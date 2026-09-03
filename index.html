@@ -993,6 +993,22 @@
       </div>
     </div>
     <div class="card-grid">
+      <a class="screen-card" href="#/build-notes">
+        <div class="thumb">&#128221;</div>
+        <div class="body">
+          <span class="status">Ongoing</span>
+          <h3>Build Notes</h3>
+          <p class="desc">Quick wireframes and sketches to help engineering see exactly how a specific feature should be built &mdash; lighter weight than a full workstream, added as questions come up.</p>
+        </div>
+      </a>
+      <a class="screen-card" href="#/long-running-tasks">
+        <div class="thumb">&#8987;</div>
+        <div class="body">
+          <span class="status">In progress</span>
+          <h3>Long-running tasks</h3>
+          <p class="desc">Agents today are one-shot &mdash; no state across time, no way to pursue a multi-step goal to completion.</p>
+        </div>
+      </a>
       <a class="screen-card" href="#/activation-rate">
         <div class="thumb">&#128200;</div>
         <div class="body">
@@ -1007,22 +1023,6 @@
           <span class="status backlog">Not started</span>
           <h3>Power-user productivity</h3>
           <p class="desc">Shortcuts, create-blank, import/export &mdash; for people who already know the product and want to move faster, not first-time builders.</p>
-        </div>
-      </a>
-      <a class="screen-card" href="#/long-running-tasks">
-        <div class="thumb">&#8987;</div>
-        <div class="body">
-          <span class="status">In progress</span>
-          <h3>Long-running tasks</h3>
-          <p class="desc">Agents today are one-shot &mdash; no state across time, no way to pursue a multi-step goal to completion.</p>
-        </div>
-      </a>
-      <a class="screen-card" href="#/build-notes">
-        <div class="thumb">&#128221;</div>
-        <div class="body">
-          <span class="status">Ongoing</span>
-          <h3>Build Notes</h3>
-          <p class="desc">Quick wireframes and sketches to help engineering see exactly how a specific feature should be built &mdash; lighter weight than a full workstream, added as questions come up.</p>
         </div>
       </a>
     </div>
@@ -1068,7 +1068,7 @@
       <a class="screen-card" href="#/agent-tab">
         <div class="thumb">🤖</div>
         <div class="body">
-          <span class="status">In progress</span>
+          <span class="status">In development</span>
           <h3>Agent tab</h3>
           <p class="desc">The default Agent builder view — channels, tools, model, instructions.</p>
         </div>
@@ -1076,7 +1076,7 @@
       <a class="screen-card" href="#/ia-trees">
         <div class="thumb">🌳</div>
         <div class="body">
-          <span class="status">In progress</span>
+          <span class="status">In development</span>
           <h3>IA tree testing</h3>
           <p class="desc">Current structure vs. two reorganisation proposals, ready to tree-test.</p>
         </div>
@@ -4238,7 +4238,7 @@ flowchart LR
 <script>
   function route() {
     var hash = location.hash || "#/";
-    var name = hash === "#/" || hash === "#" || hash === "" ? "activation-rate" : hash.replace(/^#\//, "");
+    var name = hash === "#/" || hash === "#" || hash === "" ? "home" : hash.replace(/^#\//, "");
     var sections = document.querySelectorAll("[data-route]");
     var matched = false;
     sections.forEach(function (el) {
@@ -4247,7 +4247,7 @@ flowchart LR
       if (isMatch) matched = true;
     });
     if (!matched) {
-      document.querySelector('[data-route="activation-rate"]').classList.add("is-active");
+      document.querySelector('[data-route="home"]').classList.add("is-active");
     }
     window.scrollTo(0, 0);
   }
