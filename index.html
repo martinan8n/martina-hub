@@ -966,6 +966,7 @@
   .wf .textarea[contenteditable]:empty::before {
     content: attr(data-placeholder); color: var(--ink-faint); font-style: italic;
   }
+  mark.wf-hl { background: #ffe066; color: inherit; padding: 0 1px; border-radius: 2px; }
 </style>
 
 <div class="shell">
@@ -1002,6 +1003,14 @@
           <span class="status">In progress</span>
           <h3>Long-running tasks</h3>
           <p class="desc">Agents today are one-shot &mdash; no state across time, no way to pursue a multi-step goal to completion.</p>
+        </div>
+      </a>
+      <a class="screen-card" href="#/build-notes">
+        <div class="thumb">&#128221;</div>
+        <div class="body">
+          <span class="status">Ongoing</span>
+          <h3>Build Notes</h3>
+          <p class="desc">Quick wireframes and sketches to help engineering see exactly how a specific feature should be built &mdash; lighter weight than a full workstream, added as questions come up.</p>
         </div>
       </a>
     </div>
@@ -3001,7 +3010,7 @@ flowchart TD
         <div class="thumb">&#128260;</div>
         <div class="body">
           <span class="status">In progress</span>
-          <h3>Flows and wireframes</h3>
+          <h3>Long-running task flows and wireframes</h3>
           <p class="desc">How a long-running task actually gets triggered and run &mdash; two intents, the surfaces involved, and what happens at each step.</p>
         </div>
       </a>
@@ -3009,12 +3018,87 @@ flowchart TD
     </div>
   </section>
 
+  <!-- ================= BUILD NOTES ================= -->
+  <section data-route="build-notes">
+    <a class="back-link" href="#/home">&larr; Workstreams</a>
+    <div class="hero">
+      <div>
+        <span class="kicker">Workstream &middot; Ongoing</span>
+        <h1>Build Notes</h1>
+        <p>Quick wireframes and sketches to help engineering see exactly how a specific feature should be built &mdash; lighter weight than a full workstream, added one screen at a time as implementation questions come up.</p>
+      </div>
+    </div>
+
+    <div class="section-title">Screens</div>
+    <div class="card-grid">
+      <a class="screen-card" href="#/build-notes-channels">
+        <div class="thumb">&#128225;</div>
+        <div class="body">
+          <span class="status">In progress</span>
+          <h3>Channels &mdash; Preview entry point</h3>
+          <p class="desc">Recreates the live Agent tab as it stands today, with a new Preview action added above the Channels box.</p>
+        </div>
+      </a>
+      <div class="screen-card placeholder">More screens land here as implementation questions come up</div>
+    </div>
+  </section>
+
+  <!-- ================= BUILD NOTES: CHANNELS PREVIEW ENTRY POINT ================= -->
+  <section data-route="build-notes-channels">
+    <a class="back-link" href="#/build-notes">&larr; Build Notes</a>
+    <div class="screen-head">
+      <h1>Channels &mdash; Preview entry point</h1>
+      <p>The Agent tab as it&#39;s live today (not the Activation Rate proposal) &mdash; a new &quot;Preview&quot; button is added above the Channels box, so engineers see exactly what&#39;s changing against the current screen.</p>
+    </div>
+
+    <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:480px;">
+      <div style="padding:14px 24px 10px; border-bottom:1px solid var(--line);">
+        <span class="pv-crumb">Personal / <b>New Agent</b> &#9662;</span>
+      </div>
+      <div style="display:flex; align-items:center; padding:10px 24px; border-bottom:1px solid var(--line);">
+        <span style="font-size:12.5px; color:var(--ink-faint);">Saving&hellip;</span>
+        <span class="spacer" style="flex:1;"></span>
+        <span class="icon-btn" title="Run" style="cursor:pointer; margin-right:8px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M6 4.5v15l13-7.5Z"/></svg></span>
+        <span class="btn btn-primary">Publish <span class="chev">&#9662;</span></span>
+      </div>
+      <div style="padding:18px 24px;">
+        <div class="agent-head">
+          <div class="avatar"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v3"/><circle cx="12" cy="6" r="1.2" fill="currentColor" stroke="none"/><rect x="4" y="9" width="16" height="12" rx="3"/></svg></div>
+          <h2>New Agent</h2>
+        </div>
+        <div class="tabbar">
+          <span class="tab active">Agent</span><span class="tab">Knowledge</span><span class="tab">Sessions</span><span class="tab">Settings</span>
+        </div>
+        <div class="field-label">Channels</div>
+        <div style="margin-bottom:8px;">
+          <span class="run-btn" style="cursor:pointer; padding:5px 12px; font-size:12.5px;"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M6 4.5v15l13-7.5Z"/></svg> Preview</span>
+        </div>
+        <div class="pv-add-channel" style="max-width:260px;">
+          <div class="row"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg> Add channel</div>
+          <div class="hint">Slack, Telegram, Linear, 1 more</div>
+        </div>
+        <div class="quick-actions">
+          <div class="qa">Add tool</div>
+          <div class="qa">Add skill</div>
+          <div class="qa">Add sub-agent</div>
+          <div class="qa">Add schedule</div>
+        </div>
+        <div class="field-label">Model</div>
+        <div class="model-row">
+          <span class="model-icon">&#10003;</span>
+          <span class="name">GPT-5.6 Terra</span>
+          <span class="provider">Global OpenAI</span>
+          <span class="chev">&#9662;</span>
+        </div>
+      </div>
+    </div></div></div>
+  </section>
+
   <!-- ================= LONG-RUNNING TASKS: FLOWS AND WIREFRAMES ================= -->
   <section data-route="lrt-flows">
     <a class="back-link" href="#/long-running-tasks">&larr; Long-running tasks</a>
     <div class="screen-head">
-      <h1>Flows and wireframes</h1>
-      <p>Two different intents lead to the same long-running session &mdash; the author turning it on deliberately, or the agent proposing it during a user&#39;s own prompt.</p>
+      <h1>Long-running task flows and wireframes</h1>
     </div>
 
     <h2 class="lrt-section-title">What is a long-running task?</h2>
@@ -3027,7 +3111,6 @@ flowchart TD
             <li><b>Waits in between</b> &mdash; short bursts of work, waiting on a person or event in between. Takes a long time overall, but the agent isn&#39;t actually busy most of that time. Example: a support-triage agent sitting on a channel for days.</li>
             <li><b>Working non-stop</b> &mdash; lots of steps back to back, no waiting, genuinely busy the whole way through. Example: deep research, or &quot;find 500 leads and add the good fits to HubSpot.&quot;</li>
           </ul>
-          <p class="hint" style="margin-top:8px;">Complexity, tool count, and step count only tell you how <b>big</b> a long-running task is once it already counts.</p>
         </div>
         <div class="pv-twocol-box">
           <h5>What it is not</h5>
@@ -3071,7 +3154,7 @@ flowchart TD
     <div class="pv-nav-map">
     <div class="pv-nav-map">
       <h2 class="lrt-section-title">Proposed flow</h2>
-      <p class="lrt-section-sub">Two entry intents, one shared execution path &mdash; combining the Notion PRD&#39;s author/user split with the <a href="https://www.figma.com/board/99AqWIU4yXVyXstg6YYp4p/Notes?node-id=193-5366" target="_blank" rel="noopener" style="text-decoration:underline;">FigJam sketch</a>. <span class="hl">Explicit</span>: the mode is turned on deliberately &mdash; by the author ahead of time, or anyone via the + menu in Preview. <span class="hl">Implicit</span>: the agent proposes going long-running itself when a prompt is complex enough. Both converge on <b>plan &#8594; approve &#8594; execute &#8594; review &#8594; complete</b>.</p>
+      <p class="lrt-section-sub">Two entry intents, one shared execution path &mdash; combining the Notion PRD&#39;s author/user split with the <a href="https://www.figma.com/board/99AqWIU4yXVyXstg6YYp4p/Notes?node-id=193-5366" target="_blank" rel="noopener" style="text-decoration:underline;">FigJam sketch</a>. <span class="hl">Explicit</span>: the mode is turned on deliberately &mdash; by the author ahead of time, or anyone via the + menu in Preview. <span class="hl">Implicit</span>: the agent proposes going long-running itself when a prompt is complex enough.</p>
       <div style="cursor:pointer;" onclick="openMermaidModal(this)" title="Click to enlarge">
       <pre class="mermaid">
 flowchart LR
@@ -3147,7 +3230,6 @@ flowchart LR
       </div>
       <div class="lrt-ref-panel" data-panel="1" style="display:none;">
       <h4>Use cases map</h4>
-      <p style="font-size:12.5px; color:var(--hub-muted); margin:0 0 14px; max-width:760px;">Who&#39;s using it, and is anyone watching when something needs a decision? That&#39;s the whole map: <span class="hl">two roles</span> &times; <span class="hl">two trigger types</span> &times; <span class="hl">two channel types</span>. Not every cell is equally real &mdash; the highlighted one below is where almost all of the hard questions (auto-mode, guardrails, cost caps with no one present) actually come from.</p>
       <div class="pv-usecases-wrap">
         <table class="pv-usecases-table">
           <tr>
@@ -3312,6 +3394,7 @@ flowchart LR
                 <div class="pv-topbar" id="lrtAuthorOuterTopbar">
                   <span class="pv-crumb">Personal / <b>Sales Outreach</b> &#9662;</span>
                   <span class="spacer"></span>
+                  <span class="pv-surface-icon" title="Trace" style="cursor:pointer; margin-right:8px;" onclick="lrtAuthorGo(4)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v9l6 3"/><circle cx="12" cy="12" r="9"/></svg></span>
                   <span class="btn btn-primary">Publish <span class="chev">&#9662;</span></span>
                 </div>
                 <div id="lrtAuthorSettingsView" style="padding:18px 24px; overflow:auto; flex:1; min-height:0;">
@@ -3351,6 +3434,26 @@ flowchart LR
                     </div>
                     <div class="hint" style="margin-top:4px;">When the cost cap trips, or a tool needs approval.</div>
                   </div>
+                </div>
+                <div id="lrtAuthorRunningView" style="display:none; flex-direction:column; flex:1; min-height:0;">
+                  <div class="pv-preview-tabs">
+                    <b>Sales Outreach</b>
+                    <span class="pill" style="margin-left:0;">Preview</span>
+                    <span class="spacer"></span>
+                    <span class="icon-btn" title="Minimize" style="cursor:pointer;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 14h6v6M20 10h-6V4M14 10l7-7M3 21l7-7"/></svg></span>
+                  </div>
+                  <div style="padding:14px 16px; overflow:auto; flex:1;">
+                    <div class="lrt-progress-card" style="margin:0;">
+                      <div class="goal-row"><span>Goal: 100 qualified leads</span></div>
+                      <div class="lrt-progress-steps"><span class="lrt-graph-node is-done">&#10003; Find leads</span><span class="lrt-graph-node is-active"><span class="lrt-spinner"></span> Check competitors</span><span class="lrt-graph-node">Score fits</span><span class="lrt-graph-node">Send outreach emails</span></div>
+                      <div style="display:flex; align-items:center; gap:10px; margin:10px 0;">
+                        <div class="lrt-progress-bar" style="flex:1; margin:0;"><div class="lrt-progress-bar-fill is-nudging" style="width:30%;"></div></div>
+                        <span class="lrt-pause-btn" title="Pause"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg></span>
+                      </div>
+                      <div class="lrt-trace-link"><span style="cursor:pointer; text-decoration:underline;" onclick="lrtAuthorGo(7)">&#9998; Edit plan</span><span style="cursor:pointer; text-decoration:underline; margin-left:14px;" onclick="lrtAuthorGo(4)">&rarr; View trace</span></div>
+                    </div>
+                  </div>
+                  <div class="pv-chat-footer"><div class="box"><div>Message Sales Outreach&hellip;</div><div class="box-actions"><span class="spacer"></span><span class="send-btn" style="opacity:0.45;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M12 19V5M5 12l7-7 7 7"/></svg></span></div></div></div>
                 </div>
                 <div id="lrtAuthorApprovalModeView" style="display:none; padding:18px 24px; overflow:auto; flex:1; min-height:0;">
                   <div class="tabbar">
@@ -3399,7 +3502,7 @@ flowchart LR
                     <span class="goal-text">Goal: 100 qualified leads</span>
                     <span class="lrt-medium-pill" title="Where this session is happening">&#128172; Slack</span>
                     <span class="spacer"></span>
-                    <span style="cursor:pointer; text-decoration:underline; font-size:12px;" onclick="lrtAuthorGo(6)">&#9998; Edit plan</span>
+                    <span style="cursor:pointer; text-decoration:underline; font-size:12px;" onclick="lrtAuthorGo(7)">&#9998; Edit plan</span>
                     <div class="lrt-progress-bar is-live" style="width:110px; margin:0 4px 0 10px;"><div class="lrt-progress-bar-fill"></div></div>
                     <span class="lrt-pause-btn" style="cursor:pointer; width:20px; height:20px; margin-left:4px;" title="Pause"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg></span>
                   </div>
@@ -3408,8 +3511,8 @@ flowchart LR
                     <div class="pv-trace-search"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg> Search</div>
                     <span class="btn" style="padding:6px 10px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5h16M7 12h10M10 19h4"/></svg> Events</span>
                     <span class="spacer"></span>
-                    <span class="btn" style="padding:6px 10px; cursor:pointer;" onclick="lrtAuthorGo(4)">Canvas view &rarr;</span>
-                    <span class="btn" style="padding:6px 10px; cursor:pointer; margin-left:8px;" onclick="lrtAuthorGo(5)">Board view &rarr;</span>
+                    <span class="btn" style="padding:6px 10px; cursor:pointer;" onclick="lrtAuthorGo(5)">Canvas view &rarr;</span>
+                    <span class="btn" style="padding:6px 10px; cursor:pointer; margin-left:8px;" onclick="lrtAuthorGo(6)">Board view &rarr;</span>
                   </div>
                   <div class="pv-trace-scrubber" style="margin:14px 20px 0;">
                     <div class="pv-trace-seg is-a" style="flex:2;"></div>
@@ -3442,7 +3545,7 @@ flowchart LR
                     <span class="goal-text">Goal: 100 qualified leads</span>
                     <span class="lrt-medium-pill" title="Where this session is happening">&#128172; Slack</span>
                     <span class="spacer"></span>
-                    <span style="cursor:pointer; text-decoration:underline; font-size:12px;" onclick="lrtAuthorGo(6)">&#9998; Edit plan</span>
+                    <span style="cursor:pointer; text-decoration:underline; font-size:12px;" onclick="lrtAuthorGo(7)">&#9998; Edit plan</span>
                     <div class="lrt-progress-bar is-live" style="width:110px; margin:0 4px 0 10px;"><div class="lrt-progress-bar-fill"></div></div>
                     <span class="lrt-pause-btn" style="cursor:pointer; width:20px; height:20px; margin-left:4px;" title="Pause"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg></span>
                   </div>
@@ -3473,7 +3576,7 @@ flowchart LR
                     <span class="goal-text">Goal: 100 qualified leads</span>
                     <span class="lrt-medium-pill" title="Where this session is happening">&#128172; Slack</span>
                     <span class="spacer"></span>
-                    <span style="cursor:pointer; text-decoration:underline; font-size:12px;" onclick="lrtAuthorGo(6)">&#9998; Edit plan</span>
+                    <span style="cursor:pointer; text-decoration:underline; font-size:12px;" onclick="lrtAuthorGo(7)">&#9998; Edit plan</span>
                     <div class="lrt-progress-bar is-live" style="width:110px; margin:0 4px 0 10px;"><div class="lrt-progress-bar-fill"></div></div>
                     <span class="lrt-pause-btn" style="cursor:pointer; width:20px; height:20px; margin-left:4px;" title="Pause"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg></span>
                   </div>
@@ -3503,7 +3606,7 @@ flowchart LR
                     <div class="pv-pane-assistant">
                       <div class="pv-assistant-head">AI Assistant<span class="spacer"></span></div>
                       <div style="flex:1;"></div>
-                      <div class="pv-chat-footer"><div class="box"><div class="lrt-edit-pill" style="display:flex;">&#8618; Editing plan <span style="cursor:pointer; margin-left:4px;" onclick="lrtAuthorGo(3)">&#10005;</span></div><div>Message AI Assistant&hellip;</div><div class="box-actions"><span class="spacer"></span><span class="send-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M12 19V5M5 12l7-7 7 7"/></svg></span></div></div></div>
+                      <div class="pv-chat-footer"><div class="box"><div class="lrt-edit-pill" style="display:flex;">&#8618; Editing plan <span style="cursor:pointer; margin-left:4px;" onclick="lrtAuthorGo(4)">&#10005;</span></div><div>Message AI Assistant&hellip;</div><div class="box-actions"><span class="spacer"></span><span class="send-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M12 19V5M5 12l7-7 7 7"/></svg></span></div></div></div>
                     </div>
                     <div class="pv-pane-tracemain" style="overflow:auto;">
                       <div class="pv-topbar" style="padding:10px 16px;">
@@ -3516,7 +3619,7 @@ flowchart LR
                         <span class="goal-text">Goal: 100 qualified leads</span>
                         <span class="lrt-medium-pill" title="Where this session is happening">&#128172; Slack</span>
                         <span class="spacer"></span>
-                        <span style="cursor:pointer; text-decoration:underline; font-size:12px;" onclick="lrtAuthorGo(6)">&#9998; Edit plan</span>
+                        <span style="cursor:pointer; text-decoration:underline; font-size:12px;" onclick="lrtAuthorGo(7)">&#9998; Edit plan</span>
                         <div class="lrt-progress-bar is-live" style="width:110px; margin:0 4px 0 10px;"><div class="lrt-progress-bar-fill"></div></div>
                         <span class="lrt-pause-btn" style="cursor:pointer; width:20px; height:20px; margin-left:4px;" title="Pause"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg></span>
                       </div>
@@ -3525,8 +3628,8 @@ flowchart LR
                         <div class="pv-trace-search"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg> Search</div>
                         <span class="btn" style="padding:6px 10px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5h16M7 12h10M10 19h4"/></svg> Events</span>
                         <span class="spacer"></span>
-                        <span class="btn" style="padding:6px 10px; cursor:pointer;" onclick="lrtAuthorGo(4)">Canvas view &rarr;</span>
-                        <span class="btn" style="padding:6px 10px; cursor:pointer; margin-left:8px;" onclick="lrtAuthorGo(5)">Board view &rarr;</span>
+                        <span class="btn" style="padding:6px 10px; cursor:pointer;" onclick="lrtAuthorGo(5)">Canvas view &rarr;</span>
+                        <span class="btn" style="padding:6px 10px; cursor:pointer; margin-left:8px;" onclick="lrtAuthorGo(6)">Board view &rarr;</span>
                       </div>
                       <div class="pv-trace-scrubber" style="margin:14px 20px 0;">
                         <div class="pv-trace-seg is-a" style="flex:2;"></div>
@@ -4122,10 +4225,231 @@ flowchart LR
   window.addEventListener("resize", fitWireframes);
   window.addEventListener("hashchange", function () { requestAnimationFrame(fitWireframes); });
 
+  function wfMarkAncestor(node) {
+    var el = node.nodeType === 1 ? node : node.parentElement;
+    return el ? el.closest("mark.wf-hl") : null;
+  }
+
+  var WF_HL_KEY = "wf-highlights-v1";
+
+  function wfHlLoad() {
+    try {
+      var raw = localStorage.getItem(WF_HL_KEY);
+      return raw ? JSON.parse(raw) : [];
+    } catch (e) { return []; }
+  }
+
+  function wfHlSave(list) {
+    try { localStorage.setItem(WF_HL_KEY, JSON.stringify(list)); } catch (e) {}
+  }
+
+  function wfHlSameRecord(a, b) {
+    return a.containerPath === b.containerPath && a.text === b.text && a.occurrence === b.occurrence;
+  }
+
+  function wfHlPath(el) {
+    var parts = [];
+    var node = el;
+    while (node && node.nodeType === 1) {
+      if (node.id) { parts.unshift("#" + node.id); return parts.join(" > "); }
+      if (node === document.body) { parts.unshift("body"); break; }
+      var parent = node.parentElement;
+      if (!parent) break;
+      var siblings = Array.prototype.filter.call(parent.children, function (c) { return c.tagName === node.tagName; });
+      var idx = siblings.indexOf(node) + 1;
+      parts.unshift(node.tagName.toLowerCase() + ":nth-of-type(" + idx + ")");
+      node = parent;
+    }
+    return parts.join(" > ");
+  }
+
+  function wfFlattenText(root) {
+    var walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null, false);
+    var nodes = [];
+    var text = "";
+    var n;
+    while ((n = walker.nextNode())) {
+      nodes.push({ node: n, start: text.length, end: text.length + n.nodeValue.length });
+      text += n.nodeValue;
+    }
+    return { text: text, nodes: nodes };
+  }
+
+  function wfWrapFlatRange(nodes, start, end) {
+    nodes.forEach(function (entry) {
+      var s = Math.max(start, entry.start);
+      var e = Math.min(end, entry.end);
+      if (s >= e) return;
+      var nodeRange = document.createRange();
+      nodeRange.setStart(entry.node, s - entry.start);
+      nodeRange.setEnd(entry.node, e - entry.start);
+      var mark = document.createElement("mark");
+      mark.className = "wf-hl";
+      nodeRange.surroundContents(mark);
+    });
+  }
+
+  function wfRecordForMark(mark) {
+    var container = mark.parentElement;
+    if (!container) return null;
+    var containerPath = wfHlPath(container);
+    var flat = wfFlattenText(container);
+    var markTextNode = mark.firstChild;
+    var entry = flat.nodes.filter(function (e) { return e.node === markTextNode; })[0];
+    if (!entry) return null;
+    var text = mark.textContent;
+    var idx = -1, occ = 0;
+    while (true) {
+      idx = flat.text.indexOf(text, idx + 1);
+      if (idx === -1) break;
+      if (idx === entry.start) break;
+      occ++;
+    }
+    return { containerPath: containerPath, text: text, occurrence: occ };
+  }
+
+  function wfRestoreHighlight(rec) {
+    var container;
+    try { container = document.querySelector(rec.containerPath); } catch (e) { return; }
+    if (!container) return;
+    var flat = wfFlattenText(container);
+    var idx = -1;
+    for (var i = 0; i <= rec.occurrence; i++) {
+      idx = flat.text.indexOf(rec.text, idx + 1);
+      if (idx === -1) return;
+    }
+    var end = idx + rec.text.length;
+    var alreadyDone = flat.nodes.some(function (entry) {
+      if (entry.end <= idx || entry.start >= end) return false;
+      var el = entry.node.parentElement;
+      return el && el.closest("mark.wf-hl");
+    });
+    if (alreadyDone) return;
+    wfWrapFlatRange(flat.nodes, idx, end);
+  }
+
+  function wfRestoreAllHighlights() {
+    wfHlLoad().forEach(wfRestoreHighlight);
+  }
+
+  function wfIntersectingTextNodes(range) {
+    var root = range.commonAncestorContainer;
+    var nodes = [];
+    if (root.nodeType === 3) {
+      nodes.push(root);
+    } else {
+      var walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null, false);
+      var n;
+      while ((n = walker.nextNode())) {
+        if (range.intersectsNode(n) && n.nodeValue.trim() !== "") nodes.push(n);
+      }
+    }
+    return nodes;
+  }
+
+  function wfUnwrapMarkNoNormalize(mark) {
+    var rec = wfRecordForMark(mark);
+    var parent = mark.parentNode;
+    while (mark.firstChild) parent.insertBefore(mark.firstChild, mark);
+    parent.removeChild(mark);
+    if (rec) wfHlSave(wfHlLoad().filter(function (r) { return !wfHlSameRecord(r, rec); }));
+  }
+
+  function wfToggleHighlight(range) {
+    var sel = window.getSelection();
+    var textNodes = wfIntersectingTextNodes(range);
+    if (!textNodes.length) return;
+
+    var extents = textNodes.map(function (tn) {
+      var start = tn === range.startContainer ? range.startOffset : 0;
+      var end = tn === range.endContainer ? range.endOffset : tn.nodeValue.length;
+      return { node: tn, start: start, end: end };
+    }).filter(function (ext) { return ext.start < ext.end; });
+    if (!extents.length) return;
+
+    var touchedMarks = [];
+    textNodes.forEach(function (tn) {
+      var m = wfMarkAncestor(tn);
+      if (m && touchedMarks.indexOf(m) === -1) touchedMarks.push(m);
+    });
+
+    var isPureToggleOff = false;
+    if (touchedMarks.length === 1) {
+      var mark0 = touchedMarks[0];
+      var markTextNodes = [];
+      var mw = document.createTreeWalker(mark0, NodeFilter.SHOW_TEXT, null, false);
+      var mn;
+      while ((mn = mw.nextNode())) markTextNodes.push(mn);
+      var sameSet = markTextNodes.length === textNodes.length &&
+        markTextNodes.every(function (n, idx) { return n === textNodes[idx]; });
+      if (sameSet) {
+        isPureToggleOff = extents[0].start === 0 && extents[extents.length - 1].end === textNodes[textNodes.length - 1].nodeValue.length;
+      }
+    }
+
+    if (isPureToggleOff) {
+      var mark = touchedMarks[0];
+      var parent = mark.parentNode;
+      var children = Array.prototype.slice.call(mark.childNodes);
+      wfUnwrapMarkNoNormalize(mark);
+      if (children.length && sel) {
+        var undoRange = document.createRange();
+        undoRange.setStartBefore(children[0]);
+        undoRange.setEndAfter(children[children.length - 1]);
+        parent.normalize();
+        sel.removeAllRanges();
+        sel.addRange(undoRange);
+      } else {
+        parent.normalize();
+      }
+      return;
+    }
+
+    // Partial overlap, multiple marks touched, or a fresh selection that includes
+    // already-highlighted text: unwrap whatever is touched first so we never nest
+    // marks, then wrap the full selection cleanly in one pass.
+    touchedMarks.forEach(wfUnwrapMarkNoNormalize);
+
+    var newRecords = [];
+    var createdMarks = [];
+    extents.forEach(function (ext) {
+      var nodeRange = document.createRange();
+      nodeRange.setStart(ext.node, ext.start);
+      nodeRange.setEnd(ext.node, ext.end);
+      var mark = document.createElement("mark");
+      mark.className = "wf-hl";
+      nodeRange.surroundContents(mark);
+      createdMarks.push(mark);
+      var rec = wfRecordForMark(mark);
+      if (rec) newRecords.push(rec);
+    });
+    if (newRecords.length) wfHlSave(wfHlLoad().concat(newRecords));
+    if (createdMarks.length && sel) {
+      var newRange = document.createRange();
+      newRange.setStartBefore(createdMarks[0]);
+      newRange.setEndAfter(createdMarks[createdMarks.length - 1]);
+      sel.removeAllRanges();
+      sel.addRange(newRange);
+    }
+  }
+
+  document.addEventListener("mouseup", function () {
+    var sel = window.getSelection();
+    if (!sel || sel.rangeCount === 0 || sel.isCollapsed) return;
+    var range = sel.getRangeAt(0);
+    var anchorNode = range.commonAncestorContainer;
+    var anchorEl = anchorNode.nodeType === 1 ? anchorNode : anchorNode.parentElement;
+    if (anchorEl && anchorEl.closest("[contenteditable], input, textarea")) return;
+    wfToggleHighlight(range);
+  });
+
+  wfRestoreAllHighlights();
+  window.addEventListener("hashchange", function () { requestAnimationFrame(wfRestoreAllHighlights); });
+
   var LRT_PROTO_STEPS = [
     {
       surface: "Preview (full screen)",
-      caption: "Preview (full screen), empty — the real empty state: a session chip up top, agent identity centered, nothing sent yet. Click the + to pick “Long-running task” explicitly — the pill appears right next to it — or just type without picking anything and let the agent judge complexity itself (step 3).",
+      caption: "Preview (full screen), empty — the real empty state: a session chip up top, agent identity centered, nothing sent yet. Click the + to pick “Long-running task” explicitly — the pill appears right next to it — or just type without picking anything and let the agent judge complexity itself.",
       body: '<div class="pv-session-chip"><span class="avatar" style="width:26px;height:26px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v3"/><circle cx="12" cy="6" r="1.2" fill="currentColor" stroke="none"/><rect x="4" y="9" width="16" height="12" rx="3"/></svg></span>New session <span class="chev">&#8964;</span></div><div class="pv-preview-empty"><span class="avatar"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v3"/><circle cx="12" cy="6" r="1.2" fill="currentColor" stroke="none"/><rect x="4" y="9" width="16" height="12" rx="3"/></svg></span><div class="pv-preview-empty-name">Sales Outreach</div><div class="pv-preview-empty-sub">Send a message to start a conversation</div></div>'
     },
     {
@@ -4172,7 +4496,7 @@ flowchart LR
     {
       isSummary: true,
       surface: "Preview (full screen)",
-      caption: "Summary — click “View summary” from the Completed step. Opens as a real second column on the right, not an overlay — Preview (including the message box) narrows to make room for it."
+      caption: "Summary — click “View summary” from the Completed step. Opens as a real second column on the right."
     },
     {
       caption: "Cancelled by the author — ends the session for good, distinct from Pause (which can still be resumed).",
@@ -4361,7 +4685,8 @@ flowchart LR
 
   var LRT_AUTHOR_STEPS = [
     { caption: "Author, build time, in Agent builder. Turns on Long-running task mode, sets the budget ceiling, says where to be notified — all before anyone ever talks to the agent. In reality these could also be set by prompting the Agent builder’s own assistant, not just this form — not depicted here." },
-    { isApprovalMode: true, caption: "Its own screen so every option is fully visible, rather than crammed into Settings above. Picks the preset the agent runs under; full detail on each one lives in \"Approval mode, in detail\" further down the page." },
+    { isRunningCard: true, caption: "Once a session is running, the Author switches to Preview to check on it — the same compact status card a Consumer would see, plus a shortcut straight into the full Trace." },
+    { isApprovalMode: true, caption: "" },
     { caption: "Author-only: the session hits its own cost cap ($5.00, set just above) with work still left. It warns and asks before stopping for good, rather than silently halting." },
     { isTrace: true, caption: "The Trace, with progress — the Author's view of any session. A persistent goal header and status/medium pills sit above the scrubber; subtask groups sit over the step list." },
     { isCanvasTrace: true, caption: "An alternate view of the same trace as a canvas instead of a list — closer to the Darwin tracing exploration. Still exploratory, shown here as a version of the trace rather than a separate concept." },
@@ -4371,6 +4696,7 @@ flowchart LR
 
   function lrtAuthorGo(i) {
     var settingsView = document.getElementById("lrtAuthorSettingsView");
+    var runningView = document.getElementById("lrtAuthorRunningView");
     var approvalModeView = document.getElementById("lrtAuthorApprovalModeView");
     var costCapView = document.getElementById("lrtAuthorCostCapView");
     var traceView = document.getElementById("lrtProtoTraceView");
@@ -4383,13 +4709,14 @@ flowchart LR
     if (!settingsView || !LRT_AUTHOR_STEPS[i]) return;
     var step = LRT_AUTHOR_STEPS[i];
     settingsView.style.display = i === 0 ? "" : "none";
+    runningView.style.display = step.isRunningCard ? "" : "none";
     approvalModeView.style.display = step.isApprovalMode ? "" : "none";
-    costCapView.style.display = i === 2 ? "flex" : "none";
+    costCapView.style.display = i === 3 ? "flex" : "none";
     traceView.style.display = step.isTrace ? "" : "none";
     canvasView.style.display = step.isCanvasTrace ? "" : "none";
     boardView.style.display = step.isBoardTrace ? "" : "none";
     assistantEditView.style.display = step.isAssistantEdit ? "" : "none";
-    if (outerTopbar) outerTopbar.style.display = (i === 2 || step.isTrace || step.isCanvasTrace || step.isBoardTrace || step.isAssistantEdit) ? "none" : "";
+    if (outerTopbar) outerTopbar.style.display = (i === 3 || step.isRunningCard || step.isTrace || step.isCanvasTrace || step.isBoardTrace || step.isAssistantEdit) ? "none" : "";
     if (protoSide) {
       if (step.isTrace) {
         protoSide.style.display = "";
