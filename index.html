@@ -911,6 +911,18 @@
   .wf .empty-title { font-size: 15px; font-weight: 700; color: var(--ink); }
   .wf .empty-sub { font-size: 12.5px; color: var(--ink-faint); max-width: 320px; }
   .wf .empty-box .btn-primary { margin-top: 4px; }
+  .wf .empty-box.is-hero { padding: 56px 40px; margin-top: 20px; gap: 10px; }
+  .wf .empty-box.is-hero svg { width: 40px; height: 40px; }
+  .wf .empty-box.is-hero .empty-title { font-size: 21px; }
+  .wf .empty-box.is-hero .empty-sub { font-size: 14px; max-width: 440px; }
+  .wf .empty-box.is-hero .btn-primary { margin-top: 10px; padding: 10px 18px; font-size: 14px; }
+  .wf .template-section { margin-top: 28px; width: 100%; text-align: left; }
+  .wf .template-section-label { display: flex; align-items: center; justify-content: space-between; font-size: 12px; font-weight: 700; color: var(--ink-faint); text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 10px; }
+  .wf .template-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .wf .template-card { border: 1.5px solid var(--line); border-radius: 8px; padding: 12px; text-align: left; background: var(--paper); }
+  .wf .template-card .template-icon { width: 26px; height: 26px; border-radius: 6px; border: 1px solid var(--line-soft); display: flex; align-items: center; justify-content: center; color: var(--ink-soft); margin-bottom: 8px; }
+  .wf .template-card .template-title { font-size: 13.5px; font-weight: 700; color: var(--ink); margin-bottom: 3px; }
+  .wf .template-card .template-desc { font-size: 12px; color: var(--ink-faint); line-height: 1.4; }
   .wf .advanced-toggle { display: flex; align-items: center; justify-content: space-between; padding: 10px 2px; font-size: 14.5px; font-weight: 700; color: var(--ink); cursor: pointer; }
   .wf .advanced-toggle .chev { transition: transform 0.15s; color: var(--ink-soft); }
   .wf .advanced-toggle.is-open .chev { transform: rotate(180deg); }
@@ -1045,6 +1057,14 @@
 
     <div class="section-title">Wireframes</div>
     <div class="card-grid">
+      <a class="screen-card" href="#/agent-templates">
+        <div class="thumb">&#128209;</div>
+        <div class="body">
+          <span class="status">In progress</span>
+          <h3>Agent templates</h3>
+          <p class="desc">Starter templates people can build an agent from, instead of starting blank.</p>
+        </div>
+      </a>
       <a class="screen-card" href="#/agent-tab">
         <div class="thumb">🤖</div>
         <div class="body">
@@ -1097,6 +1117,139 @@
       </div>
       <div class="screen-card placeholder">More screens land here as we go<br>(Knowledge, Sessions, Settings…)</div>
     </div>
+  </section>
+
+  <!-- ================= SCREEN: AGENT TEMPLATES ================= -->
+  <section data-route="agent-templates">
+    <a class="back-link" href="#/activation-rate">&larr; Improve Activation Rate</a>
+    <div class="screen-head">
+      <h1>Agent templates</h1>
+      <p>Right now, creating an agent starts from a blank slate &mdash; one action, no starting point to choose from. Two feasible ways to offer a template instead, both grounded in the current empty state below.</p>
+    </div>
+
+    <div class="section-title">Current state</div>
+    <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:1100px;">
+      <div class="pv-app" style="min-height:520px;">
+        <div class="pv-skeleton-navbar" style="height:auto;">NAV</div>
+        <div class="pv-main" style="display:flex; flex-direction:column;">
+          <div style="padding:20px 28px 0;">
+            <div style="display:flex; align-items:flex-start; justify-content:space-between;">
+              <div>
+                <h2 style="margin:0; font-size:20px;">Personal</h2>
+                <p style="margin:4px 0 0; font-size:13px; color:var(--ink-faint);">Workflows, credentials and data tables owned by you</p>
+              </div>
+              <span class="btn btn-primary">Create agent <span class="chev">&#9662;</span></span>
+            </div>
+            <div class="tabbar" style="margin-top:18px;">
+              <span class="tab">Workflows</span><span class="tab active">Agents <span class="pill" style="margin-left:6px;">Preview</span></span><span class="tab">Credentials</span><span class="tab">Executions</span><span class="tab">Variables</span><span class="tab">Data tables</span>
+            </div>
+          </div>
+          <div style="padding:20px 28px; flex:1;">
+            <div class="empty-box is-hero">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2v3"/><circle cx="12" cy="6" r="1.2" fill="currentColor" stroke="none"/><rect x="4" y="9" width="16" height="12" rx="3"/></svg>
+              <div class="empty-title">Create your first agent</div>
+              <div class="empty-sub">Agents automate tasks and answer questions using your connected tools and data</div>
+              <span class="btn btn-primary">Create agent</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div></div></div>
+    <p style="margin:8px 0 0; font-style:italic; font-size:12px; color:var(--hub-muted);">Recreated from the live product, not the Activation Rate proposal &mdash; a single CTA, no starting-point choice.</p>
+
+    <div class="section-title" style="margin-top:32px;">Approach 1 &mdash; templates inline in the empty state</div>
+    <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:1100px;">
+      <div class="pv-app" style="min-height:620px;">
+        <div class="pv-skeleton-navbar" style="height:auto;">NAV</div>
+        <div class="pv-main" style="display:flex; flex-direction:column;">
+          <div style="padding:20px 28px 0;">
+            <div style="display:flex; align-items:flex-start; justify-content:space-between;">
+              <div>
+                <h2 style="margin:0; font-size:20px;">Personal</h2>
+                <p style="margin:4px 0 0; font-size:13px; color:var(--ink-faint);">Workflows, credentials and data tables owned by you</p>
+              </div>
+              <span class="btn btn-primary">Create agent <span class="chev">&#9662;</span></span>
+            </div>
+            <div class="tabbar" style="margin-top:18px;">
+              <span class="tab">Workflows</span><span class="tab active">Agents <span class="pill" style="margin-left:6px;">Preview</span></span><span class="tab">Credentials</span><span class="tab">Executions</span><span class="tab">Variables</span><span class="tab">Data tables</span>
+            </div>
+          </div>
+          <div style="padding:20px 28px; flex:1;">
+            <div class="empty-box is-hero">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2v3"/><circle cx="12" cy="6" r="1.2" fill="currentColor" stroke="none"/><rect x="4" y="9" width="16" height="12" rx="3"/></svg>
+              <div class="empty-title">Create your first agent</div>
+              <div class="empty-sub">Agents automate tasks and answer questions using your connected tools and data</div>
+              <span class="btn">Create agent</span>
+              <div class="template-section">
+                <div class="template-section-label">Or start from a template</div>
+                <div class="template-grid">
+                  <div class="template-card">
+                    <div class="template-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="5" cy="6" r="2.5"/><circle cx="19" cy="6" r="2.5"/><circle cx="12" cy="18" r="2.5"/><path d="M7 7.5 10 16M17 7.5 14 16"/></svg></div>
+                    <div class="template-title">Qualify new leads</div>
+                    <div class="template-desc">Scores and routes new leads from your CRM.</div>
+                  </div>
+                  <div class="template-card">
+                    <div class="template-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></div>
+                    <div class="template-title">Triage support tickets</div>
+                    <div class="template-desc">Sorts and tags incoming support tickets.</div>
+                  </div>
+                  <div class="template-card">
+                    <div class="template-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4Z"/></svg></div>
+                    <div class="template-title">Process incoming emails</div>
+                    <div class="template-desc">Reads new emails and updates your calendar or sheet.</div>
+                  </div>
+                  <div class="template-card">
+                    <div class="template-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg></div>
+                    <div class="template-title">Enrich spreadsheet data</div>
+                    <div class="template-desc">Runs new spreadsheet rows through AI on a schedule.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div></div></div>
+    <p style="margin:8px 0 0; font-style:italic; font-size:12px; color:var(--hub-muted);">Templates sit inside the same empty state as an alternative to the blank Create-agent action &mdash; nothing to click through to see them. Based on the most common first goals people give an agent; each one can be text, the same way a typed prompt would be. <span class="src">Source: Martina&#39;s sketch, FigJam</span></p>
+
+    <div class="section-title" style="margin-top:32px;">Approach 2 &mdash; templates in the Create agent dropdown</div>
+    <p class="pv-state-label" style="margin-bottom:8px;">The Create agent button already carries a dropdown chevron live today &mdash; this uses that existing affordance instead of adding a new modal or page</p>
+    <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:1100px; position:relative;">
+      <div class="pv-app" style="min-height:520px;">
+        <div class="pv-skeleton-navbar" style="height:auto;">NAV</div>
+        <div class="pv-main" style="display:flex; flex-direction:column; position:relative;">
+          <div style="padding:20px 28px 0;">
+            <div style="display:flex; align-items:flex-start; justify-content:space-between;">
+              <div>
+                <h2 style="margin:0; font-size:20px;">Personal</h2>
+                <p style="margin:4px 0 0; font-size:13px; color:var(--ink-faint);">Workflows, credentials and data tables owned by you</p>
+              </div>
+              <span class="btn btn-primary is-active">Create agent <span class="chev">&#9652;</span></span>
+            </div>
+            <div class="tabbar" style="margin-top:18px;">
+              <span class="tab">Workflows</span><span class="tab active">Agents <span class="pill" style="margin-left:6px;">Preview</span></span><span class="tab">Credentials</span><span class="tab">Executions</span><span class="tab">Variables</span><span class="tab">Data tables</span>
+            </div>
+          </div>
+          <div style="padding:20px 28px; flex:1;">
+            <div class="empty-box is-hero">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2v3"/><circle cx="12" cy="6" r="1.2" fill="currentColor" stroke="none"/><rect x="4" y="9" width="16" height="12" rx="3"/></svg>
+              <div class="empty-title">Create your first agent</div>
+              <div class="empty-sub">Agents automate tasks and answer questions using your connected tools and data</div>
+              <span class="btn btn-primary">Create agent</span>
+            </div>
+          </div>
+          <div style="position:absolute; top:58px; right:28px; width:270px; background:var(--paper); border:1.5px solid var(--ink); border-radius:8px; box-shadow:3px 4px 0 rgba(26,28,30,0.14); padding:6px 10px;">
+            <div style="padding:8px 4px 6px; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.03em; color:var(--ink-faint);">Start from a template</div>
+            <div class="pv-dropdown-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="5" cy="6" r="2.5"/><circle cx="19" cy="6" r="2.5"/><circle cx="12" cy="18" r="2.5"/><path d="M7 7.5 10 16M17 7.5 14 16"/></svg> Qualify new leads</div>
+            <div class="pv-dropdown-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg> Triage support tickets</div>
+            <div class="pv-dropdown-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4Z"/></svg> Process incoming emails</div>
+            <div class="pv-dropdown-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg> Enrich spreadsheet data</div>
+            <div class="pv-dropdown-item" style="border-top:1.5px solid var(--ink); margin-top:4px; padding-top:11px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg> Create blank</div>
+          </div>
+        </div>
+      </div>
+    </div></div></div>
+    <p style="margin:8px 0 0; font-style:italic; font-size:12px; color:var(--hub-muted);">Reuses the Create-agent button&#39;s own dropdown &mdash; already live today &mdash; instead of adding a new modal or page. Keeps the empty state itself exactly as it is; &quot;Create blank&quot; stays available as its own explicit item, not buried inside the template list. <span class="src">Inspiration: Notion&#39;s agent-creation screen &mdash; templates only, deliberately without its free-text &quot;what should your agent do&quot; box.</span></p>
   </section>
 
   <!-- ================= SCREEN: AGENT TAB ================= -->
@@ -1658,6 +1811,7 @@
     <div class="lrt-ref-tabs" id="pvTopTabs">
       <span class="lrt-ref-tab is-active" data-tab="0" onclick="showPvTopTab(0)">First analysis</span>
       <span class="lrt-ref-tab" data-tab="1" onclick="showPvTopTab(1)">Floating panel on Agents</span>
+      <span class="lrt-ref-tab" data-tab="2" onclick="showPvTopTab(2)">Embedded panel on Agents</span>
     </div>
 
     <div class="pv-toppanel" data-panel="0">
@@ -2941,6 +3095,173 @@ flowchart TD
       </div>
 
     </div>
+
+    <div class="pv-toppanel" data-panel="2" style="display:none;">
+
+      <div class="pv-skeleton-compare">
+
+        <div class="pv-skeleton-col">
+          <p class="pv-state-label" style="margin-bottom:8px;">Building the agent</p>
+          <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:1000px;">
+            <div class="pv-app" style="min-height:440px;">
+              <div class="pv-skeleton-navbar" style="height:auto;">NAV</div>
+              <div class="pv-pane-assistant" id="pvEmbedAssistBuild" style="width:260px;">
+                <div class="pv-assistant-head">
+                  AI Assistant
+                  <span class="spacer"></span>
+                  <span class="icon-btn" title="Cost">$</span>
+                </div>
+                <div style="flex:1;"></div>
+                <div class="pv-chat-footer"><div class="box">Describe the agent you want to build&hellip;</div></div>
+              </div>
+              <div class="pv-main" style="display:flex; flex-direction:column;">
+                <div class="pv-topbar">
+                  <span class="pv-crumb">Personal / <b>New Agent</b> &#9662;</span>
+                  <span class="icon-btn" title="More options"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" stroke="none"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></svg></span>
+                  <span class="spacer"></span>
+                  <span class="btn btn-primary">Publish <span class="chev">&#9662;</span></span>
+                </div>
+                <div class="pv-panes no-preview" id="pvPanesBuildEmbed">
+                  <div class="pv-pane-settings">
+                    <div class="pv-settings-bar">
+                      <span class="pv-surface-icon is-active" title="AI Assistant" style="cursor:pointer;" onclick="pvEmbedAssistToggle('pvEmbedAssistBuild', this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 9.5 8.5 3 11l6.5 2.5L12 20l2.5-6.5L21 11l-6.5-2.5Z"/></svg></span>
+                      <span class="spacer"></span>
+                      <span class="pv-surface-icon" title="Preview" style="cursor:pointer;" onclick="togglePreview(this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M6 4.5v15l13-7.5Z"/></svg></span>
+                    </div>
+                    <div class="pv-settings-body">
+                      <div class="agent-head">
+                        <div class="avatar"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v3"/><circle cx="12" cy="6" r="1.2" fill="currentColor" stroke="none"/><rect x="4" y="9" width="16" height="12" rx="3"/></svg></div>
+                        <h2>New Agent</h2>
+                      </div>
+                      <div class="tabbar">
+                        <span class="tab active">Agent</span><span class="tab">Knowledge</span><span class="tab">Sessions</span><span class="tab">Settings</span>
+                      </div>
+                      <div class="field-label">Channels</div>
+                      <div class="pv-add-channel">
+                        <div class="row"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg> Add channel</div>
+                        <div class="hint">Slack, Telegram, Linear, 1 more</div>
+                      </div>
+                      <div class="quick-actions">
+                        <div class="qa">Add tool</div>
+                        <div class="qa">Add skill</div>
+                        <div class="qa">Add sub-agent</div>
+                        <div class="qa">Add schedule</div>
+                      </div>
+                      <div class="field-label">Model</div>
+                      <div class="model-row">
+                        <span class="model-icon">&#10003;</span>
+                        <span class="name">GPT-5.6 Terra</span>
+                        <span class="provider">Global OpenAI</span>
+                        <span class="chev">&#9662;</span>
+                      </div>
+                      <div class="field-label">Instructions</div>
+                      <div class="textarea placeholder-text" style="min-height:60px;">&nbsp;</div>
+                    </div>
+                  </div>
+                  <div class="pv-pane-preview">
+                    <div class="pv-preview-tabs">
+                      <b>New Agent</b>
+                      <span class="pill" style="margin-left:0;">Preview</span>
+                      <span class="spacer"></span>
+                      <span class="icon-btn" title="Full screen" data-pane="preview" data-size="14" style="cursor:pointer;" onclick="toggleFullScreen(this,'preview')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></span>
+                    </div>
+                    <div class="pv-chat-empty" style="flex:1;">
+                      <div class="avatar" style="width:34px;height:34px;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v3"/><circle cx="12" cy="6" r="1.2" fill="currentColor" stroke="none"/><rect x="4" y="9" width="16" height="12" rx="3"/></svg></div>
+                      <h4 style="font-size:14.5px;">New Agent</h4>
+                      <p>Send a message to start a conversation</p>
+                    </div>
+                    <div class="pv-chat-footer"><div class="box">Message New Agent&hellip;</div></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div></div></div>
+        </div>
+
+        <div class="pv-skeleton-col">
+          <p class="pv-state-label" style="margin-bottom:8px;">Viewing the agent</p>
+          <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:1000px;">
+            <div class="pv-app" style="min-height:440px;">
+              <div class="pv-skeleton-navbar" style="height:auto;">NAV</div>
+              <div class="pv-pane-assistant" id="pvEmbedAssistView" style="display:none; width:260px;">
+                <div class="pv-assistant-head">
+                  <span class="icon-btn" title="Assistant chat history"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg></span>
+                  AI Assistant
+                  <span class="spacer"></span>
+                  <span class="icon-btn" title="Cost">$</span>
+                </div>
+                <div style="flex:1;"></div>
+                <div class="pv-chat-footer"><div class="box">Describe the agent you want to build&hellip;</div></div>
+              </div>
+              <div class="pv-main" style="display:flex; flex-direction:column;">
+                <div class="pv-topbar">
+                  <span class="pv-crumb">Personal / <b>Slack Agents Digest</b> &#9662;</span>
+                  <span class="icon-btn" title="Version history"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"/><path d="M12 7v5l4 2"/></svg></span>
+                  <span class="icon-btn" title="More options"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" stroke="none"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></svg></span>
+                  <span class="spacer"></span>
+                  <span class="pv-surface-icon" title="Trace" style="cursor:pointer;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v9l6 3"/><circle cx="12" cy="12" r="9"/></svg></span>
+                  <span class="btn btn-primary">Publish <span class="chev">&#9662;</span></span>
+                </div>
+                <div class="pv-panes" id="pvPanesViewEmbed">
+                  <div class="pv-pane-settings">
+                    <div class="pv-settings-bar">
+                      <span class="pv-surface-icon" title="AI Assistant" style="cursor:pointer;" onclick="pvEmbedAssistToggle('pvEmbedAssistView', this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 9.5 8.5 3 11l6.5 2.5L12 20l2.5-6.5L21 11l-6.5-2.5Z"/></svg></span>
+                      <span class="spacer"></span>
+                      <span class="pv-surface-icon is-active" title="Preview" style="cursor:pointer;" onclick="togglePreview(this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M6 4.5v15l13-7.5Z"/></svg></span>
+                    </div>
+                    <div class="pv-settings-body">
+                      <div class="agent-head">
+                        <div class="avatar"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v3"/><circle cx="12" cy="6" r="1.2" fill="currentColor" stroke="none"/><rect x="4" y="9" width="16" height="12" rx="3"/></svg></div>
+                        <h2>Slack Agents Digest</h2>
+                      </div>
+                      <div class="tabbar">
+                        <span class="tab active">Agent</span><span class="tab">Knowledge</span><span class="tab">Sessions</span><span class="tab">Settings</span>
+                      </div>
+                      <div class="field-label">Channels</div>
+                      <div class="pv-add-channel">
+                        <div class="row"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg> Add channel</div>
+                        <div class="hint">Slack, Telegram, Linear, 1 more</div>
+                      </div>
+                      <div class="quick-actions">
+                        <div class="qa">3 Slack tools</div>
+                        <div class="qa">Slack Agents Digest Run</div>
+                        <div class="qa">Add sub-agent</div>
+                        <div class="qa">Hourly Agents Update Check</div>
+                      </div>
+                      <div class="field-label">Model</div>
+                      <div class="model-row">
+                        <span class="model-icon">&#10003;</span>
+                        <span class="name">GPT-5.6 Terra</span>
+                        <span class="provider">Global OpenAI</span>
+                        <span class="chev">&#9662;</span>
+                      </div>
+                      <div class="field-label">Instructions</div>
+                      <div class="textarea placeholder-text" style="min-height:60px;">&nbsp;</div>
+                    </div>
+                  </div>
+                  <div class="pv-pane-preview">
+                    <div class="pv-preview-tabs">
+                      <b>Slack Agents Digest</b>
+                      <span class="pill" style="margin-left:0;">Preview</span>
+                      <span class="spacer"></span>
+                      <span class="icon-btn" title="Full screen" data-pane="preview" data-size="14" style="cursor:pointer;" onclick="toggleFullScreen(this,'preview')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></span>
+                    </div>
+                    <div style="padding:0 16px 0; display:flex; flex-direction:column; gap:10px; flex:1;">
+                      <div class="pv-session-chip" style="cursor:pointer;"><span class="avatar" style="width:22px;height:22px;"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v3"/><circle cx="12" cy="6" r="1.2" fill="currentColor" stroke="none"/><rect x="4" y="9" width="16" height="12" rx="3"/></svg></span>New session <span class="chev">&#8964;</span></div>
+                      <div class="pv-bubble" style="margin:0 0 0 auto;">Run the digest for the past 7 days.</div>
+                      <div class="pv-reply" style="padding:0;">Posted the digest for Aug 19&ndash;26 to #test-internal-agents.</div>
+                    </div>
+                    <div class="pv-chat-footer"><div class="box">Message Slack Agents Digest&hellip;</div></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div></div></div>
+        </div>
+
+      </div>
+
+    </div>
   </section>
 
   <!-- ================= POWER-USER PRODUCTIVITY ================= -->
@@ -4147,6 +4468,15 @@ flowchart LR
   function togglePreview(el) { toggleSurfacePane(el, "preview"); }
   function toggleAssistantPane(el) { toggleSurfacePane(el, "assistant"); }
 
+  function pvEmbedAssistToggle(paneId, iconEl) {
+    var pane = document.getElementById(paneId);
+    if (!pane) return;
+    var showing = pane.style.display !== "none";
+    pane.style.display = showing ? "none" : "flex";
+    if (iconEl) iconEl.classList.toggle("is-active", !showing);
+    if (typeof fitWireframes === "function") requestAnimationFrame(fitWireframes);
+  }
+
   function changeCanvasState(dir) {
     var section = document.querySelector('[data-route="agent-tab"]');
     var canvas = section.querySelector(".canvas");
@@ -4433,6 +4763,10 @@ flowchart LR
     }
   }
 
+  // Text-highlighter feature disabled 2026-09-03 — was firing on every normal text
+  // selection (e.g. copying text to paste into chat), which got in the way while
+  // building. Functions above are untouched; uncomment this block to re-enable.
+  /*
   document.addEventListener("mouseup", function () {
     var sel = window.getSelection();
     if (!sel || sel.rangeCount === 0 || sel.isCollapsed) return;
@@ -4445,6 +4779,7 @@ flowchart LR
 
   wfRestoreAllHighlights();
   window.addEventListener("hashchange", function () { requestAnimationFrame(wfRestoreAllHighlights); });
+  */
 
   var LRT_PROTO_STEPS = [
     {
