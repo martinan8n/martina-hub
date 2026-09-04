@@ -1,3 +1,9 @@
+/* Base page reset — was previously injected by the Claude Artifact viewer wrapper;
+   made explicit here now that this page is served standalone. */
+:root { color-scheme: light; }
+body { margin: 0; padding: 0; font: 14px -apple-system, BlinkMacSystemFont, sans-serif; background: #faf9f5; color: #141413; }
+img { max-width: 100%; }
+
 
   /*
     Hub chrome matches n8n's PRODUCT UI (light: white / light gray-beige,
