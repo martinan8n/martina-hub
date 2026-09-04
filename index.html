@@ -311,6 +311,9 @@
   .lrt-ref-tabs { display: flex; gap: 4px; flex-wrap: wrap; border-bottom: 1px solid var(--hub-border); margin-bottom: 18px; }
   .lrt-ref-tab { padding: 9px 14px; font-size: 13px; font-weight: 600; color: var(--hub-muted); cursor: pointer; border-bottom: 2px solid transparent; }
   .lrt-ref-tab.is-active { color: var(--hub-ink); border-bottom-color: var(--hub-ink); }
+  .lrt-page-tabs { display: flex; gap: 4px; flex-wrap: wrap; border-bottom: 1px solid var(--hub-border); margin-bottom: 18px; }
+  .lrt-page-tab { padding: 9px 14px; font-size: 13px; font-weight: 600; color: var(--hub-muted); cursor: pointer; border-bottom: 2px solid transparent; }
+  .lrt-page-tab.is-active { color: var(--hub-ink); border-bottom-color: var(--hub-ink); }
   .lrt-section-title + .lrt-section-sub { font-size: 13.5px; color: var(--hub-muted); margin: 0 0 16px; max-width: 720px; }
   .lrt-proto-shell { display: flex; gap: 20px; align-items: flex-start; }
   .lrt-proto-main { flex: 1; min-width: 0; }
@@ -356,6 +359,10 @@
   .wf .lrt-status-pill.is-running { background: var(--paper); border-color: var(--line); color: var(--ink-soft); }
   @keyframes lrtSpin { to { transform: rotate(360deg); } }
   .wf .lrt-spinner { display: inline-block; width: 9px; height: 9px; border: 1.5px solid currentColor; border-top-color: transparent; border-radius: 50%; animation: lrtSpin 0.7s linear infinite; vertical-align: -1px; }
+  @keyframes lrtPulseGlow { 0% { box-shadow: 0 0 0 0 rgba(253,137,37,0.45); } 70% { box-shadow: 0 0 0 9px rgba(253,137,37,0); } 100% { box-shadow: 0 0 0 0 rgba(253,137,37,0); } }
+  .wf .lrt-motion-glow { display: inline-block; width: 9px; height: 9px; border-radius: 50%; background: #fd8925; animation: lrtPulseGlow 1.8s infinite; vertical-align: -1px; }
+  @keyframes lrtFadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+  .wf .lrt-motion-fadein { display: inline-block; animation: lrtFadeIn 0.5s ease-out; }
   .wf .lrt-status-pill.is-paused { background: #fff4e0; border-color: #e0b568; color: #8a5a10; }
   .wf .lrt-status-pill.is-done { background: #e6f6ea; border-color: #7cc794; color: #1f7a3d; }
   .wf .lrt-status-pill.is-approval { background: #fdeee2; border-color: var(--hub-accent-a); color: #a6480f; }
@@ -1005,7 +1012,7 @@
         <div class="thumb">&#8987;</div>
         <div class="body">
           <span class="status">In progress</span>
-          <h3>Long-running tasks</h3>
+          <h3>Goal-based tasks</h3>
           <p class="desc">Agents today are one-shot &mdash; no state across time, no way to pursue a multi-step goal to completion.</p>
         </div>
       </a>
@@ -3298,7 +3305,7 @@ flowchart TD
     <div class="hero">
       <div>
         <span class="kicker">Workstream &middot; In progress</span>
-        <h1>Long-running tasks</h1>
+        <h1>Goal-based tasks</h1>
         <p>Giving agents the ability to pursue a goal across time instead of running one-shot &mdash; a different foundation layer than Activation Rate or Power-user productivity.</p>
       </div>
       <div style="display:flex; gap:12px; flex-wrap:wrap;">
@@ -3308,7 +3315,7 @@ flowchart TD
         </div>
         <div class="metric-card">
           <div class="num">TBD</div>
-          <div class="label">agents with long-running mode enabled<br>by the author</div>
+          <div class="label">requests judged complex enough<br>to go goal-based</div>
         </div>
       </div>
     </div>
@@ -3320,7 +3327,7 @@ flowchart TD
       </div>
       <div class="problem-card">
         <div class="eyebrow">&#129514; Hypothesis</div>
-        <p>By giving agents a state substrate, goal/plan tracking, and execution mechanics (checkpointing, resume, clean termination on completion or cost cap), we can let agents pursue a goal across time and survive interruptions &mdash; driving community adoption of long-running agents.</p>
+        <p>By giving agents a state substrate, goal/plan tracking, and execution mechanics (checkpointing, resume, clean termination on completion or cost cap), we can let agents pursue a goal across time and survive interruptions &mdash; driving community adoption of goal-based agents.</p>
         <span class="src">Source: Notion &mdash; &quot;Long-running goal-based agents&quot; (Agents team, Q3 2026 roadmap)</span>
       </div>
     </div>
@@ -3331,8 +3338,8 @@ flowchart TD
         <div class="thumb">&#128260;</div>
         <div class="body">
           <span class="status">In progress</span>
-          <h3>Long-running task flows and wireframes</h3>
-          <p class="desc">How a long-running task actually gets triggered and run &mdash; two intents, the surfaces involved, and what happens at each step.</p>
+          <h3>Goal-based task flows and wireframes</h3>
+          <p class="desc">How a goal-based task actually gets triggered and run &mdash; how the model decides, and what happens at each step.</p>
         </div>
       </a>
       <div class="screen-card placeholder">More screens land here as this workstream gets scoped<br>(e.g. plan/timeline view, session list with progress)</div>
@@ -3352,6 +3359,14 @@ flowchart TD
 
     <div class="section-title">Screens</div>
     <div class="card-grid">
+      <a class="screen-card" href="#/build-notes-trace-preview">
+        <div class="thumb">&#128202;</div>
+        <div class="body">
+          <span class="status">In progress</span>
+          <h3>Trace and preview &mdash; sync &amp; layout fixes</h3>
+          <p class="desc">Recreates the live Trace page and its docked Preview panel, walking through the fixes from AGENT-808.</p>
+        </div>
+      </a>
       <a class="screen-card" href="#/build-notes-channels">
         <div class="thumb">&#128225;</div>
         <div class="body">
@@ -3415,12 +3430,54 @@ flowchart TD
     </div></div></div>
   </section>
 
+  <!-- ================= BUILD NOTES: TRACE AND PREVIEW ================= -->
+  <section data-route="build-notes-trace-preview">
+    <a class="back-link" href="#/build-notes">&larr; Build Notes</a>
+    <div class="screen-head">
+      <h1>Trace and preview &mdash; sync &amp; layout fixes</h1>
+      <p>Recreates the live Trace page and its docked Preview panel as they stand today (checked directly against <code>AgentSessionTimelineView.vue</code>, <code>AgentPreviewDock.vue</code> in <code>n8n-io/n8n</code>) &mdash; not a redesign, just the fixes from <a href="https://linear.app/n8n/issue/AGENT-808" target="_blank" rel="noopener" style="text-decoration:underline;">AGENT-808</a>, plus one addition. Click through the steps below.</p>
+    </div>
+
+    <div class="lrt-proto-shell">
+      <div class="lrt-proto-main">
+        <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:1180px;">
+          <div class="pv-app" style="height:600px;">
+            <div class="pv-skeleton-navbar" style="height:auto;">NAV</div>
+            <div class="pv-main">
+              <div class="pv-topbar">
+                <span class="pv-crumb">Personal / <b>Sales Outreach</b> &#9662;</span>
+                <span class="icon-btn" title="More options"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" stroke="none"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></svg></span>
+                <span class="spacer"></span>
+                <span class="icon-btn" id="bnTpTopPreviewBtn" title="Preview" style="cursor:pointer; margin-right:6px;" onclick="bnTraceGo(0)"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M6 4.5v15l13-7.5Z"/></svg></span>
+                <span class="btn btn-primary">Publish <span class="chev">&#9662;</span></span>
+              </div>
+              <div id="bnTpContent" style="display:flex; flex:1; min-height:0;"></div>
+            </div>
+          </div>
+        </div></div></div>
+        <div class="lrt-proto-controls" id="bnTpControls"></div>
+        <p class="lrt-proto-caption" id="bnTpCaption"></p>
+      </div>
+      <div class="lrt-proto-side" id="bnTpSide" style="display:none;">
+        <div class="lrt-proto-side-title">About this step</div>
+        <p class="hint" id="bnTpSideText" style="margin:0;"></p>
+      </div>
+    </div>
+  </section>
+
   <!-- ================= LONG-RUNNING TASKS: FLOWS AND WIREFRAMES ================= -->
   <section data-route="lrt-flows">
-    <a class="back-link" href="#/long-running-tasks">&larr; Long-running tasks</a>
+    <a class="back-link" href="#/long-running-tasks">&larr; Goal-based tasks</a>
     <div class="screen-head">
-      <h1>Long-running task flows and wireframes</h1>
+      <h1>Goal-based task flows and wireframes</h1>
     </div>
+
+    <div class="lrt-page-tabs" id="lrtPageTabs">
+      <span class="lrt-page-tab is-active" data-page-tab="0" onclick="lrtShowPageTab(0)">Original proposal</span>
+      <span class="lrt-page-tab" data-page-tab="1" onclick="lrtShowPageTab(1)">Revised proposal</span>
+    </div>
+
+    <div class="lrt-page-panel" data-page-panel="0">
 
     <h2 class="lrt-section-title">What is a long-running task?</h2>
     <div class="pv-assumptions">
@@ -4171,6 +4228,698 @@ flowchart LR
         <li><span class="ann-num">4</span><span class="ann-body">Is the explicit &quot;Long-running task&quot; picker actually needed, or could we rely entirely on the agent detecting goal complexity and proposing it itself? The explicit option adds a second path to design and maintain &mdash; worth it only if it&#39;s doing a real job beyond letting users discover the capability exists. Is discoverability itself that job, or is there more to it?</span></li>
         <li><span class="ann-num">5</span><span class="ann-body">Could the graph/canvas view (screen 7, currently &quot;vision, not P0&quot;) actually be the release UI instead of the timeline + session list &mdash; skip the phased build and show progress as nodes from day one? Would need to weigh against the PRD&#39;s own reasoning for deferring it (P0 ships on existing surfaces to keep scope small).</span></li>      </ol>
     </div>
+
+    </div>
+    <div class="lrt-page-panel" data-page-panel="1" style="display:none;">
+
+    <div class="annotation-legend">
+      <h4>What changed, and why</h4>
+      <ol>
+        <li><span class="ann-num">1</span><span class="ann-body">No more explicit invocation path &mdash; no author toggle, no &quot;+&quot; picker in the composer. The model alone judges whether a request needs to become a goal-based session, every time.<span class="ann-source">Source: Bakery feedback (Nik, Giulio) &mdash; resolves former Open question #4</span></span></li>
+        <li><span class="ann-num">2</span><span class="ann-body">A plan is no longer guaranteed. Some goals get one to approve; others are simple enough that the agent just starts working. Either way, approval still happens whenever a plan exists.<span class="ann-source">Source: Bakery feedback &mdash; Nik: &quot;the plan keeps changing to fit the goal&quot;; Giulio: &quot;plan and long-running don&#39;t go together&quot;</span></span></li>
+        <li><span class="ann-num">3</span><span class="ann-body">A plan isn&#39;t fixed once approved &mdash; new steps can surface hours or days later as the agent learns more. The agent says this upfront, so it isn&#39;t a surprise later.</span></li>
+        <li><span class="ann-num">4</span><span class="ann-body">Trace is graph nodes by default now, not a phased future addition &mdash; resolves former Open question #5. The kanban variant is dropped.<span class="ann-source">Source: Bakery feedback &mdash; Tuukka: kanban isn&#39;t a native n8n visualization</span></span></li>
+        <li><span class="ann-num">5</span><span class="ann-body">Each node shows the agent&#39;s reasoning for that step, not just which tool it called.<span class="ann-source">Source: Bakery feedback (Sim)</span></span></li>
+        <li><span class="ann-num">6</span><span class="ann-body">Mid-run checkpoints are visible in the trace, and a session can restart from one instead of the very beginning.<span class="ann-source">Source: Bakery feedback (Aniol)</span></span></li>
+        <li><span class="ann-num">7</span><span class="ann-body">Visibility is designed for two states, not one &mdash; live while you&#39;re watching, and catching up on everything that happened while you were away.</span></li>
+      </ol>
+    </div>
+
+    <div class="pv-nav-map">
+      <h2 class="lrt-section-title">How this works now</h2>
+      <p class="lrt-section-sub">One path, not two &mdash; the model decides on its own whether a request needs to go goal-based, and whether it needs a plan. Replaces the Explicit/Implicit split in the original proposal.</p>
+      <div style="cursor:pointer;" onclick="openMermaidModal(this)" title="Click to enlarge">
+      <pre class="mermaid">
+flowchart LR
+  U["User describes<br>a goal"] --> C{"Model judges<br>complexity"}
+  C -->|"Simple"| O["One-shot reply"]
+  C -->|"Complex"| G["Goal captured"]
+  G --> P{"Needs a<br>plan?"}
+  P -->|"No"| X["Executing"]
+  P -->|"Yes"| PL["Plan proposed<br>(may grow later)"]
+  PL --> APR["User approves"]
+  APR --> X
+  X --> R["Progress viewable anytime<br>live, or after the fact"]
+  R -->|"Pause / edit /<br>resume / restart<br>from checkpoint"| X
+  X --> D["Goal met &mdash;<br>halts cleanly"]
+      </pre>
+      </div>
+    </div>
+
+    <div class="pv-assumptions">
+      <h4>How this works, in a nutshell</h4>
+      <div class="lrt-flow-steps">
+        <div class="lrt-flow-step" style="border-style:dashed;">
+          <div class="lrt-flow-step-num">1</div>
+          <div class="lrt-flow-step-title">Judge, maybe plan</div>
+          <div class="lrt-flow-step-detail">The agent alone decides if a request needs to go goal-based, and if it needs a plan at all. Simple, obviously-scoped requests skip both.</div>
+        </div>
+        <span class="lrt-flow-arrow">&#8594;</span>
+        <div class="lrt-flow-step">
+          <div class="lrt-flow-step-num">2</div>
+          <div class="lrt-flow-step-title">Approve, if there&#39;s a plan</div>
+          <div class="lrt-flow-step-detail">Shown before it starts, flagged as something that may change &mdash; not a fixed contract. Skipped entirely if no plan was needed.</div>
+        </div>
+        <span class="lrt-flow-arrow">&#8594;</span>
+        <div class="lrt-flow-step">
+          <div class="lrt-flow-step-num">3</div>
+          <div class="lrt-flow-step-title">Work it, visibly</div>
+          <div class="lrt-flow-step-detail">Graph nodes show progress and reasoning, not just tool calls. Checkpoints let you restart partway through, not just from the beginning.</div>
+        </div>
+        <span class="lrt-flow-arrow">&#8594;</span>
+        <div class="lrt-flow-step">
+          <div class="lrt-flow-step-num">4</div>
+          <div class="lrt-flow-step-title">Done, plainly</div>
+          <div class="lrt-flow-step-detail">Finishes and tells you what it did &mdash; the full trace stays available afterward, whether you watched it happen or not.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pv-nav-map">
+      <h2 class="lrt-section-title">Agent Consumer &mdash; the experience of using it</h2>
+      <p class="lrt-section-sub">The moments that actually changed from the original proposal, shown as screens rather than a full click-through &mdash; pause, cancel, and failure states are unchanged, see Original proposal.</p>
+
+      <div class="lrt-screens">
+
+        <div class="lrt-screen-block">
+          <div class="lrt-screen-head"><h4>Starting a request &mdash; no picker to choose</h4></div>
+          <p class="lrt-screen-desc">Same composer either way. There&#39;s nothing to turn on and nothing to pick &mdash; the agent judges complexity itself as soon as you send.</p>
+          <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:900px;">
+            <div class="pv-app" style="min-height:280px;">
+              <div class="pv-skeleton-navbar" style="height:auto;">NAV</div>
+              <div class="pv-main" style="display:flex; flex-direction:column;">
+                <div class="pv-preview-tabs">
+                  <b>Sales Outreach</b>
+                  <span class="pill" style="margin-left:0;">Preview</span>
+                  <span class="spacer"></span>
+                  <span class="icon-btn" title="Minimize" style="cursor:pointer;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 14h6v6M20 10h-6V4M14 10l7-7M3 21l7-7"/></svg></span>
+                </div>
+                <div class="pv-preview-empty">
+                  <span class="avatar"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v3"/><circle cx="12" cy="6" r="1.2" fill="currentColor" stroke="none"/><rect x="4" y="9" width="16" height="12" rx="3"/></svg></span>
+                  <div class="pv-preview-empty-name">Sales Outreach</div>
+                  <div class="pv-preview-empty-sub">Send a message to start a conversation</div>
+                </div>
+                <div class="pv-chat-footer"><div class="box"><div>Message Sales Outreach&hellip;</div><div class="box-actions"><span class="spacer"></span><span class="send-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M12 19V5M5 12l7-7 7 7"/></svg></span></div></div></div>
+              </div>
+            </div>
+          </div></div></div>
+        </div>
+
+        <div class="lrt-screen-block">
+          <div class="lrt-screen-head"><h4>When a plan helps &mdash; shown upfront, flagged as not final</h4></div>
+          <p class="lrt-screen-desc">Two full pages for the same plan before it starts &mdash; as a list, or as nodes like the trace below will use once it&#39;s running. Open question: which reads better here?</p>
+          <div style="display:flex; gap:20px; align-items:flex-start; flex-wrap:wrap;">
+
+            <div style="flex:0 0 auto;">
+            <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:620px;">
+              <div class="pv-app" style="min-height:340px;">
+                <div class="pv-skeleton-navbar" style="height:auto;">NAV</div>
+                <div class="pv-main" style="display:flex; flex-direction:column;">
+                  <div class="pv-preview-tabs">
+                    <b>Sales Outreach</b>
+                    <span class="pill" style="margin-left:0;">Preview</span>
+                    <span class="spacer"></span>
+                    <span class="icon-btn" title="Minimize" style="cursor:pointer;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 14h6v6M20 10h-6V4M14 10l7-7M3 21l7-7"/></svg></span>
+                  </div>
+                  <div style="padding:16px 18px; overflow:auto; flex:1;">
+                    <div class="pv-bubble" style="margin:0 0 12px auto;">Find 500 leads at Series A SaaS companies in the US, check if they&#39;re already using a competitor, and send a personalized outreach email to the good fits, with a note on why.</div>
+                    <div class="lrt-plan-card">
+                      <p class="ask">This looks like it&#39;ll take some real work. Here&#39;s my plan &mdash; want me to go ahead?</p>
+                      <ul>
+                        <li><span class="marker"></span> Find Series A SaaS companies in the US, aiming for 500</li>
+                        <li><span class="marker"></span> Check each one for existing use of a competitor</li>
+                        <li><span class="marker"></span> Score the good fits and draft a one-line reason for each</li>
+                        <li><span class="marker"></span> Send a personalized outreach email to the good fits</li>
+                      </ul>
+                      <p class="hint" style="margin:8px 0 0;">This is a starting point, not a fixed contract &mdash; I may add or adjust steps as I learn more.</p>
+                      <div class="lrt-plan-actions" style="justify-content:space-between;"><span class="lrt-btn">&#9998; Edit plan</span><div style="display:flex; gap:8px;"><span class="lrt-btn">Cancel</span><span class="lrt-btn is-primary">Start</span></div></div>
+                    </div>
+                  </div>
+                  <div class="pv-chat-footer"><div class="box"><div>Message Sales Outreach&hellip;</div><div class="box-actions"><span class="spacer"></span><span class="send-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M12 19V5M5 12l7-7 7 7"/></svg></span></div></div></div>
+                </div>
+              </div>
+            </div></div></div>
+            <div class="lrt-screen-desc" style="margin:8px 0 0; font-weight:600; color:var(--hub-ink);">As a list</div></div>
+
+            <div style="flex:0 0 auto;">
+            <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:620px;">
+              <div class="pv-app" style="min-height:340px;">
+                <div class="pv-skeleton-navbar" style="height:auto;">NAV</div>
+                <div class="pv-main" style="display:flex; flex-direction:column;">
+                  <div class="pv-preview-tabs">
+                    <b>Sales Outreach</b>
+                    <span class="pill" style="margin-left:0;">Preview</span>
+                    <span class="spacer"></span>
+                    <span class="icon-btn" title="Minimize" style="cursor:pointer;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 14h6v6M20 10h-6V4M14 10l7-7M3 21l7-7"/></svg></span>
+                  </div>
+                  <div style="padding:16px 18px; overflow:auto; flex:1;">
+                    <div class="pv-bubble" style="margin:0 0 12px auto;">Find 500 leads at Series A SaaS companies in the US, check if they&#39;re already using a competitor, and send a personalized outreach email to the good fits, with a note on why.</div>
+                    <div class="lrt-plan-card">
+                      <p class="ask">This looks like it&#39;ll take some real work. Here&#39;s my plan &mdash; want me to go ahead?</p>
+                      <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap; margin:4px 0 6px;">
+                        <div class="lrt-graph-node">Find SaaS companies</div>
+                        <span style="color:var(--ink-faint);">&rarr;</span>
+                        <div class="lrt-graph-node">Check competitors</div>
+                        <span style="color:var(--ink-faint);">&rarr;</span>
+                        <div class="lrt-graph-node">Score fits</div>
+                        <span style="color:var(--ink-faint);">&rarr;</span>
+                        <div class="lrt-graph-node">Send outreach emails</div>
+                      </div>
+                      <p class="hint" style="margin:8px 0 0;">This is a starting point, not a fixed contract &mdash; I may add or adjust steps as I learn more.</p>
+                      <div class="lrt-plan-actions" style="justify-content:space-between;"><span class="lrt-btn">&#9998; Edit plan</span><div style="display:flex; gap:8px;"><span class="lrt-btn">Cancel</span><span class="lrt-btn is-primary">Start</span></div></div>
+                    </div>
+                  </div>
+                  <div class="pv-chat-footer"><div class="box"><div>Message Sales Outreach&hellip;</div><div class="box-actions"><span class="spacer"></span><span class="send-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M12 19V5M5 12l7-7 7 7"/></svg></span></div></div></div>
+                </div>
+              </div>
+            </div></div></div>
+            <div class="lrt-screen-desc" style="margin:8px 0 0; font-weight:600; color:var(--hub-ink);">As nodes</div></div>
+
+          </div>
+        </div>
+
+        <div class="lrt-screen-block">
+          <div class="lrt-screen-head"><h4>When a plan doesn&#39;t help &mdash; straight to work</h4></div>
+          <p class="lrt-screen-desc">Some goals are complex enough to go goal-based but simple enough that laying out steps first wouldn&#39;t add anything &mdash; the agent just starts. Three takes on that same running-no-plan moment (Current, plus two via Mobbin: <a href="https://mobbin.com/screens/59dd33d5-6390-464e-a5b0-48ceced1b893" target="_blank" rel="noopener" style="text-decoration:underline;">Manus</a> and <a href="https://mobbin.com/screens/b045e2cd-4f54-424a-97f6-4c5954f0c1e1" target="_blank" rel="noopener" style="text-decoration:underline;">ChatGPT</a>), all with pause available &mdash; then a genuinely different moment below: the same no-plan path hitting something that needs approval.</p>
+          <div style="display:flex; gap:20px; align-items:flex-start; flex-wrap:wrap;">
+
+            <div style="flex:0 0 auto;">
+            <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:620px;">
+              <div class="pv-app" style="min-height:280px;">
+                <div class="pv-skeleton-navbar" style="height:auto;">NAV</div>
+                <div class="pv-main" style="display:flex; flex-direction:column;">
+                  <div class="pv-preview-tabs">
+                    <b>Sales Outreach</b>
+                    <span class="pill" style="margin-left:0;">Preview</span>
+                    <span class="spacer"></span>
+                    <span class="icon-btn" title="Minimize" style="cursor:pointer;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 14h6v6M20 10h-6V4M14 10l7-7M3 21l7-7"/></svg></span>
+                  </div>
+                  <div style="padding:16px 18px; overflow:auto; flex:1;">
+                    <div class="pv-bubble" style="margin:0 0 12px auto;">Go through the #support-escalations channel from this week and summarize every thread that&#39;s still unresolved.</div>
+                    <div class="pv-reply" style="margin-bottom:10px;">This one&#39;s straightforward enough that I&#39;ll just start &mdash; I&#39;ll let you know if anything needs your input.</div>
+                    <div class="lrt-progress-card" style="margin:0;">
+                      <div class="goal-row"><span>Goal: unresolved threads summarized</span></div>
+                      <div class="lrt-progress-steps"><span class="lrt-graph-node is-active"><span class="lrt-spinner"></span> Reading channel</span></div>
+                      <div style="display:flex; align-items:center; gap:10px; margin:10px 0 0;">
+                        <div class="lrt-progress-bar" style="flex:1; margin:0;"><div class="lrt-progress-bar-fill is-nudging" style="width:20%;"></div></div>
+                        <span class="lrt-pause-btn" style="cursor:pointer;" title="Pause"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg></span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="pv-chat-footer"><div class="box"><div>Message Sales Outreach&hellip;</div><div class="box-actions"><span class="spacer"></span><span class="send-btn" style="opacity:0.45;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M12 19V5M5 12l7-7 7 7"/></svg></span></div></div></div>
+                </div>
+              </div>
+            </div></div></div>
+            <div class="lrt-screen-desc" style="margin:8px 0 0; font-weight:600; color:var(--hub-ink);">Current &mdash; running, no plan</div></div>
+
+            <div style="flex:0 0 auto;">
+            <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:620px;">
+              <div class="pv-app" style="min-height:280px;">
+                <div class="pv-skeleton-navbar" style="height:auto;">NAV</div>
+                <div class="pv-main" style="display:flex; flex-direction:column;">
+                  <div class="pv-preview-tabs">
+                    <b>Sales Outreach</b>
+                    <span class="pill" style="margin-left:0;">Preview</span>
+                    <span class="spacer"></span>
+                    <span class="icon-btn" title="Minimize" style="cursor:pointer;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 14h6v6M20 10h-6V4M14 10l7-7M3 21l7-7"/></svg></span>
+                  </div>
+                  <div style="padding:16px 18px; overflow:auto; flex:1;">
+                    <div class="pv-bubble" style="margin:0 0 12px auto;">Go through the #support-escalations channel from this week and summarize every thread that&#39;s still unresolved.</div>
+                    <div class="pv-reply" style="margin-bottom:10px;">Got it &mdash; I&#39;ll just start on this.</div>
+                    <div style="border:1px solid var(--line); border-radius:8px; padding:10px 14px; max-width:320px;">
+                      <div style="display:flex; align-items:center; gap:6px; font-size:13px; font-weight:600; color:var(--ink);"><span class="lrt-spinner"></span> Working <span style="margin-left:auto; color:var(--ink-faint); font-size:11px; font-weight:400;">0:04</span><span class="lrt-pause-btn" style="cursor:pointer; margin-left:8px;" title="Pause"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg></span></div>
+                      <div style="margin-top:8px; font-size:12px; color:var(--ink-soft); display:flex; flex-direction:column; gap:4px;">
+                        <div>&#9679; Reading #support-escalations</div>
+                        <div>&#9679; Grouping by thread</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="pv-chat-footer"><div class="box"><div>Message Sales Outreach&hellip;</div><div class="box-actions"><span class="spacer"></span><span class="send-btn" style="opacity:0.45;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M12 19V5M5 12l7-7 7 7"/></svg></span></div></div></div>
+                </div>
+              </div>
+            </div></div></div>
+            <div class="lrt-screen-desc" style="margin:8px 0 0; font-weight:600; color:var(--hub-ink);">Manus-style &mdash; running, no plan</div></div>
+
+            <div style="flex:0 0 auto;">
+            <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:620px;">
+              <div class="pv-app" style="min-height:280px;">
+                <div class="pv-skeleton-navbar" style="height:auto;">NAV</div>
+                <div class="pv-main" style="display:flex; flex-direction:column;">
+                  <div class="pv-preview-tabs">
+                    <b>Sales Outreach</b>
+                    <span class="pill" style="margin-left:0;">Preview</span>
+                    <span class="spacer"></span>
+                    <span class="icon-btn" title="Minimize" style="cursor:pointer;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 14h6v6M20 10h-6V4M14 10l7-7M3 21l7-7"/></svg></span>
+                  </div>
+                  <div style="padding:16px 18px; overflow:auto; flex:1;">
+                    <div class="pv-bubble" style="margin:0 0 12px auto;">Go through the #support-escalations channel from this week and summarize every thread that&#39;s still unresolved.</div>
+                    <div class="pv-reply" style="margin-bottom:10px;">I&#39;ll dig into this now &mdash; feel free to keep chatting while I work.</div>
+                    <div style="border:1px solid var(--line); border-radius:8px; padding:12px 14px;">
+                      <div style="font-size:13px; font-weight:600; color:var(--ink); margin-bottom:8px;">Reading #support-escalations</div>
+                      <div style="display:flex; align-items:center; gap:10px; margin:0 0 8px;">
+                        <div class="lrt-progress-bar" style="flex:1; margin:0;"><div class="lrt-progress-bar-fill is-nudging" style="width:35%;"></div></div>
+                        <span class="lrt-pause-btn" style="cursor:pointer;" title="Pause"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg></span>
+                      </div>
+                      <div class="hint" style="margin:0;">Est. 2 min</div>
+                    </div>
+                  </div>
+                  <div class="pv-chat-footer"><div class="box"><div>Message Sales Outreach&hellip;</div><div class="box-actions"><span class="spacer"></span><span class="send-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M12 19V5M5 12l7-7 7 7"/></svg></span></div></div></div>
+                </div>
+              </div>
+            </div></div></div>
+            <div class="lrt-screen-desc" style="margin:8px 0 0; font-weight:600; color:var(--hub-ink);">ChatGPT-style &mdash; running, no plan</div></div>
+
+          </div>
+
+          <p class="lrt-screen-desc" style="margin-top:24px;">A different moment, not another variant of the above &mdash; the same no-plan path hitting something that needs approval. Guardrails apply regardless of which running-state visual is used.</p>
+          <div style="display:flex; gap:20px; align-items:flex-start; flex-wrap:wrap;">
+
+            <div style="flex:0 0 auto;">
+            <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:620px;">
+              <div class="pv-app" style="min-height:280px;">
+                <div class="pv-skeleton-navbar" style="height:auto;">NAV</div>
+                <div class="pv-main" style="display:flex; flex-direction:column;">
+                  <div class="pv-preview-tabs">
+                    <b>Sales Outreach</b>
+                    <span class="pill" style="margin-left:0;">Preview</span>
+                    <span class="spacer"></span>
+                    <span class="icon-btn" title="Minimize" style="cursor:pointer;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 14h6v6M20 10h-6V4M14 10l7-7M3 21l7-7"/></svg></span>
+                  </div>
+                  <div style="padding:16px 18px; overflow:auto; flex:1;">
+                    <div class="pv-bubble" style="margin:0 0 12px auto;">Go through the #support-escalations channel from this week and summarize every thread that&#39;s still unresolved.</div>
+                    <div class="pv-reply" style="margin-bottom:10px;">This one&#39;s straightforward enough that I&#39;ll just start &mdash; I&#39;ll let you know if anything needs your input.</div>
+                    <div class="lrt-progress-card" style="margin:0 0 10px;">
+                      <div class="goal-row"><span>Goal: unresolved threads summarized</span></div>
+                      <div class="lrt-progress-steps"><span class="lrt-graph-node is-done">&#10003; Reading channel</span></div>
+                    </div>
+                    <div class="lrt-alert-card"><div class="lrt-alert-head"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg>Needs your approval &mdash; <b>close_ticket</b> (3 threads)</div><div class="lrt-alert-details">&rsaquo; No plan was shown for this session, but risky actions still always ask &mdash; marking 3 threads resolved based on the customer&#39;s last reply.</div><div class="lrt-alert-actions"><span class="lrt-btn">Reject</span><span class="lrt-btn is-primary">Approve</span></div></div>
+                  </div>
+                  <div class="pv-chat-footer"><div class="box"><div>Message Sales Outreach&hellip;</div><div class="box-actions"><span class="spacer"></span><span class="send-btn" style="opacity:0.45;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M12 19V5M5 12l7-7 7 7"/></svg></span></div></div></div>
+                </div>
+              </div>
+            </div></div></div>
+            <div class="lrt-screen-desc" style="margin:8px 0 0; font-weight:600; color:var(--hub-ink);">Needs approval &mdash; still gated, even with no plan</div></div>
+
+          </div>
+        </div>
+
+        <div class="lrt-screen-block">
+          <div class="lrt-screen-head"><h4>Trace &mdash; graph nodes, with reasoning and checkpoints</h4></div>
+          <p class="lrt-screen-desc">The trace, period &mdash; not one of three variants to choose between. Click a node for what it did and why; the checkpoint badge lets you restart from partway through instead of the very beginning.</p>
+          <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:1100px; padding:0;">
+            <div class="pv-app" style="min-height:340px;">
+              <div class="pv-skeleton-navbar" style="height:auto;">NAV</div>
+              <div class="pv-main">
+                <div class="pv-topbar" style="padding:10px 16px;">
+                  <span class="pv-crumb">Personal / <b>Sales Outreach</b> &#9662;</span>
+                  <span class="spacer"></span>
+                  <span class="pv-trace-meta"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M10.5 7h3"/></svg> 964,795t ($0.5185)<span class="sep">&middot;</span>78.5s</span>
+                  <span class="icon-btn" title="Close" style="cursor:pointer; margin-left:10px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6 6 18"/></svg></span>
+                </div>
+                <div class="lrt-goal-header">
+                  <span class="goal-text">Goal: 100 qualified leads</span>
+                  <span class="lrt-medium-pill" title="Where this session is happening">&#128172; Slack</span>
+                  <span class="spacer"></span>
+                  <span style="cursor:pointer; text-decoration:underline; font-size:12px;">&#9998; Edit plan</span>
+                  <div class="lrt-progress-bar is-live" style="width:110px; margin:0 4px 0 10px;"><div class="lrt-progress-bar-fill"></div></div>
+                  <span class="lrt-pause-btn" style="cursor:pointer; width:20px; height:20px; margin-left:4px;" title="Pause"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg></span>
+                </div>
+                <div style="padding:26px 24px 20px;">
+                  <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+                    <div class="lrt-graph-node is-done" style="cursor:pointer;" onclick="lrtV2ShowNodeDetail('find')">&#10003; Find leads <span class="lrt-checkpoint" title="Checkpoint saved here">&#9679;</span></div>
+                    <span style="color:var(--ink-faint);">&rarr;</span>
+                    <div style="display:flex; flex-direction:column; gap:8px;">
+                      <div class="lrt-graph-node is-active" style="cursor:pointer;" onclick="lrtV2ShowNodeDetail('check')"><span class="lrt-spinner"></span> Check competitors</div>
+                      <div class="lrt-graph-node is-active" style="cursor:pointer;" onclick="lrtV2ShowNodeDetail('enrich')"><span class="lrt-spinner"></span> Enrich firmographics</div>
+                    </div>
+                    <span style="color:var(--ink-faint);">&rarr;</span>
+                    <div class="lrt-graph-node" style="cursor:pointer;" onclick="lrtV2ShowNodeDetail('score')">Score fits</div>
+                    <span style="color:var(--ink-faint);">&rarr;</span>
+                    <div class="lrt-graph-node" style="cursor:pointer;" onclick="lrtV2ShowNodeDetail('send')"><span class="lrt-status-pill is-approval" style="margin-right:4px;">Needs approval</span> Send outreach emails</div>
+                  </div>
+                  <div id="lrtV2NodeDetail" style="margin-top:16px;">
+                    <div class="lrt-alert-card"><div class="lrt-alert-head">&#10003; Find leads &mdash; completed <span class="lrt-checkpoint" style="margin-left:6px;">&#9679;</span> checkpoint</div><div class="lrt-alert-details"><b>Why:</b> Started here since the goal needs a fixed list of companies before anything else can run.<br><b>Result:</b> Found 500 Series A SaaS companies in the US matching the criteria.</div><div class="lrt-alert-actions"><span class="lrt-btn is-primary">&#8618; Restart session from here</span></div></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div></div></div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="pv-nav-map">
+      <h2 class="lrt-section-title">Two ways of watching it happen</h2>
+      <p class="lrt-section-sub">Same session, different context &mdash; live in the platform, or catching up after being away.</p>
+      <div class="pv-twocol">
+        <div class="pv-twocol-box">
+          <h5>While you&#39;re here</h5>
+          <ul>
+            <li>The graph updates live, node by node</li>
+            <li>Approval prompts appear inline the moment they&#39;re needed</li>
+            <li>Pause, edit the plan, or restart from a checkpoint at any time</li>
+          </ul>
+        </div>
+        <div class="pv-twocol-box">
+          <h5>When you&#39;re not</h5>
+          <ul>
+            <li>Progress posts as it happens in the channel it was triggered from &mdash; not a silent background process</li>
+            <li>You&#39;re notified only when it needs you, or when it&#39;s done</li>
+            <li>Opening the trace afterward shows the same graph, with everything that happened while you were away</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="pv-nav-map">
+      <h4 style="font-size:13px;">Away example &mdash; Slack thread</h4>
+      <p style="font-size:12.5px; color:var(--hub-muted); margin:0 0 14px; max-width:760px;">Reused from the original proposal, copy updated &mdash; same idea, no invocation picker needed to get here.</p>
+      <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:480px; padding:0;">
+        <div style="padding:14px 16px 12px; border-bottom:1px dashed var(--line); display:flex; gap:10px; align-items:flex-start;">
+          <div style="width:30px; height:30px; border-radius:6px; background:var(--ink-faint); flex:none;"></div>
+          <div>
+            <div style="font-size:12.5px;"><b>Martina</b> <span style="color:var(--ink-faint); font-size:11px;">Just now</span></div>
+            <div style="font-size:13px; margin-top:2px;"><span style="color:#2563eb;">@Sales Outreach</span> find 100 Series A SaaS leads and send outreach emails to the good fits</div>
+          </div>
+        </div>
+        <div style="padding:12px 16px 16px;">
+          <div style="font-size:11px; color:var(--ink-faint); margin-bottom:10px;">3 replies</div>
+          <div style="display:flex; gap:10px; align-items:flex-start;">
+            <div style="width:30px; height:30px; border-radius:6px; background:var(--ink); flex:none;"></div>
+            <div style="flex:1;">
+              <div style="font-size:12.5px;"><b>Sales Outreach</b> <span class="lrt-medium-pill" style="margin-left:2px; padding:1px 6px; font-size:9.5px;">APP</span> <span style="color:var(--ink-faint); font-size:11px;">Just now</span></div>
+              <div style="font-size:13px; margin-top:2px;">Started on this. I&#39;ll update this thread when it needs you, or when it&#39;s done.</div>
+              <div style="font-size:12px; color:var(--ink-faint); font-style:italic; margin-top:2px;">Goal: 100 qualified leads</div>
+              <div style="display:flex; gap:10px; align-items:center; margin-top:8px;">
+                <span class="lrt-btn" style="padding:5px 12px; font-size:12px;">Open in n8n</span>
+                <span style="cursor:pointer; color:var(--ink-faint); font-size:15px;">&#8943;</span>
+              </div>
+            </div>
+          </div>
+          <div style="display:flex; gap:10px; align-items:flex-start; margin-top:16px;">
+            <div style="width:30px; height:30px; border-radius:6px; background:var(--ink); flex:none;"></div>
+            <div style="flex:1;">
+              <div style="font-size:12.5px;"><b>Sales Outreach</b> <span class="lrt-medium-pill" style="margin-left:2px; padding:1px 6px; font-size:9.5px;">APP</span> <span style="color:var(--ink-faint); font-size:11px;">Just now</span></div>
+              <div class="lrt-alert-card" style="margin-top:6px;">
+                <div class="lrt-alert-head"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg>Needs your approval &mdash; <b>send_outreach_email</b> (23 companies)</div>
+                <div class="lrt-alert-actions"><span class="lrt-btn">Reject</span><span class="lrt-btn is-primary">Approve</span></div>
+              </div>
+            </div>
+          </div>
+          <div style="display:flex; gap:10px; align-items:flex-start; margin-top:16px;">
+            <div style="width:30px; height:30px; border-radius:6px; background:var(--ink); flex:none;"></div>
+            <div style="flex:1;">
+              <div style="font-size:12.5px;"><b>Sales Outreach</b> <span class="lrt-medium-pill" style="margin-left:2px; padding:1px 6px; font-size:9.5px;">APP</span> <span style="color:var(--ink-faint); font-size:11px;">Just now</span></div>
+              <div style="font-size:13px; margin-top:2px;">Done &mdash; outreach emails sent to 100 qualified leads.</div>
+              <div style="margin-top:6px; font-size:12px; cursor:pointer; text-decoration:underline;">&#8599; View full trace</div>
+            </div>
+          </div>
+        </div>
+      </div></div></div>
+    </div>
+
+    <div class="pv-nav-map">
+      <h2 class="lrt-section-title">Agent Author &mdash; what stays configurable</h2>
+      <p class="lrt-section-sub">No on/off switch anymore &mdash; the model always judges for itself. Two more full takes on the budget/alert guardrails, pulled from real agent-settings patterns via Mobbin: <a href="https://mobbin.com/screens/e72becab-c5d7-4e1a-a955-c0d20bbcd1e4" target="_blank" rel="noopener" style="text-decoration:underline;">Intercom&#39;s Fin</a> and <a href="https://mobbin.com/screens/8cf8d3eb-515b-4ff9-b14c-dddcfb207adf" target="_blank" rel="noopener" style="text-decoration:underline;">OpenAI Platform</a>. Open question: which reads best?</p>
+      <div style="display:flex; gap:20px; align-items:flex-start; flex-wrap:wrap;">
+
+        <div style="flex:0 0 auto;">
+        <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:620px;">
+          <div class="pv-app" style="min-height:340px;">
+            <div class="pv-skeleton-navbar" style="height:auto;">NAV</div>
+            <div class="pv-main">
+              <div class="pv-topbar">
+                <span class="pv-crumb">Personal / <b>Sales Outreach</b> &#9662;</span>
+                <span class="spacer"></span>
+                <span class="btn btn-primary">Publish <span class="chev">&#9662;</span></span>
+              </div>
+              <div style="padding:18px 24px;">
+                <div class="tabbar">
+                  <span class="tab">Agent</span><span class="tab">Knowledge</span><span class="tab">Sessions</span><span class="tab active">Settings</span>
+                </div>
+                <div class="lrt-settings-group">
+                  <div class="lrt-settings-group-label">Goal-based sessions</div>
+                  <p class="hint" style="margin:0 0 12px;">Always on &mdash; the agent judges on its own when a request needs one. These limits apply whenever it does.</p>
+                  <div class="field-label" style="margin-top:0;">Overall budget</div>
+                  <div class="model-row" style="max-width:220px;">
+                    <span style="font-weight:700;">$</span><span class="name">200</span><span class="name" style="font-weight:400; color:var(--hub-muted);">/ month</span><span class="chev">&#9662;</span>
+                  </div>
+                  <div class="hint" style="margin-top:4px; margin-bottom:14px;">Pauses the agent entirely once hit.</div>
+                  <div class="field-label">Cost cap per session</div>
+                  <div class="model-row" style="max-width:220px;">
+                    <span style="font-weight:700;">$</span><span class="name">5.00</span><span class="chev">&#9662;</span>
+                  </div>
+                  <div class="hint" style="margin-top:4px; margin-bottom:14px;">Hard stop when exceeded &mdash; agent warns first.</div>
+                  <div class="field-label">Notify me</div>
+                  <div class="model-row" style="max-width:220px;">
+                    <span class="model-icon">&#10003;</span><span class="name">Slack DM</span><span class="chev">&#9662;</span>
+                  </div>
+                  <div class="hint" style="margin-top:4px;">Cost cap trips, or a tool needs approval.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div></div></div>
+        <div class="lrt-screen-desc" style="margin:8px 0 0; font-weight:600; color:var(--hub-ink);">Current</div></div>
+
+        <div style="flex:0 0 auto;">
+        <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:620px;">
+          <div class="pv-app" style="min-height:340px;">
+            <div class="pv-skeleton-navbar" style="height:auto;">NAV</div>
+            <div class="pv-main">
+              <div class="pv-topbar">
+                <span class="pv-crumb">Personal / <b>Sales Outreach</b> &#9662;</span>
+                <span class="spacer"></span>
+                <span class="btn btn-primary">Publish <span class="chev">&#9662;</span></span>
+              </div>
+              <div style="padding:18px 24px;">
+                <div class="tabbar">
+                  <span class="tab">Agent</span><span class="tab">Knowledge</span><span class="tab">Sessions</span><span class="tab active">Settings</span>
+                </div>
+                <div class="lrt-settings-group">
+                  <div class="lrt-settings-group-label">Goal-based sessions</div>
+                  <p class="hint" style="margin:0 0 12px;">Always on &mdash; the agent judges on its own when a request needs one. These limits apply whenever it does.</p>
+                  <div style="border:1px solid var(--line); border-radius:8px; padding:12px 14px; margin-bottom:10px;">
+                    <label style="display:flex; align-items:center; gap:6px; font-size:13px; font-weight:700; color:var(--ink); cursor:pointer;"><input type="checkbox" checked style="margin:0;"> Alert</label>
+                    <div class="hint" style="margin:5px 0 8px;">Let me know before reaching:</div>
+                    <div class="model-row" style="max-width:170px;"><span style="font-weight:700;">$</span><span class="name">150</span></div>
+                  </div>
+                  <div style="border:1px solid var(--line); border-radius:8px; padding:12px 14px; margin-bottom:14px;">
+                    <label style="display:flex; align-items:center; gap:6px; font-size:13px; font-weight:700; color:var(--ink); cursor:pointer;"><input type="checkbox" checked style="margin:0;"> Limit</label>
+                    <div class="hint" style="margin:5px 0 8px;">Turn the agent off after:</div>
+                    <div class="model-row" style="max-width:170px;"><span style="font-weight:700;">$</span><span class="name">200</span></div>
+                  </div>
+                  <div class="field-label" style="margin-top:0;">Notify me</div>
+                  <div class="model-row" style="max-width:220px;">
+                    <span class="model-icon">&#10003;</span><span class="name">Slack DM</span><span class="chev">&#9662;</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div></div></div>
+        <div class="lrt-screen-desc" style="margin:8px 0 0; font-weight:600; color:var(--hub-ink);">Alert vs. limit, split &mdash; Intercom Fin</div></div>
+
+        <div style="flex:0 0 auto;">
+        <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:620px;">
+          <div class="pv-app" style="min-height:340px;">
+            <div class="pv-skeleton-navbar" style="height:auto;">NAV</div>
+            <div class="pv-main">
+              <div class="pv-topbar">
+                <span class="pv-crumb">Personal / <b>Sales Outreach</b> &#9662;</span>
+                <span class="spacer"></span>
+                <span class="btn btn-primary">Publish <span class="chev">&#9662;</span></span>
+              </div>
+              <div style="padding:18px 24px;">
+                <div class="tabbar">
+                  <span class="tab">Agent</span><span class="tab">Knowledge</span><span class="tab">Sessions</span><span class="tab active">Settings</span>
+                </div>
+                <div class="lrt-settings-group">
+                  <div class="lrt-settings-group-label">Goal-based sessions</div>
+                  <p class="hint" style="margin:0 0 12px;">Always on &mdash; the agent judges on its own when a request needs one. These limits apply whenever it does.</p>
+                  <div class="field-label" style="margin-top:0;">Monthly budget</div>
+                  <div style="display:flex; align-items:baseline; gap:6px; margin-bottom:8px;"><span style="font-size:19px; font-weight:700; color:var(--ink);">$42</span><span class="hint" style="margin:0;">/ $200 this month</span></div>
+                  <div class="lrt-progress-bar" style="margin:0 0 10px;"><div class="lrt-progress-bar-fill" style="width:21%;"></div></div>
+                  <div style="display:flex; gap:8px; margin-bottom:14px;"><span class="lrt-btn">Add alert</span><span class="lrt-btn">Edit budget</span></div>
+                  <div class="field-label">Cost cap per session</div>
+                  <div class="model-row" style="max-width:220px;">
+                    <span style="font-weight:700;">$</span><span class="name">5.00</span><span class="chev">&#9662;</span>
+                  </div>
+                  <div class="hint" style="margin-top:4px;">Hard stop when exceeded &mdash; agent warns first.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div></div></div>
+        <div class="lrt-screen-desc" style="margin:8px 0 0; font-weight:600; color:var(--hub-ink);">Budget as progress &mdash; OpenAI Platform</div></div>
+
+      </div>
+    </div>
+
+    <div class="pv-nav-map">
+      <h2 class="lrt-section-title">Sessions &mdash; where every goal-based run lands</h2>
+      <p class="lrt-section-sub">Baseline checked directly against the real Agent Sessions list already shipped in <code>n8n-io/n8n</code> (<code>AgentSessionsListView.vue</code>) &mdash; reused as-is, with one addition called out below. One alternative via Mobbin: <a href="https://mobbin.com/screens/7c24e183-79c5-4666-bfc5-e631e8c9ccde" target="_blank" rel="noopener" style="text-decoration:underline;">Vapi&#39;s Evaluation Runs</a>.</p>
+      <div style="display:flex; gap:20px; align-items:flex-start; flex-wrap:wrap;">
+
+        <div style="flex:0 0 auto;">
+        <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:640px;">
+          <div class="pv-app" style="min-height:340px;">
+            <div class="pv-skeleton-navbar" style="height:auto;">NAV</div>
+            <div class="pv-main">
+              <div class="pv-topbar">
+                <span class="pv-crumb">Personal / <b>Sales Outreach</b> &#9662;</span>
+                <span class="spacer"></span>
+                <span class="btn btn-primary">Publish <span class="chev">&#9662;</span></span>
+              </div>
+              <div style="padding:18px 24px;">
+                <div class="tabbar">
+                  <span class="tab">Agent</span><span class="tab">Knowledge</span><span class="tab active">Sessions</span><span class="tab">Settings</span>
+                </div>
+                <div style="display:flex; align-items:center; gap:16px; margin:14px 0 6px;">
+                  <label style="display:flex; align-items:center; gap:6px; font-size:12.5px; color:var(--ink-soft); cursor:pointer;"><input type="checkbox" checked style="margin:0;"> Auto-refresh</label>
+                  <div class="model-row" style="max-width:150px; padding:4px 10px;"><span class="name" style="font-size:12px;">Status: All</span><span class="chev">&#9662;</span></div>
+                </div>
+                <div class="cap-row">
+                  <span class="cap-row-label" style="display:flex; flex-direction:column; align-items:flex-start; gap:2px;">
+                    <span>Find 100 qualified leads <span class="lrt-checkpoint" title="Checkpoint saved &mdash; new, not in the real list today">&#9679;</span></span>
+                    <span style="font-size:11px; color:var(--ink-soft);"><span class="lrt-spinner"></span> Running</span>
+                  </span>
+                  <span style="display:flex; align-items:center; gap:10px; font-size:11px; color:var(--ink-faint);"><span class="lrt-medium-pill">&#128172; Preview</span>Just now<span>964,795t</span><span style="cursor:pointer;">&#8943;</span></span>
+                </div>
+                <div class="cap-row">
+                  <span class="cap-row-label" style="display:flex; flex-direction:column; align-items:flex-start; gap:2px;">
+                    <span>Weekly Monday digest</span>
+                    <span style="font-size:11px; color:#1f7a3d;">Succeeded &mdash; 42s</span>
+                  </span>
+                  <span style="display:flex; align-items:center; gap:10px; font-size:11px; color:var(--ink-faint);"><span class="lrt-medium-pill">&#9200; Schedule</span>2h ago<span>12,300t</span><span style="cursor:pointer;">&#8943;</span></span>
+                </div>
+                <div class="cap-row">
+                  <span class="cap-row-label" style="display:flex; flex-direction:column; align-items:flex-start; gap:2px;">
+                    <span>Support escalations catch-up</span>
+                    <span style="font-size:11px; color:#8a5a10;">Interrupted</span>
+                  </span>
+                  <span style="display:flex; align-items:center; gap:10px; font-size:11px; color:var(--ink-faint);"><span class="lrt-medium-pill">&#128172; Slack</span>1d ago<span>8,200t</span><span style="cursor:pointer;">&#8943;</span></span>
+                </div>
+                <div class="cap-row" style="border-bottom:none;">
+                  <span class="cap-row-label" style="display:flex; flex-direction:column; align-items:flex-start; gap:2px;">
+                    <span>Lead enrichment retry</span>
+                    <span style="font-size:11px; color:#a62c2c;">Error &mdash; 6s</span>
+                  </span>
+                  <span style="display:flex; align-items:center; gap:10px; font-size:11px; color:var(--ink-faint);"><span class="lrt-medium-pill">&#128172; Preview</span>2d ago<span>3,100t</span><span style="cursor:pointer;">&#8943;</span></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div></div></div>
+        <div class="lrt-screen-desc" style="margin:8px 0 0; font-weight:600; color:var(--hub-ink);">Current &mdash; n8n&#39;s real Sessions list, reused</div>
+        <p class="hint" style="max-width:640px; margin:6px 0 0;">One addition beyond the real component: a checkpoint marker on the running row, since restart-from-checkpoint doesn&#39;t exist there today (Aniol&#39;s ask). Also worth flagging: the real statuses are <code>running / succeeded / error / cancelled / interrupted</code> &mdash; there&#39;s no distinct &quot;needs approval&quot; at the list level yet, only inside a session. Our proposal&#39;s richer status set may be worth raising with the team building this.</p>
+        </div>
+
+        <div style="flex:0 0 auto;">
+        <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:640px;">
+          <div class="pv-app" style="min-height:340px;">
+            <div class="pv-skeleton-navbar" style="height:auto;">NAV</div>
+            <div class="pv-main">
+              <div class="pv-topbar">
+                <span class="pv-crumb">Personal / <b>Sales Outreach</b> &#9662;</span>
+                <span class="spacer"></span>
+                <span class="btn btn-primary">Publish <span class="chev">&#9662;</span></span>
+              </div>
+              <div style="padding:18px 24px;">
+                <div class="tabbar">
+                  <span class="tab">Agent</span><span class="tab">Knowledge</span><span class="tab active">Sessions</span><span class="tab">Settings</span>
+                </div>
+                <div class="pv-usecases-table" style="margin-top:14px; font-size:12px;">
+                  <div class="cap-row" style="font-weight:700; color:var(--ink-soft); font-size:11px; text-transform:uppercase; letter-spacing:0.03em;">
+                    <span>Session</span><span style="display:flex; gap:22px;"><span>Status</span><span>Ran at</span><span></span></span>
+                  </div>
+                  <div class="cap-row">
+                    <span>Find 100 qualified leads</span>
+                    <span style="display:flex; align-items:center; gap:14px;"><span class="lrt-status-pill is-running" style="margin:0;"><span class="lrt-spinner"></span> Running</span><span style="color:var(--ink-faint); font-size:11px;">Just now</span><span class="lrt-btn" style="padding:4px 10px; font-size:11px;">View trace</span></span>
+                  </div>
+                  <div class="cap-row">
+                    <span>Weekly Monday digest</span>
+                    <span style="display:flex; align-items:center; gap:14px;"><span class="lrt-status-pill is-done" style="margin:0;">&#10003; Succeeded</span><span style="color:var(--ink-faint); font-size:11px;">2h ago</span><span class="lrt-btn" style="padding:4px 10px; font-size:11px;">View trace</span></span>
+                  </div>
+                  <div class="cap-row">
+                    <span>Support escalations catch-up</span>
+                    <span style="display:flex; align-items:center; gap:14px;"><span class="lrt-status-pill is-paused" style="margin:0;">&#9679; Interrupted</span><span style="color:var(--ink-faint); font-size:11px;">1d ago</span><span class="lrt-btn" style="padding:4px 10px; font-size:11px;">View trace</span></span>
+                  </div>
+                  <div class="cap-row" style="border-bottom:none;">
+                    <span>Lead enrichment retry</span>
+                    <span style="display:flex; align-items:center; gap:14px;"><span class="lrt-status-pill is-failed" style="margin:0;">&#10005; Error</span><span style="color:var(--ink-faint); font-size:11px;">2d ago</span><span class="lrt-btn" style="padding:4px 10px; font-size:11px;">View trace</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div></div></div>
+        <div class="lrt-screen-desc" style="margin:8px 0 0; font-weight:600; color:var(--hub-ink);">Alternative &mdash; Vapi&#39;s Evaluation Runs</div>
+        <p class="hint" style="max-width:640px; margin:6px 0 0;">Trades the &quot;&#8943;&quot; overflow menu for an explicit &quot;View trace&quot; button per row, and uses our real status-pill styling instead of plain colored text &mdash; more consistent with the rest of this proposal, at the cost of a busier row.</p>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="pv-nav-map">
+      <h2 class="lrt-section-title">Session status, at a glance</h2>
+      <p class="lrt-section-sub">Brought over from the Original proposal, with one addition: a fourth column showing the state in actual motion, grounded in n8n&#39;s own real motion system (<code>n8n-io/n8n-design-system</code> &mdash; <code>motion.scss</code>: <code>spin</code>, <code>pulse-glow</code>, <code>fade-in</code>). Not every state gets animation &mdash; stillness is deliberate for the ones that are already settled.</p>
+      <div class="pv-usecases-wrap">
+        <table class="pv-usecases-table">
+          <tr><th>State</th><th>Look</th><th>Means</th><th>In motion</th></tr>
+          <tr>
+            <th>Running</th>
+            <td><span class="lrt-status-pill is-running"><span class="lrt-spinner"></span> Running</span></td>
+            <td>Actively executing steps. Can be paused, or left running in the background.</td>
+            <td><span class="lrt-spinner" style="width:14px; height:14px; border-width:2px;"></span> <span class="hint" style="margin-left:6px;">real <code>spin</code> mixin</span></td>
+          </tr>
+          <tr>
+            <th>Needs approval</th>
+            <td><span class="lrt-status-pill is-approval">&#9679; Needs approval</span></td>
+            <td>Blocked on one risky action. Nothing else proceeds until it&#39;s approved or rejected.</td>
+            <td><span class="lrt-motion-glow"></span> <span class="hint" style="margin-left:6px;">real <code>pulse-glow</code> &mdash; used by N8nPulse for exactly this &quot;needs you&quot; signal</span></td>
+          </tr>
+          <tr>
+            <th>Paused</th>
+            <td><span class="lrt-status-pill is-paused">&#9679; Paused</span></td>
+            <td>Stopped by request. Resumes exactly where it left off &mdash; nothing is lost.</td>
+            <td><span style="display:inline-block; width:9px; height:9px; border-radius:50%; background:#e0b568;"></span> <span class="hint" style="margin-left:6px;">no motion &mdash; stillness reads as paused</span></td>
+          </tr>
+          <tr>
+            <th>Completed</th>
+            <td><span class="lrt-status-pill is-done">&#10003; Completed</span></td>
+            <td>Goal met, halted cleanly. Trace and summary stay available afterward.</td>
+            <td><span class="lrt-motion-fadein" style="color:#1f7a3d;">&#10003;</span> <span class="hint" style="margin-left:6px;">real <code>fade-in</code> &mdash; eases in once, doesn&#39;t loop</span></td>
+          </tr>
+          <tr>
+            <th>Cancelled</th>
+            <td><span class="lrt-status-pill is-cancelled">&#10005; Cancelled</span></td>
+            <td>Ended for good, not resumable &mdash; different from Paused.</td>
+            <td><span class="hint">no motion &mdash; a terminal state, nothing left to draw attention to</span></td>
+          </tr>
+          <tr>
+            <th>Failed</th>
+            <td><span class="lrt-status-pill is-failed">&#10005; Failed</span></td>
+            <td>A tool call itself errored (API failure, timeout) &mdash; not a normal pause point like Needs approval. Retry picks the same step back up.</td>
+            <td><span class="hint">no motion &mdash; the red pill itself already draws the eye; looping it would nag</span></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="open-questions">
+      <h4>Still open &mdash; not addressed here</h4>
+      <ol>
+        <li><span class="ann-num">1</span><span class="ann-body">Steering a running session by prompting it mid-run, not just pause &rarr; edit &rarr; resume.<span class="ann-source">Source: Bakery feedback (Sim)</span></span></li>
+        <li><span class="ann-num">2</span><span class="ann-body">Per-step time indicators, not just timestamps.<span class="ann-source">Source: Bakery feedback (Sim)</span></span></li>
+        <li><span class="ann-num">3</span><span class="ann-body">A model-quality gating policy for goal-based sessions.<span class="ann-source">Source: Bakery feedback (Sim)</span></span></li>
+        <li><span class="ann-num">4</span><span class="ann-body">A distinct &quot;ran out of platform credits&quot; failure mode, separate from hitting the Author&#39;s own cost cap.<span class="ann-source">Source: Bakery feedback &mdash; Giulio, referencing Claude&#39;s /extra-usage pattern</span></span></li>
+        <li><span class="ann-num">5</span><span class="ann-body">Author-side constraints on what qualifies as goal-based, and per-skill budgets.<span class="ann-source">Source: Bakery feedback (Rob)</span></span></li>
+      </ol>
+    </div>
+
+    </div>
   </section>
 
 </div>
@@ -4911,6 +5660,16 @@ flowchart LR
     requestAnimationFrame(fitWireframes);
   }
 
+  function lrtShowPageTab(idx) {
+    document.querySelectorAll("#lrtPageTabs .lrt-page-tab").forEach(function (t) {
+      t.classList.toggle("is-active", parseInt(t.getAttribute("data-page-tab"), 10) === idx);
+    });
+    document.querySelectorAll(".lrt-page-panel").forEach(function (p) {
+      p.style.display = parseInt(p.getAttribute("data-page-panel"), 10) === idx ? "" : "none";
+    });
+    requestAnimationFrame(fitWireframes);
+  }
+
   function lrtShowRefTab(idx) {
     document.querySelectorAll(".lrt-ref-tab").forEach(function (t) {
       t.classList.toggle("is-active", parseInt(t.getAttribute("data-tab"), 10) === idx);
@@ -4933,6 +5692,19 @@ flowchart LR
     if (!panel) return;
     panel.innerHTML = LRT_CANVAS_DETAILS[key] || "";
     panel.style.display = "";
+  }
+
+  var LRT_V2_DETAILS = {
+    find: '<div class="lrt-alert-card"><div class="lrt-alert-head">&#10003; Find leads &mdash; completed <span class="lrt-checkpoint" style="margin-left:6px;">&#9679;</span> checkpoint</div><div class="lrt-alert-details"><b>Why:</b> Started here since the goal needs a fixed list of companies before anything else can run.<br><b>Result:</b> Found 500 Series A SaaS companies in the US matching the criteria.</div><div class="lrt-alert-actions"><span class="lrt-btn is-primary">&#8618; Restart session from here</span></div></div>',
+    check: '<div class="lrt-alert-card"><div class="lrt-alert-head"><span class="lrt-spinner"></span> Check competitors &mdash; running</div><div class="lrt-alert-details"><b>Why:</b> Excluding companies already on a competitor avoids wasting outreach on accounts we can&#39;t realistically win right now.<br><b>Result so far:</b> Checked 210 of 500 companies.</div></div>',
+    enrich: '<div class="lrt-alert-card"><div class="lrt-alert-head"><span class="lrt-spinner"></span> Enrich firmographics &mdash; running</div><div class="lrt-alert-details"><b>Why:</b> Running alongside Check competitors, since neither depends on the other&#39;s result &mdash; no reason to wait.<br><b>Result so far:</b> Pulled company size, funding stage, and tech stack for 180 of 500.</div></div>',
+    score: '<div class="lrt-alert-card"><div class="lrt-alert-head">Score fits &mdash; not started</div><div class="lrt-alert-details"><b>Why it waits:</b> Scoring needs both the competitor check and the firmographics enrichment finished first, so the ranking uses complete data.</div></div>',
+    send: '<div class="lrt-alert-card"><div class="lrt-alert-head"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg>Needs your approval &mdash; <b>send_outreach_email</b> (23 companies)</div><div class="lrt-alert-details"><b>Why it asks:</b> Sending a real email to an external recipient is a risky action &mdash; always confirmed, never pre-approved.<br>&rsaquo; Sending a personalized outreach email to 23 companies, tagged &quot;Series A SaaS &mdash; Q3 outreach,&quot; each with a note on why it&#39;s a good fit.</div><div class="lrt-alert-actions"><span class="lrt-btn">Reject</span><span class="lrt-btn is-primary">Approve</span></div></div>'
+  };
+  function lrtV2ShowNodeDetail(key) {
+    var panel = document.getElementById("lrtV2NodeDetail");
+    if (!panel) return;
+    panel.innerHTML = LRT_V2_DETAILS[key] || "";
   }
 
   function lrtShowBoardDetail(key) {
@@ -5103,6 +5875,103 @@ flowchart LR
       controls.appendChild(btn);
     }
     lrtAuthorGo(0);
+  })();
+
+  var BN_TRACE_ICON = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12h-8"/><path d="M21 6h-8"/><path d="M21 18h-8"/><path d="M3 6v4c0 1.1.9 2 2 2h3"/><path d="M3 10v6c0 1.1.9 2 2 2h3"/><circle cx="5" cy="6" r="2"/></svg>';
+  var BN_NEWCHAT_ICON = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8z"/><path d="M12 8v4M10 10h4"/></svg>';
+  var BN_DOCK_HEADER = '<div style="display:flex; align-items:center; gap:6px; padding:8px 12px; border-bottom:1px solid var(--line);"><span style="font-size:12.5px; text-decoration:underline; cursor:pointer;">SESSION_NAME &#9662;</span><span class="spacer" style="flex:1;"></span><span class="icon-btn" title="View trace" style="cursor:pointer;" onclick="TRACE_CLICK">' + BN_TRACE_ICON + '</span><span class="icon-btn" title="New chat" style="cursor:pointer;">' + BN_NEWCHAT_ICON + '</span></div>';
+  var BN_DOCK_CHAT_LEADS = '<div style="padding:12px 14px; overflow:auto; flex:1;"><div class="pv-bubble" style="margin:0 0 10px auto; font-size:12px;">Find 100 qualified leads and send outreach emails.</div><div class="pv-reply" style="font-size:12px;">Working on it &mdash; I&#39;ll keep you posted.</div></div>';
+  var BN_DOCK_CHAT_DIGEST = '<div style="padding:12px 14px; overflow:auto; flex:1;"><div class="pv-bubble" style="margin:0 0 10px auto; font-size:12px;">Run the weekly digest.</div><div class="pv-reply" style="font-size:12px;">Done &mdash; posted the Monday digest to #sales-outreach.</div></div>';
+  var BN_DOCK_CHAT_EMPTY = '<div style="display:flex; flex-direction:column; align-items:center; justify-content:center; flex:1; padding:30px 20px; text-align:center;"><span class="avatar" style="margin-bottom:8px;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v3"/><circle cx="12" cy="6" r="1.2" fill="currentColor" stroke="none"/><rect x="4" y="9" width="16" height="12" rx="3"/></svg></span><div style="font-size:12.5px; color:var(--ink-faint);">New session &mdash; send a message to start</div></div>';
+  var BN_DOCK_FOOTER = '<div class="pv-chat-footer"><div class="box"><div>Message Sales Outreach&hellip;</div><div class="box-actions"><span class="spacer"></span><span class="send-btn"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M12 19V5M5 12l7-7 7 7"/></svg></span></div></div></div>';
+
+  var BN_AGENT_CONFIG = '<div style="padding:18px 24px; overflow:auto; flex:1;">' +
+    '<div class="agent-head"><div class="avatar"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v3"/><circle cx="12" cy="6" r="1.2" fill="currentColor" stroke="none"/><rect x="4" y="9" width="16" height="12" rx="3"/></svg></div><h2>Sales Outreach</h2></div>' +
+    '<div class="tabbar"><span class="tab active">Agent</span><span class="tab">Knowledge</span><span class="tab">Sessions</span><span class="tab">Settings</span></div>' +
+    '<div class="field-label">Channels</div>' +
+    '<div style="margin-bottom:8px;"><span class="run-btn" style="cursor:pointer; padding:5px 12px; font-size:12.5px;" onclick="bnTraceGo(0)"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M6 4.5v15l13-7.5Z"/></svg> Preview</span></div>' +
+    '<div class="pv-add-channel" style="max-width:260px;"><div class="row"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg> Add channel</div><div class="hint">Slack, Telegram, Linear, 1 more</div></div>' +
+    '</div>';
+
+  function bnTraceLog(rows) {
+    var html = '<div class="pv-trace-scrubber" style="margin:14px 20px 0;"><div class="pv-trace-seg is-a" style="flex:2;"></div><div class="pv-trace-seg is-idle" style="flex:1;"></div><div class="pv-trace-seg is-b" style="flex:6;"></div></div><div class="pv-trace-list">';
+    rows.forEach(function (r) { html += '<div class="pv-trace-row"><div class="who">' + r[0] + '</div><span class="time">' + r[1] + '</span></div>'; });
+    return html + '</div>';
+  }
+
+  var BN_LEADS_TRACE = bnTraceLog([["search_companies", "17:00:12"], ["search_companies", "17:00:16"], ["check_competitor_usage", "17:00:29"]]);
+  var BN_DIGEST_TRACE = bnTraceLog([["read_slack_channel", "09:00:02"], ["draft_digest", "09:00:14"], ["post_message", "09:00:21"]]);
+
+  var BN_TP_STEPS = [
+    {
+      caption: "Preview docked open, always docked — no layout-mode option, no full-page. Trace icon is a real active toggle now, shown pressed since the trace panel is currently open.",
+      content: '<div style="flex:1.4; min-width:0; overflow:auto;">' + BN_LEADS_TRACE + '</div><div style="flex:1; min-width:0; max-width:320px; border-left:1px solid var(--line); display:flex; flex-direction:column;">' +
+        BN_DOCK_HEADER.replace("SESSION_NAME", "Find 100 qualified leads").replace("TRACE_CLICK", "bnTraceGo(1)") +
+        BN_DOCK_CHAT_LEADS + BN_DOCK_FOOTER + '</div>',
+      dockOpen: true,
+      annotate: "trace-active"
+    },
+    {
+      caption: "Clicking the trace icon collapses the trace panel — the agent view underneath appears instead. A real toggle, not a dead click.",
+      content: '<div style="flex:1.6; min-width:0; display:flex; flex-direction:column;">' + BN_AGENT_CONFIG + '</div><div style="flex:1; min-width:0; max-width:320px; border-left:1px solid var(--line); display:flex; flex-direction:column;">' +
+        BN_DOCK_HEADER.replace("SESSION_NAME", "Find 100 qualified leads").replace("TRACE_CLICK", "bnTraceGo(0)") +
+        BN_DOCK_CHAT_LEADS + BN_DOCK_FOOTER + '</div>',
+      dockOpen: true
+    },
+    {
+      caption: "Switching session inside the dock (Weekly Monday digest) updates the trace panel too — both sides always agree on which session is showing.",
+      content: '<div style="flex:1.4; min-width:0; overflow:auto;">' + BN_DIGEST_TRACE + '</div><div style="flex:1; min-width:0; max-width:320px; border-left:1px solid var(--line); display:flex; flex-direction:column;">' +
+        BN_DOCK_HEADER.replace("SESSION_NAME", "Weekly Monday digest").replace("TRACE_CLICK", "bnTraceGo(1)") +
+        BN_DOCK_CHAT_DIGEST + BN_DOCK_FOOTER + '</div>',
+      dockOpen: true
+    },
+    {
+      caption: "A new session with no messages yet gets a real empty state in the trace panel (Martina's addition, not in the ticket text) instead of going blank.",
+      content: '<div style="flex:1.4; min-width:0; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:20px;"><span class="avatar" style="margin-bottom:10px;">' + BN_TRACE_ICON.replace('width="13" height="13"', 'width="22" height="22"') + '</span><div style="font-size:13px; color:var(--ink-faint);">When you talk to your agent, the trace will appear here</div></div><div style="flex:1; min-width:0; max-width:320px; border-left:1px solid var(--line); display:flex; flex-direction:column;">' +
+        BN_DOCK_HEADER.replace("SESSION_NAME", "New session").replace("TRACE_CLICK", "bnTraceGo(1)") +
+        BN_DOCK_CHAT_EMPTY + BN_DOCK_FOOTER + '</div>',
+      dockOpen: true
+    }
+  ];
+
+  function bnTraceGo(i) {
+    var content = document.getElementById("bnTpContent");
+    var caption = document.getElementById("bnTpCaption");
+    var topPreviewBtn = document.getElementById("bnTpTopPreviewBtn");
+    if (!content || !BN_TP_STEPS[i]) return;
+    var step = BN_TP_STEPS[i];
+    content.innerHTML = step.content;
+    caption.textContent = step.caption;
+    if (topPreviewBtn) topPreviewBtn.style.cssText = "cursor:pointer; margin-right:6px;" + (step.dockOpen ? "background:#e2e2e2; border:1px solid var(--line); border-radius:6px;" : "");
+    if (step.annotate === "trace-active") {
+      var traceIconActive = content.querySelector('.icon-btn[title="View trace"]');
+      if (traceIconActive) traceIconActive.style.cssText += "background:#e2e2e2; border:1px solid var(--line); border-radius:6px;";
+    }
+    var buttons = document.querySelectorAll("#bnTpControls .lrt-proto-step");
+    buttons.forEach(function (b) {
+      b.classList.toggle("is-active", parseInt(b.getAttribute("data-step"), 10) === i);
+    });
+    requestAnimationFrame(fitWireframes);
+  }
+
+  (function initBnTraceProto() {
+    var controls = document.getElementById("bnTpControls");
+    if (!controls) return;
+    for (var i = 0; i < BN_TP_STEPS.length; i++) {
+      if (i > 0) {
+        var arrow = document.createElement("span");
+        arrow.className = "lrt-proto-step-arrow";
+        arrow.textContent = "→";
+        controls.appendChild(arrow);
+      }
+      var btn = document.createElement("span");
+      btn.className = "lrt-proto-step";
+      btn.setAttribute("data-step", i);
+      btn.textContent = i + 1;
+      btn.onclick = (function (idx) { return function () { bnTraceGo(idx); }; })(i);
+      controls.appendChild(btn);
+    }
+    bnTraceGo(0);
   })();
 
   route();
