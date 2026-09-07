@@ -1650,7 +1650,7 @@ flowchart LR
 
             <div style="flex:0 0 auto;">
             <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:340px;">
-              <div class="pv-app" style="min-height:180px; padding:14px; flex-direction:column;">
+              <div class="pv-app" style="min-height:290px; padding:14px; flex-direction:column;">
                 <div id="lrtApprovalDropdown1" style="display:none; border:1px solid var(--line); border-radius:8px; padding:12px; background:var(--paper); margin-bottom:10px;">
                   <div style="font-size:13px; font-weight:600; margin-bottom:10px;">How should this agent&#39;s actions be approved?</div>
                   <div style="display:flex; align-items:flex-start; gap:8px; padding:0 0 10px; border-bottom:1px solid var(--line); cursor:pointer;" onclick="lrtSelectApprovalMode(&#39;ask&#39;)">
@@ -1722,7 +1722,7 @@ flowchart LR
                   <div style="padding:16px 18px; overflow:auto; flex:1;">
                     <div class="pv-bubble" style="margin:0 0 12px auto;">Find 500 leads at Series A SaaS companies in the US, check if they&#39;re already using a competitor, and send a personalized outreach email to the good fits, with a note on why.</div>
                     <div class="lrt-progress-card">
-                      <div style="display:flex; align-items:center; justify-content:flex-end;"><span class="lrt-pause-btn" style="cursor:pointer;" title="Stop"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2"/></svg></span></div>
+                      <div style="display:flex; align-items:center; justify-content:flex-end; gap:8px;"><span style="color:var(--ink-faint); font-size:11px;">0:26</span><span class="lrt-pause-btn" style="cursor:pointer;" title="Stop"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2"/></svg></span></div>
                       <div style="font-size:13px; line-height:1.9; margin-top:-6px;">
                         <div><span style="display:inline-block; width:9px; height:9px; background:#1f7a3d; border-radius:50%; margin-right:5px;"></span> Checked <span style="color:var(--ink-soft); font-weight:400;">(competitor tools, all 500)</span></div>
                         <div><span class="lrt-spinner" style="margin-right:5px;"></span> Scoring <span style="color:var(--ink-soft); font-weight:400;">(ranking by ICP match)</span> <span style="color:var(--ink-faint); font-size:11px;">0:22</span></div>
@@ -1860,21 +1860,19 @@ flowchart LR
 
             <div style="flex:0 0 auto;">
             <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:280px; padding:0;">
-              <div style="padding:14px; background:var(--paper);">
+              <div style="padding:14px; background:var(--paper); position:relative;">
                 <div style="font-size:10.5px; font-weight:700; letter-spacing:0.05em; color:var(--ink-faint); margin-bottom:6px;">CHATS</div>
                 <div style="font-size:10.5px; color:var(--ink-faint); margin:8px 0 4px;">Previous 7 days</div>
-                <div class="lrt-chat-hover-item" style="display:flex; align-items:center; gap:8px; padding:5px 4px; font-size:13px; position:relative; cursor:pointer;">
-                  <span class="lrt-spinner" style="flex:none;"></span> Escalations w/c 24 Aug
-                  <div class="lrt-chat-hover-card" style="position:absolute; left:100%; top:0; margin-left:8px; width:220px; background:var(--paper); border:1px solid var(--line); border-radius:8px; padding:10px 12px; box-shadow:2px 3px 0 rgba(26,28,30,0.12); z-index:5;">
-                    <div style="font-size:12.5px; font-weight:600;">Escalations w/c 24 Aug</div>
-                    <div style="font-size:11.5px; color:var(--ink-soft); margin-top:4px;">Running &mdash; 340 of 500 checked so far</div>
-                  </div>
+                <div style="display:flex; align-items:center; gap:8px; padding:5px 4px; font-size:13px; background:var(--canvas); border-radius:6px;">Escalations w/c 24 Aug<span class="spacer" style="flex:1;"></span><span class="lrt-spinner" style="flex:none;"></span></div>
+                <div style="display:flex; align-items:center; gap:8px; padding:5px 4px; font-size:13px;">Set up Maya&#39;s onboarding<span class="spacer" style="flex:1;"></span><svg width="14" height="14" viewBox="0 0 24 24" fill="#30a46c" stroke="none"><circle cx="12" cy="12" r="9"/></svg></div>
+                <div style="display:flex; align-items:center; gap:8px; padding:5px 4px; font-size:13px;">Audit /pricing metadata<span class="spacer" style="flex:1;"></span><svg width="14" height="14" viewBox="0 0 24 24" fill="#e5484d" stroke="none"><circle cx="12" cy="12" r="9"/></svg></div>
+                <div style="position:absolute; left:100%; top:38px; margin-left:8px; width:220px; background:var(--paper); border:1px solid var(--line); border-radius:8px; padding:10px 12px; box-shadow:2px 3px 0 rgba(26,28,30,0.12);">
+                  <div style="font-size:12.5px; font-weight:600;">Escalations w/c 24 Aug</div>
+                  <div style="font-size:11.5px; color:var(--ink-soft); margin-top:4px;">Running &mdash; 340 of 500 checked so far</div>
                 </div>
-                <div style="display:flex; align-items:center; gap:8px; padding:5px 4px; font-size:13px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="#30a46c" stroke="none"><circle cx="12" cy="12" r="9"/></svg> Set up Maya&#39;s onboarding</div>
-                <div style="display:flex; align-items:center; gap:8px; padding:5px 4px; font-size:13px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="#e5484d" stroke="none"><circle cx="12" cy="12" r="9"/></svg> Audit /pricing metadata</div>
               </div>
             </div></div></div>
-            <div class="lrt-screen-desc" style="margin:8px 0 0; width:280px;"><b>Running chat, in the nav.</b> Reuses the real 1a sidebar CHATS list &mdash; the spinner replaces the status dot for the chat that&#39;s currently running; hovering it reveals a card with what&#39;s happening.</div></div>
+            <div class="lrt-screen-desc" style="margin:8px 0 0; width:280px;"><b>Running chat, in the nav.</b> Reuses the real 1a sidebar CHATS list, dots moved to the right. The spinner replaces the status dot for the chat that&#39;s currently running; shown here already hovered so the info card is visible &mdash; in the real product it only shows on hover.</div></div>
 
             <div style="flex:0 0 auto;">
             <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:620px;">
@@ -1894,7 +1892,7 @@ flowchart LR
                       <div class="goal-row"><span>Goal: unresolved threads summarized</span></div>
                       <div class="lrt-progress-steps"><span class="lrt-graph-node is-done">&#10003; Reading channel</span></div>
                     </div>
-                    <div class="lrt-alert-card"><div class="lrt-alert-head"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg>Needs your approval &mdash; <b>close_ticket</b> (3 threads)</div><div class="lrt-alert-details">&rsaquo; No plan was shown for this session, but risky actions still always ask &mdash; marking 3 threads resolved based on the customer&#39;s last reply.</div><div class="lrt-alert-details" style="font-family:monospace; font-size:12px; line-height:1.7; margin-top:8px;">
+                    <div class="lrt-alert-card"><div class="lrt-alert-head"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg>Needs your approval &mdash; <b>close_ticket</b> (3 threads)</div><div class="lrt-alert-details">&rsaquo; Marking 3 threads resolved based on the customer&#39;s last reply.</div><div class="lrt-alert-details" style="font-family:monospace; font-size:12px; line-height:1.7; margin-top:8px;">
                         1. Allow only once<br>
                         2. Allow this session<br>
                         3. Allow always<br>
