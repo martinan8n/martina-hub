@@ -2397,21 +2397,21 @@ flowchart LR
                 <div class="cap-row">
                   <span class="cap-row-label" style="display:flex; flex-direction:column; align-items:flex-start; gap:2px;">
                     <span>Weekly Monday digest</span>
-                    <span style="font-size:11px;"><span style="color:#1f7a3d;">Succeeded</span> <span style="color:var(--ink-faint);">in 42.0s</span></span>
+                    <span style="font-size:11px; display:flex; align-items:center; gap:5px;"><span style="display:inline-block; width:8px; height:8px; background:#1f7a3d; border-radius:50%;"></span><span style="color:var(--ink-soft);">Done</span> <span style="color:var(--ink-faint);">in 42.0s</span></span>
                   </span>
                   <span style="display:flex; align-items:center; gap:10px; font-size:11px; color:var(--ink-faint);"><span class="lrt-medium-pill">&#128337; Schedule</span>Sep 7 09:00:02<span>12,300t</span><span style="cursor:pointer;">&#8943;</span></span>
                 </div>
                 <div class="cap-row">
                   <span class="cap-row-label" style="display:flex; flex-direction:column; align-items:flex-start; gap:2px;">
                     <span>Support escalations catch-up</span>
-                    <span style="font-size:11px;"><span style="color:#8a5a10;">Interrupted</span> <span style="color:var(--ink-faint);">in 218.3s</span></span>
+                    <span style="font-size:11px; display:flex; align-items:center; gap:5px;"><span style="display:inline-block; width:8px; height:8px; border:1.5px solid var(--ink-faint); border-radius:50%;"></span><span style="color:var(--ink-soft);">Paused</span> <span style="color:var(--ink-faint);">at 218.3s</span></span>
                   </span>
                   <span style="display:flex; align-items:center; gap:10px; font-size:11px; color:var(--ink-faint);"><span class="lrt-medium-pill">&#128279; Workflow</span>Sep 6 17:22:51<span>8,200t</span><span style="cursor:pointer;">&#8943;</span></span>
                 </div>
                 <div class="cap-row" style="border-bottom:none;">
                   <span class="cap-row-label" style="display:flex; flex-direction:column; align-items:flex-start; gap:2px;">
                     <span>Lead enrichment retry</span>
-                    <span style="font-size:11px;"><span style="color:#a62c2c;">Error</span> <span style="color:var(--ink-faint);">in 101.4s</span></span>
+                    <span style="font-size:11px; display:flex; align-items:center; gap:5px;"><span style="color:#a62c2c; font-weight:700;">&#10005;</span><span style="color:#a62c2c;">Failed</span> <span style="color:var(--ink-faint);">in 101.4s</span></span>
                   </span>
                   <span style="display:flex; align-items:center; gap:10px; font-size:11px; color:var(--ink-faint);"><span class="lrt-medium-pill">&#128279; Workflow</span>Sep 5 08:11:36<span>3,100t</span><span style="cursor:pointer;">&#8943;</span></span>
                 </div>
@@ -2420,7 +2420,7 @@ flowchart LR
           </div>
         </div></div></div>
         <div class="lrt-screen-desc" style="margin:8px 0 0; font-weight:600; color:var(--hub-ink);">Current &mdash; n8n&#39;s real Sessions list, reused</div>
-        <p class="hint" style="max-width:640px; margin:6px 0 0;">Matches the real, current Sessions tab as of Martina&#39;s latest screenshot &mdash; auto-refresh as a filled checkbox, a filter icon (no &quot;Status: All&quot; dropdown, that&#39;s not in the real UI), the left accent border, &quot;{Status} in {N}s&quot; format on every row, and the real Schedule/Workflow trigger pills. One addition beyond the real component: a checkpoint marker on the running row, since restart-from-checkpoint doesn&#39;t exist there today (Aniol&#39;s ask). Also worth flagging: the real statuses are <code>running / succeeded / error / cancelled / interrupted</code> &mdash; there&#39;s no distinct &quot;needs approval&quot; at the list level yet, only inside a session. Our proposal&#39;s richer status set may be worth raising with the team building this.</p>
+        <p class="hint" style="max-width:640px; margin:6px 0 0;">Matches the real, current Sessions tab as of Martina&#39;s latest screenshot &mdash; auto-refresh as a filled checkbox, a filter icon (no &quot;Status: All&quot; dropdown, that&#39;s not in the real UI), &quot;{Status} in {N}s&quot; format on every row, and the real Schedule/Workflow trigger pills. Status labels use our own vocabulary (Running/Done/Paused/Failed, matching the dot convention used everywhere else) rather than the real list&#39;s exact words &mdash; the real component today shows <code>running / succeeded / error / cancelled / interrupted</code> with no distinct &quot;needs approval&quot; at the list level, only inside a session. One addition beyond the real component: a checkpoint marker on the running row, since restart-from-checkpoint doesn&#39;t exist there today (Aniol&#39;s ask).</p>
         </div>
 
         <div style="flex:0 0 auto;">
