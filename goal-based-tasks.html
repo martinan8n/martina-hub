@@ -1858,6 +1858,57 @@ flowchart LR
       </div></div></div>
             <div class="lrt-screen-desc" style="margin:8px 0 0; width:280px;"><b>Away example &mdash; Slack thread.</b> Reused from the original proposal, copy updated &mdash; same idea, no invocation picker needed to get here.</div></div>
 
+            <div style="flex:0 0 auto;">
+            <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:280px; padding:0;">
+              <div style="padding:14px; background:var(--paper);">
+                <div style="font-size:10.5px; font-weight:700; letter-spacing:0.05em; color:var(--ink-faint); margin-bottom:6px;">CHATS</div>
+                <div style="font-size:10.5px; color:var(--ink-faint); margin:8px 0 4px;">Previous 7 days</div>
+                <div class="lrt-chat-hover-item" style="display:flex; align-items:center; gap:8px; padding:5px 4px; font-size:13px; position:relative; cursor:pointer;">
+                  <span class="lrt-spinner" style="flex:none;"></span> Escalations w/c 24 Aug
+                  <div class="lrt-chat-hover-card" style="position:absolute; left:100%; top:0; margin-left:8px; width:220px; background:var(--paper); border:1px solid var(--line); border-radius:8px; padding:10px 12px; box-shadow:2px 3px 0 rgba(26,28,30,0.12); z-index:5;">
+                    <div style="font-size:12.5px; font-weight:600;">Escalations w/c 24 Aug</div>
+                    <div style="font-size:11.5px; color:var(--ink-soft); margin-top:4px;">Running &mdash; 340 of 500 checked so far</div>
+                  </div>
+                </div>
+                <div style="display:flex; align-items:center; gap:8px; padding:5px 4px; font-size:13px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="#30a46c" stroke="none"><circle cx="12" cy="12" r="9"/></svg> Set up Maya&#39;s onboarding</div>
+                <div style="display:flex; align-items:center; gap:8px; padding:5px 4px; font-size:13px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="#e5484d" stroke="none"><circle cx="12" cy="12" r="9"/></svg> Audit /pricing metadata</div>
+              </div>
+            </div></div></div>
+            <div class="lrt-screen-desc" style="margin:8px 0 0; width:280px;"><b>Running chat, in the nav.</b> Reuses the real 1a sidebar CHATS list &mdash; the spinner replaces the status dot for the chat that&#39;s currently running; hovering it reveals a card with what&#39;s happening.</div></div>
+
+            <div style="flex:0 0 auto;">
+            <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:620px;">
+              <div class="pv-app" style="min-height:280px;">
+                <div class="pv-skeleton-navbar" style="height:auto;">NAV</div>
+                <div class="pv-main" style="display:flex; flex-direction:column;">
+                  <div class="pv-preview-tabs">
+                    <b>Sales Outreach</b>
+                    <span class="pill" style="margin-left:0;">Preview</span>
+                    <span class="spacer"></span>
+                    <span class="icon-btn" title="Minimize" style="cursor:pointer;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 14h6v6M20 10h-6V4M14 10l7-7M3 21l7-7"/></svg></span>
+                  </div>
+                  <div style="padding:16px 18px; overflow:auto; flex:1; display:flex; flex-direction:column;">
+                    <div class="pv-bubble" style="margin:0 0 12px auto;">Go through the #support-escalations channel from this week and summarize every thread that&#39;s still unresolved.</div>
+                    <div class="pv-reply" style="margin-bottom:10px;">This one&#39;s straightforward enough that I&#39;ll just start &mdash; I&#39;ll let you know if anything needs your input.</div>
+                    <div class="lrt-progress-card" style="margin:auto 0 10px;">
+                      <div class="goal-row"><span>Goal: unresolved threads summarized</span></div>
+                      <div class="lrt-progress-steps"><span class="lrt-graph-node is-done">&#10003; Reading channel</span></div>
+                    </div>
+                    <div class="lrt-alert-card"><div class="lrt-alert-head"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg>Needs your approval &mdash; <b>close_ticket</b> (3 threads)</div><div class="lrt-alert-details">&rsaquo; No plan was shown for this session, but risky actions still always ask &mdash; marking 3 threads resolved based on the customer&#39;s last reply.</div><div class="lrt-alert-details" style="font-family:monospace; font-size:12px; line-height:1.7; margin-top:8px;">
+                        1. Allow only once<br>
+                        2. Allow this session<br>
+                        3. Allow always<br>
+                        4. Reject
+                      </div><div class="lrt-alert-actions" style="color:var(--ink-faint); font-size:11px; font-family:monospace;">&uarr;/&darr; select &nbsp; Enter confirm &nbsp; Esc back</div></div>
+                  </div>
+                  <div class="pv-chat-footer"><div class="box"><div>Message Sales Outreach&hellip;</div><div class="box-actions"><span class="spacer"></span><span class="send-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M12 19V5M5 12l7-7 7 7"/></svg></span></div></div></div>
+                </div>
+              </div>
+            </div></div></div>
+            <div class="lrt-screen-desc" style="margin:8px 0 0; font-weight:600; color:var(--hub-ink);">Needs approval &mdash; still gated, even with no plan</div>
+            <p class="lrt-screen-desc" style="margin:4px 0 0; max-width:320px;">A different, heavier moment than Needs permission &mdash; the same no-plan path hitting something that needs approval, gated regardless of which running-state visual is used. Sticks to the bottom like the running-status card. Numbered-choice list with keyboard hints instead of buttons &mdash; the pattern Claude Code and Grok use for their own agent-status panels.</p>
+            </div>
+
           </div>
         </div>
 
@@ -1997,44 +2048,6 @@ flowchart LR
             </div></div></div>
             <div class="lrt-screen-desc" style="margin:8px 0 0; font-weight:600; color:var(--hub-ink);">Stopped &mdash; after clicking Stop</div>
             <p class="lrt-screen-desc" style="margin:4px 0 0; max-width:280px;">A separate, later state &mdash; not shown together with Recalculating. Links to the real Trace section built above.</p>
-            </div>
-
-                      </div>
-
-          <p class="lrt-screen-desc" style="margin-top:24px;">A different moment, not another variant of the above &mdash; the same no-plan path hitting something that needs approval. Guardrails apply regardless of which running-state visual is used.</p>
-          <div style="display:flex; gap:20px; align-items:flex-start; flex-wrap:wrap;">
-
-            <div style="flex:0 0 auto;">
-            <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:620px;">
-              <div class="pv-app" style="min-height:280px;">
-                <div class="pv-skeleton-navbar" style="height:auto;">NAV</div>
-                <div class="pv-main" style="display:flex; flex-direction:column;">
-                  <div class="pv-preview-tabs">
-                    <b>Sales Outreach</b>
-                    <span class="pill" style="margin-left:0;">Preview</span>
-                    <span class="spacer"></span>
-                    <span class="icon-btn" title="Minimize" style="cursor:pointer;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 14h6v6M20 10h-6V4M14 10l7-7M3 21l7-7"/></svg></span>
-                  </div>
-                  <div style="padding:16px 18px; overflow:auto; flex:1; display:flex; flex-direction:column;">
-                    <div class="pv-bubble" style="margin:0 0 12px auto;">Go through the #support-escalations channel from this week and summarize every thread that&#39;s still unresolved.</div>
-                    <div class="pv-reply" style="margin-bottom:10px;">This one&#39;s straightforward enough that I&#39;ll just start &mdash; I&#39;ll let you know if anything needs your input.</div>
-                    <div class="lrt-progress-card" style="margin:auto 0 10px;">
-                      <div class="goal-row"><span>Goal: unresolved threads summarized</span></div>
-                      <div class="lrt-progress-steps"><span class="lrt-graph-node is-done">&#10003; Reading channel</span></div>
-                    </div>
-                    <div class="lrt-alert-card"><div class="lrt-alert-head"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg>Needs your approval &mdash; <b>close_ticket</b> (3 threads)</div><div class="lrt-alert-details">&rsaquo; No plan was shown for this session, but risky actions still always ask &mdash; marking 3 threads resolved based on the customer&#39;s last reply.</div><div class="lrt-alert-details" style="font-family:monospace; font-size:12px; line-height:1.7; margin-top:8px;">
-                        1. Allow only once<br>
-                        2. Allow this session<br>
-                        3. Allow always<br>
-                        4. Reject
-                      </div><div class="lrt-alert-actions" style="color:var(--ink-faint); font-size:11px; font-family:monospace;">&uarr;/&darr; select &nbsp; Enter confirm &nbsp; Esc back</div></div>
-                  </div>
-                  <div class="pv-chat-footer"><div class="box"><div>Message Sales Outreach&hellip;</div><div class="box-actions"><span class="spacer"></span><span class="send-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M12 19V5M5 12l7-7 7 7"/></svg></span></div></div></div>
-                </div>
-              </div>
-            </div></div></div>
-            <div class="lrt-screen-desc" style="margin:8px 0 0; font-weight:600; color:var(--hub-ink);">Needs approval &mdash; still gated, even with no plan</div>
-            <p class="lrt-screen-desc" style="margin:4px 0 0; max-width:320px;">Sticks to the bottom like the running-status card. Numbered-choice list with keyboard hints instead of buttons &mdash; the pattern Claude Code and Grok use for their own agent-status panels.</p>
             </div>
 
                       </div>
@@ -2273,46 +2286,49 @@ flowchart LR
               </div>
               <div style="padding:18px 24px;">
                 <div class="tabbar">
-                  <span class="tab">Agent</span><span class="tab">Knowledge</span><span class="tab active">Sessions</span><span class="tab">Settings</span>
+                  <span class="tab">Agent</span><span class="tab">Knowledge</span><span class="tab" style="color:#fd8925; font-weight:700; border-bottom:3px solid #fd8925; padding-bottom:10px;">Sessions</span><span class="tab">Settings</span>
                 </div>
-                <div style="display:flex; align-items:center; gap:16px; margin:14px 0 6px;">
-                  <label style="display:flex; align-items:center; gap:6px; font-size:12.5px; color:var(--ink-soft); cursor:pointer;"><input type="checkbox" checked style="margin:0;"> Auto-refresh</label>
-                  <div class="model-row" style="max-width:150px; padding:4px 10px;"><span class="name" style="font-size:12px;">Status: All</span><span class="chev">&#9662;</span></div>
+                <div style="display:flex; align-items:center; margin:14px 0 6px;">
+                  <label style="display:flex; align-items:center; gap:6px; font-size:12.5px; color:var(--ink-soft); cursor:pointer;"><span style="width:14px; height:14px; border-radius:3px; background:#fd8925; display:flex; align-items:center; justify-content:center; flex:none;"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg></span> Auto refresh</label>
+                  <span class="spacer" style="flex:1;"></span>
+                  <span style="width:26px; height:26px; border:1px solid var(--line); border-radius:6px; display:flex; align-items:center; justify-content:center; cursor:pointer;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5h16l-6 8v5l-4 2v-7L4 5Z"/></svg></span>
                 </div>
-                <div class="cap-row">
+                <div style="border-left:3px solid #e5484d; border-radius:2px;">
+                <div class="cap-row" style="padding-left:12px;">
                   <span class="cap-row-label" style="display:flex; flex-direction:column; align-items:flex-start; gap:2px;">
-                    <span>Find 100 qualified leads <span class="lrt-checkpoint" title="Checkpoint saved &mdash; new, not in the real list today">&#9679;</span></span>
-                    <span style="font-size:11px; color:var(--ink-soft);"><span class="lrt-spinner"></span> Running</span>
+                    <span>Capture Agent Slack feedback <span class="lrt-checkpoint" title="Checkpoint saved &mdash; new, not in the real list today">&#9679;</span></span>
+                    <span style="font-size:11px;"><span style="color:var(--ink-soft);"><span class="lrt-spinner"></span> Running</span></span>
                   </span>
-                  <span style="display:flex; align-items:center; gap:10px; font-size:11px; color:var(--ink-faint);"><span class="lrt-medium-pill">&#128172; Preview</span>Just now<span>964,795t</span><span style="cursor:pointer;">&#8943;</span></span>
+                  <span style="display:flex; align-items:center; gap:10px; font-size:11px; color:var(--ink-faint);"><span class="lrt-medium-pill">&#128337; Schedule</span>Sep 7 12:04:10<span>248,989t</span><span style="cursor:pointer;">&#8943;</span></span>
                 </div>
-                <div class="cap-row">
+                <div class="cap-row" style="padding-left:12px;">
                   <span class="cap-row-label" style="display:flex; flex-direction:column; align-items:flex-start; gap:2px;">
                     <span>Weekly Monday digest</span>
-                    <span style="font-size:11px; color:#1f7a3d;">Succeeded &mdash; 42s</span>
+                    <span style="font-size:11px;"><span style="color:#1f7a3d;">Succeeded</span> <span style="color:var(--ink-faint);">in 42.0s</span></span>
                   </span>
-                  <span style="display:flex; align-items:center; gap:10px; font-size:11px; color:var(--ink-faint);"><span class="lrt-medium-pill">&#9200; Schedule</span>2h ago<span>12,300t</span><span style="cursor:pointer;">&#8943;</span></span>
+                  <span style="display:flex; align-items:center; gap:10px; font-size:11px; color:var(--ink-faint);"><span class="lrt-medium-pill">&#128337; Schedule</span>Sep 7 09:00:02<span>12,300t</span><span style="cursor:pointer;">&#8943;</span></span>
                 </div>
-                <div class="cap-row">
+                <div class="cap-row" style="padding-left:12px;">
                   <span class="cap-row-label" style="display:flex; flex-direction:column; align-items:flex-start; gap:2px;">
                     <span>Support escalations catch-up</span>
-                    <span style="font-size:11px; color:#8a5a10;">Interrupted</span>
+                    <span style="font-size:11px;"><span style="color:#8a5a10;">Interrupted</span> <span style="color:var(--ink-faint);">in 218.3s</span></span>
                   </span>
-                  <span style="display:flex; align-items:center; gap:10px; font-size:11px; color:var(--ink-faint);"><span class="lrt-medium-pill">&#128172; Slack</span>1d ago<span>8,200t</span><span style="cursor:pointer;">&#8943;</span></span>
+                  <span style="display:flex; align-items:center; gap:10px; font-size:11px; color:var(--ink-faint);"><span class="lrt-medium-pill">&#128279; Workflow</span>Sep 6 17:22:51<span>8,200t</span><span style="cursor:pointer;">&#8943;</span></span>
                 </div>
-                <div class="cap-row" style="border-bottom:none;">
+                <div class="cap-row" style="border-bottom:none; padding-left:12px;">
                   <span class="cap-row-label" style="display:flex; flex-direction:column; align-items:flex-start; gap:2px;">
                     <span>Lead enrichment retry</span>
-                    <span style="font-size:11px; color:#a62c2c;">Error &mdash; 6s</span>
+                    <span style="font-size:11px;"><span style="color:#a62c2c;">Error</span> <span style="color:var(--ink-faint);">in 101.4s</span></span>
                   </span>
-                  <span style="display:flex; align-items:center; gap:10px; font-size:11px; color:var(--ink-faint);"><span class="lrt-medium-pill">&#128172; Preview</span>2d ago<span>3,100t</span><span style="cursor:pointer;">&#8943;</span></span>
+                  <span style="display:flex; align-items:center; gap:10px; font-size:11px; color:var(--ink-faint);"><span class="lrt-medium-pill">&#128279; Workflow</span>Sep 5 08:11:36<span>3,100t</span><span style="cursor:pointer;">&#8943;</span></span>
+                </div>
                 </div>
               </div>
             </div>
           </div>
         </div></div></div>
         <div class="lrt-screen-desc" style="margin:8px 0 0; font-weight:600; color:var(--hub-ink);">Current &mdash; n8n&#39;s real Sessions list, reused</div>
-        <p class="hint" style="max-width:640px; margin:6px 0 0;">One addition beyond the real component: a checkpoint marker on the running row, since restart-from-checkpoint doesn&#39;t exist there today (Aniol&#39;s ask). Also worth flagging: the real statuses are <code>running / succeeded / error / cancelled / interrupted</code> &mdash; there&#39;s no distinct &quot;needs approval&quot; at the list level yet, only inside a session. Our proposal&#39;s richer status set may be worth raising with the team building this.</p>
+        <p class="hint" style="max-width:640px; margin:6px 0 0;">Matches the real, current Sessions tab as of Martina&#39;s latest screenshot &mdash; auto-refresh as a filled checkbox, a filter icon (no &quot;Status: All&quot; dropdown, that&#39;s not in the real UI), the left accent border, &quot;{Status} in {N}s&quot; format on every row, and the real Schedule/Workflow trigger pills. One addition beyond the real component: a checkpoint marker on the running row, since restart-from-checkpoint doesn&#39;t exist there today (Aniol&#39;s ask). Also worth flagging: the real statuses are <code>running / succeeded / error / cancelled / interrupted</code> &mdash; there&#39;s no distinct &quot;needs approval&quot; at the list level yet, only inside a session. Our proposal&#39;s richer status set may be worth raising with the team building this.</p>
         </div>
 
         <div style="flex:0 0 auto;">

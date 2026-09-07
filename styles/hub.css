@@ -989,3 +989,6 @@ img { max-width: 100%; }
     content: attr(data-placeholder); color: var(--ink-faint); font-style: italic;
   }
   mark.wf-hl { background: #ffe066; color: inherit; padding: 0 1px; border-radius: 2px; }
+  .wf .lrt-chat-hover-card { display: none; }
+  .wf .lrt-chat-hover-item:hover .lrt-chat-hover-card { display: block; }
+  .wf .lrt-chat-hover-item:hover { background: var(--canvas); border-radius: 6px; }
