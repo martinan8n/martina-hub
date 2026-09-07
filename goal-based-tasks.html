@@ -1580,6 +1580,77 @@ flowchart LR
     </div>
 
     <div class="pv-nav-map">
+      <h2 class="lrt-section-title">When a plan helps &mdash; shown upfront, flagged as not final</h2>
+      <p class="lrt-section-sub">Two base versions to build from &mdash; one where the agent shows what it&#39;ll do before starting, without ever calling it a plan; one where it just starts, and the status itself stays visibly provisional the whole way through.</p>
+
+      <div class="lrt-screens">
+        <div class="lrt-screen-block">
+          <div style="display:flex; gap:20px; align-items:flex-start; flex-wrap:wrap;">
+
+            <div style="flex:0 0 auto;">
+            <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:620px;">
+              <div class="pv-app" style="min-height:340px;">
+                <div class="pv-skeleton-navbar" style="height:auto;">NAV</div>
+                <div class="pv-main" style="display:flex; flex-direction:column;">
+                  <div class="pv-preview-tabs">
+                    <b>Sales Outreach</b>
+                    <span class="pill" style="margin-left:0;">Preview</span>
+                    <span class="spacer"></span>
+                    <span class="icon-btn" title="Minimize" style="cursor:pointer;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 14h6v6M20 10h-6V4M14 10l7-7M3 21l7-7"/></svg></span>
+                  </div>
+                  <div style="padding:16px 18px; overflow:auto; flex:1;">
+                    <div class="pv-bubble" style="margin:0 0 12px auto;">Find 500 leads at Series A SaaS companies in the US, check if they&#39;re already using a competitor, and send a personalized outreach email to the good fits, with a note on why.</div>
+                    <div class="lrt-plan-card">
+                      <p class="ask">This looks like it&#39;ll take some real work. Here&#39;s what I&#39;ll do &mdash; want me to go ahead?</p>
+                      <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap; margin:4px 0 6px;">
+                        <div class="lrt-graph-node">Find SaaS companies</div>
+                        <span style="color:var(--ink-faint);">&rarr;</span>
+                        <div class="lrt-graph-node plan-step-tentative">Check competitors</div>
+                        <span style="color:var(--ink-faint);">&rarr;</span>
+                        <div class="lrt-graph-node plan-step-tentative">Score fits</div>
+                        <span style="color:var(--ink-faint);">&rarr;</span>
+                        <div class="lrt-graph-node plan-step-tentative">Send outreach emails</div>
+                      </div>
+                      <p class="hint" style="margin:8px 0 0;">This is a starting point, not a fixed contract &mdash; I may add or adjust steps as I learn more.</p>
+                      <div class="lrt-plan-actions" style="justify-content:flex-end;"><div style="display:flex; gap:8px;"><span class="lrt-btn">Cancel</span><span class="lrt-btn is-primary">Start</span></div></div>
+                    </div>
+                  </div>
+                  <div class="pv-chat-footer"><div class="box"><div>Message Sales Outreach&hellip;</div><div class="box-actions"><span class="spacer"></span><span class="send-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M12 19V5M5 12l7-7 7 7"/></svg></span></div></div></div>
+                </div>
+              </div>
+            </div></div></div>
+            <div class="lrt-screen-desc" style="margin:8px 0 0; width:280px;"><b>With a plan &mdash; never called one.</b> Same shape as before, reworded so the word &quot;plan&quot; never appears; steps after the first read as tentative, not a fixed sequence.</div></div>
+
+            <div style="flex:0 0 auto;">
+            <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:620px;">
+              <div class="pv-app" style="min-height:340px;">
+                <div class="pv-skeleton-navbar" style="height:auto;">NAV</div>
+                <div class="pv-main" style="display:flex; flex-direction:column;">
+                  <div class="pv-preview-tabs">
+                    <b>Sales Outreach</b>
+                    <span class="pill" style="margin-left:0;">Preview</span>
+                    <span class="spacer"></span>
+                    <span class="icon-btn" title="Minimize" style="cursor:pointer;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 14h6v6M20 10h-6V4M14 10l7-7M3 21l7-7"/></svg></span>
+                  </div>
+                  <div style="padding:16px 18px; overflow:auto; flex:1;">
+                    <div class="pv-bubble" style="margin:0 0 12px auto;">Find 500 leads at Series A SaaS companies in the US, check if they&#39;re already using a competitor, and send a personalized outreach email to the good fits, with a note on why.</div>
+                    <div class="lrt-progress-card">
+                      <div style="display:flex; align-items:center; gap:6px; font-size:13px; font-weight:600; color:var(--ink);"><span class="lrt-spinner"></span> Finding Series A SaaS companies in the US that match&hellip;<span class="lrt-pause-btn" style="cursor:pointer; margin-left:auto; width:22px; height:22px;" title="Stop"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><rect x="5" y="5" width="14" height="14" rx="2"/></svg></span></div>
+                      <p class="hint" style="margin:8px 0 0;">I&#39;m figuring this out as I go &mdash; what I&#39;m doing right now will keep changing.</p>
+                    </div>
+                  </div>
+                  <div class="pv-chat-footer"><div class="box"><div>Message Sales Outreach&hellip;</div><div class="box-actions"><span class="spacer"></span><span class="send-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M12 19V5M5 12l7-7 7 7"/></svg></span></div></div></div>
+                </div>
+              </div>
+            </div></div></div>
+            <div class="lrt-screen-desc" style="margin:8px 0 0; width:280px;"><b>No plan &mdash; agent starts directly.</b> No preview card at all; one status line describes what&#39;s happening right now and rewrites itself as the agent goes, instead of a fixed checklist.</div></div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pv-nav-map">
       <h2 class="lrt-section-title">Two ways of watching it happen</h2>
       <p class="lrt-section-sub">Same session, different context &mdash; live in the platform, or catching up after being away.</p>
       <div class="pv-twocol">
