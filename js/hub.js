@@ -686,6 +686,16 @@
     requestAnimationFrame(fitWireframes);
   }
 
+  function chatNavShowTab(idx) {
+    document.querySelectorAll("#chatNavPageTabs .lrt-page-tab").forEach(function (t) {
+      t.classList.toggle("is-active", parseInt(t.getAttribute("data-page-tab"), 10) === idx);
+    });
+    document.querySelectorAll(".chatnav-page-panel").forEach(function (p) {
+      p.style.display = parseInt(p.getAttribute("data-page-panel"), 10) === idx ? "" : "none";
+    });
+    requestAnimationFrame(fitWireframes);
+  }
+
   function lrtShowRefTab(idx) {
     document.querySelectorAll(".lrt-ref-tab").forEach(function (t) {
       t.classList.toggle("is-active", parseInt(t.getAttribute("data-tab"), 10) === idx);
