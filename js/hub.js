@@ -1181,5 +1181,11 @@
   }
   window.chPropShowHome = chPropShowHome;
 
+  function chPropToggleShare() {
+    var modal = document.getElementById("chPropShareModal");
+    if (modal) modal.style.display = modal.style.display === "none" ? "flex" : "none";
+  }
+  window.chPropToggleShare = chPropToggleShare;
+
   route();
   requestAnimationFrame(fitWireframes);
