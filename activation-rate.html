@@ -626,7 +626,7 @@
     <div class="chatnav-page-panel" data-page-panel="1" style="display:none;">
     <div class="screen-head">
       <h1>New chat &mdash; 1a: Sidebar, chats live next to the nav &mdash; Proposal</h1>
-      <p>Heading now comes before the agent row, per feedback that title-below-icons read backwards. Agent selection drives the composer: AI Assistant is selected by default; picking another agent updates its icon&#39;s ring, the pill inside the composer, and the starter prompts below. The composer pill is also a dropdown. The dashed &ldquo;See all&rdquo; circle replaces the old text link, sitting in the row itself rather than below the composer. Sidebar: a new FAVOURITES section replaces the old static CHATS label, with the persistent entry renamed to n8n Hub &mdash; flagging this rename as a judgment call worth double-checking against Tuukka&#39;s actual naming guidance.</p>
+      <p>Agent selection drives the composer: AI Assistant is selected by default; picking another agent updates its icon&#39;s ring, the pill inside the composer, the heading, the placeholder, and the starter prompts &mdash; each agent phrases its own copy since &ldquo;automate&rdquo; didn&#39;t fit all of them. The heading sits below the agent row, as a caption for whichever agent is selected, not a fixed page title above it. The composer pill is also a dropdown. The dashed &ldquo;See all&rdquo; circle replaces the old text link. Clicking Send or any starter prompt opens a real chat with that agent, adds it to the sidebar under Today, and shows a favourite-star button at the top. Sidebar: a new FAVOURITES section replaces the old static CHATS label, with the persistent entry renamed to n8n Hub &mdash; flagging this rename as a judgment call worth double-checking against Tuukka&#39;s actual naming guidance.</p>
     </div>
 
     <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:1180px; padding:0;">
@@ -648,6 +648,7 @@
           <div style="font-size:10.5px; font-weight:700; letter-spacing:0.05em; color:var(--ink-faint); margin-top:16px; margin-bottom:4px;">FAVOURITES</div>
           <div style="display:flex; align-items:center; gap:8px; padding:5px 4px; font-size:13px; font-weight:600; background:var(--canvas); border-radius:6px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ink-faint)" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="m9 12 2 2 4-4"/></svg> n8n Hub</div>
           <div style="font-size:10.5px; color:var(--ink-faint); margin:10px 0 4px;">Today</div>
+          <div id="chPropNewChatRow" style="display:none; align-items:center; gap:8px; padding:5px 4px; font-size:13px; font-weight:600; background:var(--canvas); border-radius:6px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ink-faint)" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="m9 12 2 2 4-4"/></svg> <span id="chPropNewChatRowLabel">New chat</span></div>
           <div style="display:flex; align-items:center; gap:8px; padding:5px 4px; font-size:13px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ink-faint)" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="m9 12 2 2 4-4"/></svg> Retry logic for HTTP node</div>
           <div style="padding:6px 4px; font-size:12.5px; color:var(--ink-faint); cursor:pointer;">All chats&hellip;</div>
 
@@ -667,9 +668,7 @@
         <div id="chPropMainCol" style="flex:1; min-width:0; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:40px; overflow:auto;">
           <div id="chPropHomeView" style="display:flex; flex-direction:column; align-items:center;">
 
-          <h2 id="chPropHeading" style="font-size:24px; margin:0 0 20px;">What do you want to automate?</h2>
-
-          <div style="display:flex; gap:32px; margin-bottom:24px;">
+          <div style="display:flex; gap:32px; margin-bottom:20px;">
 
             <div style="display:flex; flex-direction:column; align-items:center; gap:6px; cursor:pointer;" onclick="chPropSelectAgent(&#39;aia&#39;)">
               <div id="chPropIcon-aia" style="width:44px; height:44px; border-radius:50%; background:#fd8925; display:flex; align-items:center; justify-content:center; box-shadow:0 0 0 2px #fff, 0 0 0 4px #fd8925;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M12 2 9.5 8.5 3 11l6.5 2.5L12 20l2.5-6.5L21 11l-6.5-2.5Z"/></svg></div>
@@ -698,6 +697,8 @@
 
           </div>
 
+          <h2 id="chPropHeading" style="font-size:24px; margin:0 0 20px;">What do you want to automate?</h2>
+
           <div style="width:100%; max-width:560px; border:1px solid var(--line); border-radius:12px;">
             <div id="chPropPlaceholder" style="padding:14px 16px; font-size:13.5px; color:var(--ink-faint);">Tell me what to build or ask a question &mdash; add context with +</div>
             <div style="display:flex; align-items:center; gap:7px; padding:8px 12px; border-top:1px solid var(--line); position:relative;">
@@ -716,16 +717,28 @@
               </div>
               <span class="spacer" style="flex:1;"></span>
               <span class="icon-btn" title="Voice" style="cursor:pointer; color:var(--ink-faint);"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v4"/></svg></span>
-              <span class="send-btn" style="cursor:pointer;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M12 19V5M5 12l7-7 7 7"/></svg></span>
+              <span class="send-btn" style="cursor:pointer;" onclick="chPropSendMessage()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M12 19V5M5 12l7-7 7 7"/></svg></span>
             </div>
           </div>
 
           <div id="chPropStarterPrompts" style="width:100%; max-width:560px; margin-top:16px; display:flex; flex-wrap:wrap; align-items:center; gap:8px;">
-            <span style="display:inline-flex; align-items:center; gap:6px; border:1px solid var(--line); border-radius:999px; padding:6px 12px; font-size:12.5px; cursor:pointer;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--ink-soft)" stroke-width="2"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3.5"/></svg>Score my leads</span>
-            <span style="display:inline-flex; align-items:center; gap:6px; border:1px solid var(--line); border-radius:999px; padding:6px 12px; font-size:12.5px; cursor:pointer;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--ink-soft)" stroke-width="2"><path d="M6 2h12v20l-3-2-3 2-3-2-3 2Z"/><path d="M9 8h6M9 12h6"/></svg>Process invoices</span>
-            <span style="display:inline-flex; align-items:center; gap:6px; border:1px solid var(--line); border-radius:999px; padding:6px 12px; font-size:12.5px; cursor:pointer;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--ink-soft)" stroke-width="2"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Schedule social posts</span>
-            <span style="display:inline-flex; align-items:center; gap:6px; border:1px solid var(--line); border-radius:999px; padding:6px 12px; font-size:12.5px; cursor:pointer;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--ink-soft)" stroke-width="2"><path d="M4 5h16v11H8l-4 3V5Z"/></svg>Telegram support agent</span>
+            <span onclick="chPropSendMessage(&#39;Score my leads&#39;)" style="display:inline-flex; align-items:center; gap:6px; border:1px solid var(--line); border-radius:999px; padding:6px 12px; font-size:12.5px; cursor:pointer;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--ink-soft)" stroke-width="2"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3.5"/></svg>Score my leads</span>
+            <span onclick="chPropSendMessage(&#39;Process invoices&#39;)" style="display:inline-flex; align-items:center; gap:6px; border:1px solid var(--line); border-radius:999px; padding:6px 12px; font-size:12.5px; cursor:pointer;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--ink-soft)" stroke-width="2"><path d="M6 2h12v20l-3-2-3 2-3-2-3 2Z"/><path d="M9 8h6M9 12h6"/></svg>Process invoices</span>
+            <span onclick="chPropSendMessage(&#39;Schedule social posts&#39;)" style="display:inline-flex; align-items:center; gap:6px; border:1px solid var(--line); border-radius:999px; padding:6px 12px; font-size:12.5px; cursor:pointer;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--ink-soft)" stroke-width="2"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Schedule social posts</span>
+            <span onclick="chPropSendMessage(&#39;Telegram support agent&#39;)" style="display:inline-flex; align-items:center; gap:6px; border:1px solid var(--line); border-radius:999px; padding:6px 12px; font-size:12.5px; cursor:pointer;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--ink-soft)" stroke-width="2"><path d="M4 5h16v11H8l-4 3V5Z"/></svg>Telegram support agent</span>
           </div>
+          </div>
+
+          <div id="chPropChatView" style="display:none; width:100%; max-width:640px; text-align:left;">
+            <div style="display:flex; align-items:center; gap:8px; margin-bottom:16px;">
+              <span onclick="chPropShowHome()" style="cursor:pointer; display:flex; align-items:center; gap:8px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 6-6 6 6 6"/></svg> New chat / <b id="chPropChatAgentLabel">AI Assistant</b></span>
+              <span class="spacer" style="flex:1;"></span>
+              <span id="chPropChatFavStar" onclick="chPropToggleChatFavourite()" title="Favourite this chat" style="cursor:pointer; color:var(--ink-faint); display:flex;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2l2.9 6.3 6.9.8-5 4.9 1.2 6.9L12 17.7l-6 3.2 1.2-6.9-5-4.9 6.9-.8Z"/></svg></span>
+            </div>
+            <div style="border:1px solid var(--line); border-radius:12px; padding:20px; min-height:220px; display:flex; flex-direction:column;">
+              <div class="pv-bubble" id="chPropChatUserMsg" style="margin:0 0 12px auto;">Score my leads</div>
+              <div class="pv-reply">On it &mdash; I&#39;ll go through your recent leads and flag the ones most worth following up on.</div>
+            </div>
           </div>
 
           <div id="chPropAllAgentsView" style="display:none; width:100%; max-width:640px; text-align:left;">
@@ -761,7 +774,7 @@
             <span class="pv-crumb">Personal / <b>AI Assistant</b> <span class="chev">&#9662;</span></span>
             <span class="spacer"></span>
             <span style="display:inline-flex; align-items:stretch; position:relative;">
-              <span id="chPropPublishBtn" class="btn" style="background:var(--accent-soft); border-radius:6px 0 0 6px;" onclick="chPropTogglePublishModal()">Publish</span>
+              <span id="chPropPublishBtn" class="btn" style="background:var(--accent-soft); border-radius:6px;" onclick="chPropTogglePublishModal()">Publish</span>
               <span id="chPropPublishChevron" class="btn icon-only" style="display:none; border-radius:0 6px 6px 0; border-left:1px solid rgba(0,0,0,0.08);" onclick="chPropTogglePublishMenu()">&#9662;</span>
               <div id="chPropPublishMenu" style="display:none; position:absolute; top:36px; right:0; width:190px; background:var(--paper); border:1px solid var(--line); border-radius:8px; box-shadow:0 4px 14px rgba(0,0,0,0.1); padding:6px; z-index:6;">
                 <div class="chprop-dropdown-row" onclick="chPropChangeVisibilityFromMenu()" style="padding:7px 8px; border-radius:6px; cursor:pointer; font-size:13px;">Change visibility&hellip;</div>

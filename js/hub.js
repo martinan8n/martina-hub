@@ -1142,9 +1142,12 @@
     }
   };
 
+  var chPropCurrentAgent = "aia";
+
   function chPropSelectAgent(key) {
     var d = CH_PROP_AGENTS[key];
     if (!d) return;
+    chPropCurrentAgent = key;
     Object.keys(CH_PROP_AGENTS).forEach(function (k) {
       var icon = document.getElementById("chPropIcon-" + k);
       if (icon) icon.style.boxShadow = k === key ? "0 0 0 2px #fff, 0 0 0 4px " + CH_PROP_AGENTS[k].color : "none";
@@ -1162,7 +1165,7 @@
     var wrap = document.getElementById("chPropStarterPrompts");
     if (wrap) {
       wrap.innerHTML = d.prompts.map(function (p) {
-        return '<span style="display:inline-flex; align-items:center; gap:6px; border:1px solid var(--line); border-radius:999px; padding:6px 12px; font-size:12.5px; cursor:pointer;">' +
+        return '<span onclick="chPropSendMessage(\'' + p.label.replace(/'/g, "\\'") + '\')" style="display:inline-flex; align-items:center; gap:6px; border:1px solid var(--line); border-radius:999px; padding:6px 12px; font-size:12.5px; cursor:pointer;">' +
           CH_PROP_ICONS[p.icon] + p.label + '</span>';
       }).join("");
     }
@@ -1180,8 +1183,10 @@
   function chPropShowAllAgents() {
     var home = document.getElementById("chPropHomeView");
     var all = document.getElementById("chPropAllAgentsView");
+    var chat = document.getElementById("chPropChatView");
     var col = document.getElementById("chPropMainCol");
     if (home) home.style.display = "none";
+    if (chat) chat.style.display = "none";
     if (all) all.style.display = "block";
     if (col) col.style.justifyContent = "flex-start";
   }
@@ -1190,9 +1195,11 @@
   function chPropShowHome() {
     var home = document.getElementById("chPropHomeView");
     var all = document.getElementById("chPropAllAgentsView");
+    var chat = document.getElementById("chPropChatView");
     var col = document.getElementById("chPropMainCol");
     if (home) home.style.display = "flex";
     if (all) all.style.display = "none";
+    if (chat) chat.style.display = "none";
     if (col) col.style.justifyContent = "center";
   }
   window.chPropShowHome = chPropShowHome;
@@ -1210,6 +1217,7 @@
       btn.innerHTML = '<span style="width:7px; height:7px; border-radius:50%; background:#2f9e5f; display:inline-block;"></span> Published';
       btn.style.background = "";
       btn.style.opacity = "0.6";
+      btn.style.borderRadius = "6px 0 0 6px";
     }
     if (chevron) chevron.style.display = "flex";
     chPropTogglePublishModal();
@@ -1228,6 +1236,47 @@
   }
   window.chPropChangeVisibilityFromMenu = chPropChangeVisibilityFromMenu;
 
+  function chPropSendMessage(text) {
+    var d = CH_PROP_AGENTS[chPropCurrentAgent];
+    if (!d) return;
+    var msg = text || d.prompts[0].label;
+    var home = document.getElementById("chPropHomeView");
+    var all = document.getElementById("chPropAllAgentsView");
+    var chat = document.getElementById("chPropChatView");
+    var col = document.getElementById("chPropMainCol");
+    if (home) home.style.display = "none";
+    if (all) all.style.display = "none";
+    if (chat) chat.style.display = "block";
+    if (col) col.style.justifyContent = "flex-start";
+    var agentLabel = document.getElementById("chPropChatAgentLabel");
+    if (agentLabel) agentLabel.textContent = d.name;
+    var userMsg = document.getElementById("chPropChatUserMsg");
+    if (userMsg) userMsg.textContent = msg;
+    var star = document.getElementById("chPropChatFavStar");
+    if (star) { star.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2l2.9 6.3 6.9.8-5 4.9 1.2 6.9L12 17.7l-6 3.2 1.2-6.9-5-4.9 6.9-.8Z"/></svg>'; star.style.color = "var(--ink-faint)"; }
+    var row = document.getElementById("chPropNewChatRow");
+    var rowLabel = document.getElementById("chPropNewChatRowLabel");
+    if (rowLabel) rowLabel.textContent = msg;
+    if (row) row.style.display = "flex";
+  }
+  window.chPropSendMessage = chPropSendMessage;
+
+  function chPropToggleChatFavourite() {
+    var star = document.getElementById("chPropChatFavStar");
+    if (!star) return;
+    var isFav = star.getAttribute("data-fav") === "1";
+    if (isFav) {
+      star.setAttribute("data-fav", "0");
+      star.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2l2.9 6.3 6.9.8-5 4.9 1.2 6.9L12 17.7l-6 3.2 1.2-6.9-5-4.9 6.9-.8Z"/></svg>';
+      star.style.color = "var(--ink-faint)";
+    } else {
+      star.setAttribute("data-fav", "1");
+      star.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="#fd8925" stroke="#fd8925" stroke-width="1.8"><path d="M12 2l2.9 6.3 6.9.8-5 4.9 1.2 6.9L12 17.7l-6 3.2 1.2-6.9-5-4.9 6.9-.8Z"/></svg>';
+      star.style.color = "#fd8925";
+    }
+  }
+  window.chPropToggleChatFavourite = chPropToggleChatFavourite;
+
   function chPropUnpublish() {
     var btn = document.getElementById("chPropPublishBtn");
     var chevron = document.getElementById("chPropPublishChevron");
@@ -1235,6 +1284,7 @@
       btn.innerHTML = "Publish";
       btn.style.background = "var(--accent-soft)";
       btn.style.opacity = "1";
+      btn.style.borderRadius = "6px";
     }
     if (chevron) chevron.style.display = "none";
     chPropTogglePublishMenu();
