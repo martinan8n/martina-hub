@@ -1514,7 +1514,7 @@ flowchart LR
     </div>
 
     </div>
-    <div class="lrt-page-panel" data-page-panel="2" style="display:none;">
+    <div class="lrt-page-panel" data-page-panel="2" style="display:block;">
 
     <div class="annotation-legend">
       <h4>What changed, and why</h4>
@@ -1864,15 +1864,21 @@ flowchart LR
                 <div style="font-size:10.5px; font-weight:700; letter-spacing:0.05em; color:var(--ink-faint); margin-bottom:6px;">CHATS</div>
                 <div style="font-size:10.5px; color:var(--ink-faint); margin:8px 0 4px;">Previous 7 days</div>
                 <div style="display:flex; align-items:center; gap:8px; padding:5px 4px; font-size:13px; background:var(--canvas); border-radius:6px;">Escalations w/c 24 Aug<span class="spacer" style="flex:1;"></span><span class="lrt-spinner" style="flex:none;"></span></div>
+                <div style="margin:4px 0 2px; padding:8px 10px; background:var(--canvas); border:1px solid var(--line); border-radius:6px;">
+                  <div style="font-size:12px; font-weight:600;">Escalations w/c 24 Aug</div>
+                  <div style="font-size:11px; color:var(--ink-soft); margin-top:3px;">Running &mdash; 340 of 500 checked so far</div>
+                </div>
                 <div style="display:flex; align-items:center; gap:8px; padding:5px 4px; font-size:13px;">Set up Maya&#39;s onboarding<span class="spacer" style="flex:1;"></span><svg width="14" height="14" viewBox="0 0 24 24" fill="#30a46c" stroke="none"><circle cx="12" cy="12" r="9"/></svg></div>
                 <div style="display:flex; align-items:center; gap:8px; padding:5px 4px; font-size:13px;">Audit /pricing metadata<span class="spacer" style="flex:1;"></span><svg width="14" height="14" viewBox="0 0 24 24" fill="#e5484d" stroke="none"><circle cx="12" cy="12" r="9"/></svg></div>
-                <div style="position:absolute; left:100%; top:38px; margin-left:8px; width:220px; background:var(--paper); border:1px solid var(--line); border-radius:8px; padding:10px 12px; box-shadow:2px 3px 0 rgba(26,28,30,0.12);">
-                  <div style="font-size:12.5px; font-weight:600;">Escalations w/c 24 Aug</div>
-                  <div style="font-size:11.5px; color:var(--ink-soft); margin-top:4px;">Running &mdash; 340 of 500 checked so far</div>
+                <div style="display:flex; align-items:center; gap:8px; padding:5px 4px; font-size:13px; background:var(--canvas); border-radius:6px;">Support macros refresh<span class="spacer" style="flex:1;"></span><svg width="14" height="14" viewBox="0 0 24 24" fill="#fd8925" stroke="none"><circle cx="12" cy="12" r="9"/></svg></div>
+                <div style="margin:4px 0 2px; padding:8px 10px; background:var(--canvas); border:1px solid var(--line); border-radius:6px;">
+                  <div style="font-size:12px; font-weight:600;">Support macros refresh</div>
+                  <div style="font-size:11px; color:var(--ink-soft); margin-top:3px;">Started by Priya &middot; 2h ago</div>
+                  <div style="font-size:11px; color:#a6480f; margin-top:3px;">Awaiting &mdash; hit a usage limit. Ask an owner to raise it to continue.</div>
                 </div>
               </div>
             </div></div></div>
-            <div class="lrt-screen-desc" style="margin:8px 0 0; width:280px;"><b>Running chat, in the nav.</b> Reuses the real 1a sidebar CHATS list, dots moved to the right. The spinner replaces the status dot for the chat that&#39;s currently running; shown here already hovered so the info card is visible &mdash; in the real product it only shows on hover.</div></div>
+            <div class="lrt-screen-desc" style="margin:8px 0 0; width:280px;"><b>Running chat, in the nav.</b> Reuses the real 1a sidebar CHATS list, dots moved to the right. The spinner replaces the status dot for the chat that&#39;s currently running; the fourth row shows the Awaiting state. Both info cards shown already expanded so they&#39;re visible here &mdash; in the real product each only shows on hovering its own row.</div></div>
 
             <div style="flex:0 0 auto;">
             <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:620px;">
@@ -2027,10 +2033,24 @@ flowchart LR
             </div>
 
 <div style="flex:0 0 auto;">
-            <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:280px;">
-              <div class="pv-app" style="min-height:100px; padding:14px; flex-direction:column;">
-                <div style="border:1px solid var(--line); border-radius:8px; padding:10px 14px; max-width:100%;">
-                  <div style="display:flex; align-items:center; gap:6px; font-size:13px; font-weight:600; color:var(--ink);"><span class="lrt-spinner"></span> Recalculating direction&hellip; <span style="margin-left:auto; color:var(--ink-faint); font-size:11px; font-weight:400;">0:11</span><span class="lrt-pause-btn" style="cursor:pointer; margin-left:8px;" title="Stop"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2"/></svg></span></div>
+            <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:620px;">
+              <div class="pv-app" style="min-height:280px;">
+                <div class="pv-skeleton-navbar" style="height:auto;">NAV</div>
+                <div class="pv-main" style="display:flex; flex-direction:column;">
+                  <div class="pv-preview-tabs">
+                    <b>Sales Outreach</b>
+                    <span class="pill" style="margin-left:0;">Preview</span>
+                    <span class="spacer"></span>
+                    <span class="icon-btn" title="Minimize" style="cursor:pointer;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 14h6v6M20 10h-6V4M14 10l7-7M3 21l7-7"/></svg></span>
+                  </div>
+                  <div style="padding:16px 18px; overflow:auto; flex:1; display:flex; flex-direction:column;">
+                    <div class="pv-bubble" style="margin:0 0 12px auto;">Go through the #support-escalations channel from this week and summarize every thread that&#39;s still unresolved.</div>
+                    <div class="pv-reply" style="margin-bottom:10px;">Got it &mdash; I&#39;ll just start on this.</div>
+                    <div style="margin-top:auto; border:1px solid var(--line); border-radius:8px; padding:10px 14px; max-width:320px;">
+                      <div style="display:flex; align-items:center; gap:6px; font-size:13px; font-weight:600; color:var(--ink);"><span class="lrt-spinner"></span> Recalculating direction&hellip; <span style="margin-left:auto; color:var(--ink-faint); font-size:11px; font-weight:400;">0:11</span><span class="lrt-pause-btn" style="cursor:pointer; margin-left:8px;" title="Stop"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2"/></svg></span></div>
+                    </div>
+                  </div>
+                  <div class="pv-chat-footer"><div class="box"><div>Message Sales Outreach&hellip;</div><div class="box-actions"><span class="spacer"></span><span class="send-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M12 19V5M5 12l7-7 7 7"/></svg></span></div></div></div>
                 </div>
               </div>
             </div></div></div>
@@ -2039,13 +2059,71 @@ flowchart LR
             </div>
 
             <div style="flex:0 0 auto;">
-            <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:280px;">
-              <div class="pv-app" style="min-height:100px; padding:14px; flex-direction:column;">
-                <div class="pv-reply" style="margin:0;">You stopped. <span class="lrt-trace-link" style="display:inline-flex; border-top:none; padding-top:0; font-size:12.5px;" onclick="document.getElementById(&#39;lrtDraftTraceSection&#39;).scrollIntoView({behavior:&#39;smooth&#39;});">Go to Trace to check &rarr;</span></div>
+            <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:620px;">
+              <div class="pv-app" style="min-height:280px;">
+                <div class="pv-skeleton-navbar" style="height:auto;">NAV</div>
+                <div class="pv-main" style="display:flex; flex-direction:column;">
+                  <div class="pv-preview-tabs">
+                    <b>Sales Outreach</b>
+                    <span class="pill" style="margin-left:0;">Preview</span>
+                    <span class="spacer"></span>
+                    <span class="icon-btn" title="Minimize" style="cursor:pointer;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 14h6v6M20 10h-6V4M14 10l7-7M3 21l7-7"/></svg></span>
+                  </div>
+                  <div style="padding:16px 18px; overflow:auto; flex:1; display:flex; flex-direction:column;">
+                    <div class="pv-bubble" style="margin:0 0 12px auto;">Go through the #support-escalations channel from this week and summarize every thread that&#39;s still unresolved.</div>
+                    <div class="pv-reply" style="margin-bottom:10px;">Got it &mdash; I&#39;ll just start on this.</div>
+                    <div class="pv-reply" style="margin-top:auto;">You stopped. <span class="lrt-trace-link" style="display:inline-flex; border-top:none; padding-top:0; font-size:12.5px;" onclick="document.getElementById(&#39;lrtDraftTraceSection&#39;).scrollIntoView({behavior:&#39;smooth&#39;});">Go to Trace to check &rarr;</span></div>
+                  </div>
+                  <div class="pv-chat-footer"><div class="box"><div>Message Sales Outreach&hellip;</div><div class="box-actions"><span class="spacer"></span><span class="send-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M12 19V5M5 12l7-7 7 7"/></svg></span></div></div></div>
+                </div>
               </div>
             </div></div></div>
             <div class="lrt-screen-desc" style="margin:8px 0 0; font-weight:600; color:var(--hub-ink);">Stopped &mdash; after clicking Stop</div>
             <p class="lrt-screen-desc" style="margin:4px 0 0; max-width:280px;">A separate, later state &mdash; not shown together with Recalculating. Links to the real Trace section built above.</p>
+            </div>
+
+            <div style="flex:0 0 auto;">
+            <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:820px;">
+              <div class="pv-app" style="min-height:300px;">
+                <div class="pv-skeleton-navbar" style="height:auto;">NAV</div>
+                <div class="pv-main" style="display:flex; flex-direction:column;">
+                  <div class="pv-preview-tabs">
+                    <b>Sales Outreach</b>
+                    <span class="pill" style="margin-left:0;">Preview</span>
+                    <span class="spacer"></span>
+                    <span class="icon-btn" title="Minimize" style="cursor:pointer;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 14h6v6M20 10h-6V4M14 10l7-7M3 21l7-7"/></svg></span>
+                  </div>
+                  <div style="display:flex; flex:1; min-height:0;">
+                    <div style="display:flex; flex-direction:column; flex:1; min-width:0; padding:16px 18px; overflow:auto;">
+                      <div class="pv-bubble" style="margin:0 0 12px auto;">Go through the #support-escalations channel from this week and summarize every thread that&#39;s still unresolved.</div>
+                      <div class="lrt-progress-card" style="margin:0 0 10px;">
+                        <div class="goal-row"><span>Goal: unresolved threads summarized</span><span style="display:flex; align-items:center; gap:5px; font-size:12px; color:#1f7a3d; font-weight:600;"><span style="display:inline-block; width:8px; height:8px; background:#1f7a3d; border-radius:50%;"></span>Done</span></div>
+                        <div class="lrt-progress-steps">
+                          <span class="lrt-graph-node is-done"><span style="display:inline-block; width:7px; height:7px; background:#1f7a3d; border-radius:50%;"></span>Reading channel</span>
+                          <span class="lrt-graph-node is-done"><span style="display:inline-block; width:7px; height:7px; background:#1f7a3d; border-radius:50%;"></span>Grouping by thread</span>
+                          <span class="lrt-graph-node is-done"><span style="display:inline-block; width:7px; height:7px; background:#1f7a3d; border-radius:50%;"></span>Drafting summary</span>
+                        </div>
+                        <div class="lrt-trace-link"><span style="cursor:pointer; text-decoration:underline;">&#8599; View summary</span></div>
+                      </div>
+                      <div class="pv-reply">Done &mdash; 12 unresolved threads summarized.</div>
+                    </div>
+                    <div style="width:210px; flex:none; border-left:1.5px solid var(--line); background:var(--paper); padding:14px; overflow:auto;">
+                      <div style="font-weight:600; font-size:11.5px; text-transform:uppercase; letter-spacing:0.04em; color:var(--ink-faint); margin-bottom:8px; display:flex; align-items:center; justify-content:space-between;">Summary <span style="cursor:pointer; font-weight:400;" title="Close">&#10005;</span></div>
+                      <p class="hint" style="margin:0 0 8px;">Goal: unresolved threads summarized</p>
+                      <ul style="margin:0 0 10px; padding-left:16px; font-size:12px; color:var(--ink-soft);">
+                        <li><span style="display:inline-block; width:6px; height:6px; background:#1f7a3d; border-radius:50%; margin-right:5px;"></span>Reading channel &mdash; found 12 unresolved threads</li>
+                        <li><span style="display:inline-block; width:6px; height:6px; background:#1f7a3d; border-radius:50%; margin-right:5px;"></span>Grouping by thread &mdash; grouped by customer and issue type</li>
+                        <li><span style="display:inline-block; width:6px; height:6px; background:#1f7a3d; border-radius:50%; margin-right:5px;"></span>Drafting summary &mdash; one paragraph per thread with a suggested next step</li>
+                      </ul>
+                      <p class="hint" style="margin:0;">Done &mdash; 12 unresolved threads summarized, ready to review.</p>
+                    </div>
+                  </div>
+                  <div class="pv-chat-footer"><div class="box"><div>Message Sales Outreach&hellip;</div><div class="box-actions"><span class="spacer"></span><span class="send-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M12 19V5M5 12l7-7 7 7"/></svg></span></div></div></div>
+                </div>
+              </div>
+            </div></div></div>
+            <div class="lrt-screen-desc" style="margin:8px 0 0; font-weight:600; color:var(--hub-ink);">Done, with a summary</div>
+            <p class="lrt-screen-desc" style="margin:4px 0 0; max-width:320px;">Recreates Original proposal&#39;s Done / View summary / side-panel pattern, adapted to Draft&#39;s green-dot Done convention &mdash; shown already open here for clarity.</p>
             </div>
 
                       </div>
@@ -2087,7 +2165,7 @@ flowchart LR
               </div>
               <div class="pv-trace-list" style="padding-top:0; padding-bottom:14px;">
                 <div class="pv-trace-row" style="padding-left:24px;"><div class="who"><span class="lrt-checkpoint">&#9679;</span> checkpoint saved</div><span class="time">17:00:29</span></div>
-                <div class="pv-trace-row" style="padding-left:24px;"><div class="who">send_outreach_email <span style="color:#fd8925; margin-left:6px;">&#9679;</span> <span style="color:#fd8925;">Needs approval</span></div><span class="time">17:00:57</span></div>
+                <div class="pv-trace-row" style="padding-left:24px;"><div class="who">send_outreach_email <span style="color:#fd8925; margin-left:6px;">&#9679;</span> <span style="color:#fd8925;">Awaiting</span></div><span class="time">17:00:57</span></div>
               </div>
                 </div>
               </div>
@@ -2115,7 +2193,6 @@ flowchart LR
                 <div class="lrt-hl-node" style="position:relative; border:1px solid var(--line); border-radius:8px; padding:10px 14px; display:flex; align-items:center; gap:8px; background:#fff;">
                   <span style="display:inline-block; width:9px; height:9px; background:#1f7a3d; border-radius:50%; flex:none;"></span>
                   <b style="font-size:13px; white-space:nowrap;">Find &amp; qualify leads</b>
-                  <span class="lrt-hl-info" style="cursor:pointer; color:var(--ink-faint); flex:none; display:flex;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v.01M11 11h1v5h1"/></svg></span>
                   <span class="chev" style="margin-left:6px;">&#9662;</span>
                   <div class="lrt-hl-explain" style="position:absolute; top:100%; left:0; margin-top:6px; width:260px; background:var(--paper); border:1px solid var(--line); border-radius:8px; padding:10px 12px; font-size:12px; color:var(--ink-soft); box-shadow:2px 3px 0 rgba(26,28,30,0.12); z-index:5;">Searched Series A SaaS companies matching the target profile, then cross-referenced each against known competitor usage &mdash; kept the 340 that don&#39;t already use one.</div>
                 </div>
@@ -2123,7 +2200,6 @@ flowchart LR
                 <div class="lrt-hl-node" style="position:relative; border:1px solid #111; border-radius:8px; padding:10px 14px; display:flex; align-items:center; gap:8px; background:#fff;">
                   <span style="display:inline-block; width:9px; height:9px; background:#111; border-radius:50%; flex:none;"></span>
                   <b style="font-size:13px; white-space:nowrap;">Score &amp; prepare outreach</b>
-                  <span class="lrt-hl-info" style="cursor:pointer; color:var(--ink-faint); flex:none; display:flex;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v.01M11 11h1v5h1"/></svg></span>
                   <span class="chev" style="margin-left:6px;">&#9662;</span>
                   <div class="lrt-hl-explain" style="position:absolute; top:100%; left:0; margin-top:6px; width:260px; background:var(--paper); border:1px solid var(--line); border-radius:8px; padding:10px 12px; font-size:12px; color:var(--ink-soft); box-shadow:2px 3px 0 rgba(26,28,30,0.12); z-index:5;">Scoring the qualified companies against fit criteria and drafting a personalized outreach note for each, explaining why they&#39;re a good match.</div>
                 </div>
@@ -2154,7 +2230,6 @@ flowchart LR
                 <div class="lrt-hl-node" style="position:relative; border:1px solid var(--line); border-radius:8px; padding:10px 14px; display:flex; align-items:center; gap:8px; background:#fff;">
                   <span style="display:inline-block; width:9px; height:9px; background:#1f7a3d; border-radius:50%; flex:none;"></span>
                   <b style="font-size:13px; white-space:nowrap;">Find &amp; qualify leads</b>
-                  <span class="lrt-hl-info" style="cursor:pointer; color:var(--ink-faint); flex:none; display:flex;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v.01M11 11h1v5h1"/></svg></span>
                   <span class="chev" style="margin-left:6px;">&#9662;</span>
                   <div class="lrt-hl-explain" style="position:absolute; top:100%; left:0; margin-top:6px; width:260px; background:var(--paper); border:1px solid var(--line); border-radius:8px; padding:10px 12px; font-size:12px; color:var(--ink-soft); box-shadow:2px 3px 0 rgba(26,28,30,0.12); z-index:5;">Searched Series A SaaS companies matching the target profile, then cross-referenced each against known competitor usage &mdash; kept the 340 that don&#39;t already use one.</div>
                 </div>
@@ -2162,7 +2237,6 @@ flowchart LR
                 <div class="lrt-hl-node" style="position:relative; border:1px solid var(--line); border-radius:8px; padding:10px 14px; display:flex; align-items:center; gap:8px; background:#fff;">
                   <span style="display:inline-block; width:9px; height:9px; background:#1f7a3d; border-radius:50%; flex:none;"></span>
                   <b style="font-size:13px; white-space:nowrap;">Score &amp; prepare outreach</b>
-                  <span class="lrt-hl-info" style="cursor:pointer; color:var(--ink-faint); flex:none; display:flex;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v.01M11 11h1v5h1"/></svg></span>
                   <span class="chev" style="margin-left:6px;">&#9662;</span>
                   <div class="lrt-hl-explain" style="position:absolute; top:100%; left:0; margin-top:6px; width:260px; background:var(--paper); border:1px solid var(--line); border-radius:8px; padding:10px 12px; font-size:12px; color:var(--ink-soft); box-shadow:2px 3px 0 rgba(26,28,30,0.12); z-index:5;">Scored the qualified companies against fit criteria and drafted a personalized outreach note for each, explaining why they&#39;re a good match.</div>
                 </div>
@@ -2170,7 +2244,6 @@ flowchart LR
                 <div class="lrt-hl-node" style="position:relative; border:1px solid var(--line); border-radius:8px; padding:10px 14px; display:flex; align-items:center; gap:8px; background:#fff;">
                   <span style="display:inline-block; width:9px; height:9px; background:#1f7a3d; border-radius:50%; flex:none;"></span>
                   <b style="font-size:13px; white-space:nowrap;">Send &amp; confirm</b>
-                  <span class="lrt-hl-info" style="cursor:pointer; color:var(--ink-faint); flex:none; display:flex;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v.01M11 11h1v5h1"/></svg></span>
                   <span class="chev" style="margin-left:6px;">&#9662;</span>
                   <div class="lrt-hl-explain" style="position:absolute; top:100%; left:0; margin-top:6px; width:260px; background:var(--paper); border:1px solid var(--line); border-radius:8px; padding:10px 12px; font-size:12px; color:var(--ink-soft); box-shadow:2px 3px 0 rgba(26,28,30,0.12); z-index:5;">Sent the outreach emails to the scored fits and flagged the batch for approval before marking the threads resolved.</div>
                 </div>
@@ -2314,35 +2387,33 @@ flowchart LR
                   <span class="spacer" style="flex:1;"></span>
                   <span style="width:26px; height:26px; border:1px solid var(--line); border-radius:6px; display:flex; align-items:center; justify-content:center; cursor:pointer;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5h16l-6 8v5l-4 2v-7L4 5Z"/></svg></span>
                 </div>
-                <div style="border-left:3px solid #e5484d; border-radius:2px;">
-                <div class="cap-row" style="padding-left:12px;">
+                <div class="cap-row">
                   <span class="cap-row-label" style="display:flex; flex-direction:column; align-items:flex-start; gap:2px;">
                     <span>Capture Agent Slack feedback <span class="lrt-checkpoint" title="Checkpoint saved &mdash; new, not in the real list today">&#9679;</span></span>
                     <span style="font-size:11px;"><span style="color:var(--ink-soft);"><span class="lrt-spinner"></span> Running</span></span>
                   </span>
                   <span style="display:flex; align-items:center; gap:10px; font-size:11px; color:var(--ink-faint);"><span class="lrt-medium-pill">&#128337; Schedule</span>Sep 7 12:04:10<span>248,989t</span><span style="cursor:pointer;">&#8943;</span></span>
                 </div>
-                <div class="cap-row" style="padding-left:12px;">
+                <div class="cap-row">
                   <span class="cap-row-label" style="display:flex; flex-direction:column; align-items:flex-start; gap:2px;">
                     <span>Weekly Monday digest</span>
                     <span style="font-size:11px;"><span style="color:#1f7a3d;">Succeeded</span> <span style="color:var(--ink-faint);">in 42.0s</span></span>
                   </span>
                   <span style="display:flex; align-items:center; gap:10px; font-size:11px; color:var(--ink-faint);"><span class="lrt-medium-pill">&#128337; Schedule</span>Sep 7 09:00:02<span>12,300t</span><span style="cursor:pointer;">&#8943;</span></span>
                 </div>
-                <div class="cap-row" style="padding-left:12px;">
+                <div class="cap-row">
                   <span class="cap-row-label" style="display:flex; flex-direction:column; align-items:flex-start; gap:2px;">
                     <span>Support escalations catch-up</span>
                     <span style="font-size:11px;"><span style="color:#8a5a10;">Interrupted</span> <span style="color:var(--ink-faint);">in 218.3s</span></span>
                   </span>
                   <span style="display:flex; align-items:center; gap:10px; font-size:11px; color:var(--ink-faint);"><span class="lrt-medium-pill">&#128279; Workflow</span>Sep 6 17:22:51<span>8,200t</span><span style="cursor:pointer;">&#8943;</span></span>
                 </div>
-                <div class="cap-row" style="border-bottom:none; padding-left:12px;">
+                <div class="cap-row" style="border-bottom:none;">
                   <span class="cap-row-label" style="display:flex; flex-direction:column; align-items:flex-start; gap:2px;">
                     <span>Lead enrichment retry</span>
                     <span style="font-size:11px;"><span style="color:#a62c2c;">Error</span> <span style="color:var(--ink-faint);">in 101.4s</span></span>
                   </span>
                   <span style="display:flex; align-items:center; gap:10px; font-size:11px; color:var(--ink-faint);"><span class="lrt-medium-pill">&#128279; Workflow</span>Sep 5 08:11:36<span>3,100t</span><span style="cursor:pointer;">&#8943;</span></span>
-                </div>
                 </div>
               </div>
             </div>
@@ -2411,8 +2482,8 @@ flowchart LR
             <td><span class="lrt-spinner" style="width:14px; height:14px; border-width:2px;"></span> <span class="hint" style="margin-left:6px;">real <code>spin</code> mixin</span></td>
           </tr>
           <tr>
-            <th>Needs approval</th>
-            <td><span class="lrt-status-pill is-approval">&#9679; Needs approval</span></td>
+            <th>Awaiting</th>
+            <td><span class="lrt-status-pill is-approval">&#9679; Awaiting</span></td>
             <td>Blocked on one risky action. Nothing else proceeds until it&#39;s approved or rejected.</td>
             <td><span class="lrt-motion-glow"></span> <span class="hint" style="margin-left:6px;">real <code>pulse-glow</code> &mdash; used by N8nPulse for exactly this &quot;needs you&quot; signal</span></td>
           </tr>
@@ -2423,8 +2494,8 @@ flowchart LR
             <td><span style="display:inline-block; width:9px; height:9px; border-radius:50%; background:#e0b568;"></span> <span class="hint" style="margin-left:6px;">no motion &mdash; stillness reads as paused</span></td>
           </tr>
           <tr>
-            <th>Completed</th>
-            <td><span class="lrt-status-pill is-done">&#10003; Completed</span></td>
+            <th>Done</th>
+            <td><span class="lrt-status-pill is-done">&#9679; Done</span></td>
             <td>Goal met, halted cleanly. Trace and summary stay available afterward.</td>
             <td><span class="lrt-motion-fadein" style="color:#1f7a3d;">&#10003;</span> <span class="hint" style="margin-left:6px;">real <code>fade-in</code> &mdash; eases in once, doesn&#39;t loop</span></td>
           </tr>
@@ -2437,7 +2508,7 @@ flowchart LR
           <tr>
             <th>Failed</th>
             <td><span class="lrt-status-pill is-failed">&#10005; Failed</span></td>
-            <td>A tool call itself errored (API failure, timeout) &mdash; not a normal pause point like Needs approval. Retry picks the same step back up.</td>
+            <td>A tool call itself errored (API failure, timeout) &mdash; not a normal pause point like Awaiting. Retry picks the same step back up.</td>
             <td><span class="hint">no motion &mdash; the red pill itself already draws the eye; looping it would nag</span></td>
           </tr>
         </table>
