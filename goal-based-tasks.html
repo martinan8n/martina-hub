@@ -1967,7 +1967,10 @@ flowchart LR
           <div style="display:flex; gap:20px; align-items:flex-start; flex-wrap:wrap;">
 
             <div style="flex:0 0 auto;">
-            <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:560px; padding:0;">
+            <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:620px; padding:0;">
+              <div class="pv-app" style="min-height:340px;">
+                <div class="pv-skeleton-navbar" style="height:auto;">NAV</div>
+                <div class="pv-main">
               <div class="pv-topbar" style="padding:10px 16px;">
                 <span class="pv-crumb">Personal / <b>Sales Outreach</b> &#9662;</span>
                 <span class="spacer"></span>
@@ -1992,13 +1995,18 @@ flowchart LR
                 <div class="pv-trace-row" style="padding-left:24px;"><div class="who"><span class="lrt-checkpoint">&#9679;</span> checkpoint saved</div><span class="time">17:00:29</span></div>
                 <div class="pv-trace-row" style="padding-left:24px;"><div class="who">send_outreach_email <span style="color:#fd8925; margin-left:6px;">&#9679;</span> <span style="color:#fd8925;">Needs approval</span></div><span class="time">17:00:57</span></div>
               </div>
+                </div>
+              </div>
             </div></div></div>
             <div class="lrt-screen-desc" style="margin:8px 0 0; font-weight:600; color:var(--hub-ink);">Text, as now</div>
             <p class="lrt-screen-desc" style="margin:4px 0 0; max-width:320px;">Same subtask-group and timestamped trace-row structure already used in Original proposal, unchanged.</p>
             </div>
 
             <div style="flex:0 0 auto;">
-            <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:560px; padding:0;">
+            <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:620px; padding:0;">
+              <div class="pv-app" style="min-height:340px;">
+                <div class="pv-skeleton-navbar" style="height:auto;">NAV</div>
+                <div class="pv-main">
               <div class="pv-topbar" style="padding:10px 16px;">
                 <span class="pv-crumb">Personal / <b>Sales Outreach</b> &#9662;</span>
                 <span class="spacer"></span>
@@ -2008,25 +2016,26 @@ flowchart LR
                 <span class="goal-text">Goal: 100 qualified leads</span>
                 <span class="lrt-medium-pill" title="Where this session is happening">&#128172; Slack</span>
                 <span class="spacer"></span>
-                <div class="lrt-progress-bar is-live" style="width:110px; margin:0 4px 0 10px;"><div class="lrt-progress-bar-fill"></div></div>
               </div>
               <div style="padding:20px 20px 8px;">
                 <div class="lrt-section-title" style="font-size:12px; text-transform:uppercase; letter-spacing:.04em; color:var(--ink-faint); margin-bottom:10px;">While executing &mdash; only what&#39;s already happened</div>
                 <div style="display:flex; align-items:center; gap:0; flex-wrap:wrap;">
-                  <div class="lrt-graph-node is-done">&#10003; Find &amp; qualify leads</div>
+                  <div class="lrt-graph-node is-done"><span style="display:inline-block; width:9px; height:9px; background:#1f7a3d; border-radius:50%; margin-right:5px;"></span>Find &amp; qualify leads</div>
                   <span style="display:inline-block; width:16px; height:1px; background:var(--line); flex:none;"></span>
-                  <div class="lrt-graph-node is-active"><span class="lrt-spinner"></span> Score &amp; prepare outreach</div>
+                  <div class="lrt-graph-node is-active"><span style="display:inline-block; width:9px; height:9px; background:#111; border-radius:50%; margin-right:5px;"></span>Score &amp; prepare outreach</div>
                 </div>
                 <p class="hint" style="margin:8px 0 0;">Nothing shown beyond the current group &mdash; not a preview of steps that haven&#39;t run yet.</p>
               </div>
               <div style="padding:8px 20px 20px; border-top:1px dashed var(--line); margin-top:8px;">
                 <div class="lrt-section-title" style="font-size:12px; text-transform:uppercase; letter-spacing:.04em; color:var(--ink-faint); margin-bottom:10px;">Once finalized &mdash; everything</div>
                 <div style="display:flex; align-items:center; gap:0; flex-wrap:wrap;">
-                  <div class="lrt-graph-node is-done">&#10003; Find &amp; qualify leads</div>
+                  <div class="lrt-graph-node is-done"><span style="display:inline-block; width:9px; height:9px; background:#1f7a3d; border-radius:50%; margin-right:5px;"></span>Find &amp; qualify leads</div>
                   <span style="display:inline-block; width:16px; height:1px; background:var(--line); flex:none;"></span>
-                  <div class="lrt-graph-node is-done">&#10003; Score &amp; prepare outreach</div>
+                  <div class="lrt-graph-node is-done"><span style="display:inline-block; width:9px; height:9px; background:#1f7a3d; border-radius:50%; margin-right:5px;"></span>Score &amp; prepare outreach</div>
                   <span style="display:inline-block; width:16px; height:1px; background:var(--line); flex:none;"></span>
-                  <div class="lrt-graph-node is-done">&#10003; Send &amp; confirm</div>
+                  <div class="lrt-graph-node" style="border-color:#fd8925;"><span style="display:inline-block; width:9px; height:9px; background:#fd8925; border-radius:50%; margin-right:5px;"></span>Send &amp; confirm &mdash; needs approval</div>
+                </div>
+              </div>
                 </div>
               </div>
             </div></div></div>
@@ -2170,44 +2179,6 @@ flowchart LR
                 <div class="lrt-settings-group">
                   <div class="lrt-settings-group-label">Goal-based sessions</div>
                   <p class="hint" style="margin:0 0 12px;">Always on &mdash; the agent judges on its own when a request needs one. These limits apply whenever it does.</p>
-                  <div style="border:1px solid var(--line); border-radius:8px; padding:12px 14px; margin-bottom:10px;">
-                    <label style="display:flex; align-items:center; gap:6px; font-size:13px; font-weight:700; color:var(--ink); cursor:pointer;"><input type="checkbox" checked style="margin:0;"> Alert</label>
-                    <div class="hint" style="margin:5px 0 8px;">Let me know before reaching:</div>
-                    <div class="model-row" style="max-width:170px;"><span style="font-weight:700;">$</span><span class="name">150</span></div>
-                  </div>
-                  <div style="border:1px solid var(--line); border-radius:8px; padding:12px 14px; margin-bottom:14px;">
-                    <label style="display:flex; align-items:center; gap:6px; font-size:13px; font-weight:700; color:var(--ink); cursor:pointer;"><input type="checkbox" checked style="margin:0;"> Limit</label>
-                    <div class="hint" style="margin:5px 0 8px;">Turn the agent off after:</div>
-                    <div class="model-row" style="max-width:170px;"><span style="font-weight:700;">$</span><span class="name">200</span></div>
-                  </div>
-                  <div class="field-label" style="margin-top:0;">Notify me</div>
-                  <div class="model-row" style="max-width:220px;">
-                    <span class="model-icon">&#10003;</span><span class="name">Slack DM</span><span class="chev">&#9662;</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div></div></div>
-        <div class="lrt-screen-desc" style="margin:8px 0 0; font-weight:600; color:var(--hub-ink);">Alert vs. limit, split &mdash; Intercom Fin</div></div>
-
-        <div style="flex:0 0 auto;">
-        <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:620px;">
-          <div class="pv-app" style="min-height:340px;">
-            <div class="pv-skeleton-navbar" style="height:auto;">NAV</div>
-            <div class="pv-main">
-              <div class="pv-topbar">
-                <span class="pv-crumb">Personal / <b>Sales Outreach</b> &#9662;</span>
-                <span class="spacer"></span>
-                <span class="btn btn-primary">Publish <span class="chev">&#9662;</span></span>
-              </div>
-              <div style="padding:18px 24px;">
-                <div class="tabbar">
-                  <span class="tab">Agent</span><span class="tab">Knowledge</span><span class="tab">Sessions</span><span class="tab active">Settings</span>
-                </div>
-                <div class="lrt-settings-group">
-                  <div class="lrt-settings-group-label">Goal-based sessions</div>
-                  <p class="hint" style="margin:0 0 12px;">Always on &mdash; the agent judges on its own when a request needs one. These limits apply whenever it does.</p>
                   <div class="field-label" style="margin-top:0;">Monthly budget</div>
                   <div style="display:flex; align-items:baseline; gap:6px; margin-bottom:8px;"><span style="font-size:19px; font-weight:700; color:var(--ink);">$42</span><span class="hint" style="margin:0;">/ $200 this month</span></div>
                   <div class="lrt-progress-bar" style="margin:0 0 10px;"><div class="lrt-progress-bar-fill" style="width:21%;"></div></div>
@@ -2306,15 +2277,15 @@ flowchart LR
                   </div>
                   <div class="cap-row">
                     <span>Find 100 qualified leads</span>
-                    <span style="display:flex; align-items:center; gap:14px;"><span class="lrt-status-pill is-running" style="margin:0;"><span class="lrt-spinner"></span> Running</span><span style="color:var(--ink-faint); font-size:11px;">Just now</span><span class="lrt-btn" style="padding:4px 10px; font-size:11px;">View trace</span></span>
+                    <span style="display:flex; align-items:center; gap:14px;"><span style="display:flex; align-items:center; gap:5px;"><span style="display:inline-block; width:9px; height:9px; background:#111; border-radius:50%;"></span> Running</span><span style="color:var(--ink-faint); font-size:11px;">Just now</span><span class="lrt-btn" style="padding:4px 10px; font-size:11px;">View trace</span></span>
                   </div>
                   <div class="cap-row">
                     <span>Weekly Monday digest</span>
-                    <span style="display:flex; align-items:center; gap:14px;"><span class="lrt-status-pill is-done" style="margin:0;">&#10003; Succeeded</span><span style="color:var(--ink-faint); font-size:11px;">2h ago</span><span class="lrt-btn" style="padding:4px 10px; font-size:11px;">View trace</span></span>
+                    <span style="display:flex; align-items:center; gap:14px;"><span style="display:flex; align-items:center; gap:5px;"><span style="display:inline-block; width:9px; height:9px; background:#1f7a3d; border-radius:50%;"></span> Succeeded</span><span style="color:var(--ink-faint); font-size:11px;">2h ago</span><span class="lrt-btn" style="padding:4px 10px; font-size:11px;">View trace</span></span>
                   </div>
                   <div class="cap-row">
                     <span>Support escalations catch-up</span>
-                    <span style="display:flex; align-items:center; gap:14px;"><span class="lrt-status-pill is-paused" style="margin:0;">&#9679; Interrupted</span><span style="color:var(--ink-faint); font-size:11px;">1d ago</span><span class="lrt-btn" style="padding:4px 10px; font-size:11px;">View trace</span></span>
+                    <span style="display:flex; align-items:center; gap:14px;"><span style="display:flex; align-items:center; gap:5px;"><span style="display:inline-block; width:9px; height:9px; background:#fd8925; border-radius:50%;"></span> Interrupted</span><span style="color:var(--ink-faint); font-size:11px;">1d ago</span><span class="lrt-btn" style="padding:4px 10px; font-size:11px;">View trace</span></span>
                   </div>
                   <div class="cap-row" style="border-bottom:none;">
                     <span>Lead enrichment retry</span>
