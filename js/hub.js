@@ -1077,5 +1077,109 @@
   }
   window.lrtSelectApprovalMode = lrtSelectApprovalMode;
 
+  var CH_PROP_ICONS = {
+    target: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--ink-soft)" stroke-width="2"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3.5"/></svg>',
+    receipt: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--ink-soft)" stroke-width="2"><path d="M6 2h12v20l-3-2-3 2-3-2-3 2Z"/><path d="M9 8h6M9 12h6"/></svg>',
+    calendar: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--ink-soft)" stroke-width="2"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>',
+    chat: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--ink-soft)" stroke-width="2"><path d="M4 5h16v11H8l-4 3V5Z"/></svg>',
+    search: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--ink-soft)" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>',
+    tag: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--ink-soft)" stroke-width="2"><path d="M20 12 12 20l-8-8V4h8Z"/><circle cx="7.5" cy="7.5" r="1"/></svg>',
+    link: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--ink-soft)" stroke-width="2"><path d="M10 13a5 5 0 0 0 7 0l1-1a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-1 1a5 5 0 0 0 7 7l1-1"/></svg>',
+    doc: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--ink-soft)" stroke-width="2"><path d="M6 2h9l5 5v15H6Z"/><path d="M9 13h6M9 17h6"/></svg>',
+    inbox: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--ink-soft)" stroke-width="2"><path d="M3 12h5l2 3h4l2-3h5"/><path d="M5 4h14l2 8v8H3v-8Z"/></svg>',
+    alert: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--ink-soft)" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg>',
+    hash: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--ink-soft)" stroke-width="2"><path d="M8 3 6 21M18 3l-2 18M3 9h18M2 15h18"/></svg>',
+    bell: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--ink-soft)" stroke-width="2"><path d="M6 9a6 6 0 0 1 12 0c0 5 2 6 2 6H4s2-1 2-6Z"/><path d="M10 21a2 2 0 0 0 4 0"/></svg>'
+  };
+  var CH_PROP_AGENTS = {
+    aia: {
+      name: "AI Assistant", color: "#fd8925", pillColor: "#fff",
+      pillIcon: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 9.5 8.5 3 11l6.5 2.5L12 20l2.5-6.5L21 11l-6.5-2.5Z"/></svg>',
+      prompts: [
+        { icon: "target", label: "Score my leads" },
+        { icon: "receipt", label: "Process invoices" },
+        { icon: "calendar", label: "Schedule social posts" },
+        { icon: "chat", label: "Telegram support agent" }
+      ]
+    },
+    seo: {
+      name: "SEO Auditor", color: "#e5484d", pillColor: "#fff",
+      pillIcon: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="8" width="16" height="11" rx="2"/><path d="M12 8V4M9 4h6"/></svg>',
+      prompts: [
+        { icon: "search", label: "Audit /pricing metadata" },
+        { icon: "tag", label: "Fix broken canonical tags" },
+        { icon: "link", label: "Check competitor backlinks" },
+        { icon: "doc", label: "Generate meta descriptions" }
+      ]
+    },
+    support: {
+      name: "Support summarizer", color: "#3b82f6", pillColor: "#fff",
+      pillIcon: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 14v-2a9 9 0 0 1 18 0v2"/><path d="M21 15a2 2 0 0 1-2 2h-1v-5h1a2 2 0 0 1 2 2ZM3 15a2 2 0 0 0 2 2h1v-5H5a2 2 0 0 0-2 2Z"/></svg>',
+      prompts: [
+        { icon: "inbox", label: "Escalations w/c 24 Aug" },
+        { icon: "chat", label: "Summarize unresolved tickets" },
+        { icon: "calendar", label: "Weekly support digest" },
+        { icon: "alert", label: "Flag angry customers" }
+      ]
+    },
+    slack: {
+      name: "Internal Slack Agent", color: "#8e4ec6", pillColor: "#fff",
+      pillIcon: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="7" width="14" height="11" rx="3"/></svg>',
+      prompts: [
+        { icon: "hash", label: "Post daily standup summary" },
+        { icon: "bell", label: "Notify #eng on deploy" },
+        { icon: "chat", label: "Answer FAQs in #support" },
+        { icon: "hash", label: "Digest #general threads" }
+      ]
+    }
+  };
+
+  function chPropSelectAgent(key) {
+    var d = CH_PROP_AGENTS[key];
+    if (!d) return;
+    Object.keys(CH_PROP_AGENTS).forEach(function (k) {
+      var icon = document.getElementById("chPropIcon-" + k);
+      if (icon) icon.style.boxShadow = k === key ? "0 0 0 2px #fff, 0 0 0 4px " + CH_PROP_AGENTS[k].color : "none";
+    });
+    var label = document.getElementById("chPropAgentPillLabel");
+    var pillIcon = document.getElementById("chPropAgentPillIcon");
+    var pill = document.getElementById("chPropAgentPill");
+    if (label) label.textContent = d.name;
+    if (pillIcon) pillIcon.innerHTML = d.pillIcon;
+    if (pill) { pill.style.background = d.color; pill.style.color = d.pillColor; }
+    var wrap = document.getElementById("chPropStarterPrompts");
+    if (wrap) {
+      wrap.innerHTML = d.prompts.map(function (p) {
+        return '<span style="display:inline-flex; align-items:center; gap:6px; border:1px solid var(--line); border-radius:999px; padding:6px 12px; font-size:12.5px; cursor:pointer;">' +
+          CH_PROP_ICONS[p.icon] + p.label + '</span>';
+      }).join("") + '<span onclick="chPropShowAllAgents()" style="font-size:12.5px; color:var(--ink-faint); cursor:pointer; margin-left:auto;">See all &rarr;</span>';
+    }
+    var dropdown = document.getElementById("chPropAgentDropdown");
+    if (dropdown) dropdown.style.display = "none";
+  }
+  window.chPropSelectAgent = chPropSelectAgent;
+
+  function chPropToggleDropdown() {
+    var dropdown = document.getElementById("chPropAgentDropdown");
+    if (dropdown) dropdown.style.display = dropdown.style.display === "none" ? "block" : "none";
+  }
+  window.chPropToggleDropdown = chPropToggleDropdown;
+
+  function chPropShowAllAgents() {
+    var home = document.getElementById("chPropHomeView");
+    var all = document.getElementById("chPropAllAgentsView");
+    if (home) home.style.display = "none";
+    if (all) all.style.display = "block";
+  }
+  window.chPropShowAllAgents = chPropShowAllAgents;
+
+  function chPropShowHome() {
+    var home = document.getElementById("chPropHomeView");
+    var all = document.getElementById("chPropAllAgentsView");
+    if (home) home.style.display = "flex";
+    if (all) all.style.display = "none";
+  }
+  window.chPropShowHome = chPropShowHome;
+
   route();
   requestAnimationFrame(fitWireframes);

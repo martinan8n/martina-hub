@@ -995,3 +995,4 @@ img { max-width: 100%; }
   .wf .lrt-hl-explain { display: none; }
   .wf .lrt-hl-node { cursor: pointer; }
   .wf .lrt-hl-node:hover .lrt-hl-explain { display: block; }
+  .wf .chprop-dropdown-row:hover { background: var(--canvas); }
