@@ -1181,11 +1181,22 @@
   }
   window.chPropShowHome = chPropShowHome;
 
-  function chPropToggleShare() {
-    var modal = document.getElementById("chPropShareModal");
+  function chPropTogglePublishModal() {
+    var modal = document.getElementById("chPropPublishModal");
     if (modal) modal.style.display = modal.style.display === "none" ? "flex" : "none";
   }
-  window.chPropToggleShare = chPropToggleShare;
+  window.chPropTogglePublishModal = chPropTogglePublishModal;
+
+  function chPropConfirmPublish() {
+    var btn = document.getElementById("chPropPublishBtn");
+    if (btn) {
+      btn.innerHTML = '<span style="width:7px; height:7px; border-radius:50%; background:#2f9e5f; display:inline-block;"></span> Published';
+      btn.style.background = "";
+      btn.style.opacity = "0.6";
+    }
+    chPropTogglePublishModal();
+  }
+  window.chPropConfirmPublish = chPropConfirmPublish;
 
   route();
   requestAnimationFrame(fitWireframes);
