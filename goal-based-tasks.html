@@ -1690,7 +1690,7 @@ flowchart LR
                     <div class="lrt-progress-card">
                       <div style="font-size:13px; line-height:1.9;">
                         <div><span style="display:inline-block; width:9px; height:9px; background:#1f7a3d; border-radius:50%; margin-right:5px;"></span> Found <span style="color:var(--ink-soft); font-weight:400;">(500 Series A SaaS companies)</span></div>
-                        <div><span class="lrt-spinner" style="margin-right:5px;"></span> Checking <span style="color:var(--ink-soft); font-weight:400;">(cross-referencing competitor tools)</span> <span style="color:var(--ink-faint); font-size:11px;">0:19</span></div>
+                        <div style="display:flex; align-items:center;"><span class="lrt-spinner" style="margin-right:5px;"></span> Checking <span style="color:var(--ink-soft); font-weight:400;">(cross-referencing competitor tools)</span> <span style="color:var(--ink-faint); font-size:11px; margin-left:6px;">0:19</span><span class="lrt-pause-btn" style="cursor:pointer; margin-left:auto; width:18px; height:18px;" title="Stop"><svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2"/></svg></span></div>
                         <div style="padding-left:20px; color:var(--ink-faint); font-size:12px;">&#9492; 340 of 500 checked so far</div>
                         <div><span style="display:inline-block; width:9px; height:9px; border:1.5px solid var(--ink-faint); border-radius:50%; margin-right:5px;"></span> <span style="color:var(--ink-faint);">Score fits &amp; draft outreach</span></div>
                       </div>
@@ -1709,27 +1709,64 @@ flowchart LR
             <div class="lrt-screen-desc" style="margin:8px 0 0; width:280px;"><b>Status progression (Claude Code style).</b> Done gets a green dot, current gets the spinner plus an indented sub-line, not-yet-started stays hollow and muted.</div></div>
 
             <div style="flex:0 0 auto;">
-            <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:400px;">
-              <div class="pv-app" style="min-height:160px; padding:14px; flex-direction:column;">
-                <div class="lrt-progress-card">
-                  <div style="font-size:13px; line-height:1.9;">
-                    <div><span style="display:inline-block; width:9px; height:9px; background:#1f7a3d; border-radius:50%; margin-right:5px;"></span> Checked <span style="color:var(--ink-soft); font-weight:400;">(competitor tools, all 500)</span></div>
-                    <div><span class="lrt-spinner" style="margin-right:5px;"></span> Scoring <span style="color:var(--ink-soft); font-weight:400;">(ranking by ICP match)</span> <span style="color:var(--ink-faint); font-size:11px;">0:22</span></div>
-                    <div><span class="lrt-spinner" style="margin-right:5px;"></span> Drafting <span style="color:var(--ink-soft); font-weight:400;">(personalizing outreach per company)</span> <span style="color:var(--ink-faint); font-size:11px;">0:04</span></div>
+            <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:620px;">
+              <div class="pv-app" style="min-height:340px;">
+                <div class="pv-skeleton-navbar" style="height:auto;">NAV</div>
+                <div class="pv-main" style="display:flex; flex-direction:column;">
+                  <div class="pv-preview-tabs">
+                    <b>Sales Outreach</b>
+                    <span class="pill" style="margin-left:0;">Preview</span>
+                    <span class="spacer"></span>
+                    <span class="icon-btn" title="Minimize" style="cursor:pointer;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 14h6v6M20 10h-6V4M14 10l7-7M3 21l7-7"/></svg></span>
                   </div>
+                  <div style="padding:16px 18px; overflow:auto; flex:1;">
+                    <div class="pv-bubble" style="margin:0 0 12px auto;">Find 500 leads at Series A SaaS companies in the US, check if they&#39;re already using a competitor, and send a personalized outreach email to the good fits, with a note on why.</div>
+                    <div class="lrt-progress-card">
+                      <div style="display:flex; align-items:center; justify-content:flex-end;"><span class="lrt-pause-btn" style="cursor:pointer;" title="Stop"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2"/></svg></span></div>
+                      <div style="font-size:13px; line-height:1.9; margin-top:-6px;">
+                        <div><span style="display:inline-block; width:9px; height:9px; background:#1f7a3d; border-radius:50%; margin-right:5px;"></span> Checked <span style="color:var(--ink-soft); font-weight:400;">(competitor tools, all 500)</span></div>
+                        <div><span class="lrt-spinner" style="margin-right:5px;"></span> Scoring <span style="color:var(--ink-soft); font-weight:400;">(ranking by ICP match)</span> <span style="color:var(--ink-faint); font-size:11px;">0:22</span></div>
+                        <div><span class="lrt-spinner" style="margin-right:5px;"></span> Drafting <span style="color:var(--ink-soft); font-weight:400;">(personalizing outreach per company)</span> <span style="color:var(--ink-faint); font-size:11px;">0:04</span></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="pv-chat-footer"><div class="box"><div>Message Sales Outreach&hellip;</div><div class="box-actions">
+                    <span class="lrt-btn" style="padding:3px 8px; font-size:11px; flex:none;">Ask for approval <span class="chev">&#9662;</span></span>
+                    <span class="spacer"></span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.4 11.05 12.2 20a5 5 0 0 1-7.1-7l9-9a3.5 3.5 0 0 1 5 5l-9 9a2 2 0 1 1-2.8-2.8l8.3-8.2"/></svg>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0M12 19v3"/></svg>
+                    <span class="send-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M12 19V5M5 12l7-7 7 7"/></svg></span>
+                  </div></div></div>
                 </div>
               </div>
             </div></div></div>
-            <div class="lrt-screen-desc" style="margin:8px 0 0; width:280px;"><b>Concurrent activity.</b> Two things can both be &quot;current&quot; at once &mdash; not everything the agent does is sequential.</div></div>
+            <div class="lrt-screen-desc" style="margin:8px 0 0; width:280px;"><b>Concurrent activity.</b> Two things can both be &quot;current&quot; at once &mdash; not everything the agent does is sequential. One Stop for the whole card, not one per line.</div></div>
 
             <div style="flex:0 0 auto;">
-            <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:400px;">
-              <div class="pv-app" style="min-height:160px; padding:14px; flex-direction:column;">
-                <div class="lrt-progress-card">
-                  <div style="font-size:13px; line-height:1.9;">
-                    <div style="display:flex; align-items:center; gap:6px; font-weight:600; color:var(--ink);"><span class="lrt-spinner"></span> Scoring <span style="color:var(--ink-soft); font-weight:400;">(ranking by ICP match)</span><span style="margin-left:auto; color:var(--ink-faint); font-size:11px; font-weight:400;">0:22</span></div>
+            <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:620px;">
+              <div class="pv-app" style="min-height:340px;">
+                <div class="pv-skeleton-navbar" style="height:auto;">NAV</div>
+                <div class="pv-main" style="display:flex; flex-direction:column;">
+                  <div class="pv-preview-tabs">
+                    <b>Sales Outreach</b>
+                    <span class="pill" style="margin-left:0;">Preview</span>
+                    <span class="spacer"></span>
+                    <span class="icon-btn" title="Minimize" style="cursor:pointer;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 14h6v6M20 10h-6V4M14 10l7-7M3 21l7-7"/></svg></span>
                   </div>
-                  <p class="hint" style="margin:8px 0 0;">Going through the 340 companies that don&#39;t already use a competitor, ranking each by how closely it matches the ideal customer profile &mdash; company size, funding stage, and tech stack all factor in.</p>
+                  <div style="padding:16px 18px; overflow:auto; flex:1;">
+                    <div class="pv-bubble" style="margin:0 0 12px auto;">Find 500 leads at Series A SaaS companies in the US, check if they&#39;re already using a competitor, and send a personalized outreach email to the good fits, with a note on why.</div>
+                    <div class="lrt-progress-card">
+                      <div style="display:flex; align-items:center; gap:6px; font-weight:600; color:var(--ink);"><span class="lrt-spinner"></span> Scoring <span style="color:var(--ink-soft); font-weight:400;">(ranking by ICP match)</span><span style="margin-left:auto; color:var(--ink-faint); font-size:11px; font-weight:400;">0:22</span><span class="lrt-pause-btn" style="cursor:pointer; margin-left:8px; width:18px; height:18px;" title="Stop"><svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2"/></svg></span></div>
+                      <p class="hint" style="margin:8px 0 0;">Going through the 340 companies that don&#39;t already use a competitor, ranking each by how closely it matches the ideal customer profile &mdash; company size, funding stage, and tech stack all factor in.</p>
+                    </div>
+                  </div>
+                  <div class="pv-chat-footer"><div class="box"><div>Message Sales Outreach&hellip;</div><div class="box-actions">
+                    <span class="lrt-btn" style="padding:3px 8px; font-size:11px; flex:none;">Ask for approval <span class="chev">&#9662;</span></span>
+                    <span class="spacer"></span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.4 11.05 12.2 20a5 5 0 0 1-7.1-7l9-9a3.5 3.5 0 0 1 5 5l-9 9a2 2 0 1 1-2.8-2.8l8.3-8.2"/></svg>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0M12 19v3"/></svg>
+                    <span class="send-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M12 19V5M5 12l7-7 7 7"/></svg></span>
+                  </div></div></div>
                 </div>
               </div>
             </div></div></div>
@@ -1749,7 +1786,7 @@ flowchart LR
                   <div style="padding:16px 18px; overflow:auto; flex:1;">
                     <div class="pv-bubble" style="margin:0 0 12px auto;">Find 500 leads at Series A SaaS companies in the US, check if they&#39;re already using a competitor, and send a personalized outreach email to the good fits, with a note on why.</div>
                     <div style="margin-top:auto; border:1px solid var(--line); border-radius:8px; padding:10px 14px;">
-                      <div style="display:flex; align-items:center; gap:6px; font-size:13px; font-weight:600; color:var(--ink);"><span class="lrt-spinner"></span> Checking <span style="font-weight:400; color:var(--ink-soft);">(competitor tools)</span><span style="margin-left:auto; color:var(--ink-faint); font-size:11px; font-weight:400;">0:31</span></div>
+                      <div style="display:flex; align-items:center; gap:6px; font-size:13px; font-weight:600; color:var(--ink);"><span class="lrt-spinner"></span> Checking <span style="font-weight:400; color:var(--ink-soft);">(competitor tools)</span><span style="margin-left:auto; color:var(--ink-faint); font-size:11px; font-weight:400;">0:31</span><span class="lrt-pause-btn" style="cursor:pointer; margin-left:8px; width:18px; height:18px;" title="Stop"><svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2"/></svg></span></div>
                     </div>
                   </div>
                   <div class="pv-chat-footer"><div class="lrt-alert-card" style="margin:0;">
@@ -1775,6 +1812,51 @@ flowchart LR
               </div>
             </div></div></div>
             <div class="lrt-screen-desc" style="margin:8px 0 0; width:280px;"><b>Needs permission, mid-run.</b> A lighter, single-tool-use check &mdash; replaces the composer&#39;s input slot entirely rather than floating over it or sitting inline, matching the real n8n AIA pattern (<code>InstanceAiConfirmationPanel.vue</code>&#39;s &quot;floating&quot; mode).</div></div>
+
+            <div style="flex:0 0 auto;">
+            <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:480px; padding:0;">
+        <div style="padding:14px 16px 12px; border-bottom:1px dashed var(--line); display:flex; gap:10px; align-items:flex-start;">
+          <div style="width:30px; height:30px; border-radius:6px; background:var(--ink-faint); flex:none;"></div>
+          <div>
+            <div style="font-size:12.5px;"><b>Martina</b> <span style="color:var(--ink-faint); font-size:11px;">Just now</span></div>
+            <div style="font-size:13px; margin-top:2px;"><span style="color:#2563eb;">@Sales Outreach</span> find 100 Series A SaaS leads and send outreach emails to the good fits</div>
+          </div>
+        </div>
+        <div style="padding:12px 16px 16px;">
+          <div style="font-size:11px; color:var(--ink-faint); margin-bottom:10px;">3 replies</div>
+          <div style="display:flex; gap:10px; align-items:flex-start;">
+            <div style="width:30px; height:30px; border-radius:6px; background:var(--ink); flex:none;"></div>
+            <div style="flex:1;">
+              <div style="font-size:12.5px;"><b>Sales Outreach</b> <span class="lrt-medium-pill" style="margin-left:2px; padding:1px 6px; font-size:9.5px;">APP</span> <span style="color:var(--ink-faint); font-size:11px;">Just now</span></div>
+              <div style="font-size:13px; margin-top:2px;">Started on this. I&#39;ll update this thread when it needs you, or when it&#39;s done.</div>
+              <div style="font-size:12px; color:var(--ink-faint); font-style:italic; margin-top:2px;">Goal: 100 qualified leads</div>
+              <div style="display:flex; gap:10px; align-items:center; margin-top:8px;">
+                <span class="lrt-btn" style="padding:5px 12px; font-size:12px;">Open in n8n</span>
+                <span style="cursor:pointer; color:var(--ink-faint); font-size:15px;">&#8943;</span>
+              </div>
+            </div>
+          </div>
+          <div style="display:flex; gap:10px; align-items:flex-start; margin-top:16px;">
+            <div style="width:30px; height:30px; border-radius:6px; background:var(--ink); flex:none;"></div>
+            <div style="flex:1;">
+              <div style="font-size:12.5px;"><b>Sales Outreach</b> <span class="lrt-medium-pill" style="margin-left:2px; padding:1px 6px; font-size:9.5px;">APP</span> <span style="color:var(--ink-faint); font-size:11px;">Just now</span></div>
+              <div class="lrt-alert-card" style="margin-top:6px;">
+                <div class="lrt-alert-head"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg>Needs your approval &mdash; <b>send_outreach_email</b> (23 companies)</div>
+                <div class="lrt-alert-actions"><span class="lrt-btn">Reject</span><span class="lrt-btn is-primary">Approve</span></div>
+              </div>
+            </div>
+          </div>
+          <div style="display:flex; gap:10px; align-items:flex-start; margin-top:16px;">
+            <div style="width:30px; height:30px; border-radius:6px; background:var(--ink); flex:none;"></div>
+            <div style="flex:1;">
+              <div style="font-size:12.5px;"><b>Sales Outreach</b> <span class="lrt-medium-pill" style="margin-left:2px; padding:1px 6px; font-size:9.5px;">APP</span> <span style="color:var(--ink-faint); font-size:11px;">Just now</span></div>
+              <div style="font-size:13px; margin-top:2px;">Done &mdash; outreach emails sent to 100 qualified leads.</div>
+              <div style="margin-top:6px; font-size:12px; cursor:pointer; text-decoration:underline;">&#8599; View full trace</div>
+            </div>
+          </div>
+        </div>
+      </div></div></div>
+            <div class="lrt-screen-desc" style="margin:8px 0 0; width:280px;"><b>Away example &mdash; Slack thread.</b> Reused from the original proposal, copy updated &mdash; same idea, no invocation picker needed to get here.</div></div>
 
           </div>
         </div>
@@ -2094,54 +2176,7 @@ flowchart LR
       </div>
     </div>
 
-    <div class="pv-nav-map">
-      <h4 style="font-size:13px;">Away example &mdash; Slack thread</h4>
-      <p style="font-size:12.5px; color:var(--hub-muted); margin:0 0 14px; max-width:760px;">Reused from the original proposal, copy updated &mdash; same idea, no invocation picker needed to get here.</p>
-      <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:480px; padding:0;">
-        <div style="padding:14px 16px 12px; border-bottom:1px dashed var(--line); display:flex; gap:10px; align-items:flex-start;">
-          <div style="width:30px; height:30px; border-radius:6px; background:var(--ink-faint); flex:none;"></div>
-          <div>
-            <div style="font-size:12.5px;"><b>Martina</b> <span style="color:var(--ink-faint); font-size:11px;">Just now</span></div>
-            <div style="font-size:13px; margin-top:2px;"><span style="color:#2563eb;">@Sales Outreach</span> find 100 Series A SaaS leads and send outreach emails to the good fits</div>
-          </div>
-        </div>
-        <div style="padding:12px 16px 16px;">
-          <div style="font-size:11px; color:var(--ink-faint); margin-bottom:10px;">3 replies</div>
-          <div style="display:flex; gap:10px; align-items:flex-start;">
-            <div style="width:30px; height:30px; border-radius:6px; background:var(--ink); flex:none;"></div>
-            <div style="flex:1;">
-              <div style="font-size:12.5px;"><b>Sales Outreach</b> <span class="lrt-medium-pill" style="margin-left:2px; padding:1px 6px; font-size:9.5px;">APP</span> <span style="color:var(--ink-faint); font-size:11px;">Just now</span></div>
-              <div style="font-size:13px; margin-top:2px;">Started on this. I&#39;ll update this thread when it needs you, or when it&#39;s done.</div>
-              <div style="font-size:12px; color:var(--ink-faint); font-style:italic; margin-top:2px;">Goal: 100 qualified leads</div>
-              <div style="display:flex; gap:10px; align-items:center; margin-top:8px;">
-                <span class="lrt-btn" style="padding:5px 12px; font-size:12px;">Open in n8n</span>
-                <span style="cursor:pointer; color:var(--ink-faint); font-size:15px;">&#8943;</span>
-              </div>
-            </div>
-          </div>
-          <div style="display:flex; gap:10px; align-items:flex-start; margin-top:16px;">
-            <div style="width:30px; height:30px; border-radius:6px; background:var(--ink); flex:none;"></div>
-            <div style="flex:1;">
-              <div style="font-size:12.5px;"><b>Sales Outreach</b> <span class="lrt-medium-pill" style="margin-left:2px; padding:1px 6px; font-size:9.5px;">APP</span> <span style="color:var(--ink-faint); font-size:11px;">Just now</span></div>
-              <div class="lrt-alert-card" style="margin-top:6px;">
-                <div class="lrt-alert-head"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg>Needs your approval &mdash; <b>send_outreach_email</b> (23 companies)</div>
-                <div class="lrt-alert-actions"><span class="lrt-btn">Reject</span><span class="lrt-btn is-primary">Approve</span></div>
-              </div>
-            </div>
-          </div>
-          <div style="display:flex; gap:10px; align-items:flex-start; margin-top:16px;">
-            <div style="width:30px; height:30px; border-radius:6px; background:var(--ink); flex:none;"></div>
-            <div style="flex:1;">
-              <div style="font-size:12.5px;"><b>Sales Outreach</b> <span class="lrt-medium-pill" style="margin-left:2px; padding:1px 6px; font-size:9.5px;">APP</span> <span style="color:var(--ink-faint); font-size:11px;">Just now</span></div>
-              <div style="font-size:13px; margin-top:2px;">Done &mdash; outreach emails sent to 100 qualified leads.</div>
-              <div style="margin-top:6px; font-size:12px; cursor:pointer; text-decoration:underline;">&#8599; View full trace</div>
-            </div>
-          </div>
-        </div>
-      </div></div></div>
-    </div>
-
-    <div class="pv-nav-map">
+        <div class="pv-nav-map">
       <h2 class="lrt-section-title">Agent Author &mdash; what stays configurable</h2>
       <p class="lrt-section-sub">No on/off switch anymore &mdash; the model always judges for itself. Two more full takes on the budget/alert guardrails, pulled from real agent-settings patterns via Mobbin: <a href="https://mobbin.com/screens/e72becab-c5d7-4e1a-a955-c0d20bbcd1e4" target="_blank" rel="noopener" style="text-decoration:underline;">Intercom&#39;s Fin</a> and <a href="https://mobbin.com/screens/8cf8d3eb-515b-4ff9-b14c-dddcfb207adf" target="_blank" rel="noopener" style="text-decoration:underline;">OpenAI Platform</a>. Open question: which reads best?</p>
       <div style="display:flex; gap:20px; align-items:flex-start; flex-wrap:wrap;">
