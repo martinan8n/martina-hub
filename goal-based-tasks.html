@@ -1606,10 +1606,11 @@ flowchart LR
                       <div class="lrt-plan-actions" style="justify-content:flex-end;"><div style="display:flex; gap:8px;"><span class="lrt-btn">Cancel</span><span class="lrt-btn is-primary">Start</span></div></div>
                     </div>
                   </div>
-                  <div class="pv-chat-footer"><div class="box"><div style="display:flex; align-items:center; gap:8px;"><span class="lrt-btn" style="padding:3px 8px; font-size:11px; flex:none;">Ask for approval <span class="chev">&#9662;</span></span><span style="flex:1;">Message Sales Outreach&hellip;</span></div><div class="box-actions">
+                  <div class="pv-chat-footer"><div class="box"><div>Message Sales Outreach&hellip;</div><div class="box-actions">
+                    <span class="lrt-btn" style="padding:3px 8px; font-size:11px; flex:none;">Ask for approval <span class="chev">&#9662;</span></span>
+                    <span class="spacer"></span>
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.4 11.05 12.2 20a5 5 0 0 1-7.1-7l9-9a3.5 3.5 0 0 1 5 5l-9 9a2 2 0 1 1-2.8-2.8l8.3-8.2"/></svg>
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0M12 19v3"/></svg>
-                    <span class="spacer"></span>
                     <span class="send-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M12 19V5M5 12l7-7 7 7"/></svg></span>
                   </div></div></div>
                 </div>
@@ -1635,10 +1636,11 @@ flowchart LR
                       <p class="hint" style="margin:8px 0 0;">I&#39;m figuring this out as I go &mdash; what I&#39;m doing right now will keep changing.</p>
                     </div>
                   </div>
-                  <div class="pv-chat-footer"><div class="box"><div style="display:flex; align-items:center; gap:8px;"><span class="lrt-btn" style="padding:3px 8px; font-size:11px; flex:none;">Ask for approval <span class="chev">&#9662;</span></span><span style="flex:1;">Message Sales Outreach&hellip;</span></div><div class="box-actions">
+                  <div class="pv-chat-footer"><div class="box"><div>Message Sales Outreach&hellip;</div><div class="box-actions">
+                    <span class="lrt-btn" style="padding:3px 8px; font-size:11px; flex:none;">Ask for approval <span class="chev">&#9662;</span></span>
+                    <span class="spacer"></span>
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.4 11.05 12.2 20a5 5 0 0 1-7.1-7l9-9a3.5 3.5 0 0 1 5 5l-9 9a2 2 0 1 1-2.8-2.8l8.3-8.2"/></svg>
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0M12 19v3"/></svg>
-                    <span class="spacer"></span>
                     <span class="send-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M12 19V5M5 12l7-7 7 7"/></svg></span>
                   </div></div></div>
                 </div>
@@ -1647,26 +1649,69 @@ flowchart LR
             <div class="lrt-screen-desc" style="margin:8px 0 0; width:280px;"><b>No plan &mdash; agent starts directly.</b> Status verb first, detail in parens after &mdash; Claude Code&#39;s own status-line format, applied here.</div></div>
 
             <div style="flex:0 0 auto;">
-            <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:400px;">
-              <div class="pv-app" style="min-height:200px; padding:14px; flex-direction:column;">
-                <div class="lrt-progress-card">
-                  <div style="font-size:13px; line-height:1.9;">
-                    <div><span style="color:#1f7a3d; font-weight:700; display:inline-block; width:14px;">&#10003;</span> Found <span style="color:var(--ink-soft); font-weight:400;">(500 Series A SaaS companies)</span></div>
-                    <div><span class="lrt-spinner" style="margin-right:5px;"></span> Checking <span style="color:var(--ink-soft); font-weight:400;">(cross-referencing competitor tools)</span></div>
-                    <div style="padding-left:20px; color:var(--ink-faint); font-size:12px;">&#9492; 340 of 500 checked so far</div>
-                    <div><span style="display:inline-block; width:9px; height:9px; border:1.5px solid var(--ink-faint); border-radius:50%; margin-right:5px;"></span> <span style="color:var(--ink-faint);">Score fits &amp; draft outreach</span></div>
+            <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:340px;">
+              <div class="pv-app" style="min-height:180px; padding:14px; flex-direction:column;">
+                <div style="border:1px solid var(--line); border-radius:8px; padding:12px; background:var(--paper); margin-bottom:10px;">
+                  <div style="font-size:13px; font-weight:600; margin-bottom:10px;">How should this agent&#39;s actions be approved?</div>
+                  <div style="display:flex; align-items:flex-start; gap:8px; padding:0 0 10px; border-bottom:1px solid var(--line);">
+                    <div style="flex:1;"><div style="font-size:13px; font-weight:600;">Ask for approval</div><p class="hint" style="margin:2px 0 0;">Always ask before running a tool or sending a message.</p></div>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex:none; margin-top:2px;"><path d="M20 6 9 17l-5-5"/></svg>
                   </div>
+                  <div style="display:flex; align-items:flex-start; gap:8px; padding:10px 0 0;">
+                    <div style="flex:1;"><div style="font-size:13px; font-weight:600; color:var(--ink-soft);">Approve for me</div><p class="hint" style="margin:2px 0 0;">Only ask for actions flagged as risky.</p></div>
+                  </div>
+                </div>
+                <div class="pv-chat-footer"><div class="box"><div>Message Sales Outreach&hellip;</div><div class="box-actions">
+                  <span class="lrt-btn" style="padding:3px 8px; font-size:11px; flex:none;">Ask for approval <span class="chev">&#9662;</span></span>
+                  <span class="spacer"></span>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.4 11.05 12.2 20a5 5 0 0 1-7.1-7l9-9a3.5 3.5 0 0 1 5 5l-9 9a2 2 0 1 1-2.8-2.8l8.3-8.2"/></svg>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0M12 19v3"/></svg>
+                  <span class="send-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M12 19V5M5 12l7-7 7 7"/></svg></span>
+                </div></div></div>
+              </div>
+            </div></div></div>
+            <div class="lrt-screen-desc" style="margin:8px 0 0; width:280px;"><b>Ask for approval &mdash; open state.</b> Same two-option interaction as ChatGPT/Claude&#39;s own approval-mode dropdown, worded for this hub. Checkmark shows the current selection.</div></div>
+
+            <div style="flex:0 0 auto;">
+            <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:620px;">
+              <div class="pv-app" style="min-height:340px;">
+                <div class="pv-skeleton-navbar" style="height:auto;">NAV</div>
+                <div class="pv-main" style="display:flex; flex-direction:column;">
+                  <div class="pv-preview-tabs">
+                    <b>Sales Outreach</b>
+                    <span class="pill" style="margin-left:0;">Preview</span>
+                    <span class="spacer"></span>
+                    <span class="icon-btn" title="Minimize" style="cursor:pointer;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 14h6v6M20 10h-6V4M14 10l7-7M3 21l7-7"/></svg></span>
+                  </div>
+                  <div style="padding:16px 18px; overflow:auto; flex:1;">
+                    <div class="pv-bubble" style="margin:0 0 12px auto;">Find 500 leads at Series A SaaS companies in the US, check if they&#39;re already using a competitor, and send a personalized outreach email to the good fits, with a note on why.</div>
+                    <div class="lrt-progress-card">
+                      <div style="font-size:13px; line-height:1.9;">
+                        <div><span style="display:inline-block; width:9px; height:9px; background:#1f7a3d; border-radius:50%; margin-right:5px;"></span> Found <span style="color:var(--ink-soft); font-weight:400;">(500 Series A SaaS companies)</span></div>
+                        <div><span class="lrt-spinner" style="margin-right:5px;"></span> Checking <span style="color:var(--ink-soft); font-weight:400;">(cross-referencing competitor tools)</span></div>
+                        <div style="padding-left:20px; color:var(--ink-faint); font-size:12px;">&#9492; 340 of 500 checked so far</div>
+                        <div><span style="display:inline-block; width:9px; height:9px; border:1.5px solid var(--ink-faint); border-radius:50%; margin-right:5px;"></span> <span style="color:var(--ink-faint);">Score fits &amp; draft outreach</span></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="pv-chat-footer"><div class="box"><div>Message Sales Outreach&hellip;</div><div class="box-actions">
+                    <span class="lrt-btn" style="padding:3px 8px; font-size:11px; flex:none;">Ask for approval <span class="chev">&#9662;</span></span>
+                    <span class="spacer"></span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.4 11.05 12.2 20a5 5 0 0 1-7.1-7l9-9a3.5 3.5 0 0 1 5 5l-9 9a2 2 0 1 1-2.8-2.8l8.3-8.2"/></svg>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0M12 19v3"/></svg>
+                    <span class="send-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M12 19V5M5 12l7-7 7 7"/></svg></span>
+                  </div></div></div>
                 </div>
               </div>
             </div></div></div>
-            <div class="lrt-screen-desc" style="margin:8px 0 0; width:280px;"><b>Status progression (Claude Code style).</b> Done gets a checkmark, current gets the spinner plus an indented sub-line, not-yet-started stays hollow and muted.</div></div>
+            <div class="lrt-screen-desc" style="margin:8px 0 0; width:280px;"><b>Status progression (Claude Code style).</b> Done gets a green dot, current gets the spinner plus an indented sub-line, not-yet-started stays hollow and muted.</div></div>
 
             <div style="flex:0 0 auto;">
             <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:400px;">
               <div class="pv-app" style="min-height:160px; padding:14px; flex-direction:column;">
                 <div class="lrt-progress-card">
                   <div style="font-size:13px; line-height:1.9;">
-                    <div><span style="color:#1f7a3d; font-weight:700; display:inline-block; width:14px;">&#10003;</span> Checked <span style="color:var(--ink-soft); font-weight:400;">(competitor tools, all 500)</span></div>
+                    <div><span style="display:inline-block; width:9px; height:9px; background:#1f7a3d; border-radius:50%; margin-right:5px;"></span> Checked <span style="color:var(--ink-soft); font-weight:400;">(competitor tools, all 500)</span></div>
                     <div><span class="lrt-spinner" style="margin-right:5px;"></span> Scoring <span style="color:var(--ink-soft); font-weight:400;">(ranking by ICP match)</span></div>
                     <div><span class="lrt-spinner" style="margin-right:5px;"></span> Drafting <span style="color:var(--ink-soft); font-weight:400;">(personalizing outreach per company)</span></div>
                   </div>
@@ -1674,6 +1719,19 @@ flowchart LR
               </div>
             </div></div></div>
             <div class="lrt-screen-desc" style="margin:8px 0 0; width:280px;"><b>Concurrent activity.</b> Two things can both be &quot;current&quot; at once &mdash; not everything the agent does is sequential.</div></div>
+
+            <div style="flex:0 0 auto;">
+            <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:400px;">
+              <div class="pv-app" style="min-height:160px; padding:14px; flex-direction:column;">
+                <div class="lrt-progress-card">
+                  <div style="font-size:13px; line-height:1.9;">
+                    <div style="display:flex; align-items:center; gap:6px; font-weight:600; color:var(--ink);"><span class="lrt-spinner"></span> Scoring <span style="color:var(--ink-soft); font-weight:400;">(ranking by ICP match)</span></div>
+                  </div>
+                  <p class="hint" style="margin:8px 0 0;">Going through the 340 companies that don&#39;t already use a competitor, ranking each by how closely it matches the ideal customer profile &mdash; company size, funding stage, and tech stack all factor in.</p>
+                </div>
+              </div>
+            </div></div></div>
+            <div class="lrt-screen-desc" style="margin:8px 0 0; width:280px;"><b>Status + paragraph.</b> One status line up top, a fuller prose explanation underneath instead of more status lines.</div></div>
 
             <div style="flex:0 0 auto;">
             <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:620px;">
@@ -1695,7 +1753,21 @@ flowchart LR
                   <div class="pv-chat-footer"><div class="lrt-alert-card" style="margin:0;">
                     <div class="lrt-alert-head">Allow web search on mobbin.com?</div>
                     <div class="lrt-alert-details">Needed to check whether these companies already use a competitor.</div>
-                    <div class="lrt-alert-actions"><span class="lrt-btn">Reject</span><span class="lrt-btn is-primary">Allow</span></div>
+                    <div style="margin-top:10px; display:flex; flex-direction:column; gap:2px;">
+                      <div style="display:flex; align-items:center; gap:8px; padding:8px 10px; border-radius:6px; background:var(--paper); cursor:pointer;">
+                        <svg width="16" height="14" viewBox="0 0 30 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12l5 5L18 6"/><path d="M9 12l5 5L25 6"/></svg>
+                        <span style="font-size:13px;"><b>Always allow</b> <span style="color:var(--ink-soft);">during this session</span></span>
+                        <span style="margin-left:auto; width:24px; height:24px; border-radius:50%; background:#fd8925; display:flex; align-items:center; justify-content:center; flex:none;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+                      </div>
+                      <div style="display:flex; align-items:center; gap:8px; padding:8px 10px; cursor:pointer;">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>
+                        <span style="font-size:13px;">Allow once</span>
+                      </div>
+                      <div style="display:flex; align-items:center; gap:8px; padding:8px 10px; cursor:pointer;">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M5.5 5.5l13 13"/></svg>
+                        <span style="font-size:13px;">Deny</span>
+                      </div>
+                    </div>
                   </div></div>
                 </div>
               </div>
@@ -1781,7 +1853,7 @@ flowchart LR
 
         <div class="lrt-screen-block">
           <div class="lrt-screen-head"><h4>When a plan doesn&#39;t help &mdash; straight to work</h4></div>
-          <p class="lrt-screen-desc">Some goals are complex enough to go goal-based but simple enough that laying out steps first wouldn&#39;t add anything &mdash; the agent just starts. The Manus-style card below is the one that reads best, so it&#39;s now the baseline &mdash; updated with Stop (not Pause), a channel icon on the step reading a specific channel, and staying pinned to the bottom of the chat while it runs, even if you keep typing. Two more via Mobbin, <a href="https://mobbin.com/screens/59dd33d5-6390-464e-a5b0-48ceced1b893" target="_blank" rel="noopener" style="text-decoration:underline;">Perplexity</a> and <a href="https://mobbin.com/screens/b045e2cd-4f54-424a-97f6-4c5954f0c1e1" target="_blank" rel="noopener" style="text-decoration:underline;">ChatGPT</a>, alongside it.</p>
+          <p class="lrt-screen-desc">Some goals are complex enough to go goal-based but simple enough that laying out steps first wouldn&#39;t add anything &mdash; the agent just starts. The Manus-style card below is the one that reads best, so it&#39;s now the baseline &mdash; updated with Stop (not Pause), a channel icon on the step reading a specific channel, and staying pinned to the bottom of the chat while it runs, even if you keep typing.</p>
           <div style="display:flex; gap:20px; align-items:flex-start; flex-wrap:wrap;">
 
             <div style="flex:0 0 auto;">
@@ -1812,75 +1884,6 @@ flowchart LR
             </div></div></div>
             <div class="lrt-screen-desc" style="margin:8px 0 0; font-weight:600; color:var(--hub-ink);">Current &mdash; running, no plan (Manus-style)</div>
             <p class="lrt-screen-desc" style="margin:4px 0 0; max-width:320px;">Stays pinned to the bottom of the chat while running &mdash; typing more doesn&#39;t scroll it away.</p>
-            </div>
-
-            <div style="flex:0 0 auto;">
-            <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:620px;">
-              <div class="pv-app" style="min-height:280px;">
-                <div class="pv-skeleton-navbar" style="height:auto;">NAV</div>
-                <div class="pv-main" style="display:flex; flex-direction:column;">
-                  <div class="pv-preview-tabs">
-                    <b>Sales Outreach</b>
-                    <span class="pill" style="margin-left:0;">Preview</span>
-                    <span class="spacer"></span>
-                    <span class="icon-btn" title="Minimize" style="cursor:pointer;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 14h6v6M20 10h-6V4M14 10l7-7M3 21l7-7"/></svg></span>
-                  </div>
-                  <div style="padding:16px 18px; overflow:auto; flex:1; display:flex; flex-direction:column;">
-                    <div class="pv-bubble" style="margin:0 0 12px auto;">Go through the #support-escalations channel from this week and summarize every thread that&#39;s still unresolved.</div>
-                    <div class="pv-reply" style="margin-bottom:10px;">Got it &mdash; I&#39;ll just start on this.</div>
-                    <div style="margin-top:auto; border:1px solid var(--line); border-radius:8px; padding:10px 14px; max-width:320px;">
-                      <div style="display:flex; align-items:center; gap:6px; font-size:13px; color:var(--ink-soft); cursor:pointer;"><span class="lrt-spinner" style="width:10px; height:10px;"></span> Thinking <span style="color:var(--ink-faint);">4s</span><span class="chev" style="margin-left:auto;">&#8964;</span><span class="lrt-pause-btn" style="cursor:pointer; margin-left:8px;" title="Stop"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2"/></svg></span></div>
-                    </div>
-                  </div>
-                  <div class="pv-chat-footer"><div class="box"><div>Message Sales Outreach&hellip;</div><div class="box-actions"><span class="spacer"></span><span class="send-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M12 19V5M5 12l7-7 7 7"/></svg></span></div></div></div>
-                </div>
-              </div>
-            </div></div></div>
-            <div class="lrt-screen-desc" style="margin:8px 0 0; font-weight:600; color:var(--hub-ink);">Perplexity-style &mdash; running, no plan</div>
-            <p class="lrt-screen-desc" style="margin:4px 0 0; max-width:320px;">Collapsed by default &mdash; click to expand into the same step list as the baseline.</p>
-            </div>
-
-            <div style="flex:0 0 auto;">
-            <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:620px;">
-              <div class="pv-app" style="min-height:280px;">
-                <div class="pv-skeleton-navbar" style="height:auto;">NAV</div>
-                <div class="pv-main" style="display:flex; flex-direction:column;">
-                  <div class="pv-preview-tabs">
-                    <b>Sales Outreach</b>
-                    <span class="pill" style="margin-left:0;">Preview</span>
-                    <span class="spacer"></span>
-                    <span class="icon-btn" title="Minimize" style="cursor:pointer;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 14h6v6M20 10h-6V4M14 10l7-7M3 21l7-7"/></svg></span>
-                  </div>
-                  <div style="padding:16px 18px; overflow:auto; flex:1; display:flex; flex-direction:column;">
-                    <div class="pv-bubble" style="margin:0 0 12px auto;">Go through the #support-escalations channel from this week and summarize every thread that&#39;s still unresolved.</div>
-                    <div class="pv-reply" style="margin-bottom:10px;">I&#39;ll dig into this now &mdash; feel free to keep chatting while I work.</div>
-                    <div style="margin-top:auto; border:1px solid var(--line); border-radius:8px; padding:12px 14px;">
-                      <div style="display:flex; align-items:center; gap:8px; font-size:13px; font-weight:600; color:var(--ink);"><span class="lrt-spinner" style="width:11px; height:11px;"></span> Reading #support-escalations<span style="margin-left:auto; display:flex; gap:6px;"><span class="lrt-btn" style="padding:3px 8px; font-size:11px;">Update</span><span class="lrt-btn" style="padding:3px 8px; font-size:11px;">Stop</span></span></div>
-                      <div style="display:flex; align-items:center; gap:10px; margin:8px 0 0;">
-                        <div class="lrt-progress-bar" style="flex:1; margin:0;"><div class="lrt-progress-bar-fill is-nudging" style="width:35%;"></div></div>
-                      </div>
-                      <span style="cursor:pointer; text-decoration:underline; font-size:12px; display:inline-block; margin-top:8px;">&rarr; View trace</span>
-                    </div>
-                  </div>
-                  <div class="pv-chat-footer"><div class="box"><div>Message Sales Outreach&hellip;</div><div class="box-actions"><span class="spacer"></span><span class="send-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M12 19V5M5 12l7-7 7 7"/></svg></span></div></div></div>
-                </div>
-              </div>
-            </div></div></div>
-            <div class="lrt-screen-desc" style="margin:8px 0 0; font-weight:600; color:var(--hub-ink);">ChatGPT-style &mdash; running, no plan</div>
-            <p class="lrt-screen-desc" style="margin:4px 0 0; max-width:320px;">Explicit Update and Stop controls instead of one icon. &quot;View trace&quot; could open a timestamped Activity panel right here instead of navigating away &mdash; a design idea, not built out in this pass.</p>
-            </div>
-
-            <div style="flex:0 0 auto;">
-            <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:280px;">
-              <div class="pv-app" style="min-height:120px; padding:14px; flex-direction:column;">
-                <div style="border:1px solid var(--line); border-radius:8px; padding:10px 14px; max-width:100%; margin-bottom:14px;">
-                  <div style="display:flex; align-items:center; gap:6px; font-size:13px; font-weight:600; color:var(--ink);"><span class="lrt-spinner"></span> Recalculating direction&hellip; <span style="margin-left:auto; color:var(--ink-faint); font-size:11px; font-weight:400;">0:11</span><span class="lrt-pause-btn" style="cursor:pointer; margin-left:8px;" title="Stop"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2"/></svg></span></div>
-                </div>
-                <div class="pv-reply" style="margin:0;">You stopped, go to Trace to check.</div>
-              </div>
-            </div></div></div>
-            <div class="lrt-screen-desc" style="margin:8px 0 0; font-weight:600; color:var(--hub-ink);">Other states of the same card</div>
-            <p class="lrt-screen-desc" style="margin:4px 0 0; max-width:280px;">Header label swaps to &quot;Recalculating direction&hellip;&quot; when the agent replans mid-run; the reply after clicking Stop.</p>
             </div>
 
             <div style="flex:0 0 auto;">
@@ -1964,7 +1967,20 @@ flowchart LR
             <p class="lrt-screen-desc" style="margin:4px 0 0; max-width:320px;">Open question, not a decision: should the model decide how specific this label gets, or is a generic category always safer? Ask Mike whether more specificity is actually preferred.</p>
             </div>
 
-          </div>
+<div style="flex:0 0 auto;">
+            <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:280px;">
+              <div class="pv-app" style="min-height:120px; padding:14px; flex-direction:column;">
+                <div style="border:1px solid var(--line); border-radius:8px; padding:10px 14px; max-width:100%; margin-bottom:14px;">
+                  <div style="display:flex; align-items:center; gap:6px; font-size:13px; font-weight:600; color:var(--ink);"><span class="lrt-spinner"></span> Recalculating direction&hellip; <span style="margin-left:auto; color:var(--ink-faint); font-size:11px; font-weight:400;">0:11</span><span class="lrt-pause-btn" style="cursor:pointer; margin-left:8px;" title="Stop"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2"/></svg></span></div>
+                </div>
+                <div class="pv-reply" style="margin:0;">You stopped, go to Trace to check.</div>
+              </div>
+            </div></div></div>
+            <div class="lrt-screen-desc" style="margin:8px 0 0; font-weight:600; color:var(--hub-ink);">Other states of the same card</div>
+            <p class="lrt-screen-desc" style="margin:4px 0 0; max-width:280px;">Header label swaps to &quot;Recalculating direction&hellip;&quot; when the agent replans mid-run; the reply after clicking Stop.</p>
+            </div>
+
+                      </div>
 
           <p class="lrt-screen-desc" style="margin-top:24px;">A different moment, not another variant of the above &mdash; the same no-plan path hitting something that needs approval. Guardrails apply regardless of which running-state visual is used.</p>
           <div style="display:flex; gap:20px; align-items:flex-start; flex-wrap:wrap;">
@@ -1987,50 +2003,22 @@ flowchart LR
                       <div class="goal-row"><span>Goal: unresolved threads summarized</span></div>
                       <div class="lrt-progress-steps"><span class="lrt-graph-node is-done">&#10003; Reading channel</span></div>
                     </div>
-                    <div class="lrt-alert-card"><div class="lrt-alert-head"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg>Needs your approval &mdash; <b>close_ticket</b> (3 threads)</div><div class="lrt-alert-details">&rsaquo; No plan was shown for this session, but risky actions still always ask &mdash; marking 3 threads resolved based on the customer&#39;s last reply.</div><div class="lrt-alert-actions" style="justify-content:space-between; flex-wrap:wrap; row-gap:8px;"><span style="cursor:pointer; text-decoration:underline; font-size:12px; color:var(--ink-soft); align-self:center;">Reject</span><div style="display:flex; gap:6px; flex-wrap:wrap;"><span class="lrt-btn">Allow only once</span><span class="lrt-btn">Allow this session</span><span class="lrt-btn is-primary">Allow always</span></div></div></div>
+                    <div class="lrt-alert-card"><div class="lrt-alert-head"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg>Needs your approval &mdash; <b>close_ticket</b> (3 threads)</div><div class="lrt-alert-details">&rsaquo; No plan was shown for this session, but risky actions still always ask &mdash; marking 3 threads resolved based on the customer&#39;s last reply.</div><div class="lrt-alert-details" style="font-family:monospace; font-size:12px; line-height:1.7; margin-top:8px;">
+                        1. Allow only once<br>
+                        2. Allow this session<br>
+                        3. Allow always<br>
+                        4. Reject
+                      </div><div class="lrt-alert-actions" style="color:var(--ink-faint); font-size:11px; font-family:monospace;">&uarr;/&darr; select &nbsp; Enter confirm &nbsp; Esc back</div></div>
                   </div>
                   <div class="pv-chat-footer"><div class="box"><div>Message Sales Outreach&hellip;</div><div class="box-actions"><span class="spacer"></span><span class="send-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M12 19V5M5 12l7-7 7 7"/></svg></span></div></div></div>
                 </div>
               </div>
             </div></div></div>
             <div class="lrt-screen-desc" style="margin:8px 0 0; font-weight:600; color:var(--hub-ink);">Needs approval &mdash; still gated, even with no plan</div>
-            <p class="lrt-screen-desc" style="margin:4px 0 0; max-width:320px;">Sticks to the bottom like the running-status card. Three consent tiers instead of a binary Reject/Approve &mdash; built on the existing alert-card pattern, since no AIA clarifying-question card exists yet in this hub to reuse instead.</p>
+            <p class="lrt-screen-desc" style="margin:4px 0 0; max-width:320px;">Sticks to the bottom like the running-status card. Numbered-choice list with keyboard hints instead of buttons &mdash; the pattern Claude Code and Grok use for their own agent-status panels.</p>
             </div>
 
-            <div style="flex:0 0 auto;">
-            <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:620px;">
-              <div class="pv-app" style="min-height:280px;">
-                <div class="pv-skeleton-navbar" style="height:auto;">NAV</div>
-                <div class="pv-main" style="display:flex; flex-direction:column;">
-                  <div class="pv-preview-tabs">
-                    <b>Sales Outreach</b>
-                    <span class="pill" style="margin-left:0;">Preview</span>
-                    <span class="spacer"></span>
-                    <span class="icon-btn" title="Minimize" style="cursor:pointer;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 14h6v6M20 10h-6V4M14 10l7-7M3 21l7-7"/></svg></span>
-                  </div>
-                  <div style="padding:16px 18px; overflow:auto; flex:1; display:flex; flex-direction:column;">
-                    <div class="pv-bubble" style="margin:0 0 12px auto;">Go through the #support-escalations channel from this week and summarize every thread that&#39;s still unresolved.</div>
-                    <div class="pv-reply" style="margin-bottom:10px;">This one&#39;s straightforward enough that I&#39;ll just start &mdash; I&#39;ll let you know if anything needs your input.</div>
-                    <div class="lrt-alert-card" style="margin-top:auto;">
-                      <div class="lrt-alert-head"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg>Needs your approval &mdash; <b>close_ticket</b> (3 threads)</div>
-                      <div class="lrt-alert-details" style="font-family:monospace; font-size:12px; line-height:1.7;">
-                        1. Allow only once<br>
-                        2. Allow this session<br>
-                        3. Allow always<br>
-                        4. Reject
                       </div>
-                      <div class="lrt-alert-actions" style="color:var(--ink-faint); font-size:11px; font-family:monospace;">&uarr;/&darr; select &nbsp; Enter confirm &nbsp; Esc back</div>
-                    </div>
-                  </div>
-                  <div class="pv-chat-footer"><div class="box"><div>Message Sales Outreach&hellip;</div><div class="box-actions"><span class="spacer"></span><span class="send-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M12 19V5M5 12l7-7 7 7"/></svg></span></div></div></div>
-                </div>
-              </div>
-            </div></div></div>
-            <div class="lrt-screen-desc" style="margin:8px 0 0; font-weight:600; color:var(--hub-ink);">Numbered-choice style (Claude Code / Grok agent-panel pattern)</div>
-            <p class="lrt-screen-desc" style="margin:4px 0 0; max-width:320px;">Same four choices as a keyboard-navigable numbered list with select/confirm/back hints, instead of buttons &mdash; the pattern Claude Code and Grok use for their own agent-status panels.</p>
-            </div>
-
-          </div>
         </div>
       </div>
     </div>
