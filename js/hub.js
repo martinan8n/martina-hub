@@ -1094,6 +1094,8 @@
   var CH_PROP_AGENTS = {
     aia: {
       name: "AI Assistant", color: "#fd8925", pillColor: "#fff",
+      heading: "What do you want to automate?",
+      placeholder: "Tell me what to build or ask a question — add context with +",
       pillIcon: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 9.5 8.5 3 11l6.5 2.5L12 20l2.5-6.5L21 11l-6.5-2.5Z"/></svg>',
       prompts: [
         { icon: "target", label: "Score my leads" },
@@ -1104,6 +1106,8 @@
     },
     seo: {
       name: "SEO Auditor", color: "#e5484d", pillColor: "#fff",
+      heading: "What do you want audited?",
+      placeholder: "Ask about a page, a checklist item, or a competitor — add context with +",
       pillIcon: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="8" width="16" height="11" rx="2"/><path d="M12 8V4M9 4h6"/></svg>',
       prompts: [
         { icon: "search", label: "Audit /pricing metadata" },
@@ -1114,6 +1118,8 @@
     },
     support: {
       name: "Support summarizer", color: "#3b82f6", pillColor: "#fff",
+      heading: "What do you need summarized?",
+      placeholder: "Ask about a ticket, a channel, or a time range — add context with +",
       pillIcon: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 14v-2a9 9 0 0 1 18 0v2"/><path d="M21 15a2 2 0 0 1-2 2h-1v-5h1a2 2 0 0 1 2 2ZM3 15a2 2 0 0 0 2 2h1v-5H5a2 2 0 0 0-2 2Z"/></svg>',
       prompts: [
         { icon: "inbox", label: "Escalations w/c 24 Aug" },
@@ -1124,6 +1130,8 @@
     },
     slack: {
       name: "Internal Slack Agent", color: "#8e4ec6", pillColor: "#fff",
+      heading: "What do you need posted to Slack?",
+      placeholder: "Ask for a summary, an update, or a channel digest — add context with +",
       pillIcon: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="7" width="14" height="11" rx="3"/></svg>',
       prompts: [
         { icon: "hash", label: "Post daily standup summary" },
@@ -1147,6 +1155,10 @@
     if (label) label.textContent = d.name;
     if (pillIcon) pillIcon.innerHTML = d.pillIcon;
     if (pill) { pill.style.background = d.color; pill.style.color = d.pillColor; }
+    var heading = document.getElementById("chPropHeading");
+    if (heading) heading.textContent = d.heading;
+    var placeholder = document.getElementById("chPropPlaceholder");
+    if (placeholder) placeholder.textContent = d.placeholder;
     var wrap = document.getElementById("chPropStarterPrompts");
     if (wrap) {
       wrap.innerHTML = d.prompts.map(function (p) {
@@ -1168,16 +1180,20 @@
   function chPropShowAllAgents() {
     var home = document.getElementById("chPropHomeView");
     var all = document.getElementById("chPropAllAgentsView");
+    var col = document.getElementById("chPropMainCol");
     if (home) home.style.display = "none";
     if (all) all.style.display = "block";
+    if (col) col.style.justifyContent = "flex-start";
   }
   window.chPropShowAllAgents = chPropShowAllAgents;
 
   function chPropShowHome() {
     var home = document.getElementById("chPropHomeView");
     var all = document.getElementById("chPropAllAgentsView");
+    var col = document.getElementById("chPropMainCol");
     if (home) home.style.display = "flex";
     if (all) all.style.display = "none";
+    if (col) col.style.justifyContent = "center";
   }
   window.chPropShowHome = chPropShowHome;
 
@@ -1205,6 +1221,12 @@
     if (menu) menu.style.display = menu.style.display === "none" ? "block" : "none";
   }
   window.chPropTogglePublishMenu = chPropTogglePublishMenu;
+
+  function chPropChangeVisibilityFromMenu() {
+    chPropTogglePublishMenu();
+    chPropTogglePublishModal();
+  }
+  window.chPropChangeVisibilityFromMenu = chPropChangeVisibilityFromMenu;
 
   function chPropUnpublish() {
     var btn = document.getElementById("chPropPublishBtn");
