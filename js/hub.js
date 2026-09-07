@@ -676,16 +676,6 @@
     requestAnimationFrame(fitWireframes);
   }
 
-  function lrtShowPageTab(idx) {
-    document.querySelectorAll("#lrtPageTabs .lrt-page-tab").forEach(function (t) {
-      t.classList.toggle("is-active", parseInt(t.getAttribute("data-page-tab"), 10) === idx);
-    });
-    document.querySelectorAll(".lrt-page-panel").forEach(function (p) {
-      p.style.display = parseInt(p.getAttribute("data-page-panel"), 10) === idx ? "" : "none";
-    });
-    requestAnimationFrame(fitWireframes);
-  }
-
   function chatNavShowTab(idx) {
     document.querySelectorAll("#chatNavPageTabs .lrt-page-tab").forEach(function (t) {
       t.classList.toggle("is-active", parseInt(t.getAttribute("data-page-tab"), 10) === idx);

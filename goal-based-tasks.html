@@ -46,32 +46,49 @@
 
     <div class="section-title">Screens</div>
     <div class="card-grid">
-      <a class="screen-card" href="#/lrt-flows">
+      <a class="screen-card" href="#/lrt-original">
+        <div class="thumb">&#128260;</div>
+        <div class="body">
+          <span class="status">Reference</span>
+          <h3>Original proposal</h3>
+          <p class="desc">The first full pass at goal-based task flows &mdash; frozen as historical record.</p>
+        </div>
+      </a>
+      <a class="screen-card" href="#/lrt-revised">
+        <div class="thumb">&#128260;</div>
+        <div class="body">
+          <span class="status">Reference</span>
+          <h3>Revised proposal</h3>
+          <p class="desc">Resolved per the cross-team Bakery feedback &mdash; no explicit invocation, conditional plan, graph-node trace.</p>
+        </div>
+      </a>
+      <a class="screen-card" href="#/lrt-draft">
         <div class="thumb">&#128260;</div>
         <div class="body">
           <span class="status">In progress</span>
-          <h3>Goal-based task flows and wireframes</h3>
-          <p class="desc">How a goal-based task actually gets triggered and run &mdash; how the model decides, and what happens at each step.</p>
+          <h3>Draft</h3>
+          <p class="desc">The active sandbox &mdash; step-by-step changes land here first.</p>
         </div>
       </a>
       <div class="screen-card placeholder">More screens land here as this workstream gets scoped<br>(e.g. plan/timeline view, session list with progress)</div>
     </div>
   </section>
 
-  <!-- ================= LONG-RUNNING TASKS: FLOWS AND WIREFRAMES ================= -->
-  <section data-route="lrt-flows">
+  <!-- ================= GOAL-BASED TASKS: ORIGINAL PROPOSAL ================= -->
+  <section data-route="lrt-original">
     <a class="back-link" href="#/long-running-tasks">&larr; Goal-based tasks</a>
     <div class="screen-head">
-      <h1>Goal-based task flows and wireframes</h1>
+      <h1>Goal-based task flows &mdash; Original proposal</h1>
     </div>
 
-    <div class="lrt-page-tabs" id="lrtPageTabs">
-      <span class="lrt-page-tab is-active" data-page-tab="0" onclick="lrtShowPageTab(0)">Original proposal</span>
-      <span class="lrt-page-tab" data-page-tab="1" onclick="lrtShowPageTab(1)">Revised proposal</span>
-      <span class="lrt-page-tab" data-page-tab="2" onclick="lrtShowPageTab(2)">Draft</span>
+    <div style="display:flex; gap:14px; font-size:13px; margin:-8px 0 20px; flex-wrap:wrap;">
+      <a href="#/lrt-original" style="font-weight:700; color:var(--hub-ink); text-decoration:underline;">Original proposal</a>
+      <span style="color:var(--hub-border);">&middot;</span>
+      <a href="#/lrt-revised" style="color:var(--hub-muted); text-decoration:none;">Revised proposal</a>
+      <span style="color:var(--hub-border);">&middot;</span>
+      <a href="#/lrt-draft" style="color:var(--hub-muted); text-decoration:none;">Draft</a>
     </div>
 
-    <div class="lrt-page-panel" data-page-panel="0">
 
     <h2 class="lrt-section-title">What is a long-running task?</h2>
     <div class="pv-assumptions">
@@ -823,8 +840,24 @@ flowchart LR
         <li><span class="ann-num">5</span><span class="ann-body">Could the graph/canvas view (screen 7, currently &quot;vision, not P0&quot;) actually be the release UI instead of the timeline + session list &mdash; skip the phased build and show progress as nodes from day one? Would need to weigh against the PRD&#39;s own reasoning for deferring it (P0 ships on existing surfaces to keep scope small).</span></li>      </ol>
     </div>
 
+
+  </section>
+
+  <!-- ================= GOAL-BASED TASKS: REVISED PROPOSAL ================= -->
+  <section data-route="lrt-revised">
+    <a class="back-link" href="#/long-running-tasks">&larr; Goal-based tasks</a>
+    <div class="screen-head">
+      <h1>Goal-based task flows &mdash; Revised proposal</h1>
     </div>
-    <div class="lrt-page-panel" data-page-panel="1" style="display:none;">
+
+    <div style="display:flex; gap:14px; font-size:13px; margin:-8px 0 20px; flex-wrap:wrap;">
+      <a href="#/lrt-original" style="color:var(--hub-muted); text-decoration:none;">Original proposal</a>
+      <span style="color:var(--hub-border);">&middot;</span>
+      <a href="#/lrt-revised" style="font-weight:700; color:var(--hub-ink); text-decoration:underline;">Revised proposal</a>
+      <span style="color:var(--hub-border);">&middot;</span>
+      <a href="#/lrt-draft" style="color:var(--hub-muted); text-decoration:none;">Draft</a>
+    </div>
+
 
     <div class="annotation-legend">
       <h4>What changed, and why</h4>
@@ -1513,8 +1546,24 @@ flowchart LR
       </ol>
     </div>
 
+
+  </section>
+
+  <!-- ================= GOAL-BASED TASKS: DRAFT ================= -->
+  <section data-route="lrt-draft">
+    <a class="back-link" href="#/long-running-tasks">&larr; Goal-based tasks</a>
+    <div class="screen-head">
+      <h1>Goal-based task flows &mdash; Draft</h1>
     </div>
-    <div class="lrt-page-panel" data-page-panel="2" style="display:block;">
+
+    <div style="display:flex; gap:14px; font-size:13px; margin:-8px 0 20px; flex-wrap:wrap;">
+      <a href="#/lrt-original" style="color:var(--hub-muted); text-decoration:none;">Original proposal</a>
+      <span style="color:var(--hub-border);">&middot;</span>
+      <a href="#/lrt-revised" style="color:var(--hub-muted); text-decoration:none;">Revised proposal</a>
+      <span style="color:var(--hub-border);">&middot;</span>
+      <a href="#/lrt-draft" style="font-weight:700; color:var(--hub-ink); text-decoration:underline;">Draft</a>
+    </div>
+
 
     <div class="annotation-legend">
       <h4>What changed, and why</h4>
@@ -2532,8 +2581,9 @@ flowchart LR
       </ol>
     </div>
 
-    </div>
+
   </section>
+
 
 </div>
 
