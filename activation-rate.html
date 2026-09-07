@@ -16,7 +16,7 @@
     <a class="back-link" href="#/activation-rate">&larr; Improve Activation Rate</a>
     <div class="screen-head">
       <h1>New chat &mdash; 1a: Sidebar, chats live next to the nav</h1>
-      <p>Recreated exactly as sketched &mdash; chats live as their own section in the primary sidebar, between the top-level nav and Projects. First concept for where chats/agent conversations should surface in the main nav; more variants land here as this gets explored.</p>
+      <p>Recreated exactly as sketched &mdash; chats live as their own section in the primary sidebar, between the top-level nav and Projects. First concept for where chats/agent conversations should surface in the main nav; more variants land here as this gets explored. &ldquo;Escalations w/c 24 Aug&rdquo; and &ldquo;Support macros refresh&rdquo; show the running and awaiting states &mdash; hover either row to see its status card.</p>
     </div>
 
     <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:1180px; padding:0;">
@@ -47,9 +47,23 @@
           <div style="display:flex; align-items:center; gap:8px; padding:5px 4px; font-size:13px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ink-faint)" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="m9 12 2 2 4-4"/></svg> Retry logic for HTTP node</div>
 
           <div style="font-size:10.5px; color:var(--ink-faint); margin:10px 0 4px;">Previous 7 days</div>
-          <div style="display:flex; align-items:center; gap:8px; padding:5px 4px; font-size:13px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2"><path d="M10 13a5 5 0 0 0 7 0l1-1a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-1 1a5 5 0 0 0 7 7l1-1"/></svg> Escalations w/c 24 Aug</div>
+          <div class="lrt-chat-hover-item" style="padding:5px 4px; font-size:13px; position:relative;">
+            <div style="display:flex; align-items:center; gap:8px;">Escalations w/c 24 Aug<span class="spacer" style="flex:1;"></span><span class="lrt-spinner" style="flex:none;"></span></div>
+            <div class="lrt-chat-hover-card" style="margin-top:6px; padding:8px 10px; background:var(--paper); border:1px solid var(--line); border-radius:6px;">
+              <div style="font-size:12px; font-weight:600;">Escalations w/c 24 Aug</div>
+              <div style="font-size:11px; color:var(--ink-soft); margin-top:3px;">Running &mdash; 340 of 500 checked so far</div>
+            </div>
+          </div>
           <div style="display:flex; align-items:center; gap:8px; padding:5px 4px; font-size:13px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="#30a46c" stroke="none"><circle cx="12" cy="12" r="9"/></svg> Set up Maya&#39;s onboarding</div>
           <div style="display:flex; align-items:center; gap:8px; padding:5px 4px; font-size:13px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="#e5484d" stroke="none"><circle cx="12" cy="12" r="9"/></svg> Audit /pricing metadata</div>
+          <div class="lrt-chat-hover-item" style="padding:5px 4px; font-size:13px; position:relative;">
+            <div style="display:flex; align-items:center; gap:8px;">Support macros refresh<span class="spacer" style="flex:1;"></span><svg width="14" height="14" viewBox="0 0 24 24" fill="#fd8925" stroke="none"><circle cx="12" cy="12" r="9"/></svg></div>
+            <div class="lrt-chat-hover-card" style="margin-top:6px; padding:8px 10px; background:var(--paper); border:1px solid var(--line); border-radius:6px;">
+              <div style="font-size:12px; font-weight:600;">Support macros refresh</div>
+              <div style="font-size:11px; color:var(--ink-soft); margin-top:3px;">Started by Priya &middot; 2h ago</div>
+              <div style="font-size:11px; color:#a6480f; margin-top:3px;">Awaiting &mdash; hit a usage limit. Ask an owner to raise it to continue.</div>
+            </div>
+          </div>
           <div style="padding:6px 4px; font-size:12.5px; color:var(--ink-faint); cursor:pointer;">All chats&hellip;</div>
 
           <div style="font-size:10.5px; font-weight:700; letter-spacing:0.05em; color:var(--ink-faint); margin:16px 0 4px;">PROJECTS</div>
