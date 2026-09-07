@@ -1632,7 +1632,7 @@ flowchart LR
                   <div style="padding:16px 18px; overflow:auto; flex:1;">
                     <div class="pv-bubble" style="margin:0 0 12px auto;">Find 500 leads at Series A SaaS companies in the US, check if they&#39;re already using a competitor, and send a personalized outreach email to the good fits, with a note on why.</div>
                     <div class="lrt-progress-card">
-                      <div style="display:flex; align-items:center; gap:6px; font-size:13px; font-weight:600; color:var(--ink);"><span class="lrt-spinner"></span> Finding <span style="font-weight:400; color:var(--ink-soft);">(Series A SaaS companies in the US that match the target profile)</span><span class="lrt-pause-btn" style="cursor:pointer; margin-left:auto; width:22px; height:22px;" title="Stop"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><rect x="5" y="5" width="14" height="14" rx="2"/></svg></span></div>
+                      <div style="display:flex; align-items:center; gap:6px; font-size:13px; font-weight:600; color:var(--ink);"><span class="lrt-spinner"></span> Finding <span style="font-weight:400; color:var(--ink-soft);">(Series A SaaS companies in the US that match the target profile)</span><span style="margin-left:auto; color:var(--ink-faint); font-size:11px; font-weight:400;">0:07</span><span class="lrt-pause-btn" style="cursor:pointer; width:22px; height:22px; margin-left:8px;" title="Stop"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><rect x="5" y="5" width="14" height="14" rx="2"/></svg></span></div>
                       <p class="hint" style="margin:8px 0 0;">I&#39;m figuring this out as I go &mdash; what I&#39;m doing right now will keep changing.</p>
                     </div>
                   </div>
@@ -1651,7 +1651,7 @@ flowchart LR
             <div style="flex:0 0 auto;">
             <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:340px;">
               <div class="pv-app" style="min-height:180px; padding:14px; flex-direction:column;">
-                <div style="border:1px solid var(--line); border-radius:8px; padding:12px; background:var(--paper); margin-bottom:10px;">
+                <div id="lrtApprovalDropdown1" style="display:none; border:1px solid var(--line); border-radius:8px; padding:12px; background:var(--paper); margin-bottom:10px;">
                   <div style="font-size:13px; font-weight:600; margin-bottom:10px;">How should this agent&#39;s actions be approved?</div>
                   <div style="display:flex; align-items:flex-start; gap:8px; padding:0 0 10px; border-bottom:1px solid var(--line);">
                     <div style="flex:1;"><div style="font-size:13px; font-weight:600;">Ask for approval</div><p class="hint" style="margin:2px 0 0;">Always ask before running a tool or sending a message.</p></div>
@@ -1661,8 +1661,9 @@ flowchart LR
                     <div style="flex:1;"><div style="font-size:13px; font-weight:600; color:var(--ink-soft);">Approve for me</div><p class="hint" style="margin:2px 0 0;">Only ask for actions flagged as risky.</p></div>
                   </div>
                 </div>
+                <div style="margin-top:auto;"></div>
                 <div class="pv-chat-footer"><div class="box"><div>Message Sales Outreach&hellip;</div><div class="box-actions">
-                  <span class="lrt-btn" style="padding:3px 8px; font-size:11px; flex:none;">Ask for approval <span class="chev">&#9662;</span></span>
+                  <span class="lrt-btn" style="padding:3px 8px; font-size:11px; flex:none; cursor:pointer;" onclick="var d=document.getElementById(&#39;lrtApprovalDropdown1&#39;); d.style.display = d.style.display===&#39;none&#39; ? &#39;block&#39; : &#39;none&#39;;">Ask for approval <span class="chev">&#9662;</span></span>
                   <span class="spacer"></span>
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.4 11.05 12.2 20a5 5 0 0 1-7.1-7l9-9a3.5 3.5 0 0 1 5 5l-9 9a2 2 0 1 1-2.8-2.8l8.3-8.2"/></svg>
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0M12 19v3"/></svg>
@@ -1670,7 +1671,7 @@ flowchart LR
                 </div></div></div>
               </div>
             </div></div></div>
-            <div class="lrt-screen-desc" style="margin:8px 0 0; width:280px;"><b>Ask for approval &mdash; open state.</b> Same two-option interaction as ChatGPT/Claude&#39;s own approval-mode dropdown, worded for this hub. Checkmark shows the current selection.</div></div>
+            <div class="lrt-screen-desc" style="margin:8px 0 0; width:280px;"><b>Ask for approval &mdash; click to open.</b> Same two-option interaction as ChatGPT/Claude&#39;s own approval-mode dropdown, worded for this hub. Click the pill in the composer to try it &mdash; checkmark shows the current selection.</div></div>
 
             <div style="flex:0 0 auto;">
             <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:620px;">
@@ -1688,7 +1689,7 @@ flowchart LR
                     <div class="lrt-progress-card">
                       <div style="font-size:13px; line-height:1.9;">
                         <div><span style="display:inline-block; width:9px; height:9px; background:#1f7a3d; border-radius:50%; margin-right:5px;"></span> Found <span style="color:var(--ink-soft); font-weight:400;">(500 Series A SaaS companies)</span></div>
-                        <div><span class="lrt-spinner" style="margin-right:5px;"></span> Checking <span style="color:var(--ink-soft); font-weight:400;">(cross-referencing competitor tools)</span></div>
+                        <div><span class="lrt-spinner" style="margin-right:5px;"></span> Checking <span style="color:var(--ink-soft); font-weight:400;">(cross-referencing competitor tools)</span> <span style="color:var(--ink-faint); font-size:11px;">0:19</span></div>
                         <div style="padding-left:20px; color:var(--ink-faint); font-size:12px;">&#9492; 340 of 500 checked so far</div>
                         <div><span style="display:inline-block; width:9px; height:9px; border:1.5px solid var(--ink-faint); border-radius:50%; margin-right:5px;"></span> <span style="color:var(--ink-faint);">Score fits &amp; draft outreach</span></div>
                       </div>
@@ -1712,8 +1713,8 @@ flowchart LR
                 <div class="lrt-progress-card">
                   <div style="font-size:13px; line-height:1.9;">
                     <div><span style="display:inline-block; width:9px; height:9px; background:#1f7a3d; border-radius:50%; margin-right:5px;"></span> Checked <span style="color:var(--ink-soft); font-weight:400;">(competitor tools, all 500)</span></div>
-                    <div><span class="lrt-spinner" style="margin-right:5px;"></span> Scoring <span style="color:var(--ink-soft); font-weight:400;">(ranking by ICP match)</span></div>
-                    <div><span class="lrt-spinner" style="margin-right:5px;"></span> Drafting <span style="color:var(--ink-soft); font-weight:400;">(personalizing outreach per company)</span></div>
+                    <div><span class="lrt-spinner" style="margin-right:5px;"></span> Scoring <span style="color:var(--ink-soft); font-weight:400;">(ranking by ICP match)</span> <span style="color:var(--ink-faint); font-size:11px;">0:22</span></div>
+                    <div><span class="lrt-spinner" style="margin-right:5px;"></span> Drafting <span style="color:var(--ink-soft); font-weight:400;">(personalizing outreach per company)</span> <span style="color:var(--ink-faint); font-size:11px;">0:04</span></div>
                   </div>
                 </div>
               </div>
@@ -1725,7 +1726,7 @@ flowchart LR
               <div class="pv-app" style="min-height:160px; padding:14px; flex-direction:column;">
                 <div class="lrt-progress-card">
                   <div style="font-size:13px; line-height:1.9;">
-                    <div style="display:flex; align-items:center; gap:6px; font-weight:600; color:var(--ink);"><span class="lrt-spinner"></span> Scoring <span style="color:var(--ink-soft); font-weight:400;">(ranking by ICP match)</span></div>
+                    <div style="display:flex; align-items:center; gap:6px; font-weight:600; color:var(--ink);"><span class="lrt-spinner"></span> Scoring <span style="color:var(--ink-soft); font-weight:400;">(ranking by ICP match)</span><span style="margin-left:auto; color:var(--ink-faint); font-size:11px; font-weight:400;">0:22</span></div>
                   </div>
                   <p class="hint" style="margin:8px 0 0;">Going through the 340 companies that don&#39;t already use a competitor, ranking each by how closely it matches the ideal customer profile &mdash; company size, funding stage, and tech stack all factor in.</p>
                 </div>
@@ -1747,12 +1748,12 @@ flowchart LR
                   <div style="padding:16px 18px; overflow:auto; flex:1;">
                     <div class="pv-bubble" style="margin:0 0 12px auto;">Find 500 leads at Series A SaaS companies in the US, check if they&#39;re already using a competitor, and send a personalized outreach email to the good fits, with a note on why.</div>
                     <div style="margin-top:auto; border:1px solid var(--line); border-radius:8px; padding:10px 14px;">
-                      <div style="display:flex; align-items:center; gap:6px; font-size:13px; font-weight:600; color:var(--ink);"><span class="lrt-spinner"></span> Checking <span style="font-weight:400; color:var(--ink-soft);">(competitor tools)</span></div>
+                      <div style="display:flex; align-items:center; gap:6px; font-size:13px; font-weight:600; color:var(--ink);"><span class="lrt-spinner"></span> Checking <span style="font-weight:400; color:var(--ink-soft);">(competitor tools)</span><span style="margin-left:auto; color:var(--ink-faint); font-size:11px; font-weight:400;">0:31</span></div>
                     </div>
                   </div>
                   <div class="pv-chat-footer"><div class="lrt-alert-card" style="margin:0;">
-                    <div class="lrt-alert-head">Allow web search on mobbin.com?</div>
-                    <div class="lrt-alert-details">Needed to check whether these companies already use a competitor.</div>
+                    <div class="lrt-alert-head" style="border-bottom:none;">Allow web search on builtwith.com?</div>
+                    <div class="lrt-alert-details" style="border-bottom:none;">Needed to check whether these companies already use a competitor.</div>
                     <div style="margin-top:10px; display:flex; flex-direction:column; gap:2px;">
                       <div style="display:flex; align-items:center; gap:8px; padding:8px 10px; border-radius:6px; background:var(--paper); cursor:pointer;">
                         <svg width="16" height="14" viewBox="0 0 30 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12l5 5L18 6"/><path d="M9 12l5 5L25 6"/></svg>
@@ -1773,80 +1774,6 @@ flowchart LR
               </div>
             </div></div></div>
             <div class="lrt-screen-desc" style="margin:8px 0 0; width:280px;"><b>Needs permission, mid-run.</b> A lighter, single-tool-use check &mdash; replaces the composer&#39;s input slot entirely rather than floating over it or sitting inline, matching the real n8n AIA pattern (<code>InstanceAiConfirmationPanel.vue</code>&#39;s &quot;floating&quot; mode).</div></div>
-
-          </div>
-        </div>
-
-        <div class="lrt-screen-block">
-          <div class="lrt-screen-head"><h4>Whether Start appears &mdash; depends on the model&#39;s confidence</h4></div>
-          <p class="lrt-screen-desc">Same plan, same steps. Low confidence surfaces a clarifying question first, then this gate; high confidence skips straight to the overview and just proceeds.</p>
-          <div style="display:flex; gap:20px; align-items:flex-start; flex-wrap:wrap;">
-
-            <div style="flex:0 0 auto;">
-            <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:620px;">
-              <div class="pv-app" style="min-height:340px;">
-                <div class="pv-skeleton-navbar" style="height:auto;">NAV</div>
-                <div class="pv-main" style="display:flex; flex-direction:column;">
-                  <div class="pv-preview-tabs">
-                    <b>Sales Outreach</b>
-                    <span class="pill" style="margin-left:0;">Preview</span>
-                    <span class="spacer"></span>
-                    <span class="icon-btn" title="Minimize" style="cursor:pointer;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 14h6v6M20 10h-6V4M14 10l7-7M3 21l7-7"/></svg></span>
-                  </div>
-                  <div style="padding:16px 18px; overflow:auto; flex:1;">
-                    <div class="pv-bubble" style="margin:0 0 12px auto;">Find 500 leads at Series A SaaS companies in the US, check if they&#39;re already using a competitor, and send a personalized outreach email to the good fits, with a note on why.</div>
-                    <div class="lrt-plan-card">
-                      <div class="lrt-plan-label">Overview of what might happen</div>
-                      <p class="ask">This looks like it&#39;ll take some real work. Here&#39;s my plan &mdash; want me to go ahead?</p>
-                      <ul>
-                        <li><span class="marker"></span> Find Series A SaaS companies in the US, aiming for 500</li>
-                        <li class="plan-step-tentative"><span class="marker"></span> Check each one for existing use of a competitor</li>
-                        <li class="plan-step-tentative"><span class="marker"></span> Score the good fits and draft a one-line reason for each</li>
-                        <li class="plan-step-tentative"><span class="marker"></span> Send a personalized outreach email to the good fits</li>
-                      </ul>
-                      <p class="hint" style="margin:8px 0 0;">This is a starting point, not a fixed contract &mdash; I may add or adjust steps as I learn more.</p>
-                      <div class="lrt-plan-actions"><span class="lrt-btn">Cancel</span><span class="lrt-btn is-primary">Start</span></div>
-                    </div>
-                  </div>
-                  <div class="pv-chat-footer"><div class="box"><div>Message Sales Outreach&hellip;</div><div class="box-actions"><span class="spacer"></span><span class="send-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M12 19V5M5 12l7-7 7 7"/></svg></span></div></div></div>
-                </div>
-              </div>
-              <button class="annotation-dot is-question" type="button" style="top:150px; left:6px;" data-badge="Open question" data-text="How do you indicate to the user that this plan will change &mdash; that steps 2 onward are provisional and may be added to or adjusted as the agent learns more? Lighter styling alone may not be enough. Not decided yet." onclick="openCritiqueDot(this)">?</button>
-            </div></div></div>
-            <div class="lrt-screen-desc" style="margin:8px 0 0; font-weight:600; color:var(--hub-ink);">Lower confidence &mdash; model shows Start as an explicit gate</div></div>
-
-            <div style="flex:0 0 auto;">
-            <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:620px;">
-              <div class="pv-app" style="min-height:340px;">
-                <div class="pv-skeleton-navbar" style="height:auto;">NAV</div>
-                <div class="pv-main" style="display:flex; flex-direction:column;">
-                  <div class="pv-preview-tabs">
-                    <b>Sales Outreach</b>
-                    <span class="pill" style="margin-left:0;">Preview</span>
-                    <span class="spacer"></span>
-                    <span class="icon-btn" title="Minimize" style="cursor:pointer;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 14h6v6M20 10h-6V4M14 10l7-7M3 21l7-7"/></svg></span>
-                  </div>
-                  <div style="padding:16px 18px; overflow:auto; flex:1;">
-                    <div class="pv-bubble" style="margin:0 0 12px auto;">Find 500 leads at Series A SaaS companies in the US, check if they&#39;re already using a competitor, and send a personalized outreach email to the good fits, with a note on why.</div>
-                    <div class="lrt-plan-card">
-                      <div class="lrt-plan-label">Overview of what might happen</div>
-                      <p class="ask">This looks straightforward &mdash; here&#39;s what I&#39;ll do:</p>
-                      <ul>
-                        <li><span class="marker"></span> Find Series A SaaS companies in the US, aiming for 500</li>
-                        <li class="plan-step-tentative"><span class="marker"></span> Check each one for existing use of a competitor</li>
-                        <li class="plan-step-tentative"><span class="marker"></span> Score the good fits and draft a one-line reason for each</li>
-                        <li class="plan-step-tentative"><span class="marker"></span> Send a personalized outreach email to the good fits</li>
-                      </ul>
-                      <p class="hint" style="margin:8px 0 0;">This is a starting point, not a fixed contract &mdash; I may add or adjust steps as I learn more.</p>
-                      <div class="lrt-plan-actions" style="justify-content:space-between;"><span class="hint" style="margin:0;">Starting automatically&hellip;</span><span class="lrt-btn">Cancel</span></div>
-                    </div>
-                  </div>
-                  <div class="pv-chat-footer"><div class="box"><div>Message Sales Outreach&hellip;</div><div class="box-actions"><span class="spacer"></span><span class="send-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M12 19V5M5 12l7-7 7 7"/></svg></span></div></div></div>
-                </div>
-              </div>
-              <button class="annotation-dot is-question" type="button" style="top:320px; left:6px;" data-badge="Unclear" data-text="A stray note just said &quot;Stop&quot; with no clear referent &mdash; unclear if this means a stop control is needed here once the agent proceeds on its own (distinct from Cancel, which is only available before it starts), or something else entirely. Flagging rather than guessing." onclick="openCritiqueDot(this)">?</button>
-            </div></div></div>
-            <div class="lrt-screen-desc" style="margin:8px 0 0; font-weight:600; color:var(--hub-ink);">High confidence &mdash; model proceeds without asking</div></div>
 
           </div>
         </div>
