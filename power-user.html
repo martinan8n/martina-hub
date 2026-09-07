@@ -1,58 +1,41 @@
 <!doctype html><html><head>
 <meta charset="utf8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Workstreams</title>
+<title>Power-user productivity</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Patrick+Hand&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles/hub.css">
 </head>
-<body data-default-route="home">
+<body data-default-route="power-user">
 
 <div class="shell">
 
-  <!-- ================= WORKSTREAMS INDEX ================= -->
-  <section data-route="home">
+  <!-- ================= POWER-USER PRODUCTIVITY ================= -->
+  <section data-route="power-user">
+    <a class="back-link" href="index.html#/home">&larr; Workstreams</a>
     <div class="hero">
       <div>
-        <span class="kicker">n8n &middot; Agents</span>
-        <h1>Workstreams</h1>
-        <p>Design review hub. Pick a workstream to see its problem, hypothesis, and screens.</p>
+        <span class="kicker">Workstream &middot; not started</span>
+        <h1>Power-user productivity</h1>
+        <p>For people who already know the product and want to move faster &mdash; a different persona and a different goal than Activation Rate.</p>
       </div>
     </div>
+
+    <div class="problem-grid">
+      <div class="problem-card">
+        <div class="eyebrow">&#129513; Problem</div>
+        <p>Experienced users have no fast path through things they already know how to do &mdash; keyboard shortcuts, starting from a blank agent instead of the AI-Assistant flow, and moving an agent&#39;s definition in/out of n8n (import/export).</p>
+      </div>
+      <div class="problem-card">
+        <div class="eyebrow">&#129514; Hypothesis</div>
+        <p>Not settled yet. These items were originally raised as candidates for Improve Activation Rate, then scoped out: they serve returning users who are already past the point of dropping off, not first-time builders. Test before adding anything here: does this help someone succeed at their <i>first</i> build, or does it help someone already capable move faster? If the latter, it belongs in this workstream, not Activation Rate.</p>
+      </div>
+    </div>
+
+    <div class="section-title">Screens</div>
     <div class="card-grid">
-      <a class="screen-card" href="build-notes.html#/build-notes">
-        <div class="thumb">&#128221;</div>
-        <div class="body">
-          <span class="status">Ongoing</span>
-          <h3>Build Notes</h3>
-          <p class="desc">Quick wireframes and sketches to help engineering see exactly how a specific feature should be built &mdash; lighter weight than a full workstream, added as questions come up.</p>
-        </div>
-      </a>
-      <a class="screen-card" href="goal-based-tasks.html#/long-running-tasks">
-        <div class="thumb">&#8987;</div>
-        <div class="body">
-          <span class="status">In progress</span>
-          <h3>Goal-based tasks</h3>
-          <p class="desc">Agents today are one-shot &mdash; no state across time, no way to pursue a multi-step goal to completion.</p>
-        </div>
-      </a>
-      <a class="screen-card" href="activation-rate.html#/activation-rate">
-        <div class="thumb">&#128200;</div>
-        <div class="body">
-          <span class="status">In progress</span>
-          <h3>Improve Activation Rate</h3>
-          <p class="desc">70% drop-off building agents, worse for manual creation than AI-Assistant-guided. Helping first-time builders actually finish.</p>
-        </div>
-      </a>
-      <a class="screen-card backlog" href="power-user.html#/power-user">
-        <div class="thumb">&#9889;</div>
-        <div class="body">
-          <span class="status backlog">Not started</span>
-          <h3>Power-user productivity</h3>
-          <p class="desc">Shortcuts, create-blank, import/export &mdash; for people who already know the product and want to move faster, not first-time builders.</p>
-        </div>
-      </a>
+      <div class="screen-card placeholder">Screens land here as this workstream gets scoped<br>(e.g. a &quot;create blank&quot; entry point, an import/export flow, a shortcuts overlay)</div>
     </div>
   </section>
 

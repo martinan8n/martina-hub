@@ -1,7 +1,8 @@
 
   function route() {
     var hash = location.hash || "#/";
-    var name = hash === "#/" || hash === "#" || hash === "" ? "home" : hash.replace(/^#\//, "");
+    var defaultRoute = document.body.getAttribute("data-default-route") || "home";
+    var name = hash === "#/" || hash === "#" || hash === "" ? defaultRoute : hash.replace(/^#\//, "");
     var sections = document.querySelectorAll("[data-route]");
     var matched = false;
     sections.forEach(function (el) {
@@ -10,7 +11,8 @@
       if (isMatch) matched = true;
     });
     if (!matched) {
-      document.querySelector('[data-route="home"]').classList.add("is-active");
+      var fallback = document.querySelector('[data-route="' + defaultRoute + '"]') || sections[0];
+      if (fallback) fallback.classList.add("is-active");
     }
     window.scrollTo(0, 0);
   }
