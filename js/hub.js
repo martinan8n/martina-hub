@@ -951,7 +951,8 @@
       content: '<div style="flex:1.4; min-width:0; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:20px;"><span class="avatar" style="margin-bottom:10px;">' + BN_TRACE_ICON.replace('width="13" height="13"', 'width="22" height="22"') + '</span><div style="font-size:13px; color:var(--ink-faint);">When you talk to your agent, the trace will appear here</div></div><div style="flex:1; min-width:0; max-width:320px; border-left:1px solid var(--line); display:flex; flex-direction:column;">' +
         BN_DOCK_HEADER.replace("SESSION_NAME", "New session").replace("TRACE_CLICK", "bnTraceGo(1)") +
         BN_DOCK_CHAT_EMPTY + BN_DOCK_FOOTER + '</div>',
-      dockOpen: true
+      dockOpen: true,
+      annotate: "trace-active"
     }
   ];
 
