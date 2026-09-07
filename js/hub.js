@@ -1045,5 +1045,26 @@
     }
   }
 
+  function lrtSelectApprovalMode(mode) {
+    var modes = ["ask", "auto"];
+    var labels = { ask: "Ask for approval", auto: "Approve for me" };
+    modes.forEach(function (m) {
+      var title = document.getElementById("lrtApprovalTitle-" + m);
+      var check = document.getElementById("lrtApprovalCheck-" + m);
+      if (title) title.style.color = m === mode ? "var(--ink)" : "var(--ink-soft)";
+      if (check) check.style.display = m === mode ? "" : "none";
+    });
+    var pill = document.getElementById("lrtApprovalPill");
+    if (pill) {
+      var chev = pill.querySelector(".chev");
+      pill.textContent = labels[mode] + " ";
+      if (chev) pill.appendChild(chev);
+      else pill.insertAdjacentHTML("beforeend", '<span class="chev">&#9662;</span>');
+    }
+    var dropdown = document.getElementById("lrtApprovalDropdown1");
+    if (dropdown) dropdown.style.display = "none";
+  }
+  window.lrtSelectApprovalMode = lrtSelectApprovalMode;
+
   route();
   requestAnimationFrame(fitWireframes);

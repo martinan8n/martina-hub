@@ -1653,17 +1653,18 @@ flowchart LR
               <div class="pv-app" style="min-height:180px; padding:14px; flex-direction:column;">
                 <div id="lrtApprovalDropdown1" style="display:none; border:1px solid var(--line); border-radius:8px; padding:12px; background:var(--paper); margin-bottom:10px;">
                   <div style="font-size:13px; font-weight:600; margin-bottom:10px;">How should this agent&#39;s actions be approved?</div>
-                  <div style="display:flex; align-items:flex-start; gap:8px; padding:0 0 10px; border-bottom:1px solid var(--line);">
-                    <div style="flex:1;"><div style="font-size:13px; font-weight:600;">Ask for approval</div><p class="hint" style="margin:2px 0 0;">Always ask before running a tool or sending a message.</p></div>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex:none; margin-top:2px;"><path d="M20 6 9 17l-5-5"/></svg>
+                  <div style="display:flex; align-items:flex-start; gap:8px; padding:0 0 10px; border-bottom:1px solid var(--line); cursor:pointer;" onclick="lrtSelectApprovalMode(&#39;ask&#39;)">
+                    <div style="flex:1;"><div id="lrtApprovalTitle-ask" style="font-size:13px; font-weight:600;">Ask for approval</div><p class="hint" style="margin:2px 0 0;">Always ask before running a tool or sending a message.</p></div>
+                    <svg id="lrtApprovalCheck-ask" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex:none; margin-top:2px;"><path d="M20 6 9 17l-5-5"/></svg>
                   </div>
-                  <div style="display:flex; align-items:flex-start; gap:8px; padding:10px 0 0;">
-                    <div style="flex:1;"><div style="font-size:13px; font-weight:600; color:var(--ink-soft);">Approve for me</div><p class="hint" style="margin:2px 0 0;">Only ask for actions flagged as risky.</p></div>
+                  <div style="display:flex; align-items:flex-start; gap:8px; padding:10px 0 0; cursor:pointer;" onclick="lrtSelectApprovalMode(&#39;auto&#39;)">
+                    <div style="flex:1;"><div id="lrtApprovalTitle-auto" style="font-size:13px; font-weight:600; color:var(--ink-soft);">Approve for me</div><p class="hint" style="margin:2px 0 0;">Only ask for actions flagged as risky.</p></div>
+                    <svg id="lrtApprovalCheck-auto" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex:none; margin-top:2px; display:none;"><path d="M20 6 9 17l-5-5"/></svg>
                   </div>
                 </div>
                 <div style="margin-top:auto;"></div>
                 <div class="pv-chat-footer"><div class="box"><div>Message Sales Outreach&hellip;</div><div class="box-actions">
-                  <span class="lrt-btn" style="padding:3px 8px; font-size:11px; flex:none; cursor:pointer;" onclick="var d=document.getElementById(&#39;lrtApprovalDropdown1&#39;); d.style.display = d.style.display===&#39;none&#39; ? &#39;block&#39; : &#39;none&#39;;">Ask for approval <span class="chev">&#9662;</span></span>
+                  <span id="lrtApprovalPill" class="lrt-btn" style="padding:3px 8px; font-size:11px; flex:none; cursor:pointer;" onclick="var d=document.getElementById(&#39;lrtApprovalDropdown1&#39;); d.style.display = d.style.display===&#39;none&#39; ? &#39;block&#39; : &#39;none&#39;;">Ask for approval <span class="chev">&#9662;</span></span>
                   <span class="spacer"></span>
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.4 11.05 12.2 20a5 5 0 0 1-7.1-7l9-9a3.5 3.5 0 0 1 5 5l-9 9a2 2 0 1 1-2.8-2.8l8.3-8.2"/></svg>
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0M12 19v3"/></svg>
@@ -2003,8 +2004,8 @@ flowchart LR
             </div>
 
             <div style="flex:0 0 auto;">
-            <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:620px; padding:0;">
-              <div class="pv-app" style="min-height:340px;">
+            <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:560px; padding:0;">
+              <div class="pv-app" style="min-height:280px;">
                 <div class="pv-skeleton-navbar" style="height:auto;">NAV</div>
                 <div class="pv-main">
               <div class="pv-topbar" style="padding:10px 16px;">
@@ -2017,7 +2018,7 @@ flowchart LR
                 <span class="lrt-medium-pill" title="Where this session is happening">&#128172; Slack</span>
                 <span class="spacer"></span>
               </div>
-              <div style="padding:20px 20px 8px;">
+              <div style="padding:20px;">
                 <div class="lrt-section-title" style="font-size:12px; text-transform:uppercase; letter-spacing:.04em; color:var(--ink-faint); margin-bottom:10px;">While executing &mdash; only what&#39;s already happened</div>
                 <div style="display:flex; align-items:center; gap:0; flex-wrap:wrap;">
                   <div class="lrt-graph-node is-done"><span style="display:inline-block; width:9px; height:9px; background:#1f7a3d; border-radius:50%; margin-right:5px;"></span>Find &amp; qualify leads</div>
@@ -2026,21 +2027,43 @@ flowchart LR
                 </div>
                 <p class="hint" style="margin:8px 0 0;">Nothing shown beyond the current group &mdash; not a preview of steps that haven&#39;t run yet.</p>
               </div>
-              <div style="padding:8px 20px 20px; border-top:1px dashed var(--line); margin-top:8px;">
+                </div>
+              </div>
+            </div></div></div>
+            <div class="lrt-screen-desc" style="margin:8px 0 0; font-weight:600; color:var(--hub-ink);">High-level grouping &mdash; while executing</div>
+            <p class="lrt-screen-desc" style="margin:4px 0 0; max-width:320px;">Each node is a high-level group of finer-grained actions underneath &mdash; no arrows, a plain connector instead. Only the completed and current groups show; nothing not-yet-started is previewed.</p>
+            </div>
+
+            <div style="flex:0 0 auto;">
+            <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:560px; padding:0;">
+              <div class="pv-app" style="min-height:280px;">
+                <div class="pv-skeleton-navbar" style="height:auto;">NAV</div>
+                <div class="pv-main">
+              <div class="pv-topbar" style="padding:10px 16px;">
+                <span class="pv-crumb">Personal / <b>Sales Outreach</b> &#9662;</span>
+                <span class="spacer"></span>
+                <span class="pv-trace-meta"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M10.5 7h3"/></svg> 964,795t ($0.5185)<span class="sep">&middot;</span>78.5s</span>
+              </div>
+              <div class="lrt-goal-header">
+                <span class="goal-text">Goal: 100 qualified leads</span>
+                <span class="lrt-status-pill is-done" style="margin:0 0 0 auto;">&#10003; Completed</span>
+              </div>
+              <div style="padding:20px;">
                 <div class="lrt-section-title" style="font-size:12px; text-transform:uppercase; letter-spacing:.04em; color:var(--ink-faint); margin-bottom:10px;">Once finalized &mdash; everything</div>
                 <div style="display:flex; align-items:center; gap:0; flex-wrap:wrap;">
                   <div class="lrt-graph-node is-done"><span style="display:inline-block; width:9px; height:9px; background:#1f7a3d; border-radius:50%; margin-right:5px;"></span>Find &amp; qualify leads</div>
                   <span style="display:inline-block; width:16px; height:1px; background:var(--line); flex:none;"></span>
                   <div class="lrt-graph-node is-done"><span style="display:inline-block; width:9px; height:9px; background:#1f7a3d; border-radius:50%; margin-right:5px;"></span>Score &amp; prepare outreach</div>
                   <span style="display:inline-block; width:16px; height:1px; background:var(--line); flex:none;"></span>
-                  <div class="lrt-graph-node" style="border-color:#fd8925;"><span style="display:inline-block; width:9px; height:9px; background:#fd8925; border-radius:50%; margin-right:5px;"></span>Send &amp; confirm &mdash; needs approval</div>
+                  <div class="lrt-graph-node is-done"><span style="display:inline-block; width:9px; height:9px; background:#1f7a3d; border-radius:50%; margin-right:5px;"></span>Send &amp; confirm</div>
                 </div>
+                <p class="hint" style="margin:8px 0 0;">No orange here &mdash; a finalized run has nothing left needing attention, by definition.</p>
               </div>
                 </div>
               </div>
             </div></div></div>
-            <div class="lrt-screen-desc" style="margin:8px 0 0; font-weight:600; color:var(--hub-ink);">High-level grouping nodes</div>
-            <p class="lrt-screen-desc" style="margin:4px 0 0; max-width:320px;">Each node is a high-level group of the finer-grained actions underneath &mdash; no arrows, a plain connector instead. Drilling into a node to see looping/redirect detail (going back to a skill or tool, a point where the approach changed) is a deliberate next step, not built in this pass.</p>
+            <div class="lrt-screen-desc" style="margin:8px 0 0; font-weight:600; color:var(--hub-ink);">High-level grouping &mdash; once finalized</div>
+            <p class="lrt-screen-desc" style="margin:4px 0 0; max-width:320px;">Every group shows as done. Drilling into a node to see looping/redirect detail (going back to a skill or tool, a point where the approach changed) is a deliberate next step, not built in this pass.</p>
             </div>
 
           </div>
