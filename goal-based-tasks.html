@@ -2113,14 +2113,22 @@ flowchart LR
                 <span class="lrt-medium-pill" title="Where this session is happening">&#128172; Slack</span>
                 <span class="spacer"></span>
               </div>
-              <div style="padding:20px;">
-                <div class="lrt-section-title" style="font-size:12px; text-transform:uppercase; letter-spacing:.04em; color:var(--ink-faint); margin-bottom:10px;">While executing &mdash; only what&#39;s already happened</div>
-                <div style="display:flex; align-items:center; gap:0; flex-wrap:wrap;">
-                  <div class="lrt-graph-node is-done"><span style="display:inline-block; width:9px; height:9px; background:#1f7a3d; border-radius:50%; margin-right:5px;"></span>Find &amp; qualify leads</div>
-                  <span style="display:inline-block; width:16px; height:1px; background:var(--line); flex:none;"></span>
-                  <div class="lrt-graph-node is-active"><span style="display:inline-block; width:9px; height:9px; background:#111; border-radius:50%; margin-right:5px;"></span>Score &amp; prepare outreach</div>
+              <div style="padding:20px; display:flex; align-items:center; gap:14px; flex-wrap:wrap;">
+                <div class="lrt-hl-node" style="position:relative; border:1px solid var(--line); border-radius:8px; padding:10px 14px; display:flex; align-items:center; gap:8px; background:#fff;">
+                  <span style="display:inline-block; width:9px; height:9px; background:#1f7a3d; border-radius:50%; flex:none;"></span>
+                  <b style="font-size:13px; white-space:nowrap;">Find &amp; qualify leads</b>
+                  <span class="lrt-hl-info" style="cursor:pointer; color:var(--ink-faint); flex:none; display:flex;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v.01M11 11h1v5h1"/></svg></span>
+                  <span class="chev" style="margin-left:6px;">&#9662;</span>
+                  <div class="lrt-hl-explain" style="position:absolute; top:100%; left:0; margin-top:6px; width:260px; background:var(--paper); border:1px solid var(--line); border-radius:8px; padding:10px 12px; font-size:12px; color:var(--ink-soft); box-shadow:2px 3px 0 rgba(26,28,30,0.12); z-index:5;">Searched Series A SaaS companies matching the target profile, then cross-referenced each against known competitor usage &mdash; kept the 340 that don&#39;t already use one.</div>
                 </div>
-                <p class="hint" style="margin:8px 0 0;">Nothing shown beyond the current group &mdash; not a preview of steps that haven&#39;t run yet.</p>
+                <span style="display:inline-block; width:16px; height:1px; background:var(--line); flex:none;"></span>
+                <div class="lrt-hl-node" style="position:relative; border:1px solid #111; border-radius:8px; padding:10px 14px; display:flex; align-items:center; gap:8px; background:#fff;">
+                  <span style="display:inline-block; width:9px; height:9px; background:#111; border-radius:50%; flex:none;"></span>
+                  <b style="font-size:13px; white-space:nowrap;">Score &amp; prepare outreach</b>
+                  <span class="lrt-hl-info" style="cursor:pointer; color:var(--ink-faint); flex:none; display:flex;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v.01M11 11h1v5h1"/></svg></span>
+                  <span class="chev" style="margin-left:6px;">&#9662;</span>
+                  <div class="lrt-hl-explain" style="position:absolute; top:100%; left:0; margin-top:6px; width:260px; background:var(--paper); border:1px solid var(--line); border-radius:8px; padding:10px 12px; font-size:12px; color:var(--ink-soft); box-shadow:2px 3px 0 rgba(26,28,30,0.12); z-index:5;">Scoring the qualified companies against fit criteria and drafting a personalized outreach note for each, explaining why they&#39;re a good match.</div>
+                </div>
               </div>
                 </div>
               </div>
@@ -2141,18 +2149,33 @@ flowchart LR
               </div>
               <div class="lrt-goal-header">
                 <span class="goal-text">Goal: 100 qualified leads</span>
-                <span class="lrt-status-pill is-done" style="margin:0 0 0 auto;">&#10003; Completed</span>
+                <span class="spacer"></span>
+                <span style="display:flex; align-items:center; gap:5px; font-size:12.5px; font-weight:600; color:#1f7a3d;"><span style="display:inline-block; width:9px; height:9px; background:#1f7a3d; border-radius:50%;"></span> Done</span>
               </div>
-              <div style="padding:20px;">
-                <div class="lrt-section-title" style="font-size:12px; text-transform:uppercase; letter-spacing:.04em; color:var(--ink-faint); margin-bottom:10px;">Once finalized &mdash; everything</div>
-                <div style="display:flex; align-items:center; gap:0; flex-wrap:wrap;">
-                  <div class="lrt-graph-node is-done"><span style="display:inline-block; width:9px; height:9px; background:#1f7a3d; border-radius:50%; margin-right:5px;"></span>Find &amp; qualify leads</div>
-                  <span style="display:inline-block; width:16px; height:1px; background:var(--line); flex:none;"></span>
-                  <div class="lrt-graph-node is-done"><span style="display:inline-block; width:9px; height:9px; background:#1f7a3d; border-radius:50%; margin-right:5px;"></span>Score &amp; prepare outreach</div>
-                  <span style="display:inline-block; width:16px; height:1px; background:var(--line); flex:none;"></span>
-                  <div class="lrt-graph-node is-done"><span style="display:inline-block; width:9px; height:9px; background:#1f7a3d; border-radius:50%; margin-right:5px;"></span>Send &amp; confirm</div>
+              <div style="padding:20px; display:flex; align-items:center; gap:14px; flex-wrap:wrap;">
+                <div class="lrt-hl-node" style="position:relative; border:1px solid var(--line); border-radius:8px; padding:10px 14px; display:flex; align-items:center; gap:8px; background:#fff;">
+                  <span style="display:inline-block; width:9px; height:9px; background:#1f7a3d; border-radius:50%; flex:none;"></span>
+                  <b style="font-size:13px; white-space:nowrap;">Find &amp; qualify leads</b>
+                  <span class="lrt-hl-info" style="cursor:pointer; color:var(--ink-faint); flex:none; display:flex;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v.01M11 11h1v5h1"/></svg></span>
+                  <span class="chev" style="margin-left:6px;">&#9662;</span>
+                  <div class="lrt-hl-explain" style="position:absolute; top:100%; left:0; margin-top:6px; width:260px; background:var(--paper); border:1px solid var(--line); border-radius:8px; padding:10px 12px; font-size:12px; color:var(--ink-soft); box-shadow:2px 3px 0 rgba(26,28,30,0.12); z-index:5;">Searched Series A SaaS companies matching the target profile, then cross-referenced each against known competitor usage &mdash; kept the 340 that don&#39;t already use one.</div>
                 </div>
-                <p class="hint" style="margin:8px 0 0;">No orange here &mdash; a finalized run has nothing left needing attention, by definition.</p>
+                <span style="display:inline-block; width:16px; height:1px; background:var(--line); flex:none;"></span>
+                <div class="lrt-hl-node" style="position:relative; border:1px solid var(--line); border-radius:8px; padding:10px 14px; display:flex; align-items:center; gap:8px; background:#fff;">
+                  <span style="display:inline-block; width:9px; height:9px; background:#1f7a3d; border-radius:50%; flex:none;"></span>
+                  <b style="font-size:13px; white-space:nowrap;">Score &amp; prepare outreach</b>
+                  <span class="lrt-hl-info" style="cursor:pointer; color:var(--ink-faint); flex:none; display:flex;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v.01M11 11h1v5h1"/></svg></span>
+                  <span class="chev" style="margin-left:6px;">&#9662;</span>
+                  <div class="lrt-hl-explain" style="position:absolute; top:100%; left:0; margin-top:6px; width:260px; background:var(--paper); border:1px solid var(--line); border-radius:8px; padding:10px 12px; font-size:12px; color:var(--ink-soft); box-shadow:2px 3px 0 rgba(26,28,30,0.12); z-index:5;">Scored the qualified companies against fit criteria and drafted a personalized outreach note for each, explaining why they&#39;re a good match.</div>
+                </div>
+                <span style="display:inline-block; width:16px; height:1px; background:var(--line); flex:none;"></span>
+                <div class="lrt-hl-node" style="position:relative; border:1px solid var(--line); border-radius:8px; padding:10px 14px; display:flex; align-items:center; gap:8px; background:#fff;">
+                  <span style="display:inline-block; width:9px; height:9px; background:#1f7a3d; border-radius:50%; flex:none;"></span>
+                  <b style="font-size:13px; white-space:nowrap;">Send &amp; confirm</b>
+                  <span class="lrt-hl-info" style="cursor:pointer; color:var(--ink-faint); flex:none; display:flex;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v.01M11 11h1v5h1"/></svg></span>
+                  <span class="chev" style="margin-left:6px;">&#9662;</span>
+                  <div class="lrt-hl-explain" style="position:absolute; top:100%; left:0; margin-top:6px; width:260px; background:var(--paper); border:1px solid var(--line); border-radius:8px; padding:10px 12px; font-size:12px; color:var(--ink-soft); box-shadow:2px 3px 0 rgba(26,28,30,0.12); z-index:5;">Sent the outreach emails to the scored fits and flagged the batch for approval before marking the threads resolved.</div>
+                </div>
               </div>
                 </div>
               </div>

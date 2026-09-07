@@ -992,3 +992,5 @@ img { max-width: 100%; }
   .wf .lrt-chat-hover-card { display: none; }
   .wf .lrt-chat-hover-item:hover .lrt-chat-hover-card { display: block; }
   .wf .lrt-chat-hover-item:hover { background: var(--canvas); border-radius: 6px; }
+  .wf .lrt-hl-explain { display: none; }
+  .wf .lrt-hl-info:hover ~ .lrt-hl-explain { display: block; }
