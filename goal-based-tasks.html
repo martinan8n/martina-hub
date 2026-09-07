@@ -1896,15 +1896,24 @@ flowchart LR
 
 <div style="flex:0 0 auto;">
             <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:280px;">
-              <div class="pv-app" style="min-height:120px; padding:14px; flex-direction:column;">
-                <div style="border:1px solid var(--line); border-radius:8px; padding:10px 14px; max-width:100%; margin-bottom:14px;">
+              <div class="pv-app" style="min-height:100px; padding:14px; flex-direction:column;">
+                <div style="border:1px solid var(--line); border-radius:8px; padding:10px 14px; max-width:100%;">
                   <div style="display:flex; align-items:center; gap:6px; font-size:13px; font-weight:600; color:var(--ink);"><span class="lrt-spinner"></span> Recalculating direction&hellip; <span style="margin-left:auto; color:var(--ink-faint); font-size:11px; font-weight:400;">0:11</span><span class="lrt-pause-btn" style="cursor:pointer; margin-left:8px;" title="Stop"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2"/></svg></span></div>
                 </div>
-                <div class="pv-reply" style="margin:0;">You stopped, go to Trace to check.</div>
               </div>
             </div></div></div>
-            <div class="lrt-screen-desc" style="margin:8px 0 0; font-weight:600; color:var(--hub-ink);">Other states of the same card</div>
-            <p class="lrt-screen-desc" style="margin:4px 0 0; max-width:280px;">Header label swaps to &quot;Recalculating direction&hellip;&quot; when the agent replans mid-run; the reply after clicking Stop.</p>
+            <div class="lrt-screen-desc" style="margin:8px 0 0; font-weight:600; color:var(--hub-ink);">Recalculating &mdash; user typed mid-run</div>
+            <p class="lrt-screen-desc" style="margin:4px 0 0; max-width:280px;">Header label swaps to this the moment the user types something new while the agent is running.</p>
+            </div>
+
+            <div style="flex:0 0 auto;">
+            <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:280px;">
+              <div class="pv-app" style="min-height:100px; padding:14px; flex-direction:column;">
+                <div class="pv-reply" style="margin:0;">You stopped. <span class="lrt-trace-link" style="display:inline-flex; border-top:none; padding-top:0; font-size:12.5px;" onclick="document.getElementById(&#39;lrtDraftTraceSection&#39;).scrollIntoView({behavior:&#39;smooth&#39;});">Go to Trace to check &rarr;</span></div>
+              </div>
+            </div></div></div>
+            <div class="lrt-screen-desc" style="margin:8px 0 0; font-weight:600; color:var(--hub-ink);">Stopped &mdash; after clicking Stop</div>
+            <p class="lrt-screen-desc" style="margin:4px 0 0; max-width:280px;">A separate, later state &mdash; not shown together with Recalculating. Links to the real Trace section built above.</p>
             </div>
 
                       </div>
@@ -1950,7 +1959,7 @@ flowchart LR
       </div>
     </div>
 
-    <div class="pv-nav-map">
+    <div class="pv-nav-map" id="lrtDraftTraceSection">
       <h2 class="lrt-section-title">Trace</h2>
       <p class="lrt-section-sub">Everything that&#39;s happened up to the moment you&#39;re looking at it &mdash; a record, not a live status. Duplicated from Original proposal&#39;s trace prototype, then reworked.</p>
       <div class="lrt-screens">
@@ -1968,10 +1977,9 @@ flowchart LR
                 <span class="goal-text">Goal: 100 qualified leads</span>
                 <span class="lrt-medium-pill" title="Where this session is happening">&#128172; Slack</span>
                 <span class="spacer"></span>
-                <div class="lrt-progress-bar is-live" style="width:110px; margin:0 4px 0 10px;"><div class="lrt-progress-bar-fill"></div></div>
               </div>
               <div class="lrt-subtask-group">
-                <div class="head"><span class="check is-done">&#10003;</span> Find Series A SaaS companies in the US</div>
+                <div class="head"><span style="display:inline-block; width:9px; height:9px; background:#1f7a3d; border-radius:50%;"></span> Find Series A SaaS companies in the US</div>
               </div>
               <div class="pv-trace-list" style="padding-top:0;">
                 <div class="pv-trace-row" style="padding-left:24px;"><div class="who">search_companies</div><span class="time">17:00:12</span></div>
@@ -1982,7 +1990,7 @@ flowchart LR
               </div>
               <div class="pv-trace-list" style="padding-top:0; padding-bottom:14px;">
                 <div class="pv-trace-row" style="padding-left:24px;"><div class="who"><span class="lrt-checkpoint">&#9679;</span> checkpoint saved</div><span class="time">17:00:29</span></div>
-                <div class="pv-trace-row" style="padding-left:24px;"><div class="who">send_outreach_email <span class="lrt-status-pill is-approval" style="margin-left:6px;">Needs approval</span></div><span class="time">17:00:57</span></div>
+                <div class="pv-trace-row" style="padding-left:24px;"><div class="who">send_outreach_email <span style="color:#fd8925; margin-left:6px;">&#9679;</span> <span style="color:#fd8925;">Needs approval</span></div><span class="time">17:00:57</span></div>
               </div>
             </div></div></div>
             <div class="lrt-screen-desc" style="margin:8px 0 0; font-weight:600; color:var(--hub-ink);">Text, as now</div>
