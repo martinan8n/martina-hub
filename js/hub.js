@@ -1067,6 +1067,108 @@
   }
   window.lrtSelectApprovalMode = lrtSelectApprovalMode;
 
+  function lrtSelectApprovalModeV2(mode) {
+    var modes = ["ask", "auto"];
+    var labels = { ask: "Ask for approval", auto: "Approve for me" };
+    modes.forEach(function (m) {
+      var title = document.getElementById("lrtApprovalTitleV2-" + m);
+      var check = document.getElementById("lrtApprovalCheckV2-" + m);
+      if (title) title.style.color = m === mode ? "var(--ink)" : "var(--ink-soft)";
+      if (check) check.style.display = m === mode ? "" : "none";
+    });
+    var pill = document.getElementById("lrtApprovalPillV2");
+    if (pill) {
+      var chev = pill.querySelector(".chev");
+      pill.textContent = labels[mode] + " ";
+      if (chev) pill.appendChild(chev);
+      else pill.insertAdjacentHTML("beforeend", '<span class="chev">&#9662;</span>');
+    }
+    var dropdown = document.getElementById("lrtApprovalDropdownV2");
+    if (dropdown) dropdown.style.display = "none";
+  }
+  window.lrtSelectApprovalModeV2 = lrtSelectApprovalModeV2;
+
+  function lrtToggleCompactStatus() {
+    var detail = document.getElementById("lrtCompactStatusDetail");
+    var chevron = document.getElementById("lrtCompactStatusChevron");
+    if (!detail || !chevron) return;
+    var isOpen = detail.style.display !== "none";
+    detail.style.display = isOpen ? "none" : "block";
+    chevron.innerHTML = isOpen ? "&#9662;" : "&#9652;";
+    requestAnimationFrame(fitWireframes);
+  }
+  window.lrtToggleCompactStatus = lrtToggleCompactStatus;
+
+  function lrtToggleCompactStatusRef() {
+    var detail = document.getElementById("lrtCompactStatusDetailRef");
+    var chevron = document.getElementById("lrtCompactStatusChevronRef");
+    if (!detail || !chevron) return;
+    var isOpen = detail.style.display !== "none";
+    detail.style.display = isOpen ? "none" : "block";
+    chevron.innerHTML = isOpen ? "&#9662;" : "&#9652;";
+    requestAnimationFrame(fitWireframes);
+  }
+  window.lrtToggleCompactStatusRef = lrtToggleCompactStatusRef;
+
+  function lrtTraceToggleChildren(key, event) {
+    if (event) event.stopPropagation();
+    var children = document.getElementById("lrtTraceChildren-" + key);
+    var svgGroup = document.getElementById("lrtTraceSvgGroup-" + key);
+    var bypass = document.getElementById("lrtTraceSvgCompact-" + key);
+    var chevron = document.getElementById("lrtChevron-" + key);
+    if (!children) return;
+    var isOpen = children.style.display === "block";
+    children.style.display = isOpen ? "none" : "block";
+    if (svgGroup) svgGroup.style.display = isOpen ? "none" : "block";
+    if (bypass) bypass.style.display = isOpen ? "block" : "none";
+    if (chevron) chevron.style.transform = isOpen ? "rotate(0deg)" : "rotate(90deg)";
+    if (key === "check-competitor") {
+      var scoreNode = document.getElementById("lrtScoreOutreachNode");
+      if (scoreNode) scoreNode.style.top = (isOpen ? 260 : 500) + "px";
+    }
+    requestAnimationFrame(fitWireframes);
+  }
+  window.lrtTraceToggleChildren = lrtTraceToggleChildren;
+
+  function lrtTraceToggleExpandAllSwitch(event) {
+    if (event) event.stopPropagation();
+    var sw = document.getElementById("lrtExpandAllSwitch");
+    var knob = sw ? sw.querySelector(".mem-toggle-knob") : null;
+    if (!sw) return;
+    var turningOn = sw.getAttribute("data-on") !== "true";
+    sw.setAttribute("data-on", turningOn ? "true" : "false");
+    sw.style.background = turningOn ? "var(--color--primary)" : "";
+    if (knob) knob.style.left = turningOn ? "16px" : "2px";
+    document.querySelectorAll('[id^="lrtChevron-"]').forEach(function (chevron) {
+      var key = chevron.id.replace("lrtChevron-", "");
+      var children = document.getElementById("lrtTraceChildren-" + key);
+      var isOpen = children && children.style.display === "block";
+      if (turningOn && !isOpen) lrtTraceToggleChildren(key);
+      if (!turningOn && isOpen) lrtTraceToggleChildren(key);
+    });
+  }
+  window.lrtTraceToggleExpandAllSwitch = lrtTraceToggleExpandAllSwitch;
+
+  var lrtTraceElapsedSeconds = 12 * 60 + 4;
+  setInterval(function () {
+    var el = document.getElementById("lrtTraceElapsed");
+    if (!el) return;
+    lrtTraceElapsedSeconds++;
+    var m = Math.floor(lrtTraceElapsedSeconds / 60);
+    var s = lrtTraceElapsedSeconds % 60;
+    el.textContent = m + ":" + (s < 10 ? "0" : "") + s;
+  }, 1000);
+
+  var lrtSidebarRunningSeconds = 12 * 60 + 4;
+  setInterval(function () {
+    var el = document.getElementById("lrtSidebarRunningDuration");
+    if (!el) return;
+    lrtSidebarRunningSeconds++;
+    var m = Math.floor(lrtSidebarRunningSeconds / 60);
+    var s = lrtSidebarRunningSeconds % 60;
+    el.textContent = m + ":" + (s < 10 ? "0" : "") + s;
+  }, 1000);
+
   var CH_PROP_ICONS = {
     target: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--ink-soft)" stroke-width="2"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3.5"/></svg>',
     receipt: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--ink-soft)" stroke-width="2"><path d="M6 2h12v20l-3-2-3 2-3-2-3 2Z"/><path d="M9 8h6M9 12h6"/></svg>',
@@ -1081,9 +1183,12 @@
     hash: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--ink-soft)" stroke-width="2"><path d="M8 3 6 21M18 3l-2 18M3 9h18M2 15h18"/></svg>',
     bell: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--ink-soft)" stroke-width="2"><path d="M6 9a6 6 0 0 1 12 0c0 5 2 6 2 6H4s2-1 2-6Z"/><path d="M10 21a2 2 0 0 0 4 0"/></svg>'
   };
+
+  var CH_PROP_CHAT_ICON = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ink-faint)" stroke-width="2"><path d="M4 5h16v11H8l-4 3V5Z"/></svg>';
+  var CH_PROP_ROBOT_ICON = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ink-faint)" stroke-width="2"><rect x="5" y="8" width="14" height="10" rx="3"/><path d="M9 8V5h6v3"/><circle cx="9.5" cy="13" r="1" fill="var(--ink-faint)" stroke="none"/><circle cx="14.5" cy="13" r="1" fill="var(--ink-faint)" stroke="none"/><path d="M3 12v2M21 12v2"/></svg>';
   var CH_PROP_AGENTS = {
     aia: {
-      name: "AI Assistant", color: "#fd8925", pillColor: "#fff",
+      name: "n8n Assistant", color: "#1a1c1e", softBg: "#eef0f2",
       heading: "What do you want to automate?",
       placeholder: "Tell me what to build or ask a question — add context with +",
       pillIcon: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 9.5 8.5 3 11l6.5 2.5L12 20l2.5-6.5L21 11l-6.5-2.5Z"/></svg>',
@@ -1095,9 +1200,9 @@
       ]
     },
     seo: {
-      name: "SEO Auditor", color: "#e5484d", pillColor: "#fff",
-      heading: "What do you want audited?",
-      placeholder: "Ask about a page, a checklist item, or a competitor — add context with +",
+      name: "SEO Auditor", color: "#e2767a", softBg: "#fbeaeb",
+      heading: "What do you want to ask?",
+      placeholder: "Ask a question or give an instruction — add context with +",
       pillIcon: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="8" width="16" height="11" rx="2"/><path d="M12 8V4M9 4h6"/></svg>',
       prompts: [
         { icon: "search", label: "Audit /pricing metadata" },
@@ -1107,9 +1212,9 @@
       ]
     },
     support: {
-      name: "Support summarizer", color: "#3b82f6", pillColor: "#fff",
-      heading: "What do you need summarized?",
-      placeholder: "Ask about a ticket, a channel, or a time range — add context with +",
+      name: "Support summarizer", color: "#3b82f6", softBg: "#e0f0fe",
+      heading: "What do you want to ask?",
+      placeholder: "Ask a question or give an instruction — add context with +",
       pillIcon: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 14v-2a9 9 0 0 1 18 0v2"/><path d="M21 15a2 2 0 0 1-2 2h-1v-5h1a2 2 0 0 1 2 2ZM3 15a2 2 0 0 0 2 2h1v-5H5a2 2 0 0 0-2 2Z"/></svg>',
       prompts: [
         { icon: "inbox", label: "Escalations w/c 24 Aug" },
@@ -1119,9 +1224,9 @@
       ]
     },
     slack: {
-      name: "Internal Slack Agent", color: "#8e4ec6", pillColor: "#fff",
-      heading: "What do you need posted to Slack?",
-      placeholder: "Ask for a summary, an update, or a channel digest — add context with +",
+      name: "Internal Slack Agent", color: "#8e4ec6", softBg: "#f3e8ff",
+      heading: "What do you want to ask?",
+      placeholder: "Ask a question or give an instruction — add context with +",
       pillIcon: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="7" width="14" height="11" rx="3"/></svg>',
       prompts: [
         { icon: "hash", label: "Post daily standup summary" },
@@ -1147,7 +1252,7 @@
     var pill = document.getElementById("chPropAgentPill");
     if (label) label.textContent = d.name;
     if (pillIcon) pillIcon.innerHTML = d.pillIcon;
-    if (pill) { pill.style.background = d.color; pill.style.color = d.pillColor; }
+    if (pill) { pill.style.background = d.softBg; pill.style.color = d.color; }
     var heading = document.getElementById("chPropHeading");
     if (heading) heading.textContent = d.heading;
     var placeholder = document.getElementById("chPropPlaceholder");
@@ -1191,28 +1296,61 @@
     if (all) all.style.display = "none";
     if (chat) chat.style.display = "none";
     if (col) col.style.justifyContent = "center";
+    chPropSetActiveNavRow("chPropNavAssistant");
   }
   window.chPropShowHome = chPropShowHome;
 
-  function chPropTogglePublishModal() {
-    var modal = document.getElementById("chPropPublishModal");
-    if (modal) modal.style.display = modal.style.display === "none" ? "flex" : "none";
+  function chPropSetActiveNavRow(rowId) {
+    ["chPropNavAssistant", "chPropNavRetry", "chPropNewChatRow"].forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el) el.style.background = id === rowId ? "var(--canvas)" : "";
+    });
   }
-  window.chPropTogglePublishModal = chPropTogglePublishModal;
+  window.chPropSetActiveNavRow = chPropSetActiveNavRow;
 
-  function chPropConfirmPublish() {
+  function chPropOpenRetryChat() {
+    var home = document.getElementById("chPropHomeView");
+    var all = document.getElementById("chPropAllAgentsView");
+    var chat = document.getElementById("chPropChatView");
+    var col = document.getElementById("chPropMainCol");
+    if (home) home.style.display = "none";
+    if (all) all.style.display = "none";
+    if (chat) chat.style.display = "block";
+    if (col) col.style.justifyContent = "flex-start";
+    var d = CH_PROP_AGENTS.aia;
+    var agentLabel = document.getElementById("chPropChatAgentLabel");
+    if (agentLabel) agentLabel.textContent = d.name;
+    var agentIcon = document.getElementById("chPropChatAgentIcon");
+    if (agentIcon) { agentIcon.style.background = d.color; agentIcon.innerHTML = d.pillIcon; }
+    var userMsg = document.getElementById("chPropChatUserMsg");
+    if (userMsg) userMsg.textContent = "Can you help me fix the retry logic for the HTTP node?";
+    var star = document.getElementById("chPropChatFavStar");
+    if (star) { star.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2l2.9 6.3 6.9.8-5 4.9 1.2 6.9L12 17.7l-6 3.2 1.2-6.9-5-4.9 6.9-.8Z"/></svg>'; star.style.color = "var(--ink-faint)"; }
+    chPropSetActiveNavRow("chPropNavRetry");
+  }
+  window.chPropOpenRetryChat = chPropOpenRetryChat;
+
+  function chPropDoPublish() {
     var btn = document.getElementById("chPropPublishBtn");
     var chevron = document.getElementById("chPropPublishChevron");
+    var availBtn = document.getElementById("chPropMakeAvailableBtn");
     if (btn) {
       btn.innerHTML = '<span style="width:7px; height:7px; border-radius:50%; background:#2f9e5f; display:inline-block;"></span> Published';
       btn.style.background = "";
       btn.style.opacity = "0.6";
+      btn.style.cursor = "default";
       btn.style.borderRadius = "6px 0 0 6px";
+      btn.onclick = null;
     }
     if (chevron) chevron.style.display = "flex";
-    chPropTogglePublishModal();
+    if (availBtn) {
+      availBtn.style.opacity = "1";
+      availBtn.style.pointerEvents = "auto";
+      availBtn.style.cursor = "pointer";
+      availBtn.title = "";
+    }
   }
-  window.chPropConfirmPublish = chPropConfirmPublish;
+  window.chPropDoPublish = chPropDoPublish;
 
   function chPropTogglePublishMenu() {
     var menu = document.getElementById("chPropPublishMenu");
@@ -1220,11 +1358,34 @@
   }
   window.chPropTogglePublishMenu = chPropTogglePublishMenu;
 
-  function chPropChangeVisibilityFromMenu() {
-    chPropTogglePublishMenu();
-    chPropTogglePublishModal();
+  function chPropToggleMakeAvailableModal() {
+    var modal = document.getElementById("chPropMakeAvailableModal");
+    if (modal) modal.style.display = modal.style.display === "none" ? "flex" : "none";
   }
-  window.chPropChangeVisibilityFromMenu = chPropChangeVisibilityFromMenu;
+  window.chPropToggleMakeAvailableModal = chPropToggleMakeAvailableModal;
+
+  function chPropAddStarterPromptRow() {
+    var wrap = document.getElementById("chPropStarterPromptRows");
+    if (!wrap) return;
+    var row = document.createElement("div");
+    row.style.cssText = "border:1px solid var(--line); border-radius:8px; padding:9px 11px; font-size:12.5px; color:var(--ink-faint);";
+    row.textContent = "New starter prompt…";
+    wrap.appendChild(row);
+  }
+  window.chPropAddStarterPromptRow = chPropAddStarterPromptRow;
+
+  function chPropConfirmMakeAvailable() {
+    var availBtn = document.getElementById("chPropMakeAvailableBtn");
+    if (availBtn) {
+      availBtn.innerHTML = '<span style="width:7px; height:7px; border-radius:50%; background:#2f9e5f; display:inline-block;"></span> Available <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.6 1Z"/></svg>';
+      availBtn.style.cursor = "pointer";
+      availBtn.style.background = "";
+      availBtn.style.opacity = "0.6";
+      availBtn.style.borderRadius = "6px";
+    }
+    chPropToggleMakeAvailableModal();
+  }
+  window.chPropConfirmMakeAvailable = chPropConfirmMakeAvailable;
 
   function chPropSendMessage(text) {
     var d = CH_PROP_AGENTS[chPropCurrentAgent];
@@ -1240,14 +1401,19 @@
     if (col) col.style.justifyContent = "flex-start";
     var agentLabel = document.getElementById("chPropChatAgentLabel");
     if (agentLabel) agentLabel.textContent = d.name;
+    var agentIcon = document.getElementById("chPropChatAgentIcon");
+    if (agentIcon) { agentIcon.style.background = d.color; agentIcon.innerHTML = d.pillIcon; }
     var userMsg = document.getElementById("chPropChatUserMsg");
     if (userMsg) userMsg.textContent = msg;
     var star = document.getElementById("chPropChatFavStar");
     if (star) { star.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2l2.9 6.3 6.9.8-5 4.9 1.2 6.9L12 17.7l-6 3.2 1.2-6.9-5-4.9 6.9-.8Z"/></svg>'; star.style.color = "var(--ink-faint)"; }
     var row = document.getElementById("chPropNewChatRow");
     var rowLabel = document.getElementById("chPropNewChatRowLabel");
+    var rowIcon = document.getElementById("chPropNewChatRowIcon");
     if (rowLabel) rowLabel.textContent = msg;
+    if (rowIcon) rowIcon.innerHTML = chPropCurrentAgent === "aia" ? CH_PROP_CHAT_ICON : CH_PROP_ROBOT_ICON;
     if (row) row.style.display = "flex";
+    chPropSetActiveNavRow("chPropNewChatRow");
   }
   window.chPropSendMessage = chPropSendMessage;
 
@@ -1270,13 +1436,23 @@
   function chPropUnpublish() {
     var btn = document.getElementById("chPropPublishBtn");
     var chevron = document.getElementById("chPropPublishChevron");
+    var availBtn = document.getElementById("chPropMakeAvailableBtn");
     if (btn) {
       btn.innerHTML = "Publish";
       btn.style.background = "var(--accent-soft)";
       btn.style.opacity = "1";
+      btn.style.cursor = "pointer";
       btn.style.borderRadius = "6px";
+      btn.onclick = chPropDoPublish;
     }
     if (chevron) chevron.style.display = "none";
+    if (availBtn) {
+      availBtn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="8" r="3"/><path d="M2 20c0-3 3-5 7-5s7 2 7 5"/><circle cx="17" cy="8" r="2.5"/><path d="M23 20c0-2.5-2-4.2-5-4.8"/></svg> Make it available';
+      availBtn.style.opacity = "0.45";
+      availBtn.style.pointerEvents = "none";
+      availBtn.style.cursor = "not-allowed";
+      availBtn.title = "Publish this agent first";
+    }
     chPropTogglePublishMenu();
   }
   window.chPropUnpublish = chPropUnpublish;

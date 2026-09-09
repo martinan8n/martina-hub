@@ -286,6 +286,7 @@ img { max-width: 100%; }
   .pv-tree-test li li { font-weight: 400; color: var(--hub-muted); margin: 4px 0; font-size: 12.5px; }
   .pv-usecases-wrap { overflow-x: auto; }
   .pv-usecases-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  section[data-route="lrt-v2"], section[data-route="lrt-trace"], section[data-route="lrt-status-controls"] { --color--primary: oklch(69.96% 0.202 44.44); --color--secondary: oklch(54.05% 0.2811 292.85); --color--success: oklch(63.2% 0.186 147.37); --color--danger: oklch(58.3% 0.2387 28.48); --color--foreground--shade-2: oklch(68.3% 0 89.88); }
   .pv-usecases-table th, .pv-usecases-table td { border: 1px solid var(--hub-border); padding: 10px 12px; text-align: left; vertical-align: top; }
   .pv-usecases-table th { background: var(--hub-bg); color: var(--hub-muted); font-weight: 700; text-transform: uppercase; font-size: 10.5px; letter-spacing: 0.04em; }
   .pv-usecases-table td { color: var(--hub-ink); line-height: 1.5; }
@@ -361,6 +362,7 @@ img { max-width: 100%; }
   @keyframes lrtSpin { to { transform: rotate(360deg); } }
   .wf .lrt-spinner { display: inline-block; width: 9px; height: 9px; border: 1.5px solid currentColor; border-top-color: transparent; border-radius: 50%; animation: lrtSpin 0.7s linear infinite; vertical-align: -1px; }
   @keyframes lrtPulseGlow { 0% { box-shadow: 0 0 0 0 rgba(253,137,37,0.45); } 70% { box-shadow: 0 0 0 9px rgba(253,137,37,0); } 100% { box-shadow: 0 0 0 0 rgba(253,137,37,0); } }
+  @keyframes lrtPulseGlowToken { 0% { box-shadow: 0 0 0 0 rgba(127,34,254,0.45); } 70% { box-shadow: 0 0 0 9px rgba(127,34,254,0); } 100% { box-shadow: 0 0 0 0 rgba(127,34,254,0); } }
   .wf .lrt-motion-glow { display: inline-block; width: 9px; height: 9px; border-radius: 50%; background: #fd8925; animation: lrtPulseGlow 1.8s infinite; vertical-align: -1px; }
   @keyframes lrtFadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
   .wf .lrt-motion-fadein { display: inline-block; animation: lrtFadeIn 0.5s ease-out; }
@@ -995,4 +997,6 @@ img { max-width: 100%; }
   .wf .lrt-hl-explain { display: none; }
   .wf .lrt-hl-node { cursor: pointer; }
   .wf .lrt-hl-node:hover .lrt-hl-explain { display: block; }
+  .wf .lrt-trace-node.is-selected { box-shadow: 0 0 0 3px rgba(26,28,30,0.12); }
+  .wf .lrt-trace-node.is-running { border-color: var(--color--primary); }
   .wf .chprop-dropdown-row:hover { background: var(--canvas); }
