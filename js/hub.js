@@ -1110,6 +1110,28 @@
   }
   window.lrtToggleCompactStatusRef = lrtToggleCompactStatusRef;
 
+  function lrtToggleBgCompact() {
+    var detail = document.getElementById("lrtBgDetail");
+    var chevron = document.getElementById("lrtBgChevron");
+    if (!detail || !chevron) return;
+    var isOpen = detail.style.display !== "none";
+    detail.style.display = isOpen ? "none" : "block";
+    chevron.style.transform = isOpen ? "rotate(0deg)" : "rotate(180deg)";
+    requestAnimationFrame(fitWireframes);
+  }
+  window.lrtToggleBgCompact = lrtToggleBgCompact;
+
+  function lrtToggleBgCompactAlt() {
+    var detail = document.getElementById("lrtBgDetailAlt");
+    var chevron = document.getElementById("lrtBgChevronAlt");
+    if (!detail || !chevron) return;
+    var isOpen = detail.style.display !== "none";
+    detail.style.display = isOpen ? "none" : "block";
+    chevron.style.transform = isOpen ? "rotate(0deg)" : "rotate(180deg)";
+    requestAnimationFrame(fitWireframes);
+  }
+  window.lrtToggleBgCompactAlt = lrtToggleBgCompactAlt;
+
   function lrtTraceToggleChildren(key, event) {
     if (event) event.stopPropagation();
     var children = document.getElementById("lrtTraceChildren-" + key);

@@ -286,7 +286,7 @@ img { max-width: 100%; }
   .pv-tree-test li li { font-weight: 400; color: var(--hub-muted); margin: 4px 0; font-size: 12.5px; }
   .pv-usecases-wrap { overflow-x: auto; }
   .pv-usecases-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
-  section[data-route="lrt-v2"], section[data-route="lrt-trace"], section[data-route="lrt-status-controls"] { --color--primary: oklch(69.96% 0.202 44.44); --color--secondary: oklch(54.05% 0.2811 292.85); --color--success: oklch(63.2% 0.186 147.37); --color--danger: oklch(58.3% 0.2387 28.48); --color--foreground--shade-2: oklch(68.3% 0 89.88); }
+  section[data-route="lrt-v2"], section[data-route="lrt-trace"], section[data-route="lrt-status-controls"], section[data-route="lrt-background-tasks"] { --color--primary: oklch(69.96% 0.202 44.44); --color--secondary: oklch(54.05% 0.2811 292.85); --color--success: oklch(63.2% 0.186 147.37); --color--danger: oklch(58.3% 0.2387 28.48); --color--foreground--shade-2: oklch(68.3% 0 89.88); }
   .pv-usecases-table th, .pv-usecases-table td { border: 1px solid var(--hub-border); padding: 10px 12px; text-align: left; vertical-align: top; }
   .pv-usecases-table th { background: var(--hub-bg); color: var(--hub-muted); font-weight: 700; text-transform: uppercase; font-size: 10.5px; letter-spacing: 0.04em; }
   .pv-usecases-table td { color: var(--hub-ink); line-height: 1.5; }
