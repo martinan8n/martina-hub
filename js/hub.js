@@ -1110,6 +1110,58 @@
   }
   window.lrtToggleCompactStatusRef = lrtToggleCompactStatusRef;
 
+  function lrtToggleVariantCard(id) {
+    var detail = document.getElementById(id + "Detail");
+    var chevron = document.getElementById(id + "Chevron");
+    if (!detail || !chevron) return;
+    var isOpen = detail.style.display !== "none";
+    detail.style.display = isOpen ? "none" : "block";
+    chevron.innerHTML = isOpen ? "&#9662;" : "&#9652;";
+    requestAnimationFrame(fitWireframes);
+  }
+  window.lrtToggleVariantCard = lrtToggleVariantCard;
+
+  var LRT_SETTINGS_MODAL_IDS = ["lrtBudgetModal", "lrtCostCapModal"];
+
+  function lrtShowSettingsModal(id) {
+    LRT_SETTINGS_MODAL_IDS.forEach(function (mid) {
+      var el = document.getElementById(mid);
+      if (el) el.style.display = mid === id ? "flex" : "none";
+    });
+  }
+  window.lrtShowSettingsModal = lrtShowSettingsModal;
+
+  function lrtHideSettingsModal(id) {
+    var el = document.getElementById(id);
+    if (el) el.style.display = "none";
+  }
+  window.lrtHideSettingsModal = lrtHideSettingsModal;
+
+  function lrtToggleBudgetAlert() {
+    var toggle = document.getElementById("lrtBudgetAlertToggle");
+    var knob = document.getElementById("lrtBudgetAlertKnob");
+    var detail = document.getElementById("lrtBudgetAlertDetail");
+    if (!toggle || !knob || !detail) return;
+    var isOn = toggle.style.background === "var(--ink)" || toggle.getAttribute("data-on") === "true";
+    if (isOn) {
+      toggle.style.background = "var(--fill)";
+      toggle.style.borderColor = "var(--line)";
+      toggle.setAttribute("data-on", "false");
+      knob.style.left = "2px";
+      knob.style.right = "";
+      detail.style.display = "none";
+    } else {
+      toggle.style.background = "var(--ink)";
+      toggle.style.borderColor = "var(--ink)";
+      toggle.setAttribute("data-on", "true");
+      knob.style.left = "";
+      knob.style.right = "2px";
+      detail.style.display = "block";
+    }
+    requestAnimationFrame(fitWireframes);
+  }
+  window.lrtToggleBudgetAlert = lrtToggleBudgetAlert;
+
   function lrtToggleBgCompact() {
     var detail = document.getElementById("lrtBgDetail");
     var chevron = document.getElementById("lrtBgChevron");
@@ -1409,6 +1461,81 @@
   }
   window.chPropConfirmMakeAvailable = chPropConfirmMakeAvailable;
 
+  function chPropToggleChannelMenu() {
+    var menu = document.getElementById("chPropChannelMenu");
+    if (menu) menu.style.display = menu.style.display === "none" ? "block" : "none";
+  }
+  window.chPropToggleChannelMenu = chPropToggleChannelMenu;
+
+  function chPropToggleChannelEditModal() {
+    var modal = document.getElementById("chPropChannelEditModal");
+    if (modal) modal.style.display = modal.style.display === "none" ? "flex" : "none";
+  }
+  window.chPropToggleChannelEditModal = chPropToggleChannelEditModal;
+
+  function chPropSetChannelModalConfirmLabel(text) {
+    var btn = document.getElementById("chPropChannelModalConfirmBtn");
+    if (btn) btn.textContent = text;
+  }
+  window.chPropSetChannelModalConfirmLabel = chPropSetChannelModalConfirmLabel;
+
+  function chPropSetChannelModalTitle(text) {
+    var title = document.getElementById("chPropChannelModalTitle");
+    if (title) title.textContent = text;
+  }
+  window.chPropSetChannelModalTitle = chPropSetChannelModalTitle;
+
+  function chPropOpenChannelEditModal() {
+    chPropToggleChannelMenu();
+    chPropSetChannelModalTitle("n8n chat");
+    chPropSetChannelModalConfirmLabel("Save");
+    chPropToggleChannelEditModal();
+  }
+  window.chPropOpenChannelEditModal = chPropOpenChannelEditModal;
+
+  function chPropOpenChannelModalFromUnavailable() {
+    chPropSetChannelModalTitle("Make it available");
+    chPropSetChannelModalConfirmLabel("Make available");
+    chPropToggleChannelEditModal();
+  }
+  window.chPropOpenChannelModalFromUnavailable = chPropOpenChannelModalFromUnavailable;
+
+  function chPropToggleAddChannelModal() {
+    var modal = document.getElementById("chPropAddChannelModal");
+    if (modal) modal.style.display = modal.style.display === "none" ? "flex" : "none";
+  }
+  window.chPropToggleAddChannelModal = chPropToggleAddChannelModal;
+
+  var CH_PROP_CHANNEL_ON_HTML =
+    '<span style="display:flex; align-items:center; gap:5px; font-size:12px; color:var(--ink-soft); cursor:pointer;" onclick="chPropToggleChannelMenu()">' +
+    '<span id="chPropChannelDot" style="width:7px; height:7px; border-radius:50%; background:#2f9e5f; flex:none;"></span><span id="chPropChannelStatus">Default</span> <span class="chev">▾</span>' +
+    "</span>" +
+    '<div id="chPropChannelMenu" style="display:none; position:absolute; top:32px; right:4px; width:140px; background:var(--paper); border:1px solid var(--line); border-radius:8px; box-shadow:0 4px 14px rgba(0,0,0,0.1); padding:6px; z-index:6;">' +
+    '<div class="chprop-dropdown-row" onclick="chPropOpenChannelEditModal()" style="padding:7px 8px; border-radius:6px; cursor:pointer; font-size:13px;">Edit</div>' +
+    '<div class="chprop-dropdown-row" onclick="chPropMakeChannelUnavailable()" style="padding:7px 8px; border-radius:6px; cursor:pointer; font-size:13px; border-top:1px solid var(--line); margin-top:4px;">Make unavailable</div>' +
+    "</div>";
+
+  function chPropMakeChannelUnavailable() {
+    chPropToggleChannelMenu();
+    var label = document.getElementById("chPropChannelRowLabel");
+    var action = document.getElementById("chPropChannelAction");
+    if (label) label.style.color = "var(--ink-faint)";
+    if (action) {
+      action.innerHTML =
+        '<span class="btn" style="font-size:12px; padding:4px 12px;" onclick="chPropOpenChannelModalFromUnavailable()">Make available</span>';
+    }
+  }
+  window.chPropMakeChannelUnavailable = chPropMakeChannelUnavailable;
+
+  function chPropConfirmChannelAvailable() {
+    var label = document.getElementById("chPropChannelRowLabel");
+    var action = document.getElementById("chPropChannelAction");
+    if (label) label.style.color = "";
+    if (action) action.innerHTML = CH_PROP_CHANNEL_ON_HTML;
+    chPropToggleChannelEditModal();
+  }
+  window.chPropConfirmChannelAvailable = chPropConfirmChannelAvailable;
+
   function chPropSendMessage(text) {
     var d = CH_PROP_AGENTS[chPropCurrentAgent];
     if (!d) return;
@@ -1478,6 +1605,205 @@
     chPropTogglePublishMenu();
   }
   window.chPropUnpublish = chPropUnpublish;
+
+  var RCM_ICONS = {
+    slack:
+      '<svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path fill="#e01e5a" d="M9.5 2A2.5 2.5 0 0 0 7 4.5V9h2.5a2.5 2.5 0 0 0 0-5Z"/><path fill="#36c5f0" d="M2 14.5A2.5 2.5 0 0 0 4.5 17H9v-2.5a2.5 2.5 0 0 0-5 0Z"/><path fill="#2eb67d" d="M14.5 22a2.5 2.5 0 0 0 2.5-2.5V15h-2.5a2.5 2.5 0 0 0 0 5Z"/><path fill="#ecb22e" d="M22 9.5A2.5 2.5 0 0 0 19.5 7H15v2.5a2.5 2.5 0 0 0 5 0Z"/></svg>',
+    telegram:
+      '<svg width="18" height="18" viewBox="0 0 24 24" fill="#29a9eb"><circle cx="12" cy="12" r="10"/><path fill="#fff" d="m7 12 3 2 7-6-8 5.5-1.5-1Z"/></svg>',
+    chat:
+      '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--ink-soft)" stroke-width="1.8"><path d="M4 5h16v11H8l-4 3V5Z"/></svg>',
+    discord:
+      '<svg width="18" height="18" viewBox="0 0 24 24" fill="#5865f2"><circle cx="12" cy="12" r="10"/></svg>',
+  };
+
+  var RCM_STATE = {
+    slack: {
+      label: "Slack",
+      credName: "Slack account — n8n workspace",
+      showSlackExtra: true,
+      noCredential: false,
+      footerLabel: "Remove channel",
+    },
+    telegram: {
+      label: "Telegram",
+      credName: "Telegram bot token — n8n workspace",
+      showSlackExtra: false,
+      noCredential: false,
+      footerLabel: "Remove channel",
+    },
+    chat: {
+      label: "n8n Chat",
+      credName: "",
+      showSlackExtra: false,
+      noCredential: true,
+      footerLabel: "Remove channel",
+    },
+    discord: {
+      label: "Discord",
+      credName: "Discord bot token — n8n workspace",
+      showSlackExtra: false,
+      noCredential: false,
+      footerLabel: "Remove channel",
+    },
+  };
+
+  function rcmCloseAllMenus() {
+    ["slack", "telegram", "chat", "discord"].forEach(function (type) {
+      var menu = document.getElementById("rcmMenu-" + type);
+      if (menu) menu.style.display = "none";
+    });
+  }
+  window.rcmCloseAllMenus = rcmCloseAllMenus;
+
+  function rcmToggleMenu(type) {
+    var menu = document.getElementById("rcmMenu-" + type);
+    if (!menu) return;
+    var willOpen = menu.style.display === "none";
+    rcmCloseAllMenus();
+    menu.style.display = willOpen ? "block" : "none";
+  }
+  window.rcmToggleMenu = rcmToggleMenu;
+
+  function rcmGoEdit(type) {
+    rcmCloseAllMenus();
+    var list = document.getElementById("rcmListView");
+    var edit = document.getElementById("rcmEditView");
+    var footer = document.getElementById("rcmFooter");
+    var back = document.getElementById("rcmBackBtn");
+    var icon = document.getElementById("rcmHeaderIcon");
+    var title = document.getElementById("rcmTitle");
+    var credName = document.getElementById("rcmCredName");
+    var credLabel = document.getElementById("rcmCredLabel");
+    var credSection = document.getElementById("rcmCredSection");
+    var chatDesc = document.getElementById("rcmChatDesc");
+    var slackExtra = document.getElementById("rcmSlackExtra");
+    var footerAction = document.getElementById("rcmFooterAction");
+    var state =
+      RCM_STATE[type] || {
+        label: "",
+        credName: "",
+        showSlackExtra: false,
+        noCredential: false,
+        footerLabel: "Remove channel",
+      };
+    if (list) list.style.display = "none";
+    if (edit) edit.style.display = "block";
+    if (footer) footer.style.display = "flex";
+    if (back) back.style.display = "inline";
+    if (icon) {
+      icon.style.display = "inline-flex";
+      icon.innerHTML = RCM_ICONS[type] || "";
+    }
+    if (title) {
+      title.textContent = state.label || type.charAt(0).toUpperCase() + type.slice(1);
+      title.dataset.type = type;
+    }
+    if (credSection) credSection.style.display = state.noCredential ? "none" : "block";
+    if (chatDesc) chatDesc.style.display = state.noCredential ? "block" : "none";
+    if (credLabel) credLabel.textContent = state.label + " credential";
+    if (credName) credName.textContent = state.credName;
+    if (slackExtra) slackExtra.style.display = state.showSlackExtra ? "block" : "none";
+    if (footerAction) footerAction.textContent = state.footerLabel;
+    var body = document.getElementById("rcmBody");
+    if (body) body.scrollTop = 0;
+    requestAnimationFrame(fitWireframes);
+  }
+  window.rcmGoEdit = rcmGoEdit;
+
+  function rcmGoBack() {
+    var list = document.getElementById("rcmListView");
+    var edit = document.getElementById("rcmEditView");
+    var footer = document.getElementById("rcmFooter");
+    var back = document.getElementById("rcmBackBtn");
+    var icon = document.getElementById("rcmHeaderIcon");
+    var title = document.getElementById("rcmTitle");
+    if (list) list.style.display = "block";
+    if (edit) edit.style.display = "none";
+    if (footer) footer.style.display = "none";
+    if (back) back.style.display = "none";
+    if (icon) icon.style.display = "none";
+    if (title) {
+      title.textContent = "Channels";
+      title.dataset.type = "";
+    }
+    requestAnimationFrame(fitWireframes);
+  }
+  window.rcmGoBack = rcmGoBack;
+
+  function rcmOpenModal() {
+    var overlay = document.getElementById("rcmModalOverlay");
+    if (overlay) overlay.style.display = "flex";
+    rcmGoBack();
+  }
+  window.rcmOpenModal = rcmOpenModal;
+
+  function rcmOpenModalToChatEdit() {
+    var overlay = document.getElementById("rcmModalOverlay");
+    if (overlay) overlay.style.display = "flex";
+    rcmGoEdit("chat");
+  }
+  window.rcmOpenModalToChatEdit = rcmOpenModalToChatEdit;
+
+  function rcmCloseModal() {
+    var overlay = document.getElementById("rcmModalOverlay");
+    if (overlay) overlay.style.display = "none";
+    rcmCloseAllMenus();
+  }
+  window.rcmCloseModal = rcmCloseModal;
+
+  function rcmDisconnect(type) {
+    rcmCloseAllMenus();
+    var action = document.getElementById("rcmAction-" + type);
+    if (action) {
+      var onclick = type === "chat" ? " onclick=\"rcmGoEdit('chat')\"" : "";
+      action.innerHTML =
+        '<span class="btn" style="font-size:12.5px; padding:5px 12px;"' + onclick + ">Connect</span>";
+    }
+    if (type === "chat") {
+      var compactRow = document.getElementById("rcmCompactChatRow");
+      if (compactRow) compactRow.style.display = "none";
+    }
+    var title = document.getElementById("rcmTitle");
+    if (title && title.dataset.type === type) rcmGoBack();
+  }
+  window.rcmDisconnect = rcmDisconnect;
+
+  function rcmConnectChat() {
+    var action = document.getElementById("rcmAction-chat");
+    if (action) {
+      action.innerHTML =
+        '<span onclick="rcmToggleMenu(\'chat\')" style="display:flex; align-items:center; gap:6px; font-size:12.5px; color:var(--ink-soft); cursor:pointer; border:1px solid var(--line); border-radius:6px; padding:5px 10px;">Connected</span>' +
+        '<div id="rcmMenu-chat" style="display:none; position:absolute; top:32px; right:0; width:150px; background:var(--paper); border:1px solid var(--line); border-radius:8px; box-shadow:0 4px 14px rgba(0,0,0,0.1); padding:6px; z-index:6;">' +
+        '<div class="chprop-dropdown-row" onclick="rcmGoEdit(\'chat\')" style="padding:7px 8px; border-radius:6px; cursor:pointer; font-size:13px;">Edit</div>' +
+        '<div class="chprop-dropdown-row" onclick="rcmDisconnect(\'chat\')" style="padding:7px 8px; border-radius:6px; cursor:pointer; font-size:13px; border-top:1px solid var(--line); margin-top:4px;">Disconnect</div>' +
+        "</div>";
+    }
+    var compactRow = document.getElementById("rcmCompactChatRow");
+    if (compactRow) compactRow.style.display = "flex";
+  }
+  window.rcmConnectChat = rcmConnectChat;
+
+  function rcmSaveEdit() {
+    var title = document.getElementById("rcmTitle");
+    var type = title ? title.dataset.type : null;
+    if (type === "chat") {
+      var action = document.getElementById("rcmAction-chat");
+      var isDisconnected = action && action.querySelector(".btn");
+      if (isDisconnected) rcmConnectChat();
+    }
+    rcmCloseModal();
+  }
+  window.rcmSaveEdit = rcmSaveEdit;
+
+  function rcmRemoveFromEdit() {
+    var title = document.getElementById("rcmTitle");
+    var type = title ? title.dataset.type : null;
+    if (!type) return;
+    rcmDisconnect(type);
+    rcmCloseModal();
+  }
+  window.rcmRemoveFromEdit = rcmRemoveFromEdit;
 
   route();
   requestAnimationFrame(fitWireframes);

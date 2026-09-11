@@ -364,8 +364,14 @@ img { max-width: 100%; }
   @keyframes lrtPulseGlow { 0% { box-shadow: 0 0 0 0 rgba(253,137,37,0.45); } 70% { box-shadow: 0 0 0 9px rgba(253,137,37,0); } 100% { box-shadow: 0 0 0 0 rgba(253,137,37,0); } }
   @keyframes lrtPulseGlowToken { 0% { box-shadow: 0 0 0 0 rgba(127,34,254,0.45); } 70% { box-shadow: 0 0 0 9px rgba(127,34,254,0); } 100% { box-shadow: 0 0 0 0 rgba(127,34,254,0); } }
   .wf .lrt-motion-glow { display: inline-block; width: 9px; height: 9px; border-radius: 50%; background: #fd8925; animation: lrtPulseGlow 1.8s infinite; vertical-align: -1px; }
+  .wf .lrt-step-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #fd8925; flex: none; }
   @keyframes lrtFadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
   .wf .lrt-motion-fadein { display: inline-block; animation: lrtFadeIn 0.5s ease-out; }
+  @keyframes rcmPing { 0% { transform: scale(1); opacity: 0.6; } 100% { transform: scale(2.4); opacity: 0; } }
+  .wf .rcm-dot { position: relative; width: 7px; height: 7px; border-radius: 50%; background: #2f9e5f; flex: none; display: inline-block; }
+  .wf .rcm-dot.is-error { background: #e5484d; }
+  .wf .rcm-dot::before { content: ""; position: absolute; inset: 0; border-radius: 50%; background: inherit; animation: rcmPing 1.6s ease-out infinite; }
+  .wf .rcm-dot.is-error::before { display: none; }
   .wf .lrt-status-pill.is-paused { background: #fff4e0; border-color: #e0b568; color: #8a5a10; }
   .wf .lrt-status-pill.is-done { background: #e6f6ea; border-color: #7cc794; color: #1f7a3d; }
   .wf .lrt-status-pill.is-approval { background: #fdeee2; border-color: var(--hub-accent-a); color: #a6480f; }

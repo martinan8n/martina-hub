@@ -168,12 +168,13 @@
                   <div id="lrtBgCompact" style="position:absolute; left:0; right:0; bottom:0; border:1px solid var(--line); border-radius:8px 8px 0 0; overflow:hidden; background:var(--paper); box-shadow:0 -2px 6px rgba(26,28,30,0.06);">
                     <div id="lrtBgDetail" style="display:none; padding:10px 14px 12px; border-bottom:1px dashed var(--line-soft);">
                       <div style="font-size:12px; color:var(--ink-soft); display:flex; flex-direction:column; gap:6px;">
-                        <div style="display:flex; align-items:center; gap:6px;"><span class="lrt-spinner" style="color:var(--color--primary); flex:none;"></span> Sub-agent &mdash; Berlin weather, week 1</div>
-                        <div style="display:flex; align-items:center; gap:6px;"><span class="lrt-spinner" style="color:var(--color--primary); flex:none;"></span> Sub-agent &mdash; Berlin weather, week 2</div>
+                        <div style="display:flex; align-items:center; gap:6px;"><span class="lrt-step-dot"></span> Sub-agent &mdash; Berlin weather, week 1</div>
+                        <div style="display:flex; align-items:center; gap:6px;"><span class="lrt-step-dot"></span> Sub-agent &mdash; Berlin weather, week 2</div>
                         <div style="display:flex; align-items:center; gap:6px;"><span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:var(--color--foreground--shade-2); flex:none;"></span> Workflow (Wait node) &mdash; waiting for tomorrow&#39;s forecast refresh</div>
                       </div>
-                      <div style="margin-top:8px;">
+                      <div style="display:flex; align-items:center; gap:14px; margin-top:8px;">
                         <span style="cursor:pointer; text-decoration:underline; font-size:12px;">&rarr; View trace</span>
+                        <span style="cursor:pointer; text-decoration:underline; font-size:12px; display:inline-flex; align-items:center; gap:4px;"><svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>Stop all tasks</span>
                       </div>
                     </div>
                     <div style="display:flex; align-items:center; gap:8px; padding:10px 14px; cursor:pointer; background:var(--paper);" onclick="lrtToggleBgCompact()">
@@ -207,7 +208,36 @@
               </div>
               <div style="padding:16px 18px; overflow:auto; flex:1; display:flex; flex-direction:column; gap:10px;">
                 <div class="pv-bubble" style="margin:0 0 0 auto;">Run three independent researchers in the background to look up the weather in Berlin for the next two weeks.</div>
-                <div class="pv-reply">All 3 finished &mdash; here&#39;s the Berlin weather summary for the next two weeks: mostly cloudy, highs around 15&deg;C, occasional rain midweek.</div>
+                <div class="pv-reply">On it &mdash; dispatching 3 background researchers now. I&#39;ll keep chatting with you in the meantime, and let you know the moment they&#39;re all done.</div>
+                <div class="pv-bubble" style="margin:0 0 0 auto;">Is it still running?</div>
+                <div class="pv-reply">Yes &mdash; all 3 are still going. I&#39;ll ping you the moment they&#39;re all done.</div>
+                <div class="pv-reply" style="display:flex; align-items:center; gap:8px; color:var(--ink-soft);"><span class="lrt-spinner" style="color:var(--color--primary); flex:none;"></span> All background tasks finished&hellip;</div>
+              </div>
+              <div class="pv-chat-footer"><div class="box"><div>Message Research Assistant&hellip;</div><div class="box-actions"><span class="spacer"></span><span class="send-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M12 19V5M5 12l7-7 7 7"/></svg></span></div></div></div>
+            </div>
+          </div>
+        </div></div></div>
+        <div class="lrt-screen-desc" style="margin:8px 0 0; font-weight:600; color:var(--hub-ink);">Generating result &mdash; the gap in between</div>
+        <p class="lrt-screen-desc" style="margin:4px 0 0; max-width:320px;">The pinned panel disappearing doesn&#39;t mean the answer is ready &mdash; finishing a background task only signals the agent, which still takes a few seconds to process it and produce a reply. Without this step there&#39;s a dead pause between the panel vanishing and the answer appearing; this fills it, reusing the same spinner+label pattern used elsewhere in this tab.<span class="src" style="display:block; margin-top:4px;">Source: Goal-based tasks call w/ Eugene &amp; Sindhuja, 2026-09-10</span></p>
+        </div>
+
+        <div style="flex:0 0 auto;">
+        <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:620px;">
+          <div class="pv-app" style="min-height:420px;">
+            <div class="pv-skeleton-navbar" style="height:auto;">NAV</div>
+            <div class="pv-main" style="display:flex; flex-direction:column;">
+              <div class="pv-preview-tabs">
+                <b>Research Assistant</b>
+                <span class="pill" style="margin-left:0;">Preview</span>
+                <span class="spacer"></span>
+                <span class="icon-btn" title="Minimize" style="cursor:pointer;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 14h6v6M20 10h-6V4M14 10l7-7M3 21l7-7"/></svg></span>
+              </div>
+              <div style="padding:16px 18px; overflow:auto; flex:1; display:flex; flex-direction:column; gap:10px;">
+                <div class="pv-bubble" style="margin:0 0 0 auto;">Run three independent researchers in the background to look up the weather in Berlin for the next two weeks.</div>
+                <div class="pv-reply" style="display:flex; align-items:flex-start; gap:10px;">
+                  <span style="flex:1;">All 3 finished &mdash; here&#39;s the Berlin weather summary for the next two weeks: mostly cloudy, highs around 15&deg;C, occasional rain midweek.</span>
+                  <span style="cursor:pointer; text-decoration:underline; font-size:12px; color:var(--ink-faint); flex:none; white-space:nowrap;">View trace</span>
+                </div>
               </div>
               <div class="pv-chat-footer"><div class="box"><div>Message Research Assistant&hellip;</div><div class="box-actions"><span class="spacer"></span><span class="send-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M12 19V5M5 12l7-7 7 7"/></svg></span></div></div></div>
             </div>
@@ -253,12 +283,13 @@
                     </div>
                     <div id="lrtBgDetailAlt" style="display:none; padding:0 14px 12px;">
                       <div style="border-top:1px dashed var(--line-soft); padding-top:10px; font-size:12px; color:var(--ink-soft); display:flex; flex-direction:column; gap:6px;">
-                        <div style="display:flex; align-items:center; gap:6px;"><span class="lrt-spinner" style="color:var(--color--primary); flex:none;"></span> Sub-agent &mdash; Berlin weather, week 1</div>
-                        <div style="display:flex; align-items:center; gap:6px;"><span class="lrt-spinner" style="color:var(--color--primary); flex:none;"></span> Sub-agent &mdash; Berlin weather, week 2</div>
+                        <div style="display:flex; align-items:center; gap:6px;"><span class="lrt-step-dot"></span> Sub-agent &mdash; Berlin weather, week 1</div>
+                        <div style="display:flex; align-items:center; gap:6px;"><span class="lrt-step-dot"></span> Sub-agent &mdash; Berlin weather, week 2</div>
                         <div style="display:flex; align-items:center; gap:6px;"><span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:var(--color--foreground--shade-2); flex:none;"></span> Workflow (Wait node) &mdash; waiting for tomorrow&#39;s forecast refresh</div>
                       </div>
-                      <div style="margin-top:8px;">
+                      <div style="display:flex; align-items:center; gap:14px; margin-top:8px;">
                         <span style="cursor:pointer; text-decoration:underline; font-size:12px;">&rarr; View trace</span>
+                        <span style="cursor:pointer; text-decoration:underline; font-size:12px; display:inline-flex; align-items:center; gap:4px;"><svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>Stop all tasks</span>
                       </div>
                     </div>
                   </div>
@@ -714,10 +745,11 @@ flowchart LR
                         <span style="font-size:11px; color:var(--ink-faint); font-weight:400;">0:31</span>
                       </div>
                       <div style="padding:0 14px 12px;">
-                        <div style="border-top:1px dashed var(--line); margin:0 0 10px; padding-top:10px; font-size:12px; color:var(--ink-soft); display:flex; flex-direction:column; gap:6px;">
-                          <div style="display:flex; align-items:center; gap:6px;"><span class="lrt-spinner" style="color:var(--color--primary); flex:none;"></span> Reading #support-escalations</div>
-                          <div style="display:flex; align-items:center; gap:6px;"><span class="lrt-spinner" style="color:var(--color--primary); flex:none;"></span> Checking Zendesk for already-resolved tickets</div>
-                          <div style="padding-left:19px; color:var(--ink-faint);">14 conversations reviewed so far</div>
+                        <div style="border-top:1px dashed var(--line); margin:0 0 10px; padding-top:10px; font-size:12px; color:var(--ink-soft); display:flex; flex-direction:column; gap:8px;">
+                          <div style="display:flex; align-items:flex-start; gap:6px;"><span class="lrt-step-dot" style="margin-top:5px;"></span> <span>Reading #support-escalations</span></div>
+                          <div style="display:flex; align-items:flex-start; gap:6px;"><span class="lrt-step-dot" style="margin-top:5px;"></span> <span>Checking Zendesk for already-resolved tickets</span></div>
+                          <div style="display:flex; align-items:flex-start; gap:6px;"><span class="lrt-step-dot" style="margin-top:5px;"></span> <span>Owler&#39;s API returned a server error after 3 retries, so I re-checked competitor usage manually via a Google search instead &mdash; didn&#39;t need to stop the whole task for it.</span></div>
+                          <div style="padding-left:14px; color:var(--ink-faint);">14 conversations reviewed so far</div>
                         </div>
                         <div style="display:flex; align-items:center; gap:14px; margin-top:8px;">
                           <span style="cursor:pointer; text-decoration:underline; font-size:12px;">&rarr; View trace</span>
@@ -749,35 +781,507 @@ flowchart LR
                     <div class="pv-bubble" style="margin:0 0 12px auto;">Go through the #support-escalations channel from this week and summarize every thread that&#39;s still unresolved.</div>
                     <div class="pv-reply">Got it &mdash; I&#39;ll just start on this.</div>
                   </div>
-                  <div class="pv-chat-footer">
-                    <div id="lrtCompactStatusRef" style="border:1.5px solid var(--line); border-bottom:none; border-radius:8px 8px 0 0; overflow:hidden;">
-                      <div style="display:flex; align-items:center; gap:8px; padding:10px 14px; cursor:pointer;" onclick="lrtToggleCompactStatusRef()">
-                        <span class="lrt-spinner" style="color:var(--color--primary); flex:none;"></span>
-                        <span style="font-size:13px; font-weight:600;">Checking escalations</span>
-                        <span class="spacer" style="flex:1;"></span>
-                        <span style="font-size:11px; color:var(--ink-faint); font-weight:400;">0:31</span>
-                        <span id="lrtCompactStatusChevronRef" style="font-size:11px; color:var(--ink-faint);">&#9662;</span>
-                      </div>
-                      <div id="lrtCompactStatusDetailRef" style="display:none; padding:0 14px 12px;">
-                        <div style="border-top:1px dashed var(--line); margin:0 0 10px; padding-top:10px; font-size:12px; color:var(--ink-soft); display:flex; flex-direction:column; gap:6px;">
-                          <div style="display:flex; align-items:center; gap:6px;"><span class="lrt-spinner" style="color:var(--color--primary); flex:none;"></span> Reading #support-escalations</div>
-                          <div style="display:flex; align-items:center; gap:6px;"><span class="lrt-spinner" style="color:var(--color--primary); flex:none;"></span> Checking Zendesk for already-resolved tickets</div>
-                          <div style="padding-left:19px; color:var(--ink-faint);">14 conversations reviewed so far</div>
+                  <div class="pv-chat-footer" style="display:flex; flex-direction:column; gap:10px;">
+                    <div id="lrtCompactAnchorRef" style="position:relative; height:40px;">
+                      <div id="lrtCompactStatusRef" style="position:absolute; left:0; right:0; bottom:0; border:1px solid var(--line); border-radius:8px; background:var(--paper); overflow:hidden; box-shadow:0 2px 8px rgba(26,28,30,0.08);">
+                        <div style="display:flex; align-items:center; gap:8px; padding:10px 14px; cursor:pointer;" onclick="lrtToggleCompactStatusRef()">
+                          <span class="lrt-spinner" style="color:var(--color--primary); flex:none;"></span>
+                          <span style="font-size:13px; font-weight:600;">Checking escalations</span>
+                          <span class="spacer" style="flex:1;"></span>
+                          <span style="font-size:11px; color:var(--ink-faint); font-weight:400;">0:31</span>
+                          <span id="lrtCompactStatusChevronRef" style="font-size:11px; color:var(--ink-faint);">&#9662;</span>
                         </div>
-                        <div style="display:flex; align-items:center; gap:14px; margin-top:8px;">
-                          <span style="cursor:pointer; text-decoration:underline; font-size:12px;">&rarr; View trace</span>
-                          <span style="cursor:pointer; text-decoration:underline; font-size:12px; display:inline-flex; align-items:center; gap:4px;"><svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>Stop all tasks</span>
+                        <div id="lrtCompactStatusDetailRef" style="display:none; padding:0 14px 12px;">
+                          <div style="border-top:1px dashed var(--line); margin:0 0 10px; padding-top:10px; font-size:12px; color:var(--ink-soft); display:flex; flex-direction:column; gap:6px;">
+                            <div style="display:flex; align-items:center; gap:6px;"><span class="lrt-step-dot"></span> Reading #support-escalations</div>
+                            <div style="display:flex; align-items:center; gap:6px;"><span class="lrt-step-dot"></span> Checking Zendesk for already-resolved tickets</div>
+                            <div style="padding-left:19px; color:var(--ink-faint);">14 conversations reviewed so far</div>
+                          </div>
+                          <div style="display:flex; align-items:center; gap:14px; margin-top:8px;">
+                            <span style="cursor:pointer; text-decoration:underline; font-size:12px;">&rarr; View trace</span>
+                            <span style="cursor:pointer; text-decoration:underline; font-size:12px; display:inline-flex; align-items:center; gap:4px;"><svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>Stop all tasks</span>
+                          </div>
                         </div>
                       </div>
                     </div>
-                    <div class="box" style="border-radius:0 0 8px 8px;"><div>Message Sales Outreach&hellip;</div><div class="box-actions"><span class="spacer"></span><span class="send-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M12 19V5M5 12l7-7 7 7"/></svg></span></div></div>
+                    <div class="box"><div>Message Sales Outreach&hellip;</div><div class="box-actions"><span class="spacer"></span><span class="send-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M12 19V5M5 12l7-7 7 7"/></svg></span></div></div>
                   </div>
                 </div>
               </div>
             </div></div></div>
             <div class="lrt-screen-desc" style="margin:8px 0 0; font-weight:600; color:var(--hub-ink);">Compact status, expandable</div>
-            <p class="lrt-screen-desc" style="margin:4px 0 0; max-width:320px;">Collapses to one line above the composer by default, click to expand into the step detail and collapse back &mdash; borrows the low visual weight of a compact ChatGPT-style status line, with Claude Cowork-style detail available on demand. Sticks to the bottom of the chat once it would otherwise scroll out of view as the conversation continues &mdash; the trigger is losing visibility, not simply a new message being sent.<span class="src" style="display:block; margin-top:4px;">Source: Martina&#39;s reference screenshots, 2026-09-08</span></p>
+            <p class="lrt-screen-desc" style="margin:4px 0 0; max-width:320px;">Stacked above the composer, not fused to it &mdash; a separate rounded card with a gap, matching the &ldquo;Stacked, not pinned&rdquo; pattern on the <a href="#/lrt-background-tasks">Background tasks</a> page. Click to expand into the step detail and collapse back; expanding overlays upward over the conversation above it instead of pushing the composer down. Sticks to the bottom of the chat once it would otherwise scroll out of view as the conversation continues &mdash; the trigger is losing visibility, not simply a new message being sent.<span class="src" style="display:block; margin-top:4px;">Source: Martina&#39;s reference screenshots, 2026-09-08</span></p>
             </div>
+      </div>
+    </div>
+
+    <div class="pv-nav-map">
+      <h2 class="lrt-section-title">Running &mdash; status card content variants</h2>
+      <p class="lrt-section-sub">Same card skeleton as &ldquo;Compact status, expandable&rdquo; above &mdash; header with timer + chevron, &ldquo;View trace&rdquo; and &ldquo;Stop all tasks&rdquo; always in the footer. Only the content in between changes. Brought over from the different copy/detail approaches explored on <a href="#/lrt-v2">V2</a>, collapsed by default here so they&#39;re easy to compare one at a time.<span class="src" style="display:block; margin-top:4px;">Source: Goal-based tasks &mdash; V2, &quot;When a plan doesn&#39;t help&quot; section</span></p>
+
+      <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:420px; padding:24px;">
+        <div style="display:flex; flex-direction:column; gap:20px;">
+
+          <div>
+            <div style="font-size:12px; font-weight:600; color:var(--ink-soft); margin-bottom:6px;">Current &mdash; running, no plan (Manus-style)</div>
+            <div id="lrtVarCurrent" style="border:1.5px solid var(--line); border-radius:8px; overflow:hidden;">
+              <div style="display:flex; align-items:center; gap:8px; padding:10px 14px; cursor:pointer;" onclick="lrtToggleVariantCard('lrtVarCurrent')">
+                <span class="lrt-spinner" style="color:var(--color--primary); flex:none;"></span>
+                <span style="font-size:13px; font-weight:600;">Reading #support-escalations</span>
+                <span class="spacer" style="flex:1;"></span>
+                <span style="font-size:11px; color:var(--ink-faint); font-weight:400;">0:04</span>
+                <span id="lrtVarCurrentChevron" style="font-size:11px; color:var(--ink-faint);">&#9662;</span>
+              </div>
+              <div id="lrtVarCurrentDetail" style="display:none; padding:0 14px 12px;">
+                <div style="border-top:1px dashed var(--line); margin:0 0 10px; padding-top:10px; font-size:12px; color:var(--ink-soft);">&#9679; Grouping by thread</div>
+                <div style="display:flex; align-items:center; gap:14px;">
+                  <span style="cursor:pointer; text-decoration:underline; font-size:12px;">&rarr; View trace</span>
+                  <span style="cursor:pointer; text-decoration:underline; font-size:12px; display:inline-flex; align-items:center; gap:4px;"><svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>Stop all tasks</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div style="font-size:12px; font-weight:600; color:var(--ink-soft); margin-bottom:6px;">Nothing</div>
+            <div id="lrtVarNothing" style="border:1.5px solid var(--line); border-radius:8px; overflow:hidden;">
+              <div style="display:flex; align-items:center; gap:8px; padding:10px 14px; cursor:pointer;" onclick="lrtToggleVariantCard('lrtVarNothing')">
+                <span class="lrt-spinner" style="color:var(--color--primary); flex:none;"></span>
+                <span style="font-size:13px; font-weight:600;">Working</span>
+                <span class="spacer" style="flex:1;"></span>
+                <span style="font-size:11px; color:var(--ink-faint); font-weight:400;">0:04</span>
+                <span id="lrtVarNothingChevron" style="font-size:11px; color:var(--ink-faint);">&#9662;</span>
+              </div>
+              <div id="lrtVarNothingDetail" style="display:none; padding:0 14px 12px;">
+                <div style="border-top:1px dashed var(--line); margin:0 0 10px; padding-top:10px; display:flex; align-items:center; gap:14px;">
+                  <span style="cursor:pointer; text-decoration:underline; font-size:12px;">&rarr; View trace</span>
+                  <span style="cursor:pointer; text-decoration:underline; font-size:12px; display:inline-flex; align-items:center; gap:4px;"><svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>Stop all tasks</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div style="font-size:12px; font-weight:600; color:var(--ink-soft); margin-bottom:6px;">Description instead of bullets</div>
+            <div id="lrtVarDescription" style="border:1.5px solid var(--line); border-radius:8px; overflow:hidden;">
+              <div style="display:flex; align-items:center; gap:8px; padding:10px 14px; cursor:pointer;" onclick="lrtToggleVariantCard('lrtVarDescription')">
+                <span class="lrt-spinner" style="color:var(--color--primary); flex:none;"></span>
+                <span style="font-size:13px; font-weight:600;">Reading #support-escalations</span>
+                <span class="spacer" style="flex:1;"></span>
+                <span style="font-size:11px; color:var(--ink-faint); font-weight:400;">0:04</span>
+                <span id="lrtVarDescriptionChevron" style="font-size:11px; color:var(--ink-faint);">&#9662;</span>
+              </div>
+              <div id="lrtVarDescriptionDetail" style="display:none; padding:0 14px 12px;">
+                <div style="border-top:1px dashed var(--line); margin:0 0 10px; padding-top:10px; font-size:12px; color:var(--ink-soft);">Reading the support-escalations channel and grouping messages by thread.</div>
+                <div style="display:flex; align-items:center; gap:14px;">
+                  <span style="cursor:pointer; text-decoration:underline; font-size:12px;">&rarr; View trace</span>
+                  <span style="cursor:pointer; text-decoration:underline; font-size:12px; display:inline-flex; align-items:center; gap:4px;"><svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>Stop all tasks</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div style="font-size:12px; font-weight:600; color:var(--ink-soft); margin-bottom:6px;">Reading Slack channels&hellip; (generic label)</div>
+            <div id="lrtVarGenericLabel" style="border:1.5px solid var(--line); border-radius:8px; overflow:hidden;">
+              <div style="display:flex; align-items:center; gap:8px; padding:10px 14px; cursor:pointer;" onclick="lrtToggleVariantCard('lrtVarGenericLabel')">
+                <span class="lrt-spinner" style="color:var(--color--primary); flex:none;"></span>
+                <span style="font-size:13px; font-weight:600;">Reading Slack channels&hellip;</span>
+                <span class="spacer" style="flex:1;"></span>
+                <span style="font-size:11px; color:var(--ink-faint); font-weight:400;">0:04</span>
+                <span id="lrtVarGenericLabelChevron" style="font-size:11px; color:var(--ink-faint);">&#9662;</span>
+              </div>
+              <div id="lrtVarGenericLabelDetail" style="display:none; padding:0 14px 12px;">
+                <div style="border-top:1px dashed var(--line); margin:0 0 10px; padding-top:10px; display:flex; align-items:center; gap:14px;">
+                  <span style="cursor:pointer; text-decoration:underline; font-size:12px;">&rarr; View trace</span>
+                  <span style="cursor:pointer; text-decoration:underline; font-size:12px; display:inline-flex; align-items:center; gap:4px;"><svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>Stop all tasks</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div style="font-size:12px; font-weight:600; color:var(--ink-soft); margin-bottom:6px;">Recalculating &mdash; user typed mid-run</div>
+            <div id="lrtVarRecalculating" style="border:1.5px solid var(--line); border-radius:8px; overflow:hidden;">
+              <div style="display:flex; align-items:center; gap:8px; padding:10px 14px; cursor:pointer;" onclick="lrtToggleVariantCard('lrtVarRecalculating')">
+                <span class="lrt-spinner" style="color:var(--color--primary); flex:none;"></span>
+                <span style="font-size:13px; font-weight:600;">Adjusting course&hellip;</span>
+                <span class="spacer" style="flex:1;"></span>
+                <span style="font-size:11px; color:var(--ink-faint); font-weight:400;">0:11</span>
+                <span id="lrtVarRecalculatingChevron" style="font-size:11px; color:var(--ink-faint);">&#9662;</span>
+              </div>
+              <div id="lrtVarRecalculatingDetail" style="display:none; padding:0 14px 12px;">
+                <div style="border-top:1px dashed var(--line); margin:0 0 10px; padding-top:10px; display:flex; align-items:center; gap:14px;">
+                  <span style="cursor:pointer; text-decoration:underline; font-size:12px;">&rarr; View trace</span>
+                  <span style="cursor:pointer; text-decoration:underline; font-size:12px; display:inline-flex; align-items:center; gap:4px;"><svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>Stop all tasks</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div></div></div>
+    </div>
+
+    <div class="pv-nav-map">
+      <h2 class="lrt-section-title">Awaiting &mdash; status card content variants</h2>
+      <p class="lrt-section-sub">Both grounded in n8n&#39;s real AIA design-system pattern, brought over from <a href="#/lrt-v2">V2</a> as-is &mdash; a different skeleton from Running above (no timer or spinner; gates the composer entirely instead of sitting above it), since that&#39;s how these actually work.</p>
+
+      <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:420px; padding:24px;">
+        <div style="display:flex; flex-direction:column; gap:20px;">
+
+          <div>
+            <div style="font-size:12px; font-weight:600; color:var(--ink-soft); margin-bottom:6px;">Needs permission, mid-run &mdash; icon rows, one-click default</div>
+            <div id="lrtVarAwaiting" style="border:1.5px solid var(--line); border-radius:8px; overflow:hidden;">
+              <div style="display:flex; align-items:center; gap:8px; padding:10px 14px; cursor:pointer;" onclick="lrtToggleVariantCard('lrtVarAwaiting')">
+                <span style="display:inline-block; width:9px; height:9px; border-radius:50%; background:var(--color--secondary); animation:lrtPulseGlowToken 1.8s infinite; flex:none;"></span>
+                <span style="font-size:13px; font-weight:600;">Allow web search on builtwith.com?</span>
+                <span class="spacer" style="flex:1;"></span>
+                <span id="lrtVarAwaitingChevron" style="font-size:11px; color:var(--ink-faint);">&#9662;</span>
+              </div>
+              <div id="lrtVarAwaitingDetail" style="display:none;">
+                <div class="lrt-alert-details" style="border-top:1px dashed var(--line); border-bottom:none;">Needed to check whether these companies already use a competitor.</div>
+                <div style="padding:0 14px 12px; display:flex; flex-direction:column; gap:2px;">
+                  <div style="display:flex; align-items:center; gap:8px; padding:8px 10px; border-radius:6px; background:var(--paper); cursor:pointer;">
+                    <svg width="16" height="14" viewBox="0 0 30 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12l5 5L18 6"/><path d="M9 12l5 5L25 6"/></svg>
+                    <span style="font-size:13px;"><b>Always allow</b> <span style="color:var(--ink-soft);">during this session</span></span>
+                    <span style="margin-left:auto; width:24px; height:24px; border-radius:50%; background:#fd8925; display:flex; align-items:center; justify-content:center; flex:none;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+                  </div>
+                  <div style="display:flex; align-items:center; gap:8px; padding:8px 10px; cursor:pointer;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>
+                    <span style="font-size:13px;">Allow once</span>
+                  </div>
+                  <div style="display:flex; align-items:center; gap:8px; padding:8px 10px; cursor:pointer;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M5.5 5.5l13 13"/></svg>
+                    <span style="font-size:13px;">Deny</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div style="font-size:12px; font-weight:600; color:var(--ink-soft); margin-bottom:6px;">Cost cap reached &mdash; amount input, not a separate confirm step</div>
+            <div id="lrtVarCostCap" style="border:1.5px solid var(--line); border-radius:8px; overflow:hidden;">
+              <div style="display:flex; align-items:center; gap:8px; padding:10px 14px; cursor:pointer;" onclick="lrtToggleVariantCard('lrtVarCostCap')">
+                <span style="display:inline-block; width:9px; height:9px; border-radius:50%; background:var(--color--secondary); animation:lrtPulseGlowToken 1.8s infinite; flex:none;"></span>
+                <span style="font-size:13px; font-weight:600;">You&#39;ve reached your cost cap</span>
+                <span class="spacer" style="flex:1;"></span>
+                <span id="lrtVarCostCapChevron" style="font-size:11px; color:var(--ink-faint);">&#9662;</span>
+              </div>
+              <div id="lrtVarCostCapDetail" style="display:none;">
+                <div class="lrt-alert-details" style="border-top:1px dashed var(--line);">This session used its full $12 limit before finishing. Add funds to keep going.</div>
+                <div style="padding:10px 14px; border-bottom:1px dashed var(--line);">
+                  <div style="display:flex; align-items:center; gap:6px; border:1px solid var(--line); border-radius:6px; padding:7px 10px;">
+                    <span style="font-size:13px; color:var(--ink-soft); font-weight:600;">$</span>
+                    <input type="text" value="10" style="border:none; outline:none; background:transparent; font-size:13px; width:100%; font-family:inherit; color:var(--ink);">
+                  </div>
+                </div>
+                <div class="lrt-alert-actions">
+                  <span class="lrt-btn">Not now</span>
+                  <span class="lrt-btn is-primary">Add funds</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div></div></div>
+    </div>
+
+    <div class="pv-nav-map">
+      <h2 class="lrt-section-title">Paused &mdash; status card content variants</h2>
+      <p class="lrt-section-sub">Brought over from <a href="#/lrt-v2">V2</a> as-is &mdash; on V2 there&#39;s no card for this state at all, just plain reply text landing in the conversation, so it&#39;s shown here as the actual wireframe screen rather than invented as a fake collapsible card.</p>
+
+      <div style="flex:0 0 auto;">
+      <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:420px;">
+        <div class="pv-app" style="min-height:260px;">
+          <div class="pv-skeleton-navbar" style="height:auto;">NAV</div>
+          <div class="pv-main" style="display:flex; flex-direction:column;">
+            <div class="pv-preview-tabs">
+              <b>Sales Outreach</b>
+              <span class="pill" style="margin-left:0;">Preview</span>
+              <span class="spacer"></span>
+              <span class="icon-btn" title="Minimize" style="cursor:pointer;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 14h6v6M20 10h-6V4M14 10l7-7M3 21l7-7"/></svg></span>
+            </div>
+            <div style="padding:16px 18px; overflow:auto; flex:1; display:flex; flex-direction:column;">
+              <div class="pv-bubble" style="margin:0 0 12px auto;">Go through the #support-escalations channel from this week and summarize every thread that&#39;s still unresolved.</div>
+              <div class="pv-reply" style="display:flex; align-items:flex-start; gap:10px;">
+                <span style="flex:1;">I stopped &mdash; you were partway through reading the channel. Want me to continue from there, or change anything before I pick it back up?</span>
+                <span style="cursor:pointer; text-decoration:underline; font-size:12px; color:var(--ink-faint); flex:none; white-space:nowrap;">View trace</span>
+              </div>
+            </div>
+            <div class="pv-chat-footer"><div class="box"><div>Message Sales Outreach&hellip;</div><div class="box-actions"><span class="spacer"></span><span class="send-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M12 19V5M5 12l7-7 7 7"/></svg></span></div></div></div>
+          </div>
+        </div>
+      </div></div></div>
+      <div class="lrt-screen-desc" style="margin:8px 0 0; font-weight:600; color:var(--hub-ink);">Paused &mdash; after clicking Stop</div>
+      <p class="lrt-screen-desc" style="margin:4px 0 0; max-width:320px;">Proactively explains what was interrupted and asks whether to change anything, inviting the user to steer via chat &mdash; rather than pointing to Trace as the primary next step.</p>
+      </div>
+    </div>
+
+    <div class="pv-nav-map">
+      <h2 class="lrt-section-title">Done &mdash; status card content variants</h2>
+      <p class="lrt-section-sub">Brought over from <a href="#/lrt-v2">V2</a> as-is &mdash; same reasoning as Paused above: no card on V2, just the actual wireframe screen, kept that way here.</p>
+
+      <div style="flex:0 0 auto;">
+      <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:420px;">
+        <div class="pv-app" style="min-height:260px;">
+          <div class="pv-skeleton-navbar" style="height:auto;">NAV</div>
+          <div class="pv-main" style="display:flex; flex-direction:column;">
+            <div class="pv-preview-tabs">
+              <b>Sales Outreach</b>
+              <span class="pill" style="margin-left:0;">Preview</span>
+              <span class="spacer"></span>
+              <span class="icon-btn" title="Minimize" style="cursor:pointer;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 14h6v6M20 10h-6V4M14 10l7-7M3 21l7-7"/></svg></span>
+            </div>
+            <div style="padding:16px 18px; overflow:auto; flex:1; display:flex; flex-direction:column;">
+              <div class="pv-bubble" style="margin:0 0 12px auto;">Go through the #support-escalations channel from this week and summarize every thread that&#39;s still unresolved.</div>
+              <div class="pv-reply">
+                <p style="margin:0; font-size:13px; color:var(--ink-soft);">Found 12 unresolved threads and summarized each. Slack&#39;s search API doesn&#39;t support channel-scoped date filters, so I pulled the full history and filtered by date manually instead.</p>
+                <div style="display:flex; align-items:center; gap:14px; margin-top:8px; border-top:1px dashed var(--line); padding-top:10px;">
+                  <div class="lrt-trace-link" style="border-top:none; padding-top:0;"><span style="cursor:pointer; text-decoration:underline;">&#8599; Escalations summary &mdash; w/c 24 Aug</span></div>
+                  <span style="cursor:pointer; text-decoration:underline; font-size:12.5px; font-weight:600; color:var(--ink); white-space:nowrap;">View trace</span>
+                </div>
+              </div>
+            </div>
+            <div class="pv-chat-footer"><div class="box"><div>Message Sales Outreach&hellip;</div><div class="box-actions"><span class="spacer"></span><span class="send-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M12 19V5M5 12l7-7 7 7"/></svg></span></div></div></div>
+          </div>
+        </div>
+      </div></div></div>
+      <div class="lrt-screen-desc" style="margin:8px 0 0; font-weight:600; color:var(--hub-ink);">Done, simplified</div>
+      <p class="lrt-screen-desc" style="margin:4px 0 0; max-width:320px;">Drops the mini-trace step boxes, the separate summary side panel, and the redundant &ldquo;Done&rdquo; label &mdash; the past-tense summary already says it&#39;s finished. The artifact is named for what it actually is (&ldquo;Escalations summary &mdash; w/c 24 Aug&rdquo;) rather than a generic &quot;1 generated document.&quot;</p>
+      </div>
+    </div>
+
+    <div class="pv-nav-map">
+      <h2 class="lrt-section-title">Failed &mdash; status card content variants</h2>
+      <p class="lrt-section-sub">Unlike Paused and Done, <a href="#/lrt-v2">V2</a> has no chat-reply example for this state at all &mdash; adapted here from its closest real content, a trace-node example of a failed tool call (Owler&#39;s API erroring, then the agent routing around it via a manual Google search).</p>
+
+      <div style="display:flex; gap:20px; align-items:flex-start; flex-wrap:wrap;">
+        <div style="flex:0 0 auto;">
+        <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:420px;">
+          <div class="pv-app" style="min-height:220px;">
+            <div class="pv-skeleton-navbar" style="height:auto;">NAV</div>
+            <div class="pv-main" style="display:flex; flex-direction:column;">
+              <div class="pv-preview-tabs">
+                <b>Sales Outreach</b>
+                <span class="pill" style="margin-left:0;">Preview</span>
+                <span class="spacer"></span>
+                <span class="icon-btn" title="Minimize" style="cursor:pointer;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 14h6v6M20 10h-6V4M14 10l7-7M3 21l7-7"/></svg></span>
+              </div>
+              <div style="padding:16px 18px; overflow:auto; flex:1; display:flex; flex-direction:column;">
+                <div class="pv-bubble" style="margin:0 0 12px auto;">Check if these companies are already using a competitor, using Owler.</div>
+                <div class="pv-reply" style="display:flex; align-items:flex-start; gap:10px;">
+                  <span style="flex:1;">Owler&#39;s API returned a server error after 3 retries, so I re-checked competitor usage manually via a Google search instead &mdash; didn&#39;t need to stop the whole task for it.</span>
+                  <span style="cursor:pointer; text-decoration:underline; font-size:12px; color:var(--ink-faint); flex:none; white-space:nowrap;">View trace</span>
+                </div>
+              </div>
+              <div class="pv-chat-footer"><div class="box"><div>Message Sales Outreach&hellip;</div><div class="box-actions"><span class="spacer"></span><span class="send-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M12 19V5M5 12l7-7 7 7"/></svg></span></div></div></div>
+            </div>
+          </div>
+        </div></div></div>
+        <div class="lrt-screen-desc" style="margin:8px 0 0; font-weight:600; color:var(--hub-ink);">Failed &mdash; one step errored, task continued</div>
+        <p class="lrt-screen-desc" style="margin:4px 0 0; max-width:320px;">Matches the table&#39;s definition: a tool call itself errored, not a normal pause point like Awaiting. No explicit &ldquo;Failed&rdquo; label &mdash; the reply just explains what happened and what was done about it, same treatment as Paused and Done above.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="pv-nav-map">
+      <h2 class="lrt-section-title">Cancelled &mdash; status card content variants</h2>
+      <p class="lrt-section-sub">Same gap as Failed &mdash; <a href="#/lrt-v2">V2</a> has no chat-reply example for this state either. Composed to make the key distinction from Paused explicit: Paused offers to resume the same session, Cancelled doesn&#39;t &mdash; it&#39;s ended for good.</p>
+
+      <div style="flex:0 0 auto;">
+      <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:420px;">
+        <div class="pv-app" style="min-height:260px;">
+          <div class="pv-skeleton-navbar" style="height:auto;">NAV</div>
+          <div class="pv-main" style="display:flex; flex-direction:column;">
+            <div class="pv-preview-tabs">
+              <b>Sales Outreach</b>
+              <span class="pill" style="margin-left:0;">Preview</span>
+              <span class="spacer"></span>
+              <span class="icon-btn" title="Minimize" style="cursor:pointer;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 14h6v6M20 10h-6V4M14 10l7-7M3 21l7-7"/></svg></span>
+            </div>
+            <div style="padding:16px 18px; overflow:auto; flex:1; display:flex; flex-direction:column;">
+              <div class="pv-bubble" style="margin:0 0 12px auto;">Go through the #support-escalations channel from this week and summarize every thread that&#39;s still unresolved.</div>
+              <div class="pv-reply" style="margin-bottom:10px;">Got it &mdash; I&#39;ll just start on this.</div>
+              <div class="pv-bubble" style="margin:0 0 12px auto;">Actually, never mind &mdash; cancel this, we don&#39;t need the escalations review this week.</div>
+              <div class="pv-reply" style="display:flex; align-items:flex-start; gap:10px;">
+                <span style="flex:1;">Cancelled &mdash; stopped here for good, nothing further will run on this one. Start a new chat if you want to revisit it later.</span>
+                <span style="cursor:pointer; text-decoration:underline; font-size:12px; color:var(--ink-faint); flex:none; white-space:nowrap;">View trace</span>
+              </div>
+            </div>
+            <div class="pv-chat-footer"><div class="box"><div>Message Sales Outreach&hellip;</div><div class="box-actions"><span class="spacer"></span><span class="send-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M12 19V5M5 12l7-7 7 7"/></svg></span></div></div></div>
+          </div>
+        </div>
+      </div></div></div>
+      <div class="lrt-screen-desc" style="margin:8px 0 0; font-weight:600; color:var(--hub-ink);">Cancelled &mdash; ended for good, not resumable</div>
+      <p class="lrt-screen-desc" style="margin:4px 0 0; max-width:320px;">Explicitly says what won&#39;t happen (no resuming this one) and what to do instead (start a new chat) &mdash; the opposite of Paused&#39;s &ldquo;want me to continue from there?&rdquo;</p>
+      </div>
+    </div>
+
+    <div class="pv-nav-map">
+      <h2 class="lrt-section-title">Running chat, in the nav &mdash; Running &amp; Awaiting</h2>
+      <p class="lrt-section-sub">Reuses the real 1a sidebar CHATS list, dots moved to the right, matching the Session status table&#39;s colour and glyph exactly (spinner for Running, pulsing dot for Awaiting). Hover any row to reveal its floating detail panel to the right &mdash; hover only, nothing shown by default.<span class="src" style="display:block; margin-top:4px;">Source: Goal-based tasks &mdash; V2</span></p>
+
+      <div class="wf-scale-wrap" style="overflow:visible;"><div class="wf"><div class="frame" style="width:280px; padding:0; overflow:visible;">
+        <div style="padding:14px; background:var(--paper); position:relative;">
+          <div style="font-size:10.5px; font-weight:700; letter-spacing:0.05em; color:var(--ink-faint); margin-bottom:6px;">CHATS</div>
+
+          <div class="lrt-chat-hover-item" style="position:relative; display:flex; align-items:center; gap:8px; padding:5px 4px; font-size:13px; cursor:pointer;">
+            <span style="width:20px; height:20px; border-radius:50%; background:#e0f0fe; display:flex; align-items:center; justify-content:center; flex:none;"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2"><path d="M3 14v-2a9 9 0 0 1 18 0v2"/><path d="M21 15a2 2 0 0 1-2 2h-1v-5h1a2 2 0 0 1 2 2ZM3 15a2 2 0 0 0 2 2h1v-5H5a2 2 0 0 0-2 2Z"/></svg></span>
+            Escalations w/c 24 Aug<span class="spacer" style="flex:1;"></span><span class="lrt-spinner" style="flex:none; color:var(--color--primary);"></span>
+            <div class="lrt-chat-hover-card" style="position:absolute; left:100%; top:0; margin-left:8px; width:190px; background:var(--paper); border:1px solid var(--line); border-radius:6px; padding:8px 10px; z-index:5; box-shadow:2px 3px 0 rgba(26,28,30,0.12);">
+              <div style="font-size:12px; font-weight:600;">Escalations w/c 24 Aug</div>
+              <div style="font-size:11px; color:var(--ink-soft); margin-top:3px;">Running &mdash; 340 of 500 checked so far</div>
+              <div style="display:flex; align-items:center; gap:5px; margin-top:6px; padding-top:6px; border-top:1px dashed var(--line); font-size:10.5px; color:var(--ink-faint);"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="3.2"/><path d="M5 20c0-3.5 3-6 7-6s7 2.5 7 6"/></svg>Personal</div>
+              <div style="display:flex; align-items:center; gap:5px; margin-top:4px; font-size:10.5px; color:var(--ink-faint);"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>Running for <span id="lrtSidebarRunningDurationRef">12:04</span></div>
+            </div>
+          </div>
+
+          <div class="lrt-chat-hover-item" style="position:relative; display:flex; align-items:center; gap:8px; padding:5px 4px; font-size:13px; cursor:pointer;">
+            <span style="width:20px; height:20px; border-radius:50%; background:#e0f0fe; display:flex; align-items:center; justify-content:center; flex:none;"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2"><path d="M3 14v-2a9 9 0 0 1 18 0v2"/><path d="M21 15a2 2 0 0 1-2 2h-1v-5h1a2 2 0 0 1 2 2ZM3 15a2 2 0 0 0 2 2h1v-5H5a2 2 0 0 0-2 2Z"/></svg></span>
+            Support macros refresh<span class="spacer" style="flex:1;"></span><span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:var(--color--secondary); animation:lrtPulseGlowToken 1.8s infinite;"></span>
+            <div class="lrt-chat-hover-card" style="position:absolute; left:100%; top:0; margin-left:8px; width:190px; background:var(--paper); border:1px solid var(--line); border-radius:6px; padding:8px 10px; z-index:5; box-shadow:2px 3px 0 rgba(26,28,30,0.12);">
+              <div style="font-size:12px; font-weight:600;">Support macros refresh</div>
+              <div style="font-size:11px; color:var(--ink-soft); margin-top:3px;">Awaiting &mdash; hit a usage limit. Ask an owner to raise it to continue.</div>
+              <div style="display:flex; align-items:center; gap:5px; margin-top:6px; padding-top:6px; border-top:1px dashed var(--line); font-size:10.5px; color:var(--ink-faint);"><span style="width:11px; height:11px; border-radius:3px; background:#8e4ec6; flex:none;"></span>sin project</div>
+              <div style="display:flex; align-items:center; gap:5px; margin-top:4px; font-size:10.5px; color:var(--ink-faint);"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>Started by Priya &middot; 2h ago</div>
+            </div>
+          </div>
+
+        </div>
+      </div></div></div>
+    </div>
+
+    <div class="pv-nav-map">
+      <h2 class="lrt-section-title">Settings &mdash; Usage and limits, final design</h2>
+      <p class="lrt-section-sub">Final design for the Settings tab&#39;s usage/limits area &mdash; merges the two earlier explorations (progress-bar usage display, consolidated budget+alert row) into one settled layout. Clicking &ldquo;Monthly budget&rdquo; opens it as a modal over the page, not a separate sub-page.</p>
+
+      <div style="display:flex; gap:20px; align-items:flex-start; flex-wrap:wrap;">
+        <div style="flex:0 0 auto;">
+        <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:640px; position:relative;">
+          <div class="pv-app" style="min-height:460px;">
+            <div class="pv-skeleton-navbar" style="height:auto;">NAV</div>
+            <div class="pv-main">
+              <div class="pv-topbar">
+                <span class="pv-crumb">Personal / <b>Sales Outreach</b> <span class="chev">&#9662;</span></span>
+                <span class="spacer"></span>
+                <span class="btn btn-primary">Publish <span class="chev">&#9662;</span></span>
+              </div>
+              <div style="padding:18px 24px;">
+                <div class="tabbar">
+                  <span class="tab">Agent</span><span class="tab">Knowledge</span><span class="tab">Sessions</span><span class="tab active">Settings</span>
+                </div>
+
+                <div style="font-size:10.5px; font-weight:700; letter-spacing:0.05em; color:var(--hub-muted); margin:18px 0 10px;">USAGE AND LIMITS</div>
+
+                <div class="wf-box" style="margin-bottom:14px;">
+                  <div class="field-label" style="margin-top:0; margin-bottom:8px;">Monthly usage</div>
+                  <div style="display:flex; align-items:baseline; justify-content:space-between; margin-bottom:10px;">
+                    <span style="font-size:18px; font-weight:700; color:var(--ink);">$42 of $200 used</span>
+                    <span style="font-size:14px; font-weight:700; color:var(--hub-muted);">21%</span>
+                  </div>
+                  <div class="lrt-progress-bar" style="margin:0;"><div class="lrt-progress-bar-fill" style="width:21%;"></div></div>
+                </div>
+
+                <div class="wf-box" style="margin-bottom:0;">
+                  <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:14px; padding-bottom:16px; border-bottom:1px solid var(--line-soft); cursor:pointer;" onclick="lrtShowSettingsModal('lrtBudgetModal')">
+                    <div style="flex:1;">
+                      <div style="font-weight:700; font-size:15px;">Monthly budget</div>
+                      <p style="margin:3px 0 0; font-size:12px; color:var(--ink-faint); max-width:320px;">Maximum this agent can spend across all sessions each month.</p>
+                    </div>
+                    <div style="text-align:right; flex:none;">
+                      <div style="font-weight:700; font-size:14px;">$200/month</div>
+                      <div style="margin-top:3px; font-size:11.5px; color:var(--ink-faint);">Alert at 80%</div>
+                    </div>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ink-faint)" stroke-width="2" style="flex:none; margin-top:3px;"><path d="m9 6 6 6-6 6"/></svg>
+                  </div>
+                  <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:14px; padding-top:16px; cursor:pointer;" onclick="lrtShowSettingsModal('lrtCostCapModal')">
+                    <div style="flex:1;">
+                      <div style="font-weight:700; font-size:15px;">Cost cap per session</div>
+                      <p style="margin:3px 0 0; font-size:12px; color:var(--ink-faint); max-width:320px;">Maximum a single session can spend, whether it&#39;s a short run or goal-based.</p>
+                    </div>
+                    <div style="text-align:right; flex:none;">
+                      <div style="font-weight:700; font-size:14px;">$5.00</div>
+                    </div>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ink-faint)" stroke-width="2" style="flex:none; margin-top:3px;"><path d="m9 6 6 6-6 6"/></svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div id="lrtBudgetModal" style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(20,20,22,0.35); border-radius:inherit;">
+            <div style="width:400px; background:var(--paper); border:1px solid var(--line); border-radius:10px; box-shadow:0 8px 24px rgba(0,0,0,0.16); padding:22px;">
+              <div style="display:flex; align-items:center; margin-bottom:8px;">
+                <span style="font-size:17px; font-weight:700;">Edit monthly budget</span>
+                <span class="spacer" style="flex:1;"></span>
+                <span style="cursor:pointer; color:var(--ink-faint); font-size:17px;" onclick="lrtHideSettingsModal('lrtBudgetModal')">&times;</span>
+              </div>
+              <div class="field-label" style="margin-top:0; margin-bottom:6px;">Monthly budget</div>
+              <div style="display:flex; border:1px solid var(--line); border-radius:8px; overflow:hidden; margin-bottom:6px;">
+                <div style="flex:1; display:flex; align-items:center; gap:3px; padding:9px 12px; font-size:14px; font-weight:700;">
+                  <span>$</span><span>200</span>
+                </div>
+                <div style="background:var(--canvas); padding:9px 14px; font-size:12.5px; color:var(--ink-soft); border-left:1px solid var(--line); display:flex; align-items:center;">per month</div>
+              </div>
+              <p style="margin:0 0 16px; font-size:11.5px; color:var(--ink-faint);">The agent pauses when this budget is reached.</p>
+
+              <div style="border-top:1px solid var(--line-soft); margin:0 0 16px;"></div>
+
+              <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:10px; margin-bottom:4px;">
+                <div style="font-weight:700; font-size:14px;">Budget alert</div>
+                <span id="lrtBudgetAlertToggle" style="cursor:pointer; flex:none; width:34px; height:20px; border-radius:12px; background:var(--fill); border:1.5px solid var(--line); position:relative; margin-top:2px;" onclick="lrtToggleBudgetAlert()"><span id="lrtBudgetAlertKnob" style="position:absolute; top:2px; left:2px; width:14px; height:14px; border-radius:50%; background:var(--paper); border:1px solid var(--line);"></span></span>
+              </div>
+              <p style="margin:0 0 16px; font-size:12px; color:var(--ink-soft); max-width:280px;">Email an alert before the budget runs out.</p>
+
+              <div id="lrtBudgetAlertDetail" style="display:none;">
+                <div class="field-label" style="margin-top:0; margin-bottom:6px; font-size:13px; font-weight:600; color:var(--ink-soft);">Alert threshold</div>
+                <div class="model-row" style="max-width:100%; margin-bottom:6px;">
+                  <span class="name">80% of budget</span><span class="chev">&#9662;</span>
+                </div>
+                <p style="margin:0; font-size:11.5px; color:var(--ink-faint);">Sends to every admin on this project.</p>
+              </div>
+
+              <div style="border-top:1px solid var(--line); margin:18px 0 0;"></div>
+              <div style="display:flex; justify-content:flex-end; gap:8px; padding-top:16px;">
+                <span class="lrt-btn">Cancel</span>
+                <span class="btn btn-primary">Save</span>
+              </div>
+            </div>
+          </div>
+
+          <div id="lrtCostCapModal" style="display:none; position:absolute; inset:0; align-items:center; justify-content:center; background:rgba(20,20,22,0.35); border-radius:inherit;">
+            <div style="width:400px; background:var(--paper); border:1px solid var(--line); border-radius:10px; box-shadow:0 8px 24px rgba(0,0,0,0.16); padding:22px;">
+              <div style="display:flex; align-items:center; margin-bottom:8px;">
+                <span style="font-size:17px; font-weight:700;">Edit cost cap per session</span>
+                <span class="spacer" style="flex:1;"></span>
+                <span style="cursor:pointer; color:var(--ink-faint); font-size:17px;" onclick="lrtHideSettingsModal('lrtCostCapModal')">&times;</span>
+              </div>
+              <p style="margin:0 0 18px; font-size:12.5px; color:var(--ink-soft);">Set the maximum a single session can spend, whether it&#39;s a short run or goal-based.</p>
+
+              <div class="field-label" style="margin-top:0; margin-bottom:6px;">Cost cap</div>
+              <div style="display:flex; border:1px solid var(--line); border-radius:8px; overflow:hidden; margin-bottom:6px;">
+                <div style="flex:1; display:flex; align-items:center; gap:3px; padding:9px 12px; font-size:14px; font-weight:700;">
+                  <span>$</span><span>5.00</span>
+                </div>
+                <div style="background:var(--canvas); padding:9px 14px; font-size:12.5px; color:var(--ink-soft); border-left:1px solid var(--line); display:flex; align-items:center;">per session</div>
+              </div>
+              <p style="margin:0; font-size:11.5px; color:var(--ink-faint);">Hard stop when exceeded &mdash; the agent warns first, then stops.</p>
+
+              <div style="border-top:1px solid var(--line); margin:18px 0 0;"></div>
+              <div style="display:flex; justify-content:flex-end; gap:8px; padding-top:16px;">
+                <span class="lrt-btn">Cancel</span>
+                <span class="btn btn-primary">Save</span>
+              </div>
+            </div>
+          </div>
+
+        </div></div></div>
+        <div class="lrt-screen-desc" style="margin:8px 0 0; font-weight:600; color:var(--hub-ink);">Settings, with Edit monthly budget open</div>
+        <p class="lrt-screen-desc" style="margin:4px 0 0; max-width:420px;">A modal over the page, not a separate sub-page &mdash; matches the real pattern used everywhere else in this hub for editing a single setting. Notification channel is fixed to the email linked to the n8n account, not user-configurable here, so &ldquo;Slack DM&rdquo; from the earlier exploration is dropped &mdash; the overview row now just reads &ldquo;Alert at 80%.&rdquo; &ldquo;Cost cap per session&rdquo; opens its own equivalent modal &mdash; click that row instead to see it (only one modal shows at a time).</p>
+        </div>
       </div>
     </div>
   </section>
@@ -3809,10 +4313,11 @@ flowchart LR
                         <span style="font-size:11px; color:var(--ink-faint); font-weight:400;">0:31</span>
                       </div>
                       <div style="padding:0 14px 12px;">
-                        <div style="border-top:1px dashed var(--line); margin:0 0 10px; padding-top:10px; font-size:12px; color:var(--ink-soft); display:flex; flex-direction:column; gap:6px;">
-                          <div style="display:flex; align-items:center; gap:6px;"><span class="lrt-spinner" style="color:var(--color--primary); flex:none;"></span> Reading #support-escalations</div>
-                          <div style="display:flex; align-items:center; gap:6px;"><span class="lrt-spinner" style="color:var(--color--primary); flex:none;"></span> Checking Zendesk for already-resolved tickets</div>
-                          <div style="padding-left:19px; color:var(--ink-faint);">14 conversations reviewed so far</div>
+                        <div style="border-top:1px dashed var(--line); margin:0 0 10px; padding-top:10px; font-size:12px; color:var(--ink-soft); display:flex; flex-direction:column; gap:8px;">
+                          <div style="display:flex; align-items:flex-start; gap:6px;"><span class="lrt-step-dot" style="margin-top:5px;"></span> <span style="flex:1;">Reading #support-escalations</span> <span style="cursor:pointer; text-decoration:underline; font-size:11px; color:var(--ink-faint); flex:none; white-space:nowrap;">View trace</span></div>
+                          <div style="display:flex; align-items:flex-start; gap:6px;"><span class="lrt-step-dot" style="margin-top:5px;"></span> <span style="flex:1;">Checking Zendesk for already-resolved tickets</span> <span style="cursor:pointer; text-decoration:underline; font-size:11px; color:var(--ink-faint); flex:none; white-space:nowrap;">View trace</span></div>
+                          <div style="display:flex; align-items:flex-start; gap:6px;"><span class="lrt-step-dot" style="margin-top:5px;"></span> <span style="flex:1;">Owler&#39;s API returned a server error after 3 retries, so I re-checked competitor usage manually via a Google search instead &mdash; didn&#39;t need to stop the whole task for it.</span> <span style="cursor:pointer; text-decoration:underline; font-size:11px; color:var(--ink-faint); flex:none; white-space:nowrap;">View trace</span></div>
+                          <div style="padding-left:14px; color:var(--ink-faint);">14 conversations reviewed so far</div>
                         </div>
                         <div style="display:flex; align-items:center; gap:14px; margin-top:8px;">
                           <span style="cursor:pointer; text-decoration:underline; font-size:12px;">&rarr; View trace</span>
@@ -3996,7 +4501,10 @@ flowchart LR
                   <div style="padding:16px 18px; overflow:auto; flex:1; display:flex; flex-direction:column;">
                     <div class="pv-bubble" style="margin:0 0 12px auto;">Go through the #support-escalations channel from this week and summarize every thread that&#39;s still unresolved.</div>
                     <div class="pv-reply" style="margin-bottom:10px;">Got it &mdash; I&#39;ll just start on this.</div>
-                    <div class="pv-reply" style="margin-top:auto;">I stopped &mdash; you were partway through reading the channel. Want me to continue from there, or change anything before I pick it back up?</div>
+                    <div class="pv-reply" style="margin-top:auto; display:flex; align-items:flex-start; gap:10px;">
+                      <span style="flex:1;">I stopped &mdash; you were partway through reading the channel. Want me to continue from there, or change anything before I pick it back up?</span>
+                      <span style="cursor:pointer; text-decoration:underline; font-size:12px; color:var(--ink-faint); flex:none; white-space:nowrap;">View trace</span>
+                    </div>
                   </div>
                   <div class="pv-chat-footer"><div class="box"><div>Message Sales Outreach&hellip;</div><div class="box-actions"><span class="spacer"></span><span class="send-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M12 19V5M5 12l7-7 7 7"/></svg></span></div></div></div>
                 </div>

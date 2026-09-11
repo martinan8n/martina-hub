@@ -822,6 +822,257 @@ flowchart LR
   G --> I[Available, still editable]
     </pre>
 
+    <h2 class="lrt-section-title" style="margin-top:32px;">Making an agent available &mdash; as a channel, not a separate button</h2>
+    <p class="lrt-section-sub">From the &ldquo;Half-baked&rdquo; review (Sep 9, 2026): Jake Ranallo suggested handling availability through <b>channels</b> &mdash; the same pattern n8n already uses for Slack/Telegram/Linear/Discord &mdash; rather than a separately-worded &quot;Make available&quot; control next to Publish. Martina confirmed chat channels are planned. Grounded in the real Channels section (<code>AgentChannelsSection.vue</code>): the default, empty state is just a row per already-connected channel plus a single &ldquo;+ Add channel&rdquo; tile &mdash; not a list of every possible channel. <b>n8n chat</b> gets a row here by default, pre-configured (no credential, so no &quot;Connect&quot; step) &mdash; its dropdown offers <b>Edit</b> (reopens the same availability modal prototyped above) and <b>Make unavailable</b>, in case someone doesn&#39;t want the agent reachable by chat at all. &ldquo;Disconnect&rdquo; didn&#39;t fit for the same reason &quot;Connect&quot; didn&#39;t &mdash; there&#39;s no credential to sever, so this pairs directly with &ldquo;Make available&rdquo; instead. Clicking &ldquo;+ Add channel&rdquo; opens the real Channels modal (Slack/Telegram/Linear/Discord, each with its own Connect button). Interactive &mdash; try the dropdown, Edit, and Add channel.</p>
+
+    <div class="pv-nav-map">
+      <div style="display:flex; gap:20px; align-items:flex-start; flex-wrap:wrap;">
+
+        <div style="flex:0 0 auto;">
+        <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:420px; min-height:440px; padding:24px; position:relative;">
+          <div style="font-size:15px; font-weight:700; margin-bottom:2px;">Channels</div>
+          <p style="margin:0 0 14px; font-size:12px; color:var(--ink-faint);">Where this agent can be reached, including by chat.</p>
+
+          <div style="display:flex; align-items:center; gap:10px; padding:10px 4px; border-bottom:1px solid var(--line-soft); position:relative;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ea4b71" stroke-width="2.5" style="flex:none;"><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="M8.2 11 15.8 7M8.2 13 15.8 17"/></svg>
+            <span id="chPropChannelRowLabel" style="font-size:13.5px; flex:1;">n8n chat</span>
+            <span id="chPropChannelAction">
+              <span style="display:flex; align-items:center; gap:5px; font-size:12px; color:var(--ink-soft); cursor:pointer;" onclick="chPropToggleChannelMenu()">
+                <span id="chPropChannelDot" style="width:7px; height:7px; border-radius:50%; background:#2f9e5f; flex:none;"></span><span id="chPropChannelStatus">Default</span> <span class="chev">&#9662;</span>
+              </span>
+              <div id="chPropChannelMenu" style="display:none; position:absolute; top:32px; right:4px; width:140px; background:var(--paper); border:1px solid var(--line); border-radius:8px; box-shadow:0 4px 14px rgba(0,0,0,0.1); padding:6px; z-index:6;">
+                <div class="chprop-dropdown-row" onclick="chPropOpenChannelEditModal()" style="padding:7px 8px; border-radius:6px; cursor:pointer; font-size:13px;">Edit</div>
+                <div class="chprop-dropdown-row" onclick="chPropMakeChannelUnavailable()" style="padding:7px 8px; border-radius:6px; cursor:pointer; font-size:13px; border-top:1px solid var(--line); margin-top:4px;">Make unavailable</div>
+              </div>
+            </span>
+          </div>
+
+          <div style="display:flex; align-items:center; gap:10px; padding:10px 4px; cursor:pointer;" onclick="chPropToggleAddChannelModal()">
+            <span style="width:28px; height:28px; border:1.5px dashed var(--line); border-radius:6px; display:flex; align-items:center; justify-content:center; color:var(--ink-faint); flex:none; font-size:15px;">+</span>
+            <div>
+              <div style="font-weight:700; font-size:13.5px;">Add channel</div>
+              <div style="font-size:11.5px; color:var(--ink-faint);">Slack, Telegram, Linear, 1 more</div>
+            </div>
+          </div>
+
+          <div id="chPropChannelEditModal" style="display:none; position:absolute; inset:0; align-items:center; justify-content:center; background:rgba(20,20,22,0.35); border-radius:inherit;">
+            <div style="width:340px; background:var(--paper); border:1px solid var(--line); border-radius:10px; box-shadow:0 8px 24px rgba(0,0,0,0.16); padding:18px;">
+              <div style="display:flex; align-items:center; margin-bottom:10px;">
+                <span id="chPropChannelModalTitle" style="font-size:14px; font-weight:700;">n8n chat</span>
+                <span class="spacer" style="flex:1;"></span>
+                <span onclick="chPropToggleChannelEditModal()" style="cursor:pointer; color:var(--ink-faint); font-size:15px;">&times;</span>
+              </div>
+              <div style="display:flex; gap:8px; align-items:flex-start; background:var(--canvas); border-radius:8px; padding:10px 12px; margin-bottom:16px;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ink-faint)" stroke-width="2" style="flex:none; margin-top:1px;"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 11h1v5h1"/></svg>
+                <span style="font-size:12px; color:var(--ink-soft); margin:0;">This agent will be available to everyone in the <b>Personal</b> project.</span>
+              </div>
+              <div style="font-size:13.5px; font-weight:700; margin-bottom:3px;">Starter prompts <span style="font-weight:400; color:var(--ink-faint); font-size:12px;">(optional)</span></div>
+              <p style="margin:0 0 10px; font-size:11.5px; color:var(--ink-faint);">Help people understand what they can ask this agent to do.</p>
+              <div style="display:flex; align-items:center; gap:5px; font-size:12.5px; color:var(--ink-soft); cursor:pointer; padding:4px 0; margin-bottom:16px;"><span style="font-weight:700;">+</span> Add starter prompt</div>
+              <div style="display:flex; justify-content:flex-end; padding-top:10px; border-top:1px solid var(--line);">
+                <span id="chPropChannelModalConfirmBtn" class="btn" style="background:var(--accent-soft);" onclick="chPropConfirmChannelAvailable()">Save</span>
+              </div>
+            </div>
+          </div>
+
+          <div id="chPropAddChannelModal" style="display:none; position:absolute; inset:0; align-items:center; justify-content:center; background:rgba(20,20,22,0.35); border-radius:inherit;">
+            <div style="width:360px; background:var(--paper); border:1px solid var(--line); border-radius:10px; box-shadow:0 8px 24px rgba(0,0,0,0.16); padding:18px;">
+              <div style="display:flex; align-items:center; margin-bottom:10px;">
+                <span style="font-size:14px; font-weight:700;">Channels</span>
+                <span class="spacer" style="flex:1;"></span>
+                <span onclick="chPropToggleAddChannelModal()" style="cursor:pointer; color:var(--ink-faint); font-size:15px;">&times;</span>
+              </div>
+              <div style="display:flex; align-items:center; gap:10px; padding:9px 2px; border-top:1px solid var(--line-soft);">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" style="flex:none;"><path fill="#e01e5a" d="M9.5 2A2.5 2.5 0 0 0 7 4.5V9h2.5a2.5 2.5 0 0 0 0-5Z"/><path fill="#36c5f0" d="M2 14.5A2.5 2.5 0 0 0 4.5 17H9v-2.5a2.5 2.5 0 0 0-5 0Z"/><path fill="#2eb67d" d="M14.5 22a2.5 2.5 0 0 0 2.5-2.5V15h-2.5a2.5 2.5 0 0 0 0 5Z"/><path fill="#ecb22e" d="M22 9.5A2.5 2.5 0 0 0 19.5 7H15v2.5a2.5 2.5 0 0 0 5 0Z"/></svg>
+                <span style="font-size:13.5px; flex:1;">Slack</span>
+                <span class="btn" style="font-size:12px; padding:4px 12px;">Connect</span>
+              </div>
+              <div style="display:flex; align-items:center; gap:10px; padding:9px 2px; border-top:1px solid var(--line-soft);">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="#29a9eb" style="flex:none;"><circle cx="12" cy="12" r="10"/><path fill="#fff" d="m7 12 3 2 7-6-8 5.5-1.5-1Z"/></svg>
+                <span style="font-size:13.5px; flex:1;">Telegram</span>
+                <span class="btn" style="font-size:12px; padding:4px 12px;">Connect</span>
+              </div>
+              <div style="display:flex; align-items:center; gap:10px; padding:9px 2px; border-top:1px solid var(--line-soft);">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="#5e6ad2" style="flex:none;"><circle cx="12" cy="12" r="10"/></svg>
+                <span style="font-size:13.5px; flex:1;">Linear</span>
+                <span class="btn" style="font-size:12px; padding:4px 12px;">Connect</span>
+              </div>
+              <div style="display:flex; align-items:center; gap:10px; padding:9px 2px; border-top:1px solid var(--line-soft); border-bottom:1px solid var(--line-soft);">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="#5865f2" style="flex:none;"><circle cx="12" cy="12" r="10"/></svg>
+                <span style="font-size:13.5px; flex:1;">Discord</span>
+                <span class="btn" style="font-size:12px; padding:4px 12px;">Connect</span>
+              </div>
+            </div>
+          </div>
+
+        </div></div></div>
+        <div class="lrt-screen-desc" style="margin:8px 0 0; width:420px;"><b>Channels, empty state.</b> Matches the real product exactly: a row per connected channel, plus one &ldquo;+ Add channel&rdquo; tile &mdash; not a list of every platform. n8n chat occupies that first row by default. Click its dropdown to Edit or Make unavailable; click &ldquo;+ Add channel&rdquo; to see the real Connect list.</div></div>
+
+      </div>
+    </div>
+
+    <h2 class="lrt-section-title" style="margin-top:32px;">Current behaviour &mdash; the real Channels modal, as it exists in n8n today</h2>
+    <p class="lrt-section-sub">Grounded directly in n8n&#39;s source (<code>AgentChannelModal.vue</code>, <code>AgentChannelListItem.vue</code>, <code>channels/registry.ts</code>, <code>AgentChannelSlackEditView.vue</code>, <code>AgentChannelSlackManagedSettings.vue</code>) &mdash; this is <b>today&#39;s</b> behaviour, not the proposal above. The modal only ever lists <b>Slack, Linear, Telegram, Discord</b>. A channel with no credential shows a &ldquo;Connect&rdquo; button; once it has one, that button becomes a status pill reading &ldquo;Connected&rdquo;, &ldquo;Not running&rdquo; (with a red dot), or &ldquo;Configured&rdquo; (configured but neither confirmed, no dot at all) &mdash; the wireframe below skips the pulsing green &ldquo;Connected&rdquo; dot the real component renders, to keep the three pills visually simple &mdash; and <b>that pill is the only way in</b>: click any of the three to open the same small menu with <b>Edit</b> and <b>Disconnect</b>. <b>Edit</b> is the actual settings screen &mdash; every channel gets a credential picker (with its own pencil-icon &ldquo;Edit credential&rdquo; shortcut); Slack additionally gets its own editable Agent name, Description, an &ldquo;Always show my bot as online&rdquo; toggle, and a link to open the app&#39;s settings directly in Slack. One thing this clarifies: <b>n8n chat isn&#39;t in this list at all</b> today. Its own source comment calls it &ldquo;implicit and credential-less&hellip; never shown in the integrations catalog&rdquo; &mdash; it just works, nothing to connect or configure. That&#39;s exactly why the proposal above (giving it a row, with Edit / Make unavailable) is a deliberate departure from current behaviour, not something already there.</p>
+
+    <div class="pv-nav-map">
+      <div style="display:flex; gap:20px; align-items:flex-start; flex-wrap:wrap;">
+
+        <div style="flex:0 0 auto;">
+        <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:520px; min-height:520px; padding:24px; position:relative;">
+
+          <div style="font-size:15px; font-weight:700; margin-bottom:2px;">Channels</div>
+          <p style="margin:0 0 14px; font-size:12px; color:var(--ink-faint);">Where this agent can be reached, including by chat.</p>
+
+          <div id="rcmCompactChatRow" style="display:flex; align-items:center; gap:10px; padding:10px 4px; border-bottom:1px solid var(--line-soft); cursor:pointer;" onclick="rcmOpenModalToChatEdit()">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--ink-soft)" stroke-width="1.8" style="flex:none;"><path d="M4 5h16v11H8l-4 3V5Z"/></svg>
+            <span style="font-size:13.5px; flex:1;">n8n Chat</span>
+            <span style="display:flex; align-items:center; gap:5px; font-size:12px; color:var(--ink-soft);">Default</span>
+          </div>
+
+          <div style="display:flex; align-items:center; gap:10px; padding:10px 4px; cursor:pointer;" onclick="rcmOpenModal()">
+            <span style="width:28px; height:28px; border:1.5px dashed var(--line); border-radius:6px; display:flex; align-items:center; justify-content:center; color:var(--ink-faint); flex:none; font-size:15px;">+</span>
+            <div>
+              <div style="font-weight:700; font-size:13.5px;">Add channel</div>
+              <div style="font-size:11.5px; color:var(--ink-faint);">Slack, Telegram, Linear, 1 more</div>
+            </div>
+          </div>
+
+          <div id="rcmModalOverlay" style="display:none; position:absolute; inset:0; align-items:center; justify-content:center; background:rgba(20,20,22,0.35); border-radius:inherit;">
+          <div style="width:460px; height:480px; background:var(--paper); border:1px solid var(--line); border-radius:10px; box-shadow:0 8px 24px rgba(0,0,0,0.16); position:relative; display:flex; flex-direction:column; overflow:hidden;">
+
+          <div style="flex:none; display:flex; align-items:center; gap:8px; padding:16px 22px 14px; border-bottom:1px solid var(--line);">
+            <span id="rcmBackBtn" onclick="rcmGoBack()" style="display:none; cursor:pointer; color:var(--ink-soft); font-size:15px;">&#8592;</span>
+            <span id="rcmHeaderIcon" style="display:none; align-items:center;"></span>
+            <span id="rcmTitle" data-type="" style="font-size:15px; font-weight:700; flex:1;">Channels</span>
+            <span onclick="rcmCloseModal()" style="cursor:pointer; color:var(--ink-faint); font-size:15px;">&times;</span>
+          </div>
+
+          <div id="rcmBody" style="flex:1; min-height:0; overflow-y:auto; padding:6px 22px 16px;">
+
+          <div id="rcmListView">
+            <ul style="list-style:none; margin:0; padding:0;">
+
+              <li style="display:flex; align-items:center; gap:10px; padding:11px 2px; border-bottom:1px solid var(--line-soft);">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--ink-soft)" stroke-width="1.8" style="flex:none;"><path d="M4 5h16v11H8l-4 3V5Z"/></svg>
+                <span style="font-size:13.5px; font-weight:700; flex:1;">n8n Chat</span>
+                <span id="rcmAction-chat" style="position:relative;">
+                  <span onclick="rcmToggleMenu('chat')" style="display:flex; align-items:center; gap:6px; font-size:12.5px; color:var(--ink-soft); cursor:pointer; border:1px solid var(--line); border-radius:6px; padding:5px 10px;">
+                    Connected
+                  </span>
+                  <div id="rcmMenu-chat" style="display:none; position:absolute; top:32px; right:0; width:150px; background:var(--paper); border:1px solid var(--line); border-radius:8px; box-shadow:0 4px 14px rgba(0,0,0,0.1); padding:6px; z-index:6;">
+                    <div class="chprop-dropdown-row" onclick="rcmGoEdit('chat')" style="padding:7px 8px; border-radius:6px; cursor:pointer; font-size:13px;">Edit</div>
+                    <div class="chprop-dropdown-row" onclick="rcmDisconnect('chat')" style="padding:7px 8px; border-radius:6px; cursor:pointer; font-size:13px; border-top:1px solid var(--line); margin-top:4px;">Disconnect</div>
+                  </div>
+                </span>
+              </li>
+
+              <li style="display:flex; align-items:center; gap:10px; padding:11px 2px; border-bottom:1px solid var(--line-soft);">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" style="flex:none;"><path fill="#e01e5a" d="M9.5 2A2.5 2.5 0 0 0 7 4.5V9h2.5a2.5 2.5 0 0 0 0-5Z"/><path fill="#36c5f0" d="M2 14.5A2.5 2.5 0 0 0 4.5 17H9v-2.5a2.5 2.5 0 0 0-5 0Z"/><path fill="#2eb67d" d="M14.5 22a2.5 2.5 0 0 0 2.5-2.5V15h-2.5a2.5 2.5 0 0 0 0 5Z"/><path fill="#ecb22e" d="M22 9.5A2.5 2.5 0 0 0 19.5 7H15v2.5a2.5 2.5 0 0 0 5 0Z"/></svg>
+                <span style="font-size:13.5px; font-weight:700; flex:1;">Slack</span>
+                <span id="rcmAction-slack" style="position:relative;">
+                  <span onclick="rcmToggleMenu('slack')" style="display:flex; align-items:center; gap:6px; font-size:12.5px; color:var(--ink-soft); cursor:pointer; border:1px solid var(--line); border-radius:6px; padding:5px 10px;">
+                    Connected
+                  </span>
+                  <div id="rcmMenu-slack" style="display:none; position:absolute; top:32px; right:0; width:130px; background:var(--paper); border:1px solid var(--line); border-radius:8px; box-shadow:0 4px 14px rgba(0,0,0,0.1); padding:6px; z-index:6;">
+                    <div class="chprop-dropdown-row" onclick="rcmGoEdit('slack')" style="padding:7px 8px; border-radius:6px; cursor:pointer; font-size:13px;">Edit</div>
+                    <div class="chprop-dropdown-row" onclick="rcmDisconnect('slack')" style="padding:7px 8px; border-radius:6px; cursor:pointer; font-size:13px; border-top:1px solid var(--line); margin-top:4px;">Disconnect</div>
+                  </div>
+                </span>
+              </li>
+
+              <li style="display:flex; align-items:center; gap:10px; padding:11px 2px; border-bottom:1px solid var(--line-soft);">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="#5e6ad2" style="flex:none;"><circle cx="12" cy="12" r="10"/></svg>
+                <span style="font-size:13.5px; font-weight:700; flex:1;">Linear</span>
+                <span id="rcmAction-linear"><span class="btn" style="font-size:12.5px; padding:5px 12px;">Connect</span></span>
+              </li>
+
+              <li style="display:flex; align-items:center; gap:10px; padding:11px 2px; border-bottom:1px solid var(--line-soft);">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="#29a9eb" style="flex:none;"><circle cx="12" cy="12" r="10"/><path fill="#fff" d="m7 12 3 2 7-6-8 5.5-1.5-1Z"/></svg>
+                <span style="font-size:13.5px; font-weight:700; flex:1;">Telegram</span>
+                <span id="rcmAction-telegram" style="position:relative;">
+                  <span onclick="rcmToggleMenu('telegram')" title="This channel couldn&#39;t be started. n8n keeps retrying it." style="display:flex; align-items:center; gap:6px; font-size:12.5px; color:var(--ink-soft); cursor:pointer; border:1px solid var(--line); border-radius:6px; padding:5px 10px;">
+                    <span class="rcm-dot is-error"></span> Not running
+                  </span>
+                  <div id="rcmMenu-telegram" style="display:none; position:absolute; top:32px; right:0; width:130px; background:var(--paper); border:1px solid var(--line); border-radius:8px; box-shadow:0 4px 14px rgba(0,0,0,0.1); padding:6px; z-index:6;">
+                    <div class="chprop-dropdown-row" onclick="rcmGoEdit('telegram')" style="padding:7px 8px; border-radius:6px; cursor:pointer; font-size:13px;">Edit</div>
+                    <div class="chprop-dropdown-row" onclick="rcmDisconnect('telegram')" style="padding:7px 8px; border-radius:6px; cursor:pointer; font-size:13px; border-top:1px solid var(--line); margin-top:4px;">Disconnect</div>
+                  </div>
+                </span>
+              </li>
+
+              <li style="display:flex; align-items:center; gap:10px; padding:11px 2px;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="#5865f2" style="flex:none;"><circle cx="12" cy="12" r="10"/></svg>
+                <span style="font-size:13.5px; font-weight:700; flex:1;">Discord</span>
+                <span id="rcmAction-discord" style="position:relative;">
+                  <span onclick="rcmToggleMenu('discord')" style="display:flex; align-items:center; gap:6px; font-size:12.5px; color:var(--ink-soft); cursor:pointer; border:1px solid var(--line); border-radius:6px; padding:5px 10px;">
+                    Configured
+                  </span>
+                  <div id="rcmMenu-discord" style="display:none; position:absolute; top:32px; right:0; width:130px; background:var(--paper); border:1px solid var(--line); border-radius:8px; box-shadow:0 4px 14px rgba(0,0,0,0.1); padding:6px; z-index:6;">
+                    <div class="chprop-dropdown-row" onclick="rcmGoEdit('discord')" style="padding:7px 8px; border-radius:6px; cursor:pointer; font-size:13px;">Edit</div>
+                    <div class="chprop-dropdown-row" onclick="rcmDisconnect('discord')" style="padding:7px 8px; border-radius:6px; cursor:pointer; font-size:13px; border-top:1px solid var(--line); margin-top:4px;">Disconnect</div>
+                  </div>
+                </span>
+              </li>
+
+            </ul>
+          </div>
+
+          <div id="rcmEditView" style="display:none; padding:10px 0 4px;">
+            <div id="rcmCredSection">
+              <div id="rcmCredLabel" style="font-size:13px; font-weight:700; margin-bottom:6px;">Credential</div>
+              <div style="display:flex; align-items:center; gap:6px; margin-bottom:4px;">
+                <div class="model-row" style="flex:1; max-width:100%;"><span class="name" id="rcmCredName">&nbsp;</span><span class="chev">&#9662;</span></div>
+                <span title="Edit credential" style="cursor:pointer; color:var(--ink-faint); display:flex; align-items:center; padding:6px; flex:none;">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+                </span>
+              </div>
+            </div>
+
+            <div id="rcmChatDesc" style="display:none;">
+              <div style="display:flex; gap:8px; align-items:flex-start; background:var(--canvas); border-radius:8px; padding:10px 12px; margin-bottom:16px;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ink-faint)" stroke-width="2" style="flex:none; margin-top:1px;"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 11h1v5h1"/></svg>
+                <span style="font-size:12px; color:var(--ink-soft); margin:0;">This agent will be available to everyone in the <b>Personal</b> project.</span>
+              </div>
+              <div style="font-size:13.5px; font-weight:700; margin-bottom:3px;">Starter prompts <span style="font-weight:400; color:var(--ink-faint); font-size:12px;">(optional)</span></div>
+              <p style="margin:0 0 10px; font-size:11.5px; color:var(--ink-faint);">Help people understand what they can ask this agent to do.</p>
+              <div style="display:flex; align-items:center; gap:5px; font-size:12.5px; color:var(--ink-soft); cursor:pointer; padding:4px 0;"><span style="font-weight:700;">+</span> Add starter prompt</div>
+            </div>
+
+            <div id="rcmSlackExtra" style="display:none;">
+              <div style="border-top:1px solid var(--line-soft); margin:16px 0 14px;"></div>
+
+              <div style="font-size:13px; font-weight:700; margin-bottom:2px;">Agent name</div>
+              <p style="margin:0 0 6px; font-size:11.5px; color:var(--ink-faint);">The name displayed for this agent in Slack</p>
+              <div style="border:1px solid var(--line); border-radius:8px; padding:8px 10px; font-size:13px; margin-bottom:16px;">SEO Auditor</div>
+
+              <div style="font-size:13px; font-weight:700; margin-bottom:6px;">Description</div>
+              <div style="border:1px solid var(--line); border-radius:8px; padding:8px 10px; font-size:12.5px; color:var(--ink-soft); margin-bottom:16px; min-height:44px;">Checks pages against your SEO checklist, right from Slack.</div>
+
+              <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:16px;">
+                <span style="font-size:13px; font-weight:700;">Always show my bot as online</span>
+                <span style="width:34px; height:20px; border-radius:12px; background:var(--ink); border:1.5px solid var(--ink); position:relative; flex:none;"><span style="position:absolute; top:2px; right:2px; width:14px; height:14px; border-radius:50%; background:var(--paper);"></span></span>
+              </div>
+
+              <div style="display:flex; align-items:center; gap:5px; font-size:12.5px; color:var(--ink); text-decoration:underline; cursor:pointer;">Open app settings in Slack <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 3h7v7"/><path d="M10 14 21 3"/><path d="M21 14v6a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h6"/></svg></div>
+            </div>
+          </div>
+
+          </div>
+
+          <div id="rcmFooter" style="display:none; flex:none; align-items:center; justify-content:space-between; padding:14px 22px; border-top:1px solid var(--line);">
+            <span id="rcmFooterAction" class="lrt-btn" onclick="rcmRemoveFromEdit()">Remove channel</span>
+            <span style="display:flex; gap:8px;"><span class="lrt-btn" onclick="rcmGoBack()">Cancel</span><span class="btn btn-primary" onclick="rcmSaveEdit()">Save</span></span>
+          </div>
+
+          </div>
+          </div>
+
+        </div></div></div>
+        <div class="lrt-screen-desc" style="margin:8px 0 0; width:520px;"><b>Current real behaviour, plus n8n Chat added in.</b> n8n Chat sits in the Channels panel by default (&ldquo;Default&rdquo;, not a real credential state). Click its row to land directly on its settings; click <b>+ Add channel</b> to land on the full real Channels modal instead. Inside that modal: a connected channel&#39;s button becomes a status pill reading Connected, Not running (red dot), or Configured &mdash; click any of them for Edit / Disconnect (same wording for every channel, n8n Chat included). Edit opens the channel&#39;s real settings: credential picker for Slack/Telegram/Discord, plus Slack&#39;s own name/description/online-status fields; n8n Chat has no credential, so its Edit view reuses the availability/starter-prompts content from the proposal above instead.</div></div>
+
+      </div>
+    </div>
+
     </div>
   </section>
 
@@ -3125,7 +3376,7 @@ flowchart TD
   </div>
 </div>
 
-<script src="js/hub.js"></script>
+<script src="js/hub.js?v=20260911e"></script>
 
 <style>.mermaid-diagram{margin-block:4px}.mermaid-diagram svg{display:block;margin:0 auto;max-width:100%;height:auto}</style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.15.0/mermaid.min.js"></script>
