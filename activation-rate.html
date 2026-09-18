@@ -838,7 +838,7 @@ flowchart LR
             <span id="chPropChannelRowLabel" style="font-size:13.5px; flex:1;">n8n chat</span>
             <span id="chPropChannelAction">
               <span style="display:flex; align-items:center; gap:5px; font-size:12px; color:var(--ink-soft); cursor:pointer;" onclick="chPropToggleChannelMenu()">
-                <span id="chPropChannelDot" style="width:7px; height:7px; border-radius:50%; background:#2f9e5f; flex:none;"></span><span id="chPropChannelStatus">Default</span> <span class="chev">&#9662;</span>
+                <span id="chPropChannelDot" style="width:7px; height:7px; border-radius:50%; background:#2f9e5f; flex:none;"></span><span id="chPropChannelStatus">Available</span> <span class="chev">&#9662;</span>
               </span>
               <div id="chPropChannelMenu" style="display:none; position:absolute; top:32px; right:4px; width:140px; background:var(--paper); border:1px solid var(--line); border-radius:8px; box-shadow:0 4px 14px rgba(0,0,0,0.1); padding:6px; z-index:6;">
                 <div class="chprop-dropdown-row" onclick="chPropOpenChannelEditModal()" style="padding:7px 8px; border-radius:6px; cursor:pointer; font-size:13px;">Edit</div>
@@ -926,7 +926,7 @@ flowchart LR
           <div id="rcmCompactChatRow" style="display:flex; align-items:center; gap:10px; padding:10px 4px; border-bottom:1px solid var(--line-soft); cursor:pointer;" onclick="rcmOpenModalToChatEdit()">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--ink-soft)" stroke-width="1.8" style="flex:none;"><path d="M4 5h16v11H8l-4 3V5Z"/></svg>
             <span style="font-size:13.5px; flex:1;">n8n Chat</span>
-            <span style="display:flex; align-items:center; gap:5px; font-size:12px; color:var(--ink-soft);">Default</span>
+            <span style="display:flex; align-items:center; gap:5px; font-size:12px; color:var(--ink-soft);">Available</span>
           </div>
 
           <div style="display:flex; align-items:center; gap:10px; padding:10px 4px; cursor:pointer;" onclick="rcmOpenModal()">
@@ -957,11 +957,11 @@ flowchart LR
                 <span style="font-size:13.5px; font-weight:700; flex:1;">n8n Chat</span>
                 <span id="rcmAction-chat" style="position:relative;">
                   <span onclick="rcmToggleMenu('chat')" style="display:flex; align-items:center; gap:6px; font-size:12.5px; color:var(--ink-soft); cursor:pointer; border:1px solid var(--line); border-radius:6px; padding:5px 10px;">
-                    Connected
+                    Available
                   </span>
                   <div id="rcmMenu-chat" style="display:none; position:absolute; top:32px; right:0; width:150px; background:var(--paper); border:1px solid var(--line); border-radius:8px; box-shadow:0 4px 14px rgba(0,0,0,0.1); padding:6px; z-index:6;">
                     <div class="chprop-dropdown-row" onclick="rcmGoEdit('chat')" style="padding:7px 8px; border-radius:6px; cursor:pointer; font-size:13px;">Edit</div>
-                    <div class="chprop-dropdown-row" onclick="rcmDisconnect('chat')" style="padding:7px 8px; border-radius:6px; cursor:pointer; font-size:13px; border-top:1px solid var(--line); margin-top:4px;">Disconnect</div>
+                    <div class="chprop-dropdown-row" onclick="rcmDisconnect('chat')" style="padding:7px 8px; border-radius:6px; cursor:pointer; font-size:13px; border-top:1px solid var(--line); margin-top:4px;">Make unavailable</div>
                   </div>
                 </span>
               </li>
@@ -1068,11 +1068,39 @@ flowchart LR
           </div>
 
         </div></div></div>
-        <div class="lrt-screen-desc" style="margin:8px 0 0; width:520px;"><b>Current real behaviour, plus n8n Chat added in.</b> n8n Chat sits in the Channels panel by default (&ldquo;Default&rdquo;, not a real credential state). Click its row to land directly on its settings; click <b>+ Add channel</b> to land on the full real Channels modal instead. Inside that modal: a connected channel&#39;s button becomes a status pill reading Connected, Not running (red dot), or Configured &mdash; click any of them for Edit / Disconnect (same wording for every channel, n8n Chat included). Edit opens the channel&#39;s real settings: credential picker for Slack/Telegram/Discord, plus Slack&#39;s own name/description/online-status fields; n8n Chat has no credential, so its Edit view reuses the availability/starter-prompts content from the proposal above instead.</div></div>
+        <div class="lrt-screen-desc" style="margin:8px 0 0; width:520px;"><b>Current real behaviour, plus n8n Chat added in.</b> n8n Chat sits in the Channels panel by default (&ldquo;Available&rdquo;, not a real credential state). Click its row to land directly on its settings; click <b>+ Add channel</b> to land on the full real Channels modal instead. Inside that modal: a connected channel&#39;s button becomes a status pill reading Connected, Not running (red dot), or Configured &mdash; click any of them for Edit / Disconnect. n8n Chat gets its own wording instead &mdash; Available, with Edit / Make unavailable &mdash; since there&#39;s no credential to connect or disconnect; Slack/Telegram/Discord keep Connected/Disconnect since those are real credentialed connections. Edit opens the channel&#39;s real settings: credential picker for Slack/Telegram/Discord, plus Slack&#39;s own name/description/online-status fields; n8n Chat has no credential, so its Edit view reuses the availability/starter-prompts content from the proposal above instead.</div></div>
 
       </div>
     </div>
 
+    <div class="pv-nav-map">
+      <h4>Channel copy reference &mdash; moment in flow</h4>
+      <table class="pv-usecases-table">
+        <tr><th>Moment in flow</th><th>Current label / wording</th><th>What it means</th></tr>
+        <tr><td>No channel added yet</td><td>Add channel</td><td>Add a new communication channel to the agent</td></tr>
+        <tr><td>Channel selected, setup required</td><td>Connect / Connect to Slack</td><td>Start authentication or credential setup</td></tr>
+        <tr><td>Slack managed setup</td><td>Add to Slack / Install app</td><td>Install/connect the Slack app</td></tr>
+        <tr><td>Setup completed</td><td>Configured</td><td>Credential is set but not yet confirmed as active</td></tr>
+        <tr><td>Existing channel</td><td>Remove channel</td><td>Remove it from the agent config; this also disconnects it</td></tr>
+        <tr><td>Technical concept, but not really a separate current state</td><td>Disconnect</td><td>Stop the integration without necessarily removing its config</td></tr>
+        <tr><td>n8n Chat proposal</td><td>Make available</td><td>Make the agent accessible in n8n Chat</td></tr>
+        <tr><td>n8n Chat reverse action</td><td>Make unavailable</td><td>Remove access from n8n Chat</td></tr>
+      </table>
+    </div>
+
+    <div class="pv-nav-map">
+      <h4>Current vs. proposal &mdash; copy by moment</h4>
+      <table class="pv-usecases-table">
+        <tr><th>Moment</th><th>Current</th><th>Proposal</th></tr>
+        <tr><td>Add a new channel</td><td>Add channel</td><td>Add channel</td></tr>
+        <tr><td>Channel added, needs setup</td><td>Connect</td><td>Connect</td></tr>
+        <tr><td>Channel successfully set up</td><td>Configured</td><td>Connected</td></tr>
+        <tr><td>Stop the integration without removing its config</td><td>Disconnect</td><td>Disconnect</td></tr>
+        <tr><td>Remove the integration from the agent config</td><td>Remove channel</td><td>Remove channel</td></tr>
+        <tr><td>Make an agent available in n8n Chat</td><td>&mdash;</td><td>Make available</td></tr>
+        <tr><td>Agent is available in n8n Chat</td><td>&mdash;</td><td>Available</td></tr>
+        <tr><td>Remove an agent from n8n Chat</td><td>&mdash;</td><td>Make unavailable</td></tr>
+      </table>
     </div>
   </section>
 

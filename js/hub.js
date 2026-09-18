@@ -1757,8 +1757,9 @@
     var action = document.getElementById("rcmAction-" + type);
     if (action) {
       var onclick = type === "chat" ? " onclick=\"rcmGoEdit('chat')\"" : "";
+      var label = type === "chat" ? "Make available" : "Connect";
       action.innerHTML =
-        '<span class="btn" style="font-size:12.5px; padding:5px 12px;"' + onclick + ">Connect</span>";
+        '<span class="btn" style="font-size:12.5px; padding:5px 12px;"' + onclick + ">" + label + "</span>";
     }
     if (type === "chat") {
       var compactRow = document.getElementById("rcmCompactChatRow");
@@ -1773,10 +1774,10 @@
     var action = document.getElementById("rcmAction-chat");
     if (action) {
       action.innerHTML =
-        '<span onclick="rcmToggleMenu(\'chat\')" style="display:flex; align-items:center; gap:6px; font-size:12.5px; color:var(--ink-soft); cursor:pointer; border:1px solid var(--line); border-radius:6px; padding:5px 10px;">Connected</span>' +
+        '<span onclick="rcmToggleMenu(\'chat\')" style="display:flex; align-items:center; gap:6px; font-size:12.5px; color:var(--ink-soft); cursor:pointer; border:1px solid var(--line); border-radius:6px; padding:5px 10px;">Available</span>' +
         '<div id="rcmMenu-chat" style="display:none; position:absolute; top:32px; right:0; width:150px; background:var(--paper); border:1px solid var(--line); border-radius:8px; box-shadow:0 4px 14px rgba(0,0,0,0.1); padding:6px; z-index:6;">' +
         '<div class="chprop-dropdown-row" onclick="rcmGoEdit(\'chat\')" style="padding:7px 8px; border-radius:6px; cursor:pointer; font-size:13px;">Edit</div>' +
-        '<div class="chprop-dropdown-row" onclick="rcmDisconnect(\'chat\')" style="padding:7px 8px; border-radius:6px; cursor:pointer; font-size:13px; border-top:1px solid var(--line); margin-top:4px;">Disconnect</div>' +
+        '<div class="chprop-dropdown-row" onclick="rcmDisconnect(\'chat\')" style="padding:7px 8px; border-radius:6px; cursor:pointer; font-size:13px; border-top:1px solid var(--line); margin-top:4px;">Make unavailable</div>' +
         "</div>";
     }
     var compactRow = document.getElementById("rcmCompactChatRow");
