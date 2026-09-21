@@ -1173,14 +1173,14 @@ flowchart LR
           <p class="desc">The single entry point for picking which agent to talk to (replaces Chat Hub, which is being sunset) &mdash; first concept, chats live in the primary sidebar.</p>
         </div>
       </a>
-      <div class="screen-card backlog" id="card-skills">
+      <a class="screen-card" id="card-skills" href="#/skills">
         <div class="thumb">&#129520;</div>
         <div class="body">
-          <span class="status backlog">Not started</span>
+          <span class="status">Proposal</span>
           <h3>Skills</h3>
-          <p class="desc">Scope and screens to be defined.</p>
+          <p class="desc">Make the standard folder or ZIP upload path obvious, show the skill structure before import, and keep manual creation secondary.</p>
         </div>
-      </div>
+      </a>
       <div class="screen-card backlog" id="card-multi-agent">
         <div class="body">
           <span class="status backlog">Not started</span>
@@ -1201,6 +1201,128 @@ flowchart LR
         </div>
       </div>
       <div class="screen-card placeholder">More screens land here as we go<br>(Knowledge, Sessions, Settings…)</div>
+    </div>
+  </section>
+
+  <!-- ================= SCREEN: SKILLS ================= -->
+  <section data-route="skills">
+    <a class="back-link" href="#/activation-rate">&larr; Improve Activation Rate</a>
+    <div class="screen-head">
+      <h1>Skills &mdash; upload a skill</h1>
+      <p>Proposal for the first-time add flow: lead with the portable skill package people already have, explain its structure in place, then validate it before adding. Creating a skill manually stays available as the secondary path.</p>
+    </div>
+
+    <div class="problem-grid">
+      <div class="problem-card">
+        <div class="eyebrow">&#128269; What other products converge on</div>
+        <p>A skill is a folder with a required <b>SKILL.md</b> and optional supporting files. GitHub accepts a local folder, file, URL, or ZIP through its CLI; Claude asks people to upload the skill folder as a ZIP; ChatGPT uses one generic upload entry and scans the package before it becomes available.</p>
+        <span class="src">Sources: <a href="https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/add-skills" target="_blank" rel="noreferrer">GitHub Copilot</a> &middot; <a href="https://support.claude.com/en/articles/12512180-use-skills-in-claude" target="_blank" rel="noreferrer">Claude</a> &middot; <a href="https://help.openai.com/en/articles/20001066" target="_blank" rel="noreferrer">ChatGPT</a></span>
+      </div>
+      <div class="problem-card">
+        <div class="eyebrow">&#9997;&#65039; Proposal</div>
+        <p><b>Upload skill</b> is the dominant action and accepts a folder or ZIP. The interface shows the expected structure before selection, then parses the name and description from <b>SKILL.md</b> and previews every included file before the user confirms. <b>Create manually</b> is a quiet secondary link.</p>
+      </div>
+    </div>
+
+    <div class="section-title">Proposed flow</div>
+    <div class="lrt-proto-main">
+      <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:1120px; padding:0; min-height:650px;">
+        <div style="height:650px; background:rgba(31,35,43,0.24); display:flex; align-items:center; justify-content:center; padding:36px; box-sizing:border-box;">
+          <div style="width:980px; min-height:560px; background:var(--paper); border:1px solid var(--line); border-radius:12px; box-shadow:0 18px 45px rgba(31,35,43,0.16); display:flex; flex-direction:column; overflow:hidden;">
+            <div style="display:flex; align-items:center; padding:18px 22px; border-bottom:1px solid var(--line);">
+              <div>
+                <div style="font-size:19px; font-weight:700;">Add skill</div>
+                <div style="font-size:12.5px; color:var(--ink-faint); margin-top:3px;">Add a reusable workflow to this agent.</div>
+              </div>
+              <span class="spacer" style="flex:1;"></span>
+              <span style="font-size:20px; color:var(--ink-faint);">&times;</span>
+            </div>
+
+            <div id="skillsUploadState" style="display:flex; flex:1; min-height:0;">
+              <div style="flex:1; padding:42px 40px; display:flex; flex-direction:column; justify-content:center;">
+                <div style="border:1.5px dashed var(--line); border-radius:12px; padding:34px 28px; text-align:center; background:var(--canvas);">
+                  <div style="width:48px; height:48px; border:1px solid var(--line); border-radius:10px; display:flex; align-items:center; justify-content:center; margin:0 auto 14px; background:var(--paper);">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 7.5h7l2 2h9v9.5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/><path d="M3 7.5V5a2 2 0 0 1 2-2h5l2 2h7a2 2 0 0 1 2 2v2.5"/></svg>
+                  </div>
+                  <div style="font-size:18px; font-weight:700;">Upload a skill</div>
+                  <div style="font-size:13px; color:var(--ink-soft); max-width:430px; margin:7px auto 18px; line-height:1.55;">Choose a skill folder or a .zip. It must contain <b>SKILL.md</b>; references, scripts, and assets are optional.</div>
+                  <div style="display:flex; gap:8px; justify-content:center; flex-wrap:wrap;">
+                    <span class="btn btn-primary" style="cursor:pointer;" onclick="skillsShowState(1)">Choose folder</span>
+                    <span class="btn" style="cursor:pointer;" onclick="skillsShowState(1)">Choose .zip</span>
+                  </div>
+                </div>
+                <div style="text-align:center; margin-top:18px; font-size:12.5px; color:var(--ink-soft);">No skill package yet? <span style="text-decoration:underline; color:var(--ink); cursor:pointer;">Create manually</span></div>
+              </div>
+              <div style="width:310px; border-left:1px solid var(--line); padding:34px 28px; background:var(--canvas); box-sizing:border-box;">
+                <div style="font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:var(--ink-soft);">Skill structure</div>
+                <div style="font-size:12.5px; color:var(--ink-faint); line-height:1.5; margin-top:7px;">The folder keeps the instructions and everything the agent may need together.</div>
+                <div style="font-family:var(--mono); font-size:12.5px; line-height:1.8; margin-top:20px; padding:14px 16px; background:var(--paper); border:1px solid var(--line); border-radius:8px;">
+                  <div>&#128193; my-skill/</div>
+                  <div style="padding-left:18px; font-weight:700;">&#128196; SKILL.md <span style="font-size:10px; color:#a6480f;">required</span></div>
+                  <div style="padding-left:18px;">&#128193; references/ <span style="font-size:10px; color:var(--ink-faint);">optional</span></div>
+                  <div style="padding-left:18px;">&#128193; scripts/ <span style="font-size:10px; color:var(--ink-faint);">optional</span></div>
+                  <div style="padding-left:18px;">&#128193; assets/ <span style="font-size:10px; color:var(--ink-faint);">optional</span></div>
+                </div>
+              </div>
+            </div>
+
+            <div id="skillsReviewState" style="display:none; flex:1; min-height:0;">
+              <div style="width:285px; border-right:1px solid var(--line); padding:26px 22px; background:var(--canvas); box-sizing:border-box;">
+                <div style="font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:var(--ink-soft); margin-bottom:12px;">summarize-meetings</div>
+                <div style="font-size:12.5px; line-height:1.9;">
+                  <div style="font-weight:700; background:var(--paper); border:1px solid var(--line); border-radius:6px; padding:3px 8px;">&#128196; SKILL.md</div>
+                  <div style="padding-left:8px; margin-top:6px;">&#128193; references/</div>
+                  <div style="padding-left:26px; color:var(--ink-soft);">&#128196; meeting-format.md</div>
+                  <div style="padding-left:8px;">&#128193; scripts/</div>
+                  <div style="padding-left:26px; color:var(--ink-soft);">&#128196; clean-transcript.js</div>
+                  <div style="padding-left:8px;">&#128193; assets/</div>
+                  <div style="padding-left:26px; color:var(--ink-soft);">&#128196; summary-template.md</div>
+                </div>
+                <div style="font-size:11.5px; color:var(--ink-faint); margin-top:18px;">4 files &middot; 38 KB</div>
+              </div>
+              <div style="flex:1; padding:30px 34px; display:flex; flex-direction:column; min-width:0;">
+                <div style="display:flex; align-items:flex-start; gap:12px;">
+                  <div style="width:38px; height:38px; border:1px solid var(--line); border-radius:8px; display:flex; align-items:center; justify-content:center; flex:none;">&#129520;</div>
+                  <div>
+                    <div style="font-size:18px; font-weight:700;">Summarize meetings</div>
+                    <div style="font-size:12.5px; color:var(--ink-soft); margin-top:4px;">Creates concise meeting summaries with decisions, owners, and next steps.</div>
+                  </div>
+                </div>
+                <div style="margin-top:24px; border:1px solid var(--line); border-radius:8px; overflow:hidden;">
+                  <div style="display:flex; gap:10px; align-items:flex-start; padding:12px 14px; border-bottom:1px dashed var(--line);">
+                    <span style="color:#2f9e5f; font-weight:700;">&#10003;</span><div><b>Valid skill structure</b><div style="font-size:11.5px; color:var(--ink-faint); margin-top:2px;">SKILL.md is at the root of the skill folder.</div></div>
+                  </div>
+                  <div style="display:flex; gap:10px; align-items:flex-start; padding:12px 14px; border-bottom:1px dashed var(--line);">
+                    <span style="color:#2f9e5f; font-weight:700;">&#10003;</span><div><b>Name and description found</b><div style="font-size:11.5px; color:var(--ink-faint); margin-top:2px;">Read from the SKILL.md metadata.</div></div>
+                  </div>
+                  <div style="display:flex; gap:10px; align-items:flex-start; padding:12px 14px;">
+                    <span style="color:#a6480f; font-weight:700;">!</span><div><b>Review code before adding</b><div style="font-size:11.5px; color:var(--ink-faint); margin-top:2px;">This skill contains one script. Only add skills from sources you trust.</div></div>
+                  </div>
+                </div>
+                <div style="margin-top:auto; padding-top:24px; display:flex; align-items:center; gap:8px;">
+                  <span class="btn" style="cursor:pointer;" onclick="skillsShowState(0)">Back</span>
+                  <span class="spacer" style="flex:1;"></span>
+                  <span class="btn btn-primary">Add skill</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div></div></div>
+      <div class="lrt-proto-controls">
+        <button class="lrt-proto-step is-active" id="skillsStep0" type="button" onclick="skillsShowState(0)">1</button>
+        <span class="lrt-proto-step-arrow">&rarr;</span>
+        <button class="lrt-proto-step" id="skillsStep1" type="button" onclick="skillsShowState(1)">2</button>
+      </div>
+      <div class="lrt-proto-caption" id="skillsProtoCaption">Choose the common path first: a complete skill folder or ZIP.</div>
+    </div>
+
+    <div class="section-title">Why this hierarchy</div>
+    <div class="pv-twocol">
+      <div class="pv-twocol-box"><h5>One upload entry</h5><p class="hint">People choose the package they already have. Folder and ZIP are formats inside the same task, not competing product concepts.</p></div>
+      <div class="pv-twocol-box"><h5>Structure before commitment</h5><p class="hint">The expected tree is visible before selection, then the real files are visible before the skill is added.</p></div>
+      <div class="pv-twocol-box"><h5>Metadata comes from SKILL.md</h5><p class="hint">Name and description are parsed from the package instead of asking people to type the same information twice.</p></div>
+      <div class="pv-twocol-box"><h5>Manual creation is secondary</h5><p class="hint">It remains discoverable for people starting from an idea, without distracting from the standard portable format.</p></div>
     </div>
   </section>
 
@@ -3412,6 +3534,23 @@ flowchart TD
   </div>
 </div>
 
+<script>
+function skillsShowState(index) {
+  var upload = document.getElementById('skillsUploadState');
+  var review = document.getElementById('skillsReviewState');
+  var step0 = document.getElementById('skillsStep0');
+  var step1 = document.getElementById('skillsStep1');
+  var caption = document.getElementById('skillsProtoCaption');
+  if (!upload || !review) return;
+  upload.style.display = index === 0 ? 'flex' : 'none';
+  review.style.display = index === 1 ? 'flex' : 'none';
+  if (step0) step0.classList.toggle('is-active', index === 0);
+  if (step1) step1.classList.toggle('is-active', index === 1);
+  if (caption) caption.textContent = index === 0
+    ? 'Choose the common path first: a complete skill folder or ZIP.'
+    : 'Review the parsed metadata, complete file tree, and safety checks before adding the skill.';
+}
+</script>
 <script src="js/hub.js?v=20260911e"></script>
 
 <style>.mermaid-diagram{margin-block:4px}.mermaid-diagram svg{display:block;margin:0 auto;max-width:100%;height:auto}</style>
