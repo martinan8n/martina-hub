@@ -1178,7 +1178,7 @@ flowchart LR
         <div class="body">
           <span class="status">Proposal</span>
           <h3>Skills</h3>
-          <p class="desc">Make the standard folder or ZIP upload path obvious, show the skill structure before import, and keep manual creation secondary.</p>
+          <p class="desc">Make the standard folder upload path obvious, show the skill structure before import, and keep manual creation secondary.</p>
         </div>
       </a>
       <div class="screen-card backlog" id="card-multi-agent">
@@ -1209,7 +1209,7 @@ flowchart LR
     <a class="back-link" href="#/activation-rate">&larr; Improve Activation Rate</a>
     <div class="screen-head">
       <h1>Skills &mdash; upload a skill</h1>
-      <p>Proposal for the first-time add flow: lead with the portable skill package people already have, explain its structure in place, then validate it before adding. Creating a skill manually stays available as the secondary path.</p>
+      <p>Two proposals for the first-time add flow, checked against how n8n's real &quot;Add skill&quot; modal behaves today (single skill per add; references are typed in by hand, one at a time, with no auto-import from an uploaded folder; no Scripts or Assets support yet even though the underlying skill format allows both) and against how GitHub, Claude, and ChatGPT handle the same task.</p>
     </div>
 
     <div class="problem-grid">
@@ -1220,16 +1220,126 @@ flowchart LR
       </div>
       <div class="problem-card">
         <div class="eyebrow">&#9997;&#65039; Proposal</div>
-        <p><b>Upload skill</b> is the dominant action and accepts a folder or ZIP. The interface shows the expected structure before selection, then parses the name and description from <b>SKILL.md</b> and previews every included file before the user confirms. <b>Create manually</b> is a quiet secondary link.</p>
+        <p><b>Upload skill</b> is the dominant action and accepts a folder. The interface shows the expected structure before selection, then parses the name and description from <b>SKILL.md</b> and previews every included file before the user confirms. <b>Create manually</b> is a quiet secondary link.</p>
       </div>
     </div>
 
-    <div class="section-title">Proposed flow</div>
+    <div class="section-title">Proposal 1 &mdash; clean, folder-first</div>
+    <p class="hint" style="margin:-4px 0 20px; max-width:720px;">An empty state built around the two real entry points (Upload folder / Upload SKILL.md) as the clear, dominant focus &mdash; no diagram to parse first, just the actions and a one-line hint, matching how GitHub/Claude/ChatGPT keep this moment plain text only. Add manually stays secondary. Scripts and Assets are intentionally left out of this pass (see Open questions) &mdash; only <b>SKILL.md</b> and <b>References</b> are addressed here, and References now actually populates from an uploaded folder instead of requiring everything to be retyped by hand.</p>
+    <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:640px;">
+      <div class="wf-box" style="margin-bottom:0;">
+        <div class="field-label" style="margin-top:0;"><span class="label-title">Skills</span></div>
+        <p class="hint" style="margin:2px 0 12px;">How this agent handles specific tasks</p>
+        <div id="skillsCleanPillList" style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
+          <span class="skills-clean-pill" onclick="skillsCleanOpenEdit()" style="cursor:pointer; display:inline-flex; align-items:center; gap:6px; border:1px solid var(--line); border-radius:20px; padding:7px 14px 7px 12px; font-size:13px; color:var(--ink); background:var(--paper);">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v16"/><path d="M20.001 19A2 2 0 0 0 22 17V5a2 2 0 0 0-1.999-2L16 3.002A5 5 0 0 0 12 5a5 5 0 0 0-4-2H4a2 2 0 0 0-2 2v12a2 2 0 0 0 1.999 2H8a5 5 0 0 1 4 2 5 5 0 0 1 4-2z"/></svg>
+            Summarize meetings
+          </span>
+          <span id="skillsCleanAddPillBtn" onclick="skillsCleanShowEmpty(); skillsCleanSetMode('add');" style="cursor:pointer; width:26px; height:26px; border:1.5px solid var(--line); border-radius:50%; display:flex; align-items:center; justify-content:center; color:var(--ink-soft);">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+          </span>
+        </div>
+      </div>
+    </div></div></div>
+    <p style="margin:8px 0 20px; font-style:italic; font-size:12px; color:var(--hub-muted);">The agent&#39;s own Skills field &mdash; clicking the existing skill reopens the modal below as <b>Edit skill</b> (with Remove skill available); clicking + opens it as <b>Add skill</b>. <span class="src">Source: real Skills field screenshot, Sept 22.</span></p>
+
     <div class="lrt-proto-main">
-      <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:1120px; padding:0; min-height:650px;">
-        <div style="height:650px; background:rgba(31,35,43,0.24); display:flex; align-items:center; justify-content:center; padding:36px; box-sizing:border-box;">
-          <div style="width:980px; min-height:560px; background:var(--paper); border:1px solid var(--line); border-radius:12px; box-shadow:0 18px 45px rgba(31,35,43,0.16); display:flex; flex-direction:column; overflow:hidden;">
+      <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:1120px; padding:0; min-height:720px;">
+        <div style="height:720px; background:rgba(31,35,43,0.24); display:flex; align-items:center; justify-content:center; padding:36px; box-sizing:border-box;">
+          <div style="width:980px; min-height:640px; background:var(--paper); border:1px solid var(--line); border-radius:12px; box-shadow:0 18px 45px rgba(31,35,43,0.16); display:flex; flex-direction:column; overflow:hidden;">
             <div style="display:flex; align-items:center; padding:18px 22px; border-bottom:1px solid var(--line);">
+              <div id="skillsCleanModalTitle" style="font-size:19px; font-weight:600;">Add skill</div>
+              <span class="spacer" style="flex:1;"></span>
+              <span style="font-size:20px; color:var(--ink-faint); cursor:pointer;">&times;</span>
+            </div>
+
+            <div id="skillsCleanEmptyState" style="display:flex; flex:1; min-height:0; align-items:center; justify-content:center; padding:36px;">
+              <div style="display:flex; flex-direction:column; align-items:center; gap:14px; max-width:420px; text-align:center;">
+                  <div style="font-size:18px; font-weight:700;">Upload a skill</div>
+                  <div style="font-size:13px; color:var(--ink-soft); max-width:340px; line-height:1.55;">Choose a skill folder or a single <b>SKILL.md</b> file. It must contain <b>SKILL.md</b>; a <b>references/</b> folder is optional.</div>
+                  <div style="display:flex; gap:8px;">
+                    <span class="btn btn-primary" style="cursor:pointer;" onclick="skillsCleanShowForm('folder')">Upload folder</span>
+                    <span class="btn" style="cursor:pointer;" onclick="skillsCleanShowForm('file')">Upload SKILL.md</span>
+                  </div>
+                  <div style="font-size:12.5px; color:var(--ink-soft); margin-top:4px;">No skill package yet? <span style="text-decoration:underline; color:var(--ink); cursor:pointer;" onclick="skillsCleanShowForm('manual')">Add manually</span></div>
+              </div>
+            </div>
+
+            <div id="skillsCleanFormState" style="display:none; flex:1; min-height:0; flex-direction:column;">
+              <div style="display:flex; flex:1; min-height:0;">
+                <div style="width:230px; border-right:1px solid var(--line); padding:22px 20px; background:var(--canvas); box-sizing:border-box; font-size:13px; overflow-y:auto;">
+                  <div id="skillsCleanSkillRow" onclick="skillsCleanShowSkillFields()" style="color:var(--ink); display:flex; align-items:center; gap:8px; cursor:pointer; padding:6px 8px; margin:-6px -8px; border-radius:6px;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex:none;"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"/><path d="M14 2v5a1 1 0 0 0 1 1h5"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg> SKILL.md</div>
+                  <div style="margin-top:20px; display:flex; align-items:center; justify-content:space-between;">
+                    <span style="color:var(--ink-soft);">References</span>
+                    <span onclick="skillsCleanAddReference()" style="cursor:pointer; width:22px; height:22px; border:1.5px solid var(--line); border-radius:6px; display:flex; align-items:center; justify-content:center; color:var(--ink-soft);"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg></span>
+                  </div>
+                  <div id="skillsCleanRefList" style="margin-top:8px; color:var(--ink-soft); display:flex; flex-direction:column; gap:2px;">no files</div>
+                </div>
+                <div style="flex:1; padding:26px 32px 20px; overflow-y:auto; box-sizing:border-box;">
+                  <div id="skillsCleanMainFields">
+                    <div class="wf-box" style="margin-bottom:0;">
+                      <div class="field-label" style="margin-top:0;"><span class="label-title">Name <span class="required-mark">*</span></span></div>
+                      <div id="skillsCleanName" style="border:1.5px solid var(--line); border-radius:8px; padding:9px 12px; font-size:14.5px; color:var(--ink-faint);">Summarize meetings</div>
+
+                      <div class="field-label"><span class="label-title">When to use this skill <span class="required-mark">*</span></span></div>
+                      <div id="skillsCleanDesc" style="border:1.5px solid var(--line); border-radius:8px; padding:9px 12px; font-size:14.5px; color:var(--ink-faint);">Use when summarizing meetings or notes</div>
+
+                      <div class="field-label"><span class="label-title">What the skill does <span class="required-mark">*</span></span></div>
+                      <div style="position:relative;">
+                        <div id="skillsCleanInstructions" class="textarea placeholder-text" style="border-radius:8px; min-height:110px;">Describe what the agent should do, step by step&hellip;</div>
+                        <div style="border:1.5px solid var(--ink); border-top:none; border-radius:0 0 8px 8px; padding:5px 12px; font-size:11px; color:var(--ink-faint); text-align:right;"><span id="skillsCleanCharCount">0</span> / 65,536 characters</div>
+                      </div>
+
+                      <div class="field-label"><span class="label-title">Allowed tools</span></div>
+                      <div class="cap-row" style="border-bottom:none; padding:2px;">
+                        <span class="cap-add" style="cursor:pointer;">+ Add tool</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div id="skillsCleanRefEditor" style="display:none;">
+                    <div class="wf-box" style="margin-bottom:0;">
+                      <div class="field-label" style="margin-top:0;"><span class="label-title">File name <span class="required-mark">*</span></span></div>
+                      <input id="skillsCleanRefFileName" type="text" value="reference" oninput="skillsCleanUpdateActiveReference()" style="width:100%; border:1.5px solid var(--line); border-radius:8px; padding:9px 12px; font-size:14.5px; color:var(--ink); font-family:inherit; box-sizing:border-box;">
+
+                      <div class="field-label"><span class="label-title">Reference content <span class="required-mark">*</span></span></div>
+                      <textarea id="skillsCleanRefContent" placeholder="Enter reference content&hellip;" oninput="skillsCleanUpdateActiveReference(); document.getElementById('skillsCleanRefCharCount').textContent = this.value.length;" style="width:100%; min-height:160px; border:1.5px solid var(--ink); border-radius:8px; padding:12px; font-size:14.5px; font-family:inherit; color:var(--ink); box-sizing:border-box; resize:vertical;"></textarea>
+                      <div style="font-size:11px; color:var(--ink-faint); text-align:right; margin-top:4px;"><span id="skillsCleanRefCharCount">0</span> / 65,536 characters</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div style="border-top:1px solid var(--line); padding:16px 32px; display:flex; align-items:center; gap:8px;">
+                <span id="skillsCleanRemoveBtn" class="btn" style="display:none; cursor:pointer; align-items:center; gap:6px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 11v6"/><path d="M14 11v6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg> Remove skill</span>
+                <span class="spacer" style="flex:1;"></span>
+                <span class="btn btn-primary" style="cursor:pointer;" onclick="skillsCleanSaveSkill()">Save skill</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div></div></div>
+      <div class="lrt-proto-caption" id="skillsCleanCaption">One screen, two dominant entry points, one quiet fallback &mdash; no separate review step, no branching.</div>
+    </div>
+
+    <div class="open-questions">
+      <h4>Open questions</h4>
+      <ol>
+        <li id="skills-clean-oq-1"><span class="ann-num">1</span><span class="ann-body"><b>Scripts and Assets are deliberately out of scope here.</b> The real skill format supports both, and n8n's current UI supports neither &mdash; left out of this pass rather than guessed at. If they're added later, the same &quot;auto-populate from the uploaded folder&quot; treatment given to References here should probably extend to them too.</span></li>
+        <li id="skills-clean-oq-2"><span class="ann-num">2</span><span class="ann-body">This assumes a folder upload <i>can</i> be read well enough to auto-populate References from real files &mdash; not confirmed today (the one real test so far came back empty, though with a folder-naming caveat: <code>reference/</code> vs the spec's <code>references/</code>). Needs a clean test with a correctly-named folder before treating this as buildable as described.</span></li>
+        <li id="skills-clean-oq-3"><span class="ann-num">3</span><span class="ann-body">Whether the loaded skill's own name/title should be shown anywhere in this left panel (e.g. above the tree) is deliberately left undecided for now &mdash; not resolved.</span></li>
+      </ol>
+    </div>
+
+    <div class="section-title" style="margin-top:32px;">Proposal 2 &mdash; staged upload with review</div>
+    <p class="hint" style="margin:-4px 0 20px; max-width:720px;">A more cautious alternative: show what was found before committing, including a real validation/trust check &mdash; useful given a skill can bundle a script that will actually execute. Heavier than Proposal 1, but surfaces problems (missing metadata, untrusted code) before the skill is added rather than after.</p>
+    <div class="lrt-proto-main">
+      <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:1120px; padding:0; min-height:800px;">
+        <div style="height:800px; background:rgba(31,35,43,0.24); display:flex; align-items:center; justify-content:center; padding:36px; box-sizing:border-box;">
+          <div style="width:980px; min-height:720px; background:var(--paper); border:1px solid var(--line); border-radius:12px; box-shadow:0 18px 45px rgba(31,35,43,0.16); display:flex; flex-direction:column; overflow:hidden;">
+            <div style="display:flex; align-items:center; padding:18px 22px; border-bottom:1px solid var(--line);">
+              <span id="skillsHeaderBack" onclick="skillsShowState(0)" style="display:none; align-items:center; justify-content:center; width:26px; height:26px; margin-right:4px; border-radius:6px; color:var(--ink-soft); cursor:pointer; flex:none;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 6-6 6 6 6"/></svg>
+              </span>
               <div>
                 <div style="font-size:19px; font-weight:700;">Add skill</div>
                 <div style="font-size:12.5px; color:var(--ink-faint); margin-top:3px;">Add a reusable workflow to this agent.</div>
@@ -1245,13 +1355,12 @@ flowchart LR
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 7.5h7l2 2h9v9.5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/><path d="M3 7.5V5a2 2 0 0 1 2-2h5l2 2h7a2 2 0 0 1 2 2v2.5"/></svg>
                   </div>
                   <div style="font-size:18px; font-weight:700;">Upload a skill</div>
-                  <div style="font-size:13px; color:var(--ink-soft); max-width:430px; margin:7px auto 18px; line-height:1.55;">Choose a skill folder or a .zip. It must contain <b>SKILL.md</b>; references, scripts, and assets are optional.</div>
+                  <div style="font-size:13px; color:var(--ink-soft); max-width:430px; margin:7px auto 18px; line-height:1.55;">Choose a skill folder. It must contain <b>SKILL.md</b>; references, scripts, and assets are optional.</div>
                   <div style="display:flex; gap:8px; justify-content:center; flex-wrap:wrap;">
                     <span class="btn btn-primary" style="cursor:pointer;" onclick="skillsShowState(1)">Choose folder</span>
-                    <span class="btn" style="cursor:pointer;" onclick="skillsShowState(1)">Choose .zip</span>
                   </div>
                 </div>
-                <div style="text-align:center; margin-top:18px; font-size:12.5px; color:var(--ink-soft);">No skill package yet? <span style="text-decoration:underline; color:var(--ink); cursor:pointer;">Create manually</span></div>
+                <div style="text-align:center; margin-top:18px; font-size:12.5px; color:var(--ink-soft);">No skill package yet? <span style="text-decoration:underline; color:var(--ink); cursor:pointer;" onclick="skillsShowState(2)">Create manually</span></div>
               </div>
               <div style="width:310px; border-left:1px solid var(--line); padding:34px 28px; background:var(--canvas); box-sizing:border-box;">
                 <div style="font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:var(--ink-soft);">Skill structure</div>
@@ -1306,23 +1415,80 @@ flowchart LR
                 </div>
               </div>
             </div>
+
+            <div id="skillsManualState" style="display:none; flex:1; min-height:0; overflow-y:auto;">
+              <div style="padding:26px 40px 20px; display:flex; flex-direction:column; min-height:100%; box-sizing:border-box;">
+                <div class="wf-box" style="margin-bottom:0;">
+                  <div class="field-label" style="margin-top:0;"><span class="label-title">Name <span class="required-mark">*</span></span></div>
+                  <div style="border:1.5px solid var(--line); border-radius:8px; padding:9px 12px; font-size:14.5px; color:var(--ink-faint);">Summarize meetings</div>
+
+                  <div class="field-label"><span class="label-title">Description <span class="required-mark">*</span></span></div>
+                  <div style="border:1.5px solid var(--line); border-radius:8px; padding:9px 12px; font-size:14.5px; color:var(--ink-faint);">Use when summarizing meetings or notes</div>
+
+                  <div class="field-label"><span class="label-title">Instructions <span class="required-mark">*</span></span></div>
+                  <div style="position:relative;">
+                    <div class="toolbar is-visible" style="position:static; box-shadow:none;">
+                      <span class="tdrop">T &#9662;</span>
+                      <button><b>B</b></button>
+                      <button><i>I</i></button>
+                      <button><s>S</s></button>
+                      <button><u>U</u></button>
+                      <span class="sep"></span>
+                      <button>&#10078;</button>
+                      <button>&#128712;</button>
+                      <button>&#128279;</button>
+                      <span class="sep"></span>
+                      <button>1.</button>
+                      <button>&#8226;</button>
+                      <button>&#9745;</button>
+                      <span class="sep"></span>
+                      <button>&#8634;</button>
+                      <button>&#8635;</button>
+                      <span class="sep"></span>
+                      <button>&#9636;</button>
+                    </div>
+                    <div class="textarea placeholder-text" style="border-radius:8px 8px 0 0; min-height:120px;">Describe what the agent should do, step by step&hellip;</div>
+                    <div style="border:1.5px solid var(--ink); border-top:none; border-radius:0 0 8px 8px; padding:5px 12px; font-size:11px; color:var(--ink-faint); text-align:right;">0 / 65,536 characters</div>
+                  </div>
+
+                  <div class="field-label"><span class="label-title">Allowed tools</span></div>
+                  <div class="cap-row" style="border-bottom:none; padding:2px;">
+                    <span class="cap-add" style="cursor:pointer;">+ Add tool</span>
+                  </div>
+                </div>
+                <div style="margin-top:auto; padding-top:20px; display:flex; align-items:center; gap:8px;">
+                  <span class="btn" style="cursor:pointer;" onclick="skillsShowState(0)">Back</span>
+                  <span class="spacer" style="flex:1;"></span>
+                  <span class="btn btn-primary">Add skill</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div></div></div>
       <div class="lrt-proto-controls">
-        <button class="lrt-proto-step is-active" id="skillsStep0" type="button" onclick="skillsShowState(0)">1</button>
+        <button class="lrt-proto-step is-active" id="skillsStep0" type="button" onclick="skillsShowState(0)" style="width:auto; border-radius:14px; padding:0 14px;">Upload</button>
         <span class="lrt-proto-step-arrow">&rarr;</span>
-        <button class="lrt-proto-step" id="skillsStep1" type="button" onclick="skillsShowState(1)">2</button>
+        <button class="lrt-proto-step" id="skillsStep1" type="button" onclick="skillsShowState(1)" style="width:auto; border-radius:14px; padding:0 14px;">Review</button>
+        <span class="lrt-proto-step-arrow" style="opacity:.4;">&middot;&middot;&middot;</span>
+        <button class="lrt-proto-step" id="skillsStep2" type="button" onclick="skillsShowState(2)" style="width:auto; border-radius:14px; padding:0 14px;">Manual</button>
       </div>
-      <div class="lrt-proto-caption" id="skillsProtoCaption">Choose the common path first: a complete skill folder or ZIP.</div>
+      <div class="lrt-proto-caption" id="skillsProtoCaption">Start here. Choosing a folder on this screen leads to <b>Review</b>; clicking &quot;Create manually&quot; instead leads to <b>Manual</b> &mdash; the two are alternatives, not a sequence.</div>
     </div>
 
     <div class="section-title">Why this hierarchy</div>
     <div class="pv-twocol">
-      <div class="pv-twocol-box"><h5>One upload entry</h5><p class="hint">People choose the package they already have. Folder and ZIP are formats inside the same task, not competing product concepts.</p></div>
+      <div class="pv-twocol-box"><h5>One upload entry</h5><p class="hint">A single, standard folder-upload action &mdash; not a menu of formats to choose between first.</p></div>
       <div class="pv-twocol-box"><h5>Structure before commitment</h5><p class="hint">The expected tree is visible before selection, then the real files are visible before the skill is added.</p></div>
       <div class="pv-twocol-box"><h5>Metadata comes from SKILL.md</h5><p class="hint">Name and description are parsed from the package instead of asking people to type the same information twice.</p></div>
       <div class="pv-twocol-box"><h5>Manual creation is secondary</h5><p class="hint">It remains discoverable for people starting from an idea, without distracting from the standard portable format.</p></div>
+    </div>
+
+    <div class="open-questions">
+      <h4>Open questions</h4>
+      <ol>
+        <li id="skills-oq-1"><span class="ann-num">1</span><span class="ann-body"><b>&quot;Create manually&quot; isn&#39;t actually designed.</b> It reads as a live secondary link in this proposal, but nothing is behind it yet &mdash; most likely it should drop into the existing real Add-skill form (Name / Description / Allowed tools / Instructions), but that hand-off, and whether that form changes at all once skills can also arrive pre-packaged, isn&#39;t stated anywhere. Not resolved.</span></li>
+      </ol>
     </div>
   </section>
 
@@ -1382,7 +1548,7 @@ flowchart LR
             </div>
           </div>
           <div style="padding:20px 28px; flex:1;">
-            <div class="empty-box is-hero">
+            <div class="empty-box is-hero" style="border:none;">
               <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2v3"/><circle cx="12" cy="6" r="1.2" fill="currentColor" stroke="none"/><rect x="4" y="9" width="16" height="12" rx="3"/></svg>
               <div class="empty-title">Create your first agent</div>
               <div class="empty-sub">Agents automate tasks and answer questions using your connected tools and data</div>
@@ -1390,25 +1556,33 @@ flowchart LR
               <div class="template-section">
                 <div class="template-section-label">Or start from a template</div>
                 <div class="template-grid">
-                  <div class="template-card">
-                    <div class="template-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="5" cy="6" r="2.5"/><circle cx="19" cy="6" r="2.5"/><circle cx="12" cy="18" r="2.5"/><path d="M7 7.5 10 16M17 7.5 14 16"/></svg></div>
-                    <div class="template-title">Qualify new leads</div>
-                    <div class="template-desc">Scores and routes new leads from your CRM.</div>
+                  <div class="template-card is-compact">
+                    <div class="template-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18h-5"/><path d="M18 14h-8"/><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-4 0v-9a2 2 0 0 1 2-2h2"/><rect width="8" height="4" x="10" y="6" rx="1"/></svg></div>
+                    <div class="template-text">
+                      <div class="template-title">Morning news brief</div>
+                      <div class="template-desc">Sends a daily summary of today&#39;s top headlines.</div>
+                    </div>
                   </div>
-                  <div class="template-card">
-                    <div class="template-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></div>
-                    <div class="template-title">Triage support tickets</div>
-                    <div class="template-desc">Sorts and tags incoming support tickets.</div>
-                  </div>
-                  <div class="template-card">
+                  <div class="template-card is-compact">
                     <div class="template-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4Z"/></svg></div>
-                    <div class="template-title">Process incoming emails</div>
-                    <div class="template-desc">Reads new emails and updates your calendar or sheet.</div>
+                    <div class="template-text">
+                      <div class="template-title">Process incoming emails</div>
+                      <div class="template-desc">Reads new emails and updates your calendar or sheet.</div>
+                    </div>
                   </div>
-                  <div class="template-card">
-                    <div class="template-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg></div>
-                    <div class="template-title">Enrich spreadsheet data</div>
-                    <div class="template-desc">Runs new spreadsheet rows through AI on a schedule.</div>
+                  <div class="template-card is-compact">
+                    <div class="template-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="5" cy="6" r="2.5"/><circle cx="19" cy="6" r="2.5"/><circle cx="12" cy="18" r="2.5"/><path d="M7 7.5 10 16M17 7.5 14 16"/></svg></div>
+                    <div class="template-text">
+                      <div class="template-title">Qualify new leads</div>
+                      <div class="template-desc">Scores and routes new leads from your CRM.</div>
+                    </div>
+                  </div>
+                  <div class="template-card is-compact">
+                    <div class="template-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" x2="19" y1="8" y2="14"/><line x1="22" x2="16" y1="11" y2="11"/></svg></div>
+                    <div class="template-text">
+                      <div class="template-title">LinkedIn outreach</div>
+                      <div class="template-desc">Drafts and sends personalized connection messages.</div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1447,10 +1621,10 @@ flowchart LR
           </div>
           <div style="position:absolute; top:58px; right:28px; width:270px; background:var(--paper); border:1.5px solid var(--ink); border-radius:8px; box-shadow:3px 4px 0 rgba(26,28,30,0.14); padding:6px 10px;">
             <div style="padding:8px 4px 6px; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.03em; color:var(--ink-faint);">Start from a template</div>
-            <div class="pv-dropdown-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="5" cy="6" r="2.5"/><circle cx="19" cy="6" r="2.5"/><circle cx="12" cy="18" r="2.5"/><path d="M7 7.5 10 16M17 7.5 14 16"/></svg> Qualify new leads</div>
-            <div class="pv-dropdown-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg> Triage support tickets</div>
+            <div class="pv-dropdown-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18h-5"/><path d="M18 14h-8"/><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-4 0v-9a2 2 0 0 1 2-2h2"/><rect width="8" height="4" x="10" y="6" rx="1"/></svg> Morning news brief</div>
             <div class="pv-dropdown-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4Z"/></svg> Process incoming emails</div>
-            <div class="pv-dropdown-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg> Enrich spreadsheet data</div>
+            <div class="pv-dropdown-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="5" cy="6" r="2.5"/><circle cx="19" cy="6" r="2.5"/><circle cx="12" cy="18" r="2.5"/><path d="M7 7.5 10 16M17 7.5 14 16"/></svg> Qualify new leads</div>
+            <div class="pv-dropdown-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" x2="19" y1="8" y2="14"/><line x1="22" x2="16" y1="11" y2="11"/></svg> LinkedIn outreach</div>
             <div class="pv-dropdown-item" style="border-top:1.5px solid var(--ink); margin-top:4px; padding-top:11px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg> Create blank</div>
           </div>
         </div>
@@ -3535,20 +3709,207 @@ flowchart TD
 </div>
 
 <script>
+var skillsCleanReferences = [];
+var skillsCleanActiveRefIndex = null;
+
+function skillsCleanShowForm(source) {
+  var empty = document.getElementById('skillsCleanEmptyState');
+  var form = document.getElementById('skillsCleanFormState');
+  var caption = document.getElementById('skillsCleanCaption');
+  var nameEl = document.getElementById('skillsCleanName');
+  var descEl = document.getElementById('skillsCleanDesc');
+  var instrEl = document.getElementById('skillsCleanInstructions');
+  var charCount = document.getElementById('skillsCleanCharCount');
+  if (!empty || !form) return;
+  empty.style.display = 'none';
+  form.style.display = 'flex';
+
+  var instrText = 'Read the meeting transcript or notes provided. Identify the key decisions made, who owns each follow-up action, and what the concrete next steps are. Write a concise summary organized under three headings: Decisions, Owners, Next steps. Keep it under 200 words.';
+
+  if (source === 'folder' || source === 'file') {
+    nameEl.textContent = 'Summarize meetings';
+    nameEl.style.color = 'var(--ink)';
+    descEl.textContent = 'Use when summarizing meetings or notes';
+    descEl.style.color = 'var(--ink)';
+    instrEl.textContent = instrText;
+    instrEl.classList.remove('placeholder-text');
+    instrEl.style.color = 'var(--ink)';
+    instrEl.style.fontStyle = 'normal';
+    if (charCount) charCount.textContent = instrText.length;
+  } else {
+    nameEl.textContent = 'Summarize meetings';
+    nameEl.style.color = 'var(--ink-faint)';
+    descEl.textContent = 'Use when summarizing meetings or notes';
+    descEl.style.color = 'var(--ink-faint)';
+    instrEl.textContent = 'Describe what the agent should do, step by step…';
+    instrEl.classList.add('placeholder-text');
+    instrEl.style.color = '';
+    instrEl.style.fontStyle = '';
+    if (charCount) charCount.textContent = 0;
+  }
+
+  if (source === 'folder') {
+    skillsCleanReferences = [
+      { filename: 'meeting-format.md', content: 'Standard section order for a meeting summary: Decisions, Owners, Next steps.' },
+      { filename: 'tone-guide.md', content: 'Keep summaries neutral and factual. No editorializing on how a meeting went.' }
+    ];
+    if (caption) caption.innerHTML = 'Uploaded a <b>folder</b> &mdash; everything is already here: Name, When to use it &amp; What it does are filled in from SKILL.md, and both files found in references/ appear on the left automatically.';
+  } else if (source === 'file') {
+    skillsCleanReferences = [];
+    if (caption) caption.innerHTML = 'Uploaded a single <b>SKILL.md</b> file &mdash; Name, When to use it &amp; What it does are filled in from it already. No references/ folder exists to import from.';
+  } else {
+    skillsCleanReferences = [];
+    if (caption) caption.innerHTML = 'Started from &quot;Add manually&quot; &mdash; same form, nothing pre-filled. Add references one at a time with the + above if needed.';
+  }
+
+  skillsCleanActiveRefIndex = null;
+  skillsCleanShowSkillFields();
+  skillsCleanSetMode('add');
+}
+window.skillsCleanShowForm = skillsCleanShowForm;
+
+function skillsCleanSetMode(mode) {
+  var title = document.getElementById('skillsCleanModalTitle');
+  var removeBtn = document.getElementById('skillsCleanRemoveBtn');
+  if (title) title.textContent = mode === 'edit' ? 'Edit skill' : 'Add skill';
+  if (removeBtn) removeBtn.style.display = mode === 'edit' ? 'inline-flex' : 'none';
+}
+window.skillsCleanSetMode = skillsCleanSetMode;
+
+function skillsCleanOpenEdit() {
+  skillsCleanShowForm('folder');
+  skillsCleanSetMode('edit');
+}
+window.skillsCleanOpenEdit = skillsCleanOpenEdit;
+
+function skillsCleanSaveSkill() {
+  var wasAdd = document.getElementById('skillsCleanModalTitle').textContent !== 'Edit skill';
+  if (wasAdd) {
+    var nameEl = document.getElementById('skillsCleanName');
+    var name = (nameEl && nameEl.textContent.trim()) || 'New skill';
+    var pillList = document.getElementById('skillsCleanPillList');
+    var addBtn = document.getElementById('skillsCleanAddPillBtn');
+    if (pillList && addBtn) {
+      var pill = document.createElement('span');
+      pill.className = 'skills-clean-pill';
+      pill.setAttribute('onclick', 'skillsCleanOpenEdit()');
+      pill.style.cssText = 'cursor:pointer; display:inline-flex; align-items:center; gap:6px; border:1px solid var(--line); border-radius:20px; padding:7px 14px 7px 12px; font-size:13px; color:var(--ink); background:var(--paper);';
+      pill.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v16"/><path d="M20.001 19A2 2 0 0 0 22 17V5a2 2 0 0 0-1.999-2L16 3.002A5 5 0 0 0 12 5a5 5 0 0 0-4-2H4a2 2 0 0 0-2 2v12a2 2 0 0 0 1.999 2H8a5 5 0 0 1 4 2 5 5 0 0 1 4-2z"/></svg> ' + name;
+      pillList.insertBefore(pill, addBtn);
+    }
+  }
+  skillsCleanSetMode('edit');
+}
+window.skillsCleanSaveSkill = skillsCleanSaveSkill;
+
+function skillsCleanShowEmpty() {
+  var empty = document.getElementById('skillsCleanEmptyState');
+  var form = document.getElementById('skillsCleanFormState');
+  var caption = document.getElementById('skillsCleanCaption');
+  if (!empty || !form) return;
+  empty.style.display = 'flex';
+  form.style.display = 'none';
+  if (caption) caption.innerHTML = 'One screen, two dominant entry points, one quiet fallback &mdash; no separate review step, no branching.';
+}
+window.skillsCleanShowEmpty = skillsCleanShowEmpty;
+
+function skillsCleanRefRow(filename, index, isActive) {
+  var icon = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex:none;"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"/><path d="M14 2v5a1 1 0 0 0 1 1h5"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>';
+  var bg = isActive ? 'var(--active-nav)' : 'transparent';
+  var color = isActive ? 'var(--active-nav-ink)' : 'var(--ink-soft)';
+  return '<div onclick="skillsCleanShowReference(' + index + ')" style="display:flex; align-items:center; gap:8px; cursor:pointer; min-width:0; padding:6px 8px; margin:0 -8px; border-radius:6px; background:' + bg + '; color:' + color + ';">' + icon +
+    '<span style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">references/' + filename + '</span></div>';
+}
+window.skillsCleanRefRow = skillsCleanRefRow;
+
+function skillsCleanRenderSidebar() {
+  var skillRow = document.getElementById('skillsCleanSkillRow');
+  var refList = document.getElementById('skillsCleanRefList');
+  if (!skillRow || !refList) return;
+
+  var skillActive = skillsCleanActiveRefIndex === null;
+  skillRow.style.background = skillActive ? 'var(--active-nav)' : 'transparent';
+  skillRow.style.color = skillActive ? 'var(--active-nav-ink)' : 'var(--ink)';
+
+  if (!skillsCleanReferences.length) {
+    refList.innerHTML = 'no files';
+    return;
+  }
+  refList.innerHTML = skillsCleanReferences.map(function (ref, i) {
+    return skillsCleanRefRow(ref.filename || 'reference', i, i === skillsCleanActiveRefIndex);
+  }).join('');
+}
+window.skillsCleanRenderSidebar = skillsCleanRenderSidebar;
+
+function skillsCleanShowSkillFields() {
+  var mainFields = document.getElementById('skillsCleanMainFields');
+  var refEditor = document.getElementById('skillsCleanRefEditor');
+  if (!mainFields || !refEditor) return;
+  skillsCleanActiveRefIndex = null;
+  mainFields.style.display = 'block';
+  refEditor.style.display = 'none';
+  skillsCleanRenderSidebar();
+}
+window.skillsCleanShowSkillFields = skillsCleanShowSkillFields;
+
+function skillsCleanShowReference(index) {
+  var mainFields = document.getElementById('skillsCleanMainFields');
+  var refEditor = document.getElementById('skillsCleanRefEditor');
+  var fileNameInput = document.getElementById('skillsCleanRefFileName');
+  var contentInput = document.getElementById('skillsCleanRefContent');
+  var charCount = document.getElementById('skillsCleanRefCharCount');
+  var ref = skillsCleanReferences[index];
+  if (!mainFields || !refEditor || !ref) return;
+  skillsCleanActiveRefIndex = index;
+  mainFields.style.display = 'none';
+  refEditor.style.display = 'block';
+  fileNameInput.value = (ref.filename || 'reference.md').replace(/\.md$/, '');
+  contentInput.value = ref.content || '';
+  if (charCount) charCount.textContent = contentInput.value.length;
+  skillsCleanRenderSidebar();
+}
+window.skillsCleanShowReference = skillsCleanShowReference;
+
+function skillsCleanUpdateActiveReference() {
+  if (skillsCleanActiveRefIndex === null) return;
+  var fileNameInput = document.getElementById('skillsCleanRefFileName');
+  var contentInput = document.getElementById('skillsCleanRefContent');
+  var ref = skillsCleanReferences[skillsCleanActiveRefIndex];
+  if (!ref) return;
+  ref.filename = (fileNameInput.value.trim() || 'reference') + '.md';
+  ref.content = contentInput.value;
+  skillsCleanRenderSidebar();
+}
+window.skillsCleanUpdateActiveReference = skillsCleanUpdateActiveReference;
+
+function skillsCleanAddReference() {
+  skillsCleanReferences.push({ filename: 'reference.md', content: '' });
+  skillsCleanRenderSidebar();
+}
+window.skillsCleanAddReference = skillsCleanAddReference;
+
 function skillsShowState(index) {
   var upload = document.getElementById('skillsUploadState');
   var review = document.getElementById('skillsReviewState');
+  var manual = document.getElementById('skillsManualState');
   var step0 = document.getElementById('skillsStep0');
   var step1 = document.getElementById('skillsStep1');
+  var step2 = document.getElementById('skillsStep2');
   var caption = document.getElementById('skillsProtoCaption');
-  if (!upload || !review) return;
+  var headerBack = document.getElementById('skillsHeaderBack');
+  if (!upload || !review || !manual) return;
   upload.style.display = index === 0 ? 'flex' : 'none';
   review.style.display = index === 1 ? 'flex' : 'none';
+  manual.style.display = index === 2 ? 'flex' : 'none';
+  if (headerBack) headerBack.style.display = index === 0 ? 'none' : 'flex';
   if (step0) step0.classList.toggle('is-active', index === 0);
   if (step1) step1.classList.toggle('is-active', index === 1);
-  if (caption) caption.textContent = index === 0
-    ? 'Choose the common path first: a complete skill folder or ZIP.'
-    : 'Review the parsed metadata, complete file tree, and safety checks before adding the skill.';
+  if (step2) step2.classList.toggle('is-active', index === 2);
+  if (caption) caption.innerHTML = index === 0
+    ? 'Start here. Choosing a folder on this screen leads to <b>Review</b>; clicking &quot;Create manually&quot; instead leads to <b>Manual</b> &mdash; the two are alternatives, not a sequence.'
+    : index === 1
+    ? 'Appears after choosing a folder on <b>Upload</b>. Review the parsed metadata, complete file tree, and safety checks before adding the skill.'
+    : 'Appears after clicking &quot;Create manually&quot; on <b>Upload</b>. Same fields as the real Add-skill form today &mdash; the open question is whether this form itself should change once skills can also arrive pre-packaged (see Open questions).';
 }
 </script>
 <script src="js/hub.js?v=20260911e"></script>

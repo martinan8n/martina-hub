@@ -1,0 +1,289 @@
+<!doctype html><html><head>
+<meta charset="utf8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Agents list</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Patrick+Hand&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles/hub.css">
+</head>
+<body data-default-route="agents-list">
+
+<div class="shell">
+
+  <!-- ================= AGENTS LIST ================= -->
+  <section data-route="agents-list">
+    <a class="back-link" href="index.html#/home">&larr; Workstreams</a>
+    <div class="hero">
+      <div>
+        <span class="kicker">Workstream &middot; New</span>
+        <h1>Agents list</h1>
+        <p>Today the Agents list is just a table of names and dates &mdash; you have to open an agent to learn anything about it. Four Linear tickets ask for more visibility right in the list; this workstream figures out how they fit together rather than bolting each on separately.</p>
+      </div>
+    </div>
+
+    <div class="problem-grid">
+      <div class="problem-card">
+        <div class="eyebrow">&#129513; Problem</div>
+        <p>You can&#39;t tell from the list whether an agent last ran successfully, never ran at all, or is just an empty shell someone created and forgot about. Every one of those questions requires opening the agent. <b>AGENT-798</b> (duplicate in the row menu, mirroring the Workflows pattern) already shipped &mdash; the rest are open.</p>
+      </div>
+      <div class="problem-card">
+        <div class="eyebrow">&#129514; Hypothesis</div>
+        <p>Surfacing last-run time (<b>AGENT-901</b>), a visual flag for empty/throwaway agents (<b>AGENT-906</b>), a Description item in the row menu (<b>AGENT-948</b>), and a failed-run indicator (<b>AGENT-979</b>, backlog) lets people triage their agents from the list alone. Grouping the two &quot;needs attention&quot; signals (failed runs, empty agents) into a small summary above the list &mdash; rather than making people scan every row for them &mdash; is the one piece none of the four tickets asked for on their own.</p>
+        <span class="src">Source: Linear &mdash; AGENT-798, AGENT-901, AGENT-906, AGENT-948, AGENT-979</span>
+      </div>
+    </div>
+
+    <div class="section-title">Screens</div>
+    <div class="card-grid">
+      <a class="screen-card" href="#/agents-list-dashboard">
+        <div class="thumb">&#128203;</div>
+        <div class="body">
+          <span class="status">In progress</span>
+          <h3>Mini dashboard + enriched list</h3>
+          <p class="desc">Current state vs. a proposed version with an attention summary on top and last-run/empty/failed signals built into the rows and row menu.</p>
+        </div>
+      </a>
+      <div class="screen-card placeholder">More screens land here as this develops</div>
+    </div>
+  </section>
+
+  <!-- ================= AGENTS LIST: MINI DASHBOARD + ENRICHED LIST ================= -->
+  <section data-route="agents-list-dashboard">
+    <a class="back-link" href="#/agents-list">&larr; Agents list</a>
+    <div class="screen-head">
+      <h1>Mini dashboard + enriched list</h1>
+      <p>Not a screenshot recreation &mdash; built directly from what the four tickets describe (the existing name/last-updated/created columns, and the Workflows row-menu pattern AGENT-948 asks to mirror). Flag anything that doesn&#39;t match what&#39;s actually live.</p>
+    </div>
+
+    <div class="section-title">Current state</div>
+    <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:900px;">
+      <div class="pv-app" style="min-height:420px;">
+        <div class="pv-skeleton-navbar" style="height:auto;">NAV</div>
+        <div class="pv-main" style="display:flex; flex-direction:column;">
+          <div style="padding:20px 28px 0;">
+            <div style="display:flex; align-items:flex-start; justify-content:space-between;">
+              <div>
+                <h2 style="margin:0; font-size:20px;">Personal</h2>
+                <p style="margin:4px 0 0; font-size:13px; color:var(--ink-faint);">Workflows, credentials and data tables owned by you</p>
+              </div>
+              <span class="btn btn-primary">Create agent <span class="chev">&#9662;</span></span>
+            </div>
+            <div class="tabbar" style="margin-top:18px; margin-bottom:0;">
+              <span class="tab">Workflows</span><span class="tab active">Agents <span class="pill" style="margin-left:6px;">Preview</span></span><span class="tab">Credentials</span><span class="tab">Executions</span><span class="tab">Variables</span><span class="tab">Data tables</span>
+            </div>
+          </div>
+          <div style="padding:0 28px 20px;">
+            <div class="agents-toolbar-row">
+              <span class="agents-search-input"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>Search agents&hellip;</span>
+              <span class="agents-sort-select">Sort by name (A-Z) <span class="chev" style="border:none; margin:0; padding:0;">&#9662;</span></span>
+            </div>
+            <div class="agents-card-list">
+              <div class="agents-card-row">
+                <div>
+                  <div class="agents-card-name">Weekly Competitor Digest</div>
+                  <div class="agents-card-meta">Last updated 17 hours ago &middot; Created 1 September <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.4 11.05 12.2 20a5 5 0 0 1-7.1-7l9-9a3.5 3.5 0 0 1 5 5l-9 9a2 2 0 1 1-2.8-2.8l8.3-8.2"/></svg></div>
+                </div>
+                <div class="agents-card-actions">
+                  <span class="agents-status-pill"><span class="dot"></span>Published</span>
+                  <span class="agents-card-iconbtn"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg></span>
+                  <span class="agents-card-iconbtn"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" stroke="none"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></svg></span>
+                </div>
+              </div>
+              <div class="agents-card-row">
+                <div>
+                  <div class="agents-card-name">Onboarding Assistant</div>
+                  <div class="agents-card-meta">Last updated 3 days ago &middot; Created 28 August <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.4 11.05 12.2 20a5 5 0 0 1-7.1-7l9-9a3.5 3.5 0 0 1 5 5l-9 9a2 2 0 1 1-2.8-2.8l8.3-8.2"/></svg></div>
+                </div>
+                <div class="agents-card-actions">
+                  <span class="agents-status-pill"><span class="dot"></span>Published</span>
+                  <span class="agents-card-iconbtn"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg></span>
+                  <span class="agents-card-iconbtn"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" stroke="none"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></svg></span>
+                </div>
+              </div>
+              <div class="agents-card-row">
+                <div>
+                  <div class="agents-card-name">New Agent</div>
+                  <div class="agents-card-meta">Last updated 2 days ago &middot; Created 20 September <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.4 11.05 12.2 20a5 5 0 0 1-7.1-7l9-9a3.5 3.5 0 0 1 5 5l-9 9a2 2 0 1 1-2.8-2.8l8.3-8.2"/></svg></div>
+                </div>
+                <div class="agents-card-actions">
+                  <span class="agents-status-pill"><span class="dot"></span>Published</span>
+                  <span class="agents-card-iconbtn"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg></span>
+                  <span class="agents-card-iconbtn"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" stroke="none"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></svg></span>
+                </div>
+              </div>
+              <div class="agents-card-row">
+                <div>
+                  <div class="agents-card-name">Invoice Reconciler</div>
+                  <div class="agents-card-meta">Last updated 3 days ago &middot; Created 12 August <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.4 11.05 12.2 20a5 5 0 0 1-7.1-7l9-9a3.5 3.5 0 0 1 5 5l-9 9a2 2 0 1 1-2.8-2.8l8.3-8.2"/></svg></div>
+                </div>
+                <div class="agents-card-actions">
+                  <span class="agents-status-pill"><span class="dot"></span>Published</span>
+                  <span class="agents-card-iconbtn"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg></span>
+                  <span class="agents-card-iconbtn"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" stroke="none"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></svg></span>
+                </div>
+              </div>
+            </div>
+            <div class="agents-footer-row">
+              <span>Total 35</span>
+              <span class="agents-card-iconbtn" style="width:22px; height:22px;">&#8249;</span>
+              <span class="agents-page-num">1</span>
+              <span class="agents-card-iconbtn" style="width:22px; height:22px;">&#8250;</span>
+              <span class="agents-per-page">100/page <span class="chev" style="border:none; margin:0; padding:0;">&#9662;</span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div></div></div>
+    <p style="margin:8px 0 0; font-style:italic; font-size:12px; color:var(--hub-muted);">Recreated from Martina&#39;s real screenshot, Sept 22 &mdash; card-per-row list, search + sort above it, Published status pill, a quick-add and row-menu icon per card, pagination footer. Row menu today: Open, Rename, <b>Duplicate</b> (AGENT-798, shipped), Delete &mdash; no Description yet, no Last run, no Empty flag. Agent names here are invented, not the real ones in her screenshot.</p>
+
+    <div class="section-title" style="margin-top:32px;">Proposed &mdash; mini dashboard + enriched list</div>
+    <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:900px;">
+      <div class="pv-app" style="min-height:520px;">
+        <div class="pv-skeleton-navbar" style="height:auto;">NAV</div>
+        <div class="pv-main" style="display:flex; flex-direction:column;">
+          <div style="padding:20px 28px 0;">
+            <div style="display:flex; align-items:flex-start; justify-content:space-between;">
+              <div>
+                <h2 style="margin:0; font-size:20px;">Personal</h2>
+                <p style="margin:4px 0 0; font-size:13px; color:var(--ink-faint);">Workflows, credentials and data tables owned by you</p>
+              </div>
+              <span class="btn btn-primary">Create agent <span class="chev">&#9662;</span></span>
+            </div>
+            <div class="tabbar" style="margin-top:18px; margin-bottom:0;">
+              <span class="tab">Workflows</span><span class="tab active">Agents <span class="pill" style="margin-left:6px;">Preview</span></span><span class="tab">Credentials</span><span class="tab">Executions</span><span class="tab">Variables</span><span class="tab">Data tables</span>
+            </div>
+          </div>
+          <div style="padding:0 28px 24px;">
+            <div class="agents-attn-panel">
+              <div class="agents-attn-title">Needs attention</div>
+              <div class="agents-attn-list">
+                <div class="agents-attn-list-item"><span class="agents-attn-dot is-failed"></span>Invoice Reconciler<span class="agents-attn-state">Failed last run</span><a href="#" class="agents-attn-link" onclick="event.preventDefault();">Go to agent</a></div>
+                <div class="agents-attn-list-item"><span class="agents-attn-dot is-failed"></span>Contract Renewal Tracker<span class="agents-attn-state">Failed last run</span><a href="#" class="agents-attn-link" onclick="event.preventDefault();">Go to agent</a></div>
+                <div class="agents-attn-list-item"><span class="agents-attn-dot is-awaiting"></span>Outreach Sequencer<span class="agents-attn-state">Awaiting approval</span><a href="#" class="agents-attn-link" onclick="event.preventDefault();">Go to agent</a></div>
+              </div>
+            </div>
+            <div class="agents-toolbar-row">
+              <span class="agents-search-input"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>Search agents&hellip;</span>
+              <span class="agents-sort-select">Sort by name (A-Z) <span class="chev" style="border:none; margin:0; padding:0;">&#9662;</span></span>
+            </div>
+            <div class="agents-card-list">
+              <div class="agents-card-row">
+                <div>
+                  <div class="agents-card-name">Weekly Competitor Digest</div>
+                  <div class="agents-card-meta">Last updated 17 hours ago &middot; Created 1 September &middot; Last run 2 hours ago</div>
+                </div>
+                <div class="agents-card-actions">
+                  <span class="agents-status-pill"><span class="dot"></span>Published</span>
+                  <span class="agents-card-iconbtn" onclick="document.getElementById('agentsRowMenu1').style.display = document.getElementById('agentsRowMenu1').style.display === 'block' ? 'none' : 'block';" style="position:relative;">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" stroke="none"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></svg>
+                    <div id="agentsRowMenu1" class="agents-row-dropdown" style="display:none; text-align:left;">
+                      <div class="pv-dropdown-item">Go to agent</div>
+                      <div class="pv-dropdown-item">Rename</div>
+                      <div class="pv-dropdown-item">Description</div>
+                      <div class="pv-dropdown-item">Duplicate</div>
+                      <div class="pv-dropdown-item" style="border-top:1.5px solid var(--ink); margin-top:4px; padding-top:9px; color:#e5484d;">Delete</div>
+                    </div>
+                  </span>
+                </div>
+              </div>
+              <div class="agents-card-row">
+                <div>
+                  <div class="agents-card-name">Onboarding Assistant</div>
+                  <div class="agents-card-meta">Last updated 3 days ago &middot; Created 28 August &middot; Last run yesterday</div>
+                </div>
+                <div class="agents-card-actions">
+                  <span class="agents-status-pill"><span class="dot"></span>Published</span>
+                  <span class="agents-card-iconbtn"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" stroke="none"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></svg></span>
+                </div>
+              </div>
+              <div class="agents-card-row is-empty">
+                <div>
+                  <div class="agents-card-name">New Agent</div>
+                  <div class="agents-card-meta">Last updated 2 days ago &middot; Created 20 September &middot; Last run &mdash;</div>
+                </div>
+                <div class="agents-card-actions">
+                  <span class="agents-status-pill" style="color:var(--ink-faint);"><span class="dot" style="background:var(--ink-faint);"></span>Published</span>
+                  <span class="agents-card-iconbtn"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" stroke="none"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></svg></span>
+                </div>
+              </div>
+              <div class="agents-card-row">
+                <div>
+                  <div class="agents-card-name">Invoice Reconciler</div>
+                  <div class="agents-card-meta">Last updated 3 days ago &middot; Created 12 August &middot; Last run <span class="agents-run-failed"><span class="x">&#10005;</span>Failed</span></div>
+                </div>
+                <div class="agents-card-actions">
+                  <span class="agents-status-pill"><span class="dot"></span>Published</span>
+                  <span class="agents-card-iconbtn"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" stroke="none"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></svg></span>
+                </div>
+              </div>
+              <div class="agents-card-row">
+                <div>
+                  <div class="agents-card-name">Contract Renewal Tracker</div>
+                  <div class="agents-card-meta">Last updated 4 days ago &middot; Created 5 August &middot; Last run <span class="agents-run-failed"><span class="x">&#10005;</span>Failed</span></div>
+                </div>
+                <div class="agents-card-actions">
+                  <span class="agents-status-pill"><span class="dot"></span>Published</span>
+                  <span class="agents-card-iconbtn"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" stroke="none"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></svg></span>
+                </div>
+              </div>
+              <div class="agents-card-row">
+                <div>
+                  <div class="agents-card-name">Outreach Sequencer</div>
+                  <div class="agents-card-meta">Last updated 6 hours ago &middot; Created 9 September &middot; Last run <span class="agents-run-failed"><span class="x" style="color:#7f22fe;">&#9679;</span>Awaiting approval</span></div>
+                </div>
+                <div class="agents-card-actions">
+                  <span class="agents-status-pill"><span class="dot"></span>Published</span>
+                  <span class="agents-card-iconbtn"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" stroke="none"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></svg></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div></div></div>
+    <p style="margin:8px 0 0; font-style:italic; font-size:12px; color:var(--hub-muted);"><b>Needs attention</b> lists agents by name, not just a count &mdash; failures can stack up across several agents, so a bare &quot;1 agent failed&quot; undersells it once there are three. Added <b>Awaiting approval</b> here too (not one of the four tickets &mdash; her own addition, see open question 4). <b>Last run</b> (AGENT-901) now also carries the Failed (AGENT-979) and Awaiting states, both dot-coloured with neutral text per the hub&#39;s status convention. Empty agents (AGENT-906) dropped the pill badge and instead render the whole row in light gray &mdash; quieter than an alert, since an unused agent isn&#39;t urgent the way a failure or a pending approval is. Row menu adds <b>Description</b> (AGENT-948) next to the already-shipped <b>Duplicate</b> (AGENT-798).</p>
+
+    <div class="open-questions">
+      <h4>Open questions</h4>
+      <ol>
+        <li id="agents-list-oq-1"><span class="ann-num">1</span><span class="ann-body">The row menu&#39;s exact order (Open, Rename, Description, Duplicate, Delete) is a guess &mdash; AGENT-948 says Description should match Workflows&#39; menu, but this was built from the ticket text alone, not a screenshot of that real menu. Confirm the real order and wording before this ships.</span></li>
+        <li id="agents-list-oq-2"><span class="ann-num">2</span><span class="ann-body">Needs attention items are static, not clickable here. Should clicking one filter/scroll the list below to that agent? Feels like the obvious next step.</span></li>
+        <li id="agents-list-oq-3"><span class="ann-num">3</span><span class="ann-body">Empty (AGENT-906) and Failed (AGENT-979) are treated as mutually exclusive &mdash; an agent with no runs can&#39;t also have a failed run. Worth confirming that holds for however &quot;empty&quot; actually gets defined (never run vs. never configured aren&#39;t necessarily the same thing).</span></li>
+        <li id="agents-list-oq-4"><span class="ann-num">4</span><span class="ann-body"><b>Awaiting approval</b> isn&#39;t one of the four tickets &mdash; added because approval-gated runs are a real &quot;needs attention&quot; case (see the approval-mode work in Goal-based tasks). Needs its own ticket if this is worth building alongside the other four, and someone should confirm what actually counts as &quot;awaiting&quot; for an agent versus a workflow run.</span></li>
+        <li id="agents-list-oq-5"><span class="ann-num">5</span><span class="ann-body">Empty agents no longer appear in Needs attention, only as a grayed-out row in the list itself &mdash; a deliberate call that &quot;unused&quot; is lower-urgency than a failure or a pending approval. Flag if that&#39;s wrong and it should still be counted/listed above.</span></li>
+      </ol>
+    </div>
+  </section>
+
+</div>
+
+<div class="modal-backdrop" id="beforeModal" onclick="closeBeforeModal(event)">
+  <div class="modal-content">
+    <button class="modal-close" type="button" onclick="closeBeforeModal(event)">&#10005;</button>
+    <img id="beforeModalImg" src="">
+  </div>
+</div>
+
+<div class="modal-backdrop" id="annModal" onclick="closeAnnModal(event)">
+  <div class="ann-modal-content" onclick="event.stopPropagation()">
+    <button class="modal-close" type="button" onclick="closeAnnModal(event)">&#10005;</button>
+    <div class="ann-modal-head">
+      <span class="ann-modal-badge" id="annModalBadge"></span>
+      <span class="ann-modal-kicker" id="annModalKicker"></span>
+    </div>
+    <div class="ann-modal-body" id="annModalBody"></div>
+    <a class="ann-modal-jump" href="#" id="annModalJump">View in full list &darr;</a>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="wfModal" onclick="closeWfModal(event)">
+  <div class="wf-modal-content" onclick="event.stopPropagation()">
+    <button class="modal-close" type="button" onclick="closeWfModal(event)">&#10005;</button>
+    <div class="wf-modal-body" id="wfModalBody"></div>
+  </div>
+</div>
+
+<script src="js/hub.js"></script>
+
+</body></html>

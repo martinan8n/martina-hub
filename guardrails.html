@@ -1,0 +1,293 @@
+<!doctype html><html><head>
+<meta charset="utf8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Guardrails</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Patrick+Hand&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles/hub.css">
+</head>
+<body data-default-route="guardrails">
+
+<div class="shell">
+
+  <!-- ================= GUARDRAILS ================= -->
+  <section data-route="guardrails">
+    <a class="back-link" href="index.html#/home">&larr; Workstreams</a>
+    <div class="hero">
+      <div>
+        <span class="kicker">Workstream &middot; New</span>
+        <h1>Guardrails</h1>
+        <p>Spend limits, approval gates, and running/awaiting states are settled patterns already, but scattered across the Goal-based tasks explorations. This collects the finished ones in one place. Nothing here is new work &mdash; these screens still live in Goal-based tasks too, this is a duplicate, not a move.</p>
+      </div>
+    </div>
+
+    <div class="problem-grid">
+      <div class="problem-card">
+        <div class="eyebrow">&#129513; Problem</div>
+        <p>Usage/limits settings, the nav-level running/awaiting indicators, and the cost-cap-reached gate were each designed and settled inside Goal-based tasks V2, but they apply anywhere an agent can run, spend, or need approval &mdash; not just long-running goal-based sessions. Buried inside one workstream, they're easy to miss when reviewing guardrail behavior generally.</p>
+      </div>
+      <div class="problem-card">
+        <div class="eyebrow">&#129514; Hypothesis</div>
+        <p>Collecting the settled guardrail patterns &mdash; final Settings design, nav Running &amp; Awaiting states, and the real-AIA-grounded Cost cap gate &mdash; into their own workstream makes them easier to reference and keep consistent everywhere an agent's spend or approval status shows up, without re-deciding anything already decided.</p>
+        <span class="src">Source: duplicated as-is from Goal-based tasks &mdash; V2, Sept 22</span>
+      </div>
+    </div>
+
+    <div class="section-title">Screens</div>
+    <div class="card-grid">
+      <a class="screen-card" href="#/guardrails-patterns">
+        <div class="thumb">&#128274;</div>
+        <div class="body">
+          <span class="status">In progress</span>
+          <h3>Usage, limits &amp; running states</h3>
+          <p class="desc">Settings &mdash; Usage and limits (final design); Running chat in the nav &mdash; Running &amp; Awaiting; Cost cap reached, grounded in the real AIA question-card pattern.</p>
+        </div>
+      </a>
+      <div class="screen-card placeholder">More guardrail patterns land here as they settle elsewhere</div>
+    </div>
+  </section>
+
+  <!-- ================= GUARDRAILS: PATTERNS (duplicated from Goal-based tasks V2) ================= -->
+  <section data-route="guardrails-patterns">
+    <a class="back-link" href="#/guardrails">&larr; Guardrails</a>
+    <div class="screen-head">
+      <h1>Usage, limits &amp; running states</h1>
+      <p>Duplicated as-is from Goal-based tasks &mdash; not redesigned here. Still present there too; this is a second home, not a replacement.</p>
+    </div>
+
+    <div class="pv-nav-map">
+      <h2 class="lrt-section-title">Settings &mdash; Usage and limits, final design</h2>
+      <p class="lrt-section-sub">Final design for the Settings tab&#39;s usage/limits area &mdash; merges the two earlier explorations (progress-bar usage display, consolidated budget+alert row) into one settled layout. Clicking &ldquo;Monthly budget&rdquo; opens it as a modal over the page, not a separate sub-page.</p>
+
+      <div style="display:flex; gap:20px; align-items:flex-start; flex-wrap:wrap;">
+        <div style="flex:0 0 auto;">
+        <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:640px; position:relative;">
+          <div class="pv-app" style="min-height:460px;">
+            <div class="pv-skeleton-navbar" style="height:auto;">NAV</div>
+            <div class="pv-main">
+              <div class="pv-topbar">
+                <span class="pv-crumb">Personal / <b>Sales Outreach</b> <span class="chev">&#9662;</span></span>
+                <span class="spacer"></span>
+                <span class="btn btn-primary">Publish <span class="chev">&#9662;</span></span>
+              </div>
+              <div style="padding:18px 24px;">
+                <div class="tabbar">
+                  <span class="tab">Agent</span><span class="tab">Knowledge</span><span class="tab">Sessions</span><span class="tab active">Settings</span>
+                </div>
+
+                <div style="font-size:10.5px; font-weight:700; letter-spacing:0.05em; color:var(--hub-muted); margin:18px 0 10px;">USAGE AND LIMITS</div>
+
+                <div class="wf-box" style="margin-bottom:14px;">
+                  <div class="field-label" style="margin-top:0; margin-bottom:8px;">Monthly usage</div>
+                  <div style="display:flex; align-items:baseline; justify-content:space-between; margin-bottom:10px;">
+                    <span style="font-size:18px; font-weight:700; color:var(--ink);">$42 of $200 used</span>
+                    <span style="font-size:14px; font-weight:700; color:var(--hub-muted);">21%</span>
+                  </div>
+                  <div class="lrt-progress-bar" style="margin:0;"><div class="lrt-progress-bar-fill" style="width:21%;"></div></div>
+                </div>
+
+                <div class="wf-box" style="margin-bottom:0;">
+                  <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:14px; padding-bottom:16px; border-bottom:1px solid var(--line-soft); cursor:pointer;" onclick="lrtShowSettingsModal('lrtBudgetModal')">
+                    <div style="flex:1;">
+                      <div style="font-weight:700; font-size:15px;">Monthly budget</div>
+                      <p style="margin:3px 0 0; font-size:12px; color:var(--ink-faint); max-width:320px;">Maximum this agent can spend across all sessions each month.</p>
+                    </div>
+                    <div style="text-align:right; flex:none;">
+                      <div style="font-weight:700; font-size:14px;">$200/month</div>
+                      <div style="margin-top:3px; font-size:11.5px; color:var(--ink-faint);">Alert at 80%</div>
+                    </div>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ink-faint)" stroke-width="2" style="flex:none; margin-top:3px;"><path d="m9 6 6 6-6 6"/></svg>
+                  </div>
+                  <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:14px; padding-top:16px; cursor:pointer;" onclick="lrtShowSettingsModal('lrtCostCapModal')">
+                    <div style="flex:1;">
+                      <div style="font-weight:700; font-size:15px;">Cost cap per session</div>
+                      <p style="margin:3px 0 0; font-size:12px; color:var(--ink-faint); max-width:320px;">Maximum a single session can spend, whether it&#39;s a short run or goal-based.</p>
+                    </div>
+                    <div style="text-align:right; flex:none;">
+                      <div style="font-weight:700; font-size:14px;">$5.00</div>
+                    </div>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ink-faint)" stroke-width="2" style="flex:none; margin-top:3px;"><path d="m9 6 6 6-6 6"/></svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div id="lrtBudgetModal" style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(20,20,22,0.35); border-radius:inherit;">
+            <div style="width:400px; background:var(--paper); border:1px solid var(--line); border-radius:10px; box-shadow:0 8px 24px rgba(0,0,0,0.16); padding:22px;">
+              <div style="display:flex; align-items:center; margin-bottom:8px;">
+                <span style="font-size:17px; font-weight:700;">Edit monthly budget</span>
+                <span class="spacer" style="flex:1;"></span>
+                <span style="cursor:pointer; color:var(--ink-faint); font-size:17px;" onclick="lrtHideSettingsModal('lrtBudgetModal')">&times;</span>
+              </div>
+              <div class="field-label" style="margin-top:0; margin-bottom:6px;">Monthly budget</div>
+              <div style="display:flex; border:1px solid var(--line); border-radius:8px; overflow:hidden; margin-bottom:6px;">
+                <div style="flex:1; display:flex; align-items:center; gap:3px; padding:9px 12px; font-size:14px; font-weight:700;">
+                  <span>$</span><span>200</span>
+                </div>
+                <div style="background:var(--canvas); padding:9px 14px; font-size:12.5px; color:var(--ink-soft); border-left:1px solid var(--line); display:flex; align-items:center;">per month</div>
+              </div>
+              <p style="margin:0 0 16px; font-size:11.5px; color:var(--ink-faint);">The agent pauses when this budget is reached.</p>
+
+              <div style="border-top:1px solid var(--line-soft); margin:0 0 16px;"></div>
+
+              <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:10px; margin-bottom:4px;">
+                <div style="font-weight:700; font-size:14px;">Budget alert</div>
+                <span id="lrtBudgetAlertToggle" style="cursor:pointer; flex:none; width:34px; height:20px; border-radius:12px; background:var(--fill); border:1.5px solid var(--line); position:relative; margin-top:2px;" onclick="lrtToggleBudgetAlert()"><span id="lrtBudgetAlertKnob" style="position:absolute; top:2px; left:2px; width:14px; height:14px; border-radius:50%; background:var(--paper); border:1px solid var(--line);"></span></span>
+              </div>
+              <p style="margin:0 0 16px; font-size:12px; color:var(--ink-soft); max-width:280px;">Email an alert before the budget runs out.</p>
+
+              <div id="lrtBudgetAlertDetail" style="display:none;">
+                <div class="field-label" style="margin-top:0; margin-bottom:6px; font-size:13px; font-weight:600; color:var(--ink-soft);">Alert threshold</div>
+                <div class="model-row" style="max-width:100%; margin-bottom:6px;">
+                  <span class="name">80% of budget</span><span class="chev">&#9662;</span>
+                </div>
+                <p style="margin:0; font-size:11.5px; color:var(--ink-faint);">Sends to every admin on this project.</p>
+              </div>
+
+              <div style="border-top:1px solid var(--line); margin:18px 0 0;"></div>
+              <div style="display:flex; justify-content:flex-end; gap:8px; padding-top:16px;">
+                <span class="lrt-btn">Cancel</span>
+                <span class="btn btn-primary">Save</span>
+              </div>
+            </div>
+          </div>
+
+          <div id="lrtCostCapModal" style="display:none; position:absolute; inset:0; align-items:center; justify-content:center; background:rgba(20,20,22,0.35); border-radius:inherit;">
+            <div style="width:400px; background:var(--paper); border:1px solid var(--line); border-radius:10px; box-shadow:0 8px 24px rgba(0,0,0,0.16); padding:22px;">
+              <div style="display:flex; align-items:center; margin-bottom:8px;">
+                <span style="font-size:17px; font-weight:700;">Edit cost cap per session</span>
+                <span class="spacer" style="flex:1;"></span>
+                <span style="cursor:pointer; color:var(--ink-faint); font-size:17px;" onclick="lrtHideSettingsModal('lrtCostCapModal')">&times;</span>
+              </div>
+              <p style="margin:0 0 18px; font-size:12.5px; color:var(--ink-soft);">Set the maximum a single session can spend, whether it&#39;s a short run or goal-based.</p>
+
+              <div class="field-label" style="margin-top:0; margin-bottom:6px;">Cost cap</div>
+              <div style="display:flex; border:1px solid var(--line); border-radius:8px; overflow:hidden; margin-bottom:6px;">
+                <div style="flex:1; display:flex; align-items:center; gap:3px; padding:9px 12px; font-size:14px; font-weight:700;">
+                  <span>$</span><span>5.00</span>
+                </div>
+                <div style="background:var(--canvas); padding:9px 14px; font-size:12.5px; color:var(--ink-soft); border-left:1px solid var(--line); display:flex; align-items:center;">per session</div>
+              </div>
+              <p style="margin:0; font-size:11.5px; color:var(--ink-faint);">Hard stop when exceeded &mdash; the agent warns first, then stops.</p>
+
+              <div style="border-top:1px solid var(--line); margin:18px 0 0;"></div>
+              <div style="display:flex; justify-content:flex-end; gap:8px; padding-top:16px;">
+                <span class="lrt-btn">Cancel</span>
+                <span class="btn btn-primary">Save</span>
+              </div>
+            </div>
+          </div>
+
+        </div></div></div>
+        <div class="lrt-screen-desc" style="margin:8px 0 0; font-weight:600; color:var(--hub-ink);">Settings, with Edit monthly budget open</div>
+        <p class="lrt-screen-desc" style="margin:4px 0 0; max-width:420px;">A modal over the page, not a separate sub-page &mdash; matches the real pattern used everywhere else in this hub for editing a single setting. Notification channel is fixed to the email linked to the n8n account, not user-configurable here, so &ldquo;Slack DM&rdquo; from the earlier exploration is dropped &mdash; the overview row now just reads &ldquo;Alert at 80%.&rdquo; &ldquo;Cost cap per session&rdquo; opens its own equivalent modal &mdash; click that row instead to see it (only one modal shows at a time).</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="pv-nav-map" style="margin-top:36px;">
+      <h2 class="lrt-section-title">Running chat, in the nav &mdash; Running &amp; Awaiting</h2>
+      <p class="lrt-section-sub">Reuses the real 1a sidebar CHATS list, dots moved to the right, matching the Session status table&#39;s colour and glyph exactly (spinner for Running, pulsing dot for Awaiting). Hover any row to reveal its floating detail panel to the right &mdash; hover only, nothing shown by default.<span class="src" style="display:block; margin-top:4px;">Source: Goal-based tasks &mdash; V2</span></p>
+
+      <div class="wf-scale-wrap" style="overflow:visible;"><div class="wf"><div class="frame" style="width:280px; padding:0; overflow:visible;">
+        <div style="padding:14px; background:var(--paper); position:relative;">
+          <div style="font-size:10.5px; font-weight:700; letter-spacing:0.05em; color:var(--ink-faint); margin-bottom:6px;">CHATS</div>
+
+          <div class="lrt-chat-hover-item" style="position:relative; display:flex; align-items:center; gap:8px; padding:5px 4px; font-size:13px; cursor:pointer;">
+            <span style="width:20px; height:20px; border-radius:50%; background:#e0f0fe; display:flex; align-items:center; justify-content:center; flex:none;"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2"><path d="M3 14v-2a9 9 0 0 1 18 0v2"/><path d="M21 15a2 2 0 0 1-2 2h-1v-5h1a2 2 0 0 1 2 2ZM3 15a2 2 0 0 0 2 2h1v-5H5a2 2 0 0 0-2 2Z"/></svg></span>
+            Escalations w/c 24 Aug<span class="spacer" style="flex:1;"></span><span class="lrt-spinner" style="flex:none; color:var(--color--primary);"></span>
+            <div class="lrt-chat-hover-card" style="position:absolute; left:100%; top:0; margin-left:8px; width:190px; background:var(--paper); border:1px solid var(--line); border-radius:6px; padding:8px 10px; z-index:5; box-shadow:2px 3px 0 rgba(26,28,30,0.12);">
+              <div style="font-size:12px; font-weight:600;">Escalations w/c 24 Aug</div>
+              <div style="font-size:11px; color:var(--ink-soft); margin-top:3px;">Running &mdash; 340 of 500 checked so far</div>
+              <div style="display:flex; align-items:center; gap:5px; margin-top:6px; padding-top:6px; border-top:1px dashed var(--line); font-size:10.5px; color:var(--ink-faint);"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="3.2"/><path d="M5 20c0-3.5 3-6 7-6s7 2.5 7 6"/></svg>Personal</div>
+              <div style="display:flex; align-items:center; gap:5px; margin-top:4px; font-size:10.5px; color:var(--ink-faint);"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>Running for <span id="lrtSidebarRunningDurationRef">12:04</span></div>
+            </div>
+          </div>
+
+          <div class="lrt-chat-hover-item" style="position:relative; display:flex; align-items:center; gap:8px; padding:5px 4px; font-size:13px; cursor:pointer;">
+            <span style="width:20px; height:20px; border-radius:50%; background:#e0f0fe; display:flex; align-items:center; justify-content:center; flex:none;"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2"><path d="M3 14v-2a9 9 0 0 1 18 0v2"/><path d="M21 15a2 2 0 0 1-2 2h-1v-5h1a2 2 0 0 1 2 2ZM3 15a2 2 0 0 0 2 2h1v-5H5a2 2 0 0 0-2 2Z"/></svg></span>
+            Support macros refresh<span class="spacer" style="flex:1;"></span><span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:var(--color--secondary); animation:lrtPulseGlowToken 1.8s infinite;"></span>
+            <div class="lrt-chat-hover-card" style="position:absolute; left:100%; top:0; margin-left:8px; width:190px; background:var(--paper); border:1px solid var(--line); border-radius:6px; padding:8px 10px; z-index:5; box-shadow:2px 3px 0 rgba(26,28,30,0.12);">
+              <div style="font-size:12px; font-weight:600;">Support macros refresh</div>
+              <div style="font-size:11px; color:var(--ink-soft); margin-top:3px;">Awaiting &mdash; hit a usage limit. Ask an owner to raise it to continue.</div>
+              <div style="display:flex; align-items:center; gap:5px; margin-top:6px; padding-top:6px; border-top:1px dashed var(--line); font-size:10.5px; color:var(--ink-faint);"><span style="width:11px; height:11px; border-radius:3px; background:#8e4ec6; flex:none;"></span>sin project</div>
+              <div style="display:flex; align-items:center; gap:5px; margin-top:4px; font-size:10.5px; color:var(--ink-faint);"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>Started by Priya &middot; 2h ago</div>
+            </div>
+          </div>
+
+        </div>
+      </div></div></div>
+    </div>
+
+    <div class="pv-nav-map" style="margin-top:36px;">
+      <h2 class="lrt-section-title">Cost cap reached</h2>
+      <p class="lrt-section-sub">A different skeleton from the Running state above &mdash; no timer or spinner, and it gates the composer entirely instead of sitting above it, since that&#39;s how this actually works.<span class="src" style="display:block; margin-top:4px;">Source: Goal-based tasks &mdash; V2</span></p>
+
+      <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:480px; padding:0;">
+        <div class="pv-app" style="min-height:280px;">
+          <div class="pv-skeleton-navbar" style="height:auto;">NAV</div>
+          <div class="pv-main" style="display:flex; flex-direction:column;">
+            <div class="pv-preview-tabs">
+              <b>Email Campaign</b>
+              <span class="pill" style="margin-left:0;">Preview</span>
+              <span class="spacer"></span>
+              <span class="icon-btn" title="Minimize" style="cursor:pointer;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 14h6v6M20 10h-6V4M14 10l7-7M3 21l7-7"/></svg></span>
+            </div>
+            <div style="padding:16px 18px; overflow:auto; flex:1;">
+              <div class="pv-bubble" style="margin:0 0 12px auto;">Send this campaign to our full list of 50,000 contacts.</div>
+              <div class="pv-reply">Stopped partway through &mdash; 21,400 of 50,000 sent so far.</div>
+            </div>
+            <div class="pv-chat-footer"><div class="lrt-alert-card" style="margin:0;">
+              <div class="lrt-alert-head"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg><b>You&#39;ve reached your cost cap</b></div>
+              <div class="lrt-alert-details">This session used its full $12 limit before finishing. Add funds to keep going.</div>
+              <div style="padding:10px 14px; border-bottom:1px dashed var(--line);">
+                <div style="display:flex; align-items:center; gap:6px; border:1px solid var(--line); border-radius:6px; padding:7px 10px;">
+                  <span style="font-size:13px; color:var(--ink-soft); font-weight:600;">$</span>
+                  <input type="text" value="10" style="border:none; outline:none; background:transparent; font-size:13px; width:100%; font-family:inherit; color:var(--ink);">
+                </div>
+              </div>
+              <div class="lrt-alert-actions">
+                <span class="lrt-btn">Not now</span>
+                <span class="lrt-btn is-primary">Add funds</span>
+              </div>
+            </div></div>
+          </div>
+        </div>
+      </div></div></div>
+      <p class="lrt-screen-desc" style="margin:8px 0 0; max-width:480px;"><b>Cost cap reached.</b> One card, not two &mdash; the amount input replaces a separate &quot;do you want to top up?&quot; confirmation step, since entering an amount and confirming already is the yes. Grounded in the real n8n AIA question-card pattern (<code>InstanceAiQuestions.vue</code>), adapted from its free-text question type.</p>
+    </div>
+  </section>
+
+</div>
+
+<div class="modal-backdrop" id="beforeModal" onclick="closeBeforeModal(event)">
+  <div class="modal-content">
+    <button class="modal-close" type="button" onclick="closeBeforeModal(event)">&#10005;</button>
+    <img id="beforeModalImg" src="">
+  </div>
+</div>
+
+<div class="modal-backdrop" id="annModal" onclick="closeAnnModal(event)">
+  <div class="ann-modal-content" onclick="event.stopPropagation()">
+    <button class="modal-close" type="button" onclick="closeAnnModal(event)">&#10005;</button>
+    <div class="ann-modal-head">
+      <span class="ann-modal-badge" id="annModalBadge"></span>
+      <span class="ann-modal-kicker" id="annModalKicker"></span>
+    </div>
+    <div class="ann-modal-body" id="annModalBody"></div>
+    <a class="ann-modal-jump" href="#" id="annModalJump">View in full list &darr;</a>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="wfModal" onclick="closeWfModal(event)">
+  <div class="wf-modal-content" onclick="event.stopPropagation()">
+    <button class="modal-close" type="button" onclick="closeWfModal(event)">&#10005;</button>
+    <div class="wf-modal-body" id="wfModalBody"></div>
+  </div>
+</div>
+
+<script src="js/hub.js"></script>
+
+</body></html>
