@@ -1194,7 +1194,7 @@ flowchart LR
           </div>
         </div>
       </div>
-      <p class="lrt-screen-desc" style="margin:12px 0 0; max-width:520px;">Channels lives inside the real <b>Triggers</b> box, alongside Schedules &mdash; matching the real Triggers/Capabilities pill pattern exactly (Schedules shown for context, unchanged from today). n8n Chat occupies the first channel pill by default; click it for a small dropdown with <b>Edit</b> and <b>Make unavailable</b>, matching the wireframe proposal above. Click &quot;+&quot; to see the real Connect list.</p>
+      <p class="lrt-screen-desc" style="margin:12px 0 0; max-width:520px;">Channels lives inside the real <b>Triggers</b> box, alongside Schedules &mdash; matching the real Triggers/Capabilities pill pattern exactly (Schedules shown for context, unchanged from today). n8n Chat occupies the first channel pill by default; click it to open its settings directly. Click &quot;+&quot; to see the real Connect list &mdash; n8n Chat&#39;s <b>Available</b> status there opens a small dropdown with <b>Edit</b> and <b>Make unavailable</b>, matching the wireframe proposal above.</p>
 
       <div class="lrt-proto-main">
         <div class="hifi">
@@ -1225,10 +1225,10 @@ flowchart LR
                 <span class="hifi-modal-title">Channels</span>
                 <span class="hifi-modal-close" onclick="hifiChannelsCloseAll()">&times;</span>
               </div>
-              <div style="display:flex; align-items:center; gap:var(--spacing--2xs); padding:var(--spacing--xs) 0; margin-top:var(--spacing--sm); cursor:pointer;" onclick="hifiChannelsShowEdit()">
+              <div style="display:flex; align-items:center; gap:var(--spacing--2xs); padding:var(--spacing--xs) 0; margin-top:var(--spacing--sm);">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="flex:none;"><path d="M4 5h16v11H8l-4 3V5Z"/></svg>
                 <span style="font-size:var(--font-size--sm); font-weight:var(--font-weight--medium); flex:1;">n8n Chat</span>
-                <span style="display:inline-flex; align-items:center; gap:4px; font-size:var(--font-size--sm); font-weight:var(--font-weight--regular); color:var(--text-color);"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--color--green-600)" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg>Available</span>
+                <span id="hifiChannelRowStatus" style="position:relative;"></span>
               </div>
               <div style="display:flex; align-items:center; gap:var(--spacing--2xs); padding:var(--spacing--xs) 0;">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" style="flex:none;"><path fill="#e01e5a" d="M9.5 2A2.5 2.5 0 0 0 7 4.5V9h2.5a2.5 2.5 0 0 0 0-5Z"/><path fill="#36c5f0" d="M2 14.5A2.5 2.5 0 0 0 4.5 17H9v-2.5a2.5 2.5 0 0 0-5 0Z"/><path fill="#2eb67d" d="M14.5 22a2.5 2.5 0 0 0 2.5-2.5V15h-2.5a2.5 2.5 0 0 0 0 5Z"/><path fill="#ecb22e" d="M22 9.5A2.5 2.5 0 0 0 19.5 7H15v2.5a2.5 2.5 0 0 0 5 0Z"/></svg>
@@ -1260,34 +1260,46 @@ flowchart LR
     <script>
       var HIFI_CHAT_ICON = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 5h16v11H8l-4 3V5Z"/></svg>';
 
-      function hifiChannelsRenderAvailable() {
-        document.getElementById("hifiChannelAction").innerHTML =
-          '<span class="hifi-chip" style="cursor:pointer; position:relative;" onclick="hifiChannelsToggleMenu(event)">' + HIFI_CHAT_ICON + 'n8n Chat' +
-          '<span id="hifiChannelMenu" class="hifi-action-menu" style="display:none;">' +
-          '<div class="hifi-action-menu-item" onclick="hifiChannelsMenuEdit(event)">Edit</div>' +
-          '<div class="hifi-action-menu-item" onclick="hifiChannelsMenuMakeUnavailable(event)">Make unavailable</div>' +
-          '</span></span>';
+      var hifiChannelAvailable = true;
+
+      function hifiChannelsRenderAll() {
+        if (hifiChannelAvailable) {
+          document.getElementById("hifiChannelAction").innerHTML =
+            '<span class="hifi-chip" style="cursor:pointer;" onclick="hifiChannelsShowEdit()">' + HIFI_CHAT_ICON + 'n8n Chat</span>';
+          document.getElementById("hifiChannelRowStatus").innerHTML =
+            '<span style="display:inline-flex; align-items:center; gap:4px; font-size:var(--font-size--sm); font-weight:var(--font-weight--regular); color:var(--text-color); cursor:pointer;" onclick="hifiChannelsToggleRowMenu(event)">' +
+            '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--color--green-600)" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg>Available' +
+            '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--text-color--subtler)" stroke-width="2" style="margin-left:2px;"><path d="m6 9 6 6 6-6"/></svg>' +
+            '</span>' +
+            '<span id="hifiChannelRowMenu" class="hifi-action-menu" style="display:none; right:0; left:auto;">' +
+            '<div class="hifi-action-menu-item" onclick="hifiChannelsRowMenuEdit(event)">Edit</div>' +
+            '<div class="hifi-action-menu-item" onclick="hifiChannelsRowMenuMakeUnavailable(event)">Make unavailable</div>' +
+            '</span>';
+        } else {
+          document.getElementById("hifiChannelAction").innerHTML =
+            '<span class="hifi-chip" style="cursor:pointer; border-style:dashed; color:var(--text-color--subtler);" onclick="hifiChannelsOpenFromUnavailable()">' + HIFI_CHAT_ICON + 'n8n Chat</span>';
+          document.getElementById("hifiChannelRowStatus").innerHTML =
+            '<button class="n8n-button n8n-button--secondary n8n-button--size-small" onclick="hifiChannelsOpenFromUnavailable()">Make available</button>';
+        }
       }
-      function hifiChannelsRenderUnavailable() {
-        document.getElementById("hifiChannelAction").innerHTML =
-          '<span class="hifi-chip" style="cursor:pointer; border-style:dashed; color:var(--text-color--subtler);" onclick="hifiChannelsOpenFromUnavailable()">' + HIFI_CHAT_ICON + 'n8n Chat</span>';
-      }
-      function hifiChannelsToggleMenu(e) {
+      function hifiChannelsToggleRowMenu(e) {
         if (e) e.stopPropagation();
-        var menu = document.getElementById("hifiChannelMenu");
+        var menu = document.getElementById("hifiChannelRowMenu");
         if (menu) menu.style.display = menu.style.display === "none" ? "block" : "none";
       }
-      function hifiChannelsMenuEdit(e) {
+      function hifiChannelsRowMenuEdit(e) {
         if (e) e.stopPropagation();
-        hifiChannelsToggleMenu();
+        hifiChannelsToggleRowMenu();
         hifiChannelsShowEdit();
       }
-      function hifiChannelsMenuMakeUnavailable(e) {
+      function hifiChannelsRowMenuMakeUnavailable(e) {
         if (e) e.stopPropagation();
-        hifiChannelsRenderUnavailable();
+        hifiChannelAvailable = false;
+        hifiChannelsRenderAll();
       }
       function hifiChannelsMakeUnavailable() {
-        hifiChannelsRenderUnavailable();
+        hifiChannelAvailable = false;
+        hifiChannelsRenderAll();
         document.getElementById("hifiChannelEditModal").style.display = "none";
       }
       function hifiChannelsShowEdit() {
@@ -1307,7 +1319,8 @@ flowchart LR
         document.getElementById("hifiChannelEditModal").scrollIntoView({ behavior: "smooth", block: "center" });
       }
       function hifiChannelsConfirmAvailable() {
-        hifiChannelsRenderAvailable();
+        hifiChannelAvailable = true;
+        hifiChannelsRenderAll();
         document.getElementById("hifiChannelEditModal").style.display = "none";
       }
       function hifiChannelsShowAdd() {
@@ -1324,9 +1337,9 @@ flowchart LR
         document.getElementById("hifiChannelEditModal").style.display = "none";
         document.getElementById("hifiChannelAddModal").style.display = "none";
       }
-      hifiChannelsRenderAvailable();
+      hifiChannelsRenderAll();
       document.addEventListener("click", function () {
-        var menu = document.getElementById("hifiChannelMenu");
+        var menu = document.getElementById("hifiChannelRowMenu");
         if (menu) menu.style.display = "none";
       });
     </script>
@@ -1484,7 +1497,7 @@ flowchart LR
             <div style="display:flex; align-items:center; padding:18px 22px; border-bottom:1px solid var(--line);">
               <div id="skillsCleanModalTitle" style="font-size:19px; font-weight:600;">Add skill</div>
               <span class="spacer" style="flex:1;"></span>
-              <span style="font-size:20px; color:var(--ink-faint); cursor:pointer;">&times;</span>
+              <span style="font-size:20px; color:var(--ink-faint); cursor:pointer;" onclick="skillsCleanShowEmpty(); skillsCleanSetMode('add');">&times;</span>
             </div>
 
             <div id="skillsCleanEmptyState" style="display:flex; flex:1; min-height:0; align-items:center; justify-content:center; padding:36px;">
@@ -1764,7 +1777,7 @@ flowchart LR
                 <div style="font-size:12.5px; color:var(--ink-faint); margin-top:3px;">Add a reusable workflow to this agent.</div>
               </div>
               <span class="spacer" style="flex:1;"></span>
-              <span style="font-size:20px; color:var(--ink-faint);">&times;</span>
+              <span style="font-size:20px; color:var(--ink-faint); cursor:pointer;" onclick="skillsShowState(0)">&times;</span>
             </div>
 
             <div id="skillsUploadState" style="display:flex; flex:1; min-height:0;">
