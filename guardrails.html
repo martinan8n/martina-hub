@@ -6,6 +6,62 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Patrick+Hand&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles/hub.css">
+<link rel="stylesheet" href="styles/n8n-tokens.css?v=4">
+<style>
+  /* Hi-fi Settings screen — real n8n tokens (InterVariable stand-in, real spacing/radius/colour scale),
+     not the hand-drawn .wf wireframe style used elsewhere on this page. Scoped under .hifi so it can't
+     leak into the wireframe sections above/below it. */
+  .hifi { font-family: var(--font-family); color: var(--text-color); }
+  .hifi-shell { border: 1px solid var(--border-color); border-radius: var(--radius--md); background: var(--background--subtle); overflow: hidden; min-height: 620px; }
+  .hifi-topbar { display: flex; align-items: center; gap: var(--spacing--xs); padding: var(--spacing--sm) var(--spacing--md); border-bottom: 1px solid var(--border-color); background: var(--background--surface); }
+  .hifi-crumb { font-size: var(--font-size--sm); color: var(--text-color); }
+  .hifi-crumb b { font-weight: var(--font-weight--medium); }
+  .hifi-body { padding: var(--spacing--md) var(--spacing--xl) var(--spacing--xl); max-width: 620px; background: var(--background--subtle); }
+  .hifi-section-label { font-size: var(--font-size--sm); font-weight: var(--font-weight--medium); color: var(--text-color); margin: var(--spacing--xl) 0 var(--spacing--sm); }
+  .hifi-card { border: 1px solid var(--border-color); border-radius: var(--radius--xs); background: var(--background--surface); box-shadow: 0 1px 2px rgba(0,0,0,0.04); padding: var(--spacing--md) var(--spacing--sm); margin-bottom: var(--spacing--sm); }
+  .hifi-section-divider { border-top: 1px solid var(--border-color--subtle); margin: var(--spacing--md) calc(-1 * var(--spacing--sm)); }
+  .hifi-field-label { font-size: var(--font-size--sm); font-weight: var(--font-weight--medium); margin-bottom: var(--spacing--xs); }
+  .hifi-modal .hifi-field-label { margin-top: var(--spacing--md); }
+  .hifi-usage-row { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: var(--spacing--2xs); }
+  .hifi-usage-amount { font-size: var(--font-size--lg); font-weight: var(--font-weight--medium); }
+  .hifi-usage-amount-faint { color: var(--text-color--subtler); font-weight: var(--font-weight--regular); }
+  .hifi-usage-pct { font-size: var(--font-size--sm); font-weight: var(--font-weight--medium); color: var(--text-color--subtle); }
+  .hifi-progress { position: relative; height: 6px; border-radius: var(--radius--full); background: var(--color--neutral-150); overflow: hidden; }
+  .hifi-progress-fill { height: 100%; border-radius: var(--radius--full); background: var(--color--primary); }
+  .hifi-progress-marker { position: absolute; top: -2px; bottom: -2px; width: 2px; background: var(--color--neutral-600); border-radius: 1px; }
+  .hifi-slider { --fill: 75%; -webkit-appearance: none; appearance: none; width: 100%; height: 14px; background: transparent; margin: var(--spacing--sm) 0 var(--spacing--3xs); cursor: pointer; }
+  .hifi-slider::-webkit-slider-runnable-track { height: 4px; border-radius: var(--radius--full); background: linear-gradient(to right, var(--color--primary) var(--fill), var(--color--neutral-150) var(--fill)); }
+  .hifi-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 14px; height: 14px; margin-top: -5px; border-radius: 50%; background: var(--color--primary); border: 2px solid var(--color--neutral-white); box-shadow: 0 0 0 1px var(--border-color); }
+  .hifi-slider::-moz-range-track { height: 4px; border-radius: var(--radius--full); background: var(--color--neutral-150); }
+  .hifi-slider::-moz-range-progress { height: 4px; border-radius: var(--radius--full); background: var(--color--primary); }
+  .hifi-slider::-moz-range-thumb { width: 14px; height: 14px; border-radius: 50%; background: var(--color--primary); border: 2px solid var(--color--neutral-white); box-shadow: 0 0 0 1px var(--border-color); }
+  .hifi-settings-row { display: flex; align-items: flex-start; gap: var(--spacing--sm); padding: var(--spacing--sm) 0; cursor: pointer; }
+  .hifi-row-label { flex: 1; min-width: 0; }
+  .hifi-row-title { font-size: var(--font-size--sm); font-weight: var(--font-weight--medium); }
+  .hifi-row-desc { font-size: var(--font-size--2xs); color: var(--text-color--subtler); margin: 2px 0 0; max-width: 320px; }
+  .hifi-row-value { text-align: right; flex: none; font-size: var(--font-size--sm); font-weight: var(--font-weight--medium); }
+  .hifi-row-sub { font-size: var(--font-size--2xs); font-weight: var(--font-weight--regular); color: var(--text-color--subtler); margin-top: 2px; }
+  .hifi-chev { flex: none; color: var(--text-color--subtler); margin-top: 3px; }
+  .hifi-modal-backdrop { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.3); border-radius: inherit; }
+  .hifi-modal { width: 380px; background: var(--background--surface); border-radius: var(--radius--lg); box-shadow: 0 0 0 0.5px var(--border-color), 0 8px 8px rgba(0,0,0,0.04), 0 32px 32px rgba(0,0,0,0.04), 0 64px 64px rgba(0,0,0,0.06); padding: var(--spacing--lg); }
+  .hifi-modal-head { display: flex; align-items: center; padding-bottom: var(--spacing--sm); margin-bottom: var(--spacing--sm); border-bottom: 1px solid var(--border-color); }
+  .hifi-modal-title { font-size: var(--font-size--lg); font-weight: var(--font-weight--medium); }
+  .hifi-modal-close { cursor: pointer; color: var(--text-color--subtler); font-size: 17px; margin-left: auto; }
+  .hifi-modal-hint { font-size: var(--font-size--2xs); color: var(--text-color--subtler); margin: 0 0 var(--spacing--sm); }
+  .hifi-modal-subtitle { font-size: var(--font-size--sm); color: var(--text-color--subtler); margin: 0 0 var(--spacing--sm); }
+  .hifi-amount-input { display: flex; border: 1px solid var(--border-color); border-radius: var(--radius--2xs); overflow: hidden; margin-bottom: var(--spacing--3xs); min-height: var(--height--lg); }
+  .hifi-amount-input .amt { flex: 1; display: flex; align-items: center; gap: 2px; padding: 0 var(--spacing--xs); font-size: var(--font-size--sm); font-weight: var(--font-weight--medium); }
+  .hifi-amount-input .per { background: var(--background--subtle); padding: 0 var(--spacing--xs); font-size: var(--font-size--xs); color: var(--text-color--subtle); border-left: 1px solid var(--border-color); display: flex; align-items: center; }
+  .hifi-divider { border-top: 1px solid var(--border-color--subtle); margin: var(--spacing--sm) 0; }
+  .hifi-toggle-row { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--spacing--xs); }
+  .hifi-toggle { cursor: pointer; flex: none; width: 34px; height: 20px; border-radius: var(--radius--full); background: var(--color--neutral-200); border: 1px solid var(--color--neutral-250); position: relative; transition: background 120ms ease; }
+  .hifi-toggle.is-on { background: var(--color--green-500); border-color: var(--color--green-500); }
+  .hifi-toggle-knob { position: absolute; top: 1px; left: 1px; width: 16px; height: 16px; border-radius: 50%; background: var(--color--neutral-white); transition: left 120ms ease; }
+  .hifi-toggle.is-on .hifi-toggle-knob { left: 15px; }
+  .hifi-alert-detail { margin-top: var(--spacing--sm); }
+  .hifi-select-row { display: flex; align-items: center; justify-content: space-between; border: 1px solid var(--border-color); border-radius: var(--radius--2xs); padding: var(--spacing--3xs) var(--spacing--xs); font-size: var(--font-size--sm); font-weight: var(--font-weight--medium); margin-bottom: var(--spacing--3xs); }
+  .hifi-modal-actions { display: flex; justify-content: flex-end; gap: var(--spacing--3xs); padding-top: var(--spacing--sm); }
+</style>
 </head>
 <body data-default-route="guardrails">
 
@@ -36,6 +92,14 @@
 
     <div class="section-title">Screens</div>
     <div class="card-grid">
+      <a class="screen-card" href="#/guardrails-settings-hifi">
+        <div class="thumb">&#10024;</div>
+        <div class="body">
+          <span class="status">In progress</span>
+          <h3>Settings &mdash; Usage and limits (hi-fi)</h3>
+          <p class="desc">The settled Settings design, rebuilt with real n8n typography, spacing, and component patterns instead of the hand-drawn wireframe.</p>
+        </div>
+      </a>
       <a class="screen-card" href="#/guardrails-patterns">
         <div class="thumb">&#128274;</div>
         <div class="body">
@@ -46,6 +110,155 @@
       </a>
       <div class="screen-card placeholder">More guardrail patterns land here as they settle elsewhere</div>
     </div>
+  </section>
+
+  <!-- ================= GUARDRAILS: SETTINGS HI-FI ================= -->
+  <section data-route="guardrails-settings-hifi">
+    <a class="back-link" href="#/guardrails">&larr; Guardrails</a>
+    <div class="screen-head">
+      <h1>Settings &mdash; Usage and limits (hi-fi)</h1>
+      <p>Same content and decisions as the wireframe version &mdash; nothing redesigned here, just rebuilt with real n8n typography (Inter, 400/500/600 weights), spacing/radius scale, and colour tokens pulled directly from <code>n8n-io/n8n</code>&#39;s design system.</p>
+    </div>
+
+    <div class="hifi" style="max-width:640px; position:relative;">
+      <div class="hifi-shell">
+        <div class="hifi-topbar">
+          <span class="hifi-crumb"><span style="color:var(--text-color--subtler);">Personal /</span> <b>Sales Outreach</b> &#9662;</span>
+          <span style="color:var(--text-color--subtler); cursor:pointer; display:inline-flex; padding:0 4px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></span>
+          <span class="spacer" style="flex:1;"></span>
+          <span style="display:inline-flex; border:1px solid var(--border-color); border-radius: var(--radius--3xs); overflow:hidden;">
+            <button class="n8n-button n8n-button--tertiary n8n-button--size-medium" style="border-radius:0;">Publish</button>
+            <button class="n8n-button n8n-button--tertiary n8n-button--size-medium" style="border-radius:0; border-left:1px solid var(--border-color); padding:0 var(--spacing--3xs);">&#9662;</button>
+          </span>
+        </div>
+        <div style="display:flex; flex-direction:column; align-items:flex-start; gap:var(--spacing--sm); padding:var(--spacing--xl) var(--spacing--md) var(--spacing--xl);">
+          <div style="width:48px; height:48px; border-radius:var(--radius--md); background:linear-gradient(135deg,#FF965A,#5AC8FF); display:flex; align-items:center; justify-content:center; flex:none;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4 20-7Z"/></svg>
+          </div>
+          <h1 style="font-size:var(--font-size--xl); font-weight:var(--font-weight--medium); margin:0; color:var(--text-color);">Sales Outreach</h1>
+        </div>
+        <div class="n8n-tabs" style="margin:0 24px;">
+          <div class="n8n-tab">Build</div>
+          <div class="n8n-tab">Knowledge</div>
+          <div class="n8n-tab">Sessions</div>
+          <div class="n8n-tab is-active">Settings</div>
+        </div>
+        <div class="hifi-body">
+          <div class="hifi-card">
+            <div class="hifi-field-label">Monthly usage</div>
+            <div class="hifi-usage-row">
+              <span class="hifi-usage-amount">$42<span class="hifi-usage-amount-faint"> of </span>$200<span class="hifi-usage-amount-faint"> used</span></span>
+              <span class="hifi-usage-pct">21%</span>
+            </div>
+            <div class="hifi-progress"><div class="hifi-progress-fill" style="width:21%;"></div><div id="hifiUsageAlertMarker" class="hifi-progress-marker" style="left:80%; display:none;" title="Alert threshold: 80%"></div></div>
+
+            <div class="hifi-section-divider"></div>
+
+            <div class="hifi-settings-row" onclick="hifiShowModal('hifiBudgetModal')">
+              <div class="hifi-row-label">
+                <div class="hifi-row-title">Monthly budget</div>
+                <p class="hifi-row-desc">Maximum this agent can spend across all sessions each month.</p>
+              </div>
+              <div class="hifi-row-value">$200/month<div id="hifiBudgetAlertRowSub" class="hifi-row-sub">Alert at 80%</div></div>
+              <svg class="hifi-chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 6 6 6-6 6"/></svg>
+            </div>
+            <div class="hifi-settings-row" onclick="hifiShowModal('hifiCostCapModal')">
+              <div class="hifi-row-label">
+                <div class="hifi-row-title">Cost cap per session</div>
+                <p class="hifi-row-desc">Maximum a single session can spend.</p>
+              </div>
+              <div class="hifi-row-value">$5.00</div>
+              <svg class="hifi-chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 6 6 6-6 6"/></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="hifiBudgetModal" class="hifi-modal-backdrop" style="display:none;">
+        <div class="hifi-modal">
+          <div class="hifi-modal-head">
+            <span class="hifi-modal-title">Edit monthly budget</span>
+            <span class="hifi-modal-close" onclick="hifiHideModal('hifiBudgetModal')">&times;</span>
+          </div>
+          <div class="hifi-field-label">Monthly budget</div>
+          <div class="hifi-amount-input"><div class="amt"><span>$</span><span>200</span></div><div class="per">per month</div></div>
+          <p class="hifi-modal-hint">The agent pauses when this budget is reached.</p>
+          <div class="hifi-divider"></div>
+          <div class="hifi-toggle-row">
+            <div class="hifi-row-title" style="font-size:var(--font-size--sm);">Budget alert</div>
+            <span id="hifiBudgetAlertToggle" class="hifi-toggle" onclick="hifiToggleBudgetAlert()"><span class="hifi-toggle-knob"></span></span>
+          </div>
+          <p class="hifi-modal-hint" style="margin-top:4px;">Email an alert before the budget runs out.</p>
+          <div id="hifiBudgetAlertDetail" class="hifi-alert-detail" style="display:none;">
+            <div class="hifi-field-label" style="font-size:var(--font-size--xs); color:var(--text-color--subtle); display:flex; align-items:center; justify-content:space-between;">
+              Alert threshold
+              <span id="hifiAlertThresholdValue" style="color:var(--text-color--subtler); font-weight:var(--font-weight--regular);">80% of budget</span>
+            </div>
+            <input type="range" id="hifiAlertThresholdSlider" class="hifi-slider" min="50" max="90" step="10" value="80" list="hifiThresholdTicks" oninput="hifiUpdateAlertThreshold(this.value)">
+            <datalist id="hifiThresholdTicks">
+              <option value="50"></option><option value="60"></option><option value="70"></option><option value="80"></option><option value="90"></option>
+            </datalist>
+            <p class="hifi-modal-hint" style="margin:0;">Sends to every admin on this project.</p>
+          </div>
+          <div class="hifi-modal-actions">
+            <button class="n8n-button n8n-button--tertiary n8n-button--size-medium" onclick="hifiHideModal('hifiBudgetModal')">Cancel</button>
+            <button class="n8n-button n8n-button--primary n8n-button--size-medium">Save</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="hifiCostCapModal" class="hifi-modal-backdrop" style="display:none;">
+        <div class="hifi-modal">
+          <div class="hifi-modal-head">
+            <span class="hifi-modal-title">Edit cost cap per session</span>
+            <span class="hifi-modal-close" onclick="hifiHideModal('hifiCostCapModal')">&times;</span>
+          </div>
+          <p class="hifi-modal-subtitle">Set the maximum a single session can spend.</p>
+          <div class="hifi-field-label">Cost cap</div>
+          <div class="hifi-amount-input"><div class="amt"><span>$</span><span>5.00</span></div><div class="per">per session</div></div>
+          <p class="hifi-modal-hint">Hard stop when exceeded &mdash; the agent warns first, then stops.</p>
+          <div class="hifi-modal-actions">
+            <button class="n8n-button n8n-button--tertiary n8n-button--size-medium" onclick="hifiHideModal('hifiCostCapModal')">Cancel</button>
+            <button class="n8n-button n8n-button--primary n8n-button--size-medium">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="lrt-screen-desc" style="margin:12px 0 0; max-width:520px;">Same content, same decisions (notification channel fixed to account email, &quot;Cost cap per session&quot; opens its own equivalent modal, only one modal at a time) &mdash; only the visual language changed.</p>
+
+    <script>
+      function hifiShowModal(id) {
+        ["hifiBudgetModal", "hifiCostCapModal"].forEach(function (mid) {
+          var el = document.getElementById(mid);
+          if (el) el.style.display = mid === id ? "flex" : "none";
+        });
+      }
+      function hifiHideModal(id) {
+        var el = document.getElementById(id);
+        if (el) el.style.display = "none";
+      }
+      function hifiToggleBudgetAlert() {
+        var toggle = document.getElementById("hifiBudgetAlertToggle");
+        var detail = document.getElementById("hifiBudgetAlertDetail");
+        if (!toggle || !detail) return;
+        var isOn = toggle.classList.contains("is-on");
+        toggle.classList.toggle("is-on", !isOn);
+        detail.style.display = isOn ? "none" : "block";
+      }
+      function hifiUpdateAlertThreshold(value) {
+        var slider = document.getElementById("hifiAlertThresholdSlider");
+        var valueLabel = document.getElementById("hifiAlertThresholdValue");
+        var marker = document.getElementById("hifiUsageAlertMarker");
+        var rowSub = document.getElementById("hifiBudgetAlertRowSub");
+        if (slider) {
+          var fillPct = ((value - slider.min) / (slider.max - slider.min)) * 100;
+          slider.style.setProperty("--fill", fillPct + "%");
+        }
+        if (valueLabel) valueLabel.textContent = value + "% of budget";
+        if (marker) { marker.style.left = value + "%"; marker.title = "Alert threshold: " + value + "%"; }
+        if (rowSub) rowSub.textContent = "Alert at " + value + "%";
+      }
+    </script>
   </section>
 
   <!-- ================= GUARDRAILS: PATTERNS (duplicated from Goal-based tasks V2) ================= -->
