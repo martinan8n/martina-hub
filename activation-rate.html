@@ -18,6 +18,9 @@
   .hifi-chip-row-label { display: flex; align-items: baseline; gap: var(--spacing--3xs); font-size: var(--font-size--sm); font-weight: var(--font-weight--medium); }
   .hifi-chip-row-count { font-size: var(--font-size--2xs); font-weight: var(--font-weight--regular); color: var(--text-color--subtler); }
   .hifi-chip { display: inline-flex; align-items: center; gap: var(--spacing--3xs); border: 1px solid var(--border-color); border-radius: var(--radius--full); padding: var(--spacing--3xs) var(--spacing--xs); font-size: var(--font-size--xs); color: var(--text-color); background: var(--background--surface); cursor: pointer; }
+  .hifi-action-menu { position: absolute; top: calc(100% + var(--spacing--3xs)); left: 0; min-width: 160px; background: var(--background--surface); border: 1px solid var(--border-color); border-radius: var(--radius--sm); box-shadow: 0 4px 14px rgba(0,0,0,0.1); padding: var(--spacing--3xs); z-index: 20; }
+  .hifi-action-menu-item { padding: var(--spacing--2xs) var(--spacing--xs); border-radius: var(--radius--3xs); font-size: var(--font-size--sm); color: var(--text-color); cursor: pointer; white-space: nowrap; }
+  .hifi-action-menu-item:hover { background: var(--background--hover); }
   .hifi-add-circle { width: 26px; height: 26px; border: none; background: transparent; border-radius: var(--radius--full); display: flex; align-items: center; justify-content: center; color: var(--text-color--subtler); flex: none; font-size: 15px; cursor: pointer; }
   .hifi-add-circle:hover { background: var(--background--hover); }
   .hifi-chip svg { flex: none; color: var(--text-color--subtle); }
@@ -54,8 +57,8 @@
   .hifi-row-title { font-size: var(--font-size--sm); font-weight: var(--font-weight--medium); }
   .hifi-row-desc { font-size: var(--font-size--2xs); color: var(--text-color--subtler); margin: 2px 0 0; max-width: 320px; }
   .hifi-chev { flex: none; color: var(--text-color--subtler); margin-top: 3px; }
-  .hifi-modal { width: 440px; background: var(--background--surface); border-radius: var(--radius--lg); box-shadow: 0 0 0 0.5px var(--border-color), 0 8px 8px rgba(0,0,0,0.04), 0 32px 32px rgba(0,0,0,0.04), 0 64px 64px rgba(0,0,0,0.06); padding: var(--spacing--lg); }
-  .hifi-modal-head { display: flex; align-items: center; padding: 0 var(--spacing--lg) var(--spacing--sm); margin: 0 calc(var(--spacing--lg) * -1) var(--spacing--sm); border-bottom: 1px solid var(--border-color); }
+  .hifi-modal { width: 480px; background: var(--background--surface); border-radius: var(--radius--lg); box-shadow: 0 0 0 0.5px var(--border-color), 0 8px 8px rgba(0,0,0,0.04), 0 32px 32px rgba(0,0,0,0.04), 0 64px 64px rgba(0,0,0,0.06); padding: var(--spacing--xl); }
+  .hifi-modal-head { display: flex; align-items: center; padding: 0 var(--spacing--xl) var(--spacing--md); margin: 0 calc(var(--spacing--xl) * -1) var(--spacing--md); border-bottom: 1px solid var(--border-color); }
   .hifi-modal-title { font-size: var(--font-size--lg); font-weight: var(--font-weight--medium); }
   .hifi-modal-close { cursor: pointer; color: var(--text-color--subtler); font-size: 17px; margin-left: auto; }
   .hifi-modal-hint { font-size: var(--font-size--2xs); color: var(--text-color--subtler); margin: 0 0 var(--spacing--sm); }
@@ -1191,7 +1194,7 @@ flowchart LR
           </div>
         </div>
       </div>
-      <p class="lrt-screen-desc" style="margin:12px 0 0; max-width:520px;">Channels lives inside the real <b>Triggers</b> box, alongside Schedules &mdash; matching the real Triggers/Capabilities pill pattern exactly (Schedules shown for context, unchanged from today). n8n Chat occupies the first channel pill by default; click it to open its settings directly (no dropdown). Click &quot;+&quot; to see the real Connect list.</p>
+      <p class="lrt-screen-desc" style="margin:12px 0 0; max-width:520px;">Channels lives inside the real <b>Triggers</b> box, alongside Schedules &mdash; matching the real Triggers/Capabilities pill pattern exactly (Schedules shown for context, unchanged from today). n8n Chat occupies the first channel pill by default; click it for a small dropdown with <b>Edit</b> and <b>Make unavailable</b>, matching the wireframe proposal above. Click &quot;+&quot; to see the real Connect list.</p>
 
       <div class="lrt-proto-main">
         <div class="hifi">
@@ -1259,11 +1262,29 @@ flowchart LR
 
       function hifiChannelsRenderAvailable() {
         document.getElementById("hifiChannelAction").innerHTML =
-          '<span class="hifi-chip" style="cursor:pointer;" onclick="hifiChannelsShowEdit()">' + HIFI_CHAT_ICON + 'n8n Chat</span>';
+          '<span class="hifi-chip" style="cursor:pointer; position:relative;" onclick="hifiChannelsToggleMenu(event)">' + HIFI_CHAT_ICON + 'n8n Chat' +
+          '<span id="hifiChannelMenu" class="hifi-action-menu" style="display:none;">' +
+          '<div class="hifi-action-menu-item" onclick="hifiChannelsMenuEdit(event)">Edit</div>' +
+          '<div class="hifi-action-menu-item" onclick="hifiChannelsMenuMakeUnavailable(event)">Make unavailable</div>' +
+          '</span></span>';
       }
       function hifiChannelsRenderUnavailable() {
         document.getElementById("hifiChannelAction").innerHTML =
           '<span class="hifi-chip" style="cursor:pointer; border-style:dashed; color:var(--text-color--subtler);" onclick="hifiChannelsOpenFromUnavailable()">' + HIFI_CHAT_ICON + 'n8n Chat</span>';
+      }
+      function hifiChannelsToggleMenu(e) {
+        if (e) e.stopPropagation();
+        var menu = document.getElementById("hifiChannelMenu");
+        if (menu) menu.style.display = menu.style.display === "none" ? "block" : "none";
+      }
+      function hifiChannelsMenuEdit(e) {
+        if (e) e.stopPropagation();
+        hifiChannelsToggleMenu();
+        hifiChannelsShowEdit();
+      }
+      function hifiChannelsMenuMakeUnavailable(e) {
+        if (e) e.stopPropagation();
+        hifiChannelsRenderUnavailable();
       }
       function hifiChannelsMakeUnavailable() {
         hifiChannelsRenderUnavailable();
@@ -1304,6 +1325,10 @@ flowchart LR
         document.getElementById("hifiChannelAddModal").style.display = "none";
       }
       hifiChannelsRenderAvailable();
+      document.addEventListener("click", function () {
+        var menu = document.getElementById("hifiChannelMenu");
+        if (menu) menu.style.display = "none";
+      });
     </script>
   </section>
 
@@ -1584,7 +1609,7 @@ flowchart LR
               </div>
 
               <div id="hifiSkillsActions" class="hifi-modal-lg-actions" style="display:none;">
-                <button class="n8n-button n8n-button--tertiary n8n-button--size-medium" id="hifiSkillsRemoveBtn" style="display:none; color:var(--color--red-600);" onclick="hifiSkillsShowEmpty()">Remove skill</button>
+                <button class="n8n-button n8n-button--tertiary n8n-button--size-medium" id="hifiSkillsRemoveBtn" style="display:none; align-items:center; gap:6px;" onclick="hifiSkillsShowEmpty()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 11v6"/><path d="M14 11v6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>Remove skill</button>
                 <span class="spacer" style="flex:1;"></span>
                 <button class="n8n-button n8n-button--tertiary n8n-button--size-medium" onclick="hifiSkillsShowEmpty()">Cancel</button>
                 <button class="n8n-button n8n-button--primary n8n-button--size-medium" onclick="hifiSkillsSaveSkill()">Save skill</button>
