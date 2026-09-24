@@ -7,6 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Patrick+Hand&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles/hub.css">
 <link rel="stylesheet" href="styles/n8n-tokens.css?v=4">
+<link rel="stylesheet" href="styles/notebook-ui.css">
 <style>
   /* Hi-fi Skills screen — real n8n tokens, same approach as guardrails.html's
      hi-fi Settings build. Scoped under .hifi so it can't leak into the
@@ -2024,6 +2025,89 @@ flowchart LR
       </div>
     </div></div></div>
     <p style="margin:8px 0 0; font-style:italic; font-size:12px; color:var(--hub-muted);">Templates sit inside the same empty state as an alternative to the blank Create-agent action &mdash; nothing to click through to see them. Based on the most common first goals people give an agent; each one can be text, the same way a typed prompt would be. <span class="src">Source: Martina&#39;s sketch, FigJam</span></p>
+
+    <div class="section-title" style="margin-top:32px;">Approach 1 &mdash; templates inline in the empty state</div>
+    <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:1100px;">
+      <div class="pv-app" style="min-height:620px;">
+        <div class="pv-skeleton-navbar" style="height:auto;">NAV</div>
+        <div class="pv-main" style="display:flex; flex-direction:column;">
+          <div style="padding:20px 28px 0;">
+            <div style="display:flex; align-items:flex-start; justify-content:space-between;">
+              <div>
+                <h2 style="margin:0; font-size:20px;">Personal</h2>
+                <p style="margin:4px 0 0; font-size:13px; color:var(--ink-faint);">Workflows, credentials and data tables owned by you</p>
+              </div>
+              <span class="btn btn-primary">Create agent <span class="chev">&#9662;</span></span>
+            </div>
+            <div class="tabbar" style="margin-top:18px;">
+              <span class="tab">Workflows</span><span class="tab active">Agents <span class="pill" style="margin-left:6px;">Preview</span></span><span class="tab">Credentials</span><span class="tab">Executions</span><span class="tab">Variables</span><span class="tab">Data tables</span>
+            </div>
+          </div>
+          <div style="padding:20px 28px; flex:1;">
+            <div class="empty-box is-hero" style="border:none;">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2v3"/><circle cx="12" cy="6" r="1.2" fill="currentColor" stroke="none"/><rect x="4" y="9" width="16" height="12" rx="3"/></svg>
+              <div class="empty-title">Create your first agent</div>
+              <div class="empty-sub">Agents automate tasks and answer questions using your connected tools and data</div>
+              <span class="btn">Create agent</span>
+
+              <div class="nbk" style="width:100%; max-width:520px; margin:20px auto 0;">
+                <div class="nbk-composer" id="agentTemplatesComposer">
+                  <textarea class="nbk-composer-input" id="agentTemplatesComposerInput" rows="2" placeholder="Ask anything, or pick an agent above..."></textarea>
+                  <div class="nbk-composer-row">
+                    <div class="nbk-send-btn" id="agentTemplatesSendBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M12 19V5M5 12l7-7 7 7"/></svg></div>
+                  </div>
+                </div>
+              </div>
+              <div class="template-section">
+                <div class="template-section-label">Or start from a template</div>
+                <div class="template-grid">
+                  <div class="template-card is-compact">
+                    <div class="template-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18h-5"/><path d="M18 14h-8"/><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-4 0v-9a2 2 0 0 1 2-2h2"/><rect width="8" height="4" x="10" y="6" rx="1"/></svg></div>
+                    <div class="template-text">
+                      <div class="template-title">Morning news brief</div>
+                      <div class="template-desc">Sends a daily summary of today&#39;s top headlines.</div>
+                    </div>
+                  </div>
+                  <div class="template-card is-compact">
+                    <div class="template-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4Z"/></svg></div>
+                    <div class="template-text">
+                      <div class="template-title">Process incoming emails</div>
+                      <div class="template-desc">Reads new emails and updates your calendar or sheet.</div>
+                    </div>
+                  </div>
+                  <div class="template-card is-compact">
+                    <div class="template-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="5" cy="6" r="2.5"/><circle cx="19" cy="6" r="2.5"/><circle cx="12" cy="18" r="2.5"/><path d="M7 7.5 10 16M17 7.5 14 16"/></svg></div>
+                    <div class="template-text">
+                      <div class="template-title">Qualify new leads</div>
+                      <div class="template-desc">Scores and routes new leads from your CRM.</div>
+                    </div>
+                  </div>
+                  <div class="template-card is-compact">
+                    <div class="template-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" x2="19" y1="8" y2="14"/><line x1="22" x2="16" y1="11" y2="11"/></svg></div>
+                    <div class="template-text">
+                      <div class="template-title">LinkedIn outreach</div>
+                      <div class="template-desc">Drafts and sends personalized connection messages.</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div></div></div>
+    <p style="margin:8px 0 0; font-style:italic; font-size:12px; color:var(--hub-muted);">Templates sit inside the same empty state as an alternative to the blank Create-agent action &mdash; nothing to click through to see them. Based on the most common first goals people give an agent; each one can be text, the same way a typed prompt would be. <span class="src">Source: Martina&#39;s sketch, FigJam</span></p>
+    <script>
+      (function () {
+        var composer = document.getElementById("agentTemplatesComposer");
+        var input = document.getElementById("agentTemplatesComposerInput");
+        var sendBtn = document.getElementById("agentTemplatesSendBtn");
+        if (!composer || !input || !sendBtn) return;
+        input.addEventListener("focus", function () { composer.classList.add("is-focused"); });
+        input.addEventListener("blur", function () { composer.classList.remove("is-focused"); });
+        input.addEventListener("input", function () { sendBtn.classList.toggle("has-message", input.value.trim().length > 0); });
+      })();
+    </script>
 
     <div class="section-title" style="margin-top:32px;">Approach 2 &mdash; templates in the Create agent dropdown</div>
     <p class="pv-state-label" style="margin-bottom:8px;">The Create agent button already carries a dropdown chevron live today &mdash; this uses that existing affordance instead of adding a new modal or page</p>
