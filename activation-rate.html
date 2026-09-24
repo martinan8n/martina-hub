@@ -2049,14 +2049,17 @@ flowchart LR
               <div class="empty-title">What should your agent do?</div>
               <div class="empty-sub">Tell me the job. I&#39;ll handle the setup.</div>
 
-              <div style="width:100%; max-width:520px; margin:20px auto 0; display:flex; justify-content:flex-end;">
+              <div style="width:100%; max-width:520px; margin:8px auto 0; display:flex; justify-content:flex-end;">
                 <span style="font-size:13px; color:var(--ink-faint); cursor:pointer; text-decoration:underline; text-decoration-color:var(--line);">Create blank</span>
               </div>
               <div class="nbk" style="width:100%; max-width:520px; margin:6px auto 0;">
                 <div class="nbk-composer" id="agentTemplatesComposer">
                   <textarea class="nbk-composer-input" id="agentTemplatesComposerInput" rows="2" placeholder="Describe the agent you want to build"></textarea>
                   <div class="nbk-composer-row">
-                    <div class="nbk-send-btn" id="agentTemplatesSendBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></svg></div>
+                    <span class="nbk-composer-icon-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg></span>
+                    <span class="nbk-composer-spacer"></span>
+                    <span class="nbk-composer-icon-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19v3"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><rect x="9" y="2" width="6" height="13" rx="3"/></svg></span>
+                    <div class="nbk-send-btn" id="agentTemplatesSendBtn"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></svg></div>
                   </div>
                 </div>
               </div>
@@ -2069,7 +2072,7 @@ flowchart LR
                       <div style="font-size:14px; font-weight:700; color:var(--ink);">Morning news brief</div>
                       <div style="font-size:12.5px; color:var(--ink-faint);">Sends a daily summary of today&#39;s top headlines.</div>
                     </div>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--ink-faint)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex:none;"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--ink-faint)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex:none;"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
                   </div>
                   <div style="display:flex; align-items:center; gap:12px; padding:12px 4px; border-bottom:1px solid var(--line-soft); cursor:pointer;">
                     <div style="width:36px; height:36px; border-radius:10px; background:linear-gradient(135deg,#6d5ce6,#4a90e2); display:flex; align-items:center; justify-content:center; flex:none;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 6 10 7 10-7"/></svg></div>
@@ -2077,7 +2080,7 @@ flowchart LR
                       <div style="font-size:14px; font-weight:700; color:var(--ink);">Process incoming emails</div>
                       <div style="font-size:12.5px; color:var(--ink-faint);">Reads new emails and updates your calendar or sheet.</div>
                     </div>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--ink-faint)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex:none;"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--ink-faint)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex:none;"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
                   </div>
                   <div style="display:flex; align-items:center; gap:12px; padding:12px 4px; border-bottom:1px solid var(--line-soft); cursor:pointer;">
                     <div style="width:36px; height:36px; border-radius:10px; background:linear-gradient(135deg,#3fae7a,#2f8f5c); display:flex; align-items:center; justify-content:center; flex:none;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"/><path d="M2 20c0-3.3 3.1-5.5 7-5.5s7 2.2 7 5.5"/><circle cx="17" cy="8" r="2.5"/><path d="M23 20c0-2.6-2.1-4.4-5-4.9"/></svg></div>
@@ -2085,7 +2088,7 @@ flowchart LR
                       <div style="font-size:14px; font-weight:700; color:var(--ink);">Qualify new leads</div>
                       <div style="font-size:12.5px; color:var(--ink-faint);">Scores and routes new leads from your CRM.</div>
                     </div>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--ink-faint)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex:none;"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--ink-faint)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex:none;"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
                   </div>
                   <div style="display:flex; align-items:center; gap:12px; padding:12px 4px; cursor:pointer;">
                     <div style="width:36px; height:36px; border-radius:10px; background:linear-gradient(135deg,#3a9bdb,#1f6fc4); display:flex; align-items:center; justify-content:center; flex:none;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 17H7A5 5 0 0 1 7 7h2"/><path d="M15 7h2a5 5 0 1 1 0 10h-2"/><line x1="8" y1="12" x2="16" y2="12"/></svg></div>
@@ -2093,7 +2096,7 @@ flowchart LR
                       <div style="font-size:14px; font-weight:700; color:var(--ink);">LinkedIn outreach</div>
                       <div style="font-size:12.5px; color:var(--ink-faint);">Drafts and sends personalized connection messages.</div>
                     </div>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--ink-faint)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex:none;"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--ink-faint)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex:none;"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
                   </div>
                 </div>
               </div>

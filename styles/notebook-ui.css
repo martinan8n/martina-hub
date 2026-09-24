@@ -131,6 +131,9 @@
 }
 .nbk-composer-input::placeholder { color: var(--ink-faint); opacity: 1; }
 .nbk-composer-row { display: flex; align-items: center; gap: 10px; padding: 8px 12px; }
+.nbk-composer-icon-btn { display: flex; align-items: center; justify-content: center; color: var(--ink-faint); cursor: pointer; flex: none; }
+.nbk-composer-icon-btn:hover { color: var(--ink-soft); }
+.nbk-composer-spacer { flex: 1; }
 .nbk-send-btn {
   margin-left: auto; width: 30px; height: 30px; border-radius: 50%;
   background: var(--ink); color: #fff; display: flex; align-items: center; justify-content: center;
