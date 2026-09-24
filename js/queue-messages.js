@@ -13,7 +13,7 @@ function render(){
  if(['running','adjusting'].includes(state)){$('task-icon').innerHTML='<span class="lrt-spinner" style="color:var(--color--primary);"></span>';}
  else{const [stateWord,iconHtml]=stateInfo[state];$('task-icon').innerHTML=iconHtml;$('task-state-text').textContent=stateWord;}
  $('pending-section').hidden=messages.length===0;$('composer').classList.toggle('qm-fused',messages.length>0);
- $('pending-label').textContent=messages.length+' pending message'+(messages.length===1?'':'s');$('pending-list').hidden=collapsed;$('toggle-pending').setAttribute('aria-expanded',String(!collapsed));
+ $('pending-label').textContent=messages.length+' pending message'+(messages.length===1?'':'s');$('pending-list').hidden=collapsed;$('toggle-pending').setAttribute('aria-expanded',String(!collapsed));$('pending-chevron').innerHTML=collapsed?'&#9662;':'&#9652;';
  $('pending-list').innerHTML=messages.map((m,i)=>{
   const extra=m.failed?'<button class="qm-icon-btn" data-action="retry" title="Retry" aria-label="Retry">&#8635;</button>':state==='done'?'<button class="qm-icon-btn" data-action="start" title="Start follow-up" aria-label="Start follow-up">&rarr;</button>':'';
   return editing===m.id
@@ -38,7 +38,7 @@ $('pending-list').onclick=e=>{const button=e.target.closest('button[data-action]
  if(action==='start'){if(editing!==null){notice('Save or cancel your edit first.');return;}messages=messages.filter(x=>x.id!==id);state='running';history(m.text,'Follow-up started');notice('A new follow-up has started. Other messages remain pending.');}
  render();};
 $('pending-list').onkeydown=e=>{if(e.key==='Escape'&&editing!==null){editing=null;render();notice('Edit canceled.');}};
-$('toggle-pending').onclick=()=>{collapsed=!collapsed;$('pending-list').hidden=collapsed;$('toggle-pending').setAttribute('aria-expanded',String(!collapsed));};
+$('toggle-pending').onclick=()=>{collapsed=!collapsed;$('pending-list').hidden=collapsed;$('toggle-pending').setAttribute('aria-expanded',String(!collapsed));$('pending-chevron').innerHTML=collapsed?'&#9662;':'&#9652;';};
 let taskDetailOpen=false;
 $('task-toggle').onclick=()=>{taskDetailOpen=!taskDetailOpen;$('task-detail-panel').style.display=taskDetailOpen?'block':'none';$('task-chevron').innerHTML=taskDetailOpen?'&#9652;':'&#9662;';};
 $('composer').onsubmit=e=>{e.preventDefault();const text=$('draft').value.trim();if(!text){notice('Write a message first.');return;}if($('send').disabled)return;messages.push({id:nextId++,text,mode:'steer'});$('draft').value='';render();notice(messages.length===5?'5-message limit reached. Edit or remove a pending message to add another.':'Message saved. The current job keeps running.');};
