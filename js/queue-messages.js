@@ -4,7 +4,7 @@ const $=id=>document.getElementById(id);
 let messages=[],nextId=4,state='running',editing=null,collapsed=false,removed=null;
 const escape=s=>s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const notice=text=>{$('feedback').textContent=text;};
-function history(text,label=''){const node=document.createElement('div');node.className=label?'pv-bubble':'pv-reply';node.textContent=text;if(label){const small=document.createElement('span');small.className='qm-applied';small.textContent=label;node.append(small);}$('history').append(node);$('history').scrollTop=$('history').scrollHeight;}
+function history(text,label=''){const node=document.createElement('div');node.className=label?'qm-log':'pv-reply';node.textContent=text;if(label){const small=document.createElement('span');small.className='qm-applied';small.textContent=label;node.append(small);}$('history').append(node);$('history').scrollTop=$('history').scrollHeight;}
 function render(){
  const activeEdit=editing!==null&&$('edit-'+editing); const editDraft=activeEdit?activeEdit.value:null;
  const titles={running:'Reviewing accounts',adjusting:'Adjusting course…',paused:'Task paused',stopped:'Task cancelled',done:'Task finished',approval:'Needs approval'};
@@ -20,7 +20,7 @@ function render(){
  $('gate').innerHTML=state==='approval'?'<div class="qm-gate"><p>Allow access to Salesforce account activity?</p><button id="approve">Allow and continue</button> <button id="reject">Decline and pause</button></div>':'';
  if(state==='approval'){$('approve').onclick=()=>{state='running';render();notice('Approval granted. Updates will apply at the next safe point.');};$('reject').onclick=()=>{state='paused';render();notice('Permission declined. Task paused; messages retained.');};}
 }
-function reset(){messages=[{id:1,mode:'steer',text:'Only include enterprise accounts with more than 500 employees.'},{id:2,mode:'steer',text:'Prioritize accounts with an open renewal in the next 30 days. Include the account owner, renewal date, and the most recent customer conversation in the shortlist. Please flag missing information instead of guessing.'},{id:3,mode:'later',text:'Then draft a short internal summary of the shortlist for the sales team. Do not send it.'}];nextId=4;state='running';editing=null;collapsed=false;$('draft').value='';$('timing').value='steer';$('history').innerHTML='<div class="qm-user">Find enterprise accounts that need a follow-up this week.</div><div class="qm-assistant">I’ll review the accounts and their recent activity, then prepare a shortlist.</div>';$('task-detail').textContent='Reading Salesforce account activity. 14 accounts reviewed.';render();notice('Updates apply after the current action finishes.');}
+function reset(){messages=[{id:1,mode:'steer',text:'Only include enterprise accounts with more than 500 employees.'},{id:2,mode:'steer',text:'Prioritize accounts with an open renewal in the next 30 days. Include the account owner, renewal date, and the most recent customer conversation in the shortlist. Please flag missing information instead of guessing.'},{id:3,mode:'later',text:'Then draft a short internal summary of the shortlist for the sales team. Do not send it.'}];nextId=4;state='running';editing=null;collapsed=false;$('draft').value='';$('timing').value='steer';$('history').innerHTML='<div class="pv-bubble">Find enterprise accounts that need a follow-up this week.</div><div class="pv-reply">I’ll review the accounts and their recent activity, then prepare a shortlist.</div>';$('task-detail').textContent='Reading Salesforce account activity. 14 accounts reviewed.';render();notice('Updates apply after the current action finishes.');}
 $('pending-list').addEventListener('toggle',e=>{const row=e.target.closest('.qm-row');if(row){const m=messages.find(x=>x.id===Number(row.dataset.id));if(m)m.open=row.open;}},true);
 $('pending-list').onclick=e=>{const button=e.target.closest('button[data-action]');if(!button)return;const id=Number(button.closest('.qm-row').dataset.id),m=messages.find(x=>x.id===id),action=button.dataset.action;if(!m)return;
  if(action==='edit'){if(editing!==null){notice('Save or cancel the current edit first.');return;}editing=id;render();$('edit-'+id).focus();return;}
@@ -37,13 +37,13 @@ $('task-expand-toggle').onclick=()=>{taskDetailOpen=!taskDetailOpen;$('task-deta
 $('composer').onsubmit=e=>{e.preventDefault();const text=$('draft').value.trim();if(!text){notice('Write a message first.');return;}if($('send').disabled)return;messages.push({id:nextId++,text,mode:$('timing').value});$('draft').value='';render();notice(messages.length===5?'5-message limit reached. Edit or remove a pending message to add another.':'Message saved. The current job keeps running.');};
 $('draft').onkeydown=e=>{if(e.key==='Enter'&&!e.shiftKey&&!e.isComposing){e.preventDefault();$('composer').requestSubmit();}};
 $('pause').onclick=()=>{state=state==='paused'?'running':'paused';render();notice(state==='paused'?'Task paused explicitly. Pending messages will not run until you resume.':'Task resumed. Pending updates wait for the next safe point.');};
-$('stop').onclick=()=>{document.querySelector('.qm-task-more').open=false;if(window.confirm('Stop this task? It cannot resume. Pending messages will remain visible but will not run.')){state='stopped';render();notice('Task cancelled explicitly. Pending messages were not sent.');}};
+$('stop').onclick=()=>{if(window.confirm('Stop this task? It cannot resume. Pending messages will remain visible but will not run.')){state='stopped';render();notice('Task cancelled explicitly. Pending messages were not sent.');}};
 $('trace').onclick=()=>{history('Trace: Salesforce account activity → 14 accounts reviewed. The current action has not been canceled.');};
 for(const button of document.querySelectorAll('[data-sim]'))button.onclick=()=>{
  for(const b of document.querySelectorAll('[data-sim]'))b.classList.remove('is-active');button.classList.add('is-active');
- const action=button.dataset.sim;if(action==='reset'){reset();return;}
+ const action=button.dataset.sim;
  if(editing!==null){notice('Save or cancel your edit before running a simulation step.');return;}
- if(['paused','stopped','done','approval'].includes(state)){notice('This task cannot advance in its current state. Resume, resolve approval, start a follow-up, or reset.');return;}
+ if(['paused','stopped','done','approval'].includes(state)){notice('This task cannot advance in its current state. Resume, resolve approval, or start a follow-up.');return;}
  if(action==='safe'){
   const editIndex=messages.findIndex(m=>m.id===editing||m.failed);const batch=messages.filter((m,i)=>m.mode==='steer'&&!m.failed&&(editIndex<0||i<editIndex));
   if(!batch.length){notice(editing!==null?'Pending updates are held while you edit.':'No steering updates are ready. Follow-ups wait until task completion.');return;}
