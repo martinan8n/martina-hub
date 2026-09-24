@@ -1178,13 +1178,7 @@ flowchart LR
             </div>
             <button class="n8n-button n8n-button--secondary n8n-button--size-small"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:4px;"><path d="M5 3 19 12 5 21Z"/></svg>Preview</button>
           </div>
-          <div style="display:flex; align-items:center; gap:var(--spacing--sm); flex-wrap:wrap; margin-top:var(--spacing--md);">
-            <span class="hifi-row-title" style="flex:none;">Channels</span>
-            <span style="display:flex; align-items:center; gap:var(--spacing--4xs);">
-              <span id="hifiChannelAction" style="position:relative;"></span>
-              <span class="hifi-add-circle" onclick="hifiChannelsShowAdd()">+</span>
-            </span>
-          </div>
+          <div id="hifiChannelsRow" style="display:flex; align-items:center; gap:var(--spacing--sm); flex-wrap:wrap; margin-top:var(--spacing--md);"></div>
           <div style="display:flex; align-items:center; gap:var(--spacing--sm); margin-top:var(--spacing--md);">
             <span class="hifi-row-title" style="flex:none;">Schedules</span>
             <span style="display:flex; align-items:center; gap:var(--spacing--4xs);">
@@ -1264,6 +1258,12 @@ flowchart LR
 
       function hifiChannelsRenderAll() {
         if (hifiChannelAvailable) {
+          document.getElementById("hifiChannelsRow").innerHTML =
+            '<span class="hifi-row-title" style="flex:none;">Channels</span>' +
+            '<span style="display:flex; align-items:center; gap:var(--spacing--4xs);">' +
+            '<span id="hifiChannelAction" style="position:relative;"></span>' +
+            '<span class="hifi-add-circle" onclick="hifiChannelsShowAdd()">+</span>' +
+            '</span>';
           document.getElementById("hifiChannelAction").innerHTML =
             '<span class="hifi-chip" style="cursor:pointer;" onclick="hifiChannelsShowEdit()">' + HIFI_CHAT_ICON + 'n8n Chat</span>';
           document.getElementById("hifiChannelRowStatus").innerHTML =
@@ -1275,7 +1275,8 @@ flowchart LR
             '<div class="hifi-action-menu-item" onclick="hifiChannelsRowMenuMakeUnavailable(event)">Make unavailable</div>' +
             '</span>';
         } else {
-          document.getElementById("hifiChannelAction").innerHTML = "";
+          document.getElementById("hifiChannelsRow").innerHTML =
+            '<span class="hifi-row-title" style="color:var(--text-color--subtler); cursor:pointer;" onclick="hifiChannelsShowAdd()">Add channel</span>';
           document.getElementById("hifiChannelRowStatus").innerHTML =
             '<button class="n8n-button n8n-button--secondary n8n-button--size-small" onclick="hifiChannelsOpenFromUnavailable()">Make available</button>';
         }
