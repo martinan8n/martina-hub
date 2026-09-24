@@ -4,7 +4,7 @@ const $=id=>document.getElementById(id);
 let messages=[],nextId=4,state='running',editing=null,collapsed=false,removed=null;
 const escape=s=>s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const notice=text=>{$('feedback').textContent=text;};
-function history(text,label=''){const node=document.createElement('div');node.className=label?'qm-user':'qm-assistant';node.textContent=text;if(label){const small=document.createElement('span');small.className='qm-applied';small.textContent=label;node.append(small);}$('history').append(node);$('history').scrollTop=$('history').scrollHeight;}
+function history(text,label=''){const node=document.createElement('div');node.className=label?'pv-bubble':'pv-reply';node.textContent=text;if(label){const small=document.createElement('span');small.className='qm-applied';small.textContent=label;node.append(small);}$('history').append(node);$('history').scrollTop=$('history').scrollHeight;}
 function render(){
  const activeEdit=editing!==null&&$('edit-'+editing); const editDraft=activeEdit?activeEdit.value:null;
  const titles={running:'Reviewing accounts',adjusting:'Adjusting course…',paused:'Task paused',stopped:'Task cancelled',done:'Task finished',approval:'Needs approval'};
@@ -32,12 +32,15 @@ $('pending-list').onclick=e=>{const button=e.target.closest('button[data-action]
  render();};
 $('pending-list').onkeydown=e=>{if(e.key==='Escape'&&editing!==null){editing=null;render();notice('Edit canceled.');}};
 $('toggle-pending').onclick=()=>{collapsed=!collapsed;$('pending-list').hidden=collapsed;$('toggle-pending').setAttribute('aria-expanded',String(!collapsed));};
+let taskDetailOpen=false;
+$('task-expand-toggle').onclick=()=>{taskDetailOpen=!taskDetailOpen;$('task-detail-panel').hidden=!taskDetailOpen;$('task-expand-toggle').setAttribute('aria-expanded',String(taskDetailOpen));$('task-expand-toggle').querySelector('.chev').style.display='inline-block';$('task-expand-toggle').querySelector('.chev').style.transform=taskDetailOpen?'rotate(180deg)':'';};
 $('composer').onsubmit=e=>{e.preventDefault();const text=$('draft').value.trim();if(!text){notice('Write a message first.');return;}if($('send').disabled)return;messages.push({id:nextId++,text,mode:$('timing').value});$('draft').value='';render();notice(messages.length===5?'5-message limit reached. Edit or remove a pending message to add another.':'Message saved. The current job keeps running.');};
 $('draft').onkeydown=e=>{if(e.key==='Enter'&&!e.shiftKey&&!e.isComposing){e.preventDefault();$('composer').requestSubmit();}};
-$('pause').onclick=e=>{e.preventDefault();e.stopPropagation();state=state==='paused'?'running':'paused';render();notice(state==='paused'?'Task paused explicitly. Pending messages will not run until you resume.':'Task resumed. Pending updates wait for the next safe point.');};
-$('stop').onclick=e=>{e.preventDefault();e.stopPropagation();if(window.confirm('Stop this task? It cannot resume. Pending messages will remain visible but will not run.')){state='stopped';render();notice('Task cancelled explicitly. Pending messages were not sent.');}};
+$('pause').onclick=()=>{state=state==='paused'?'running':'paused';render();notice(state==='paused'?'Task paused explicitly. Pending messages will not run until you resume.':'Task resumed. Pending updates wait for the next safe point.');};
+$('stop').onclick=()=>{document.querySelector('.qm-task-more').open=false;if(window.confirm('Stop this task? It cannot resume. Pending messages will remain visible but will not run.')){state='stopped';render();notice('Task cancelled explicitly. Pending messages were not sent.');}};
 $('trace').onclick=()=>{history('Trace: Salesforce account activity → 14 accounts reviewed. The current action has not been canceled.');};
 for(const button of document.querySelectorAll('[data-sim]'))button.onclick=()=>{
+ for(const b of document.querySelectorAll('[data-sim]'))b.classList.remove('is-active');button.classList.add('is-active');
  const action=button.dataset.sim;if(action==='reset'){reset();return;}
  if(editing!==null){notice('Save or cancel your edit before running a simulation step.');return;}
  if(['paused','stopped','done','approval'].includes(state)){notice('This task cannot advance in its current state. Resume, resolve approval, start a follow-up, or reset.');return;}
