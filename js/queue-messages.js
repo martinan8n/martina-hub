@@ -1,0 +1,51 @@
+(() => {
+'use strict';
+const $=id=>document.getElementById(id);
+let messages=[],nextId=4,state='running',editing=null,collapsed=false,removed=null;
+const escape=s=>s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const notice=text=>{$('feedback').textContent=text;};
+function history(text,label=''){const node=document.createElement('div');node.className=label?'qm-user':'qm-assistant';node.textContent=text;if(label){const small=document.createElement('span');small.className='qm-applied';small.textContent=label;node.append(small);}$('history').append(node);$('history').scrollTop=$('history').scrollHeight;}
+function render(){
+ const activeEdit=editing!==null&&$('edit-'+editing); const editDraft=activeEdit?activeEdit.value:null;
+ const titles={running:'◌ Reviewing accounts',adjusting:'◌ Adjusting course…',paused:'Ⅱ Task paused',stopped:'Task stopped',done:'Task finished',approval:'Approval needed'};
+ $('task-title').textContent=titles[state];$('task-state').textContent=state==='adjusting'?'Running':state[0].toUpperCase()+state.slice(1);
+ $('pending-label').textContent=messages.length+' pending message'+(messages.length===1?'':'s');$('pending-list').hidden=collapsed;$('toggle-pending').setAttribute('aria-expanded',String(!collapsed));
+ $('pending-list').innerHTML=messages.map((m,i)=>`<details class="qm-row" data-id="${m.id}" ${m.open||editing===m.id?'open':''}><summary><span class="qm-preview">${i+1}. ${escape(m.text)}</span><small>${m.failed?'Not delivered · Retry available':state==='stopped'?'Not sent · Task stopped':m.mode==='later'?'After task finishes':state==='done'?'Not applied · Task finished':state==='paused'?'Waiting for resume':state==='approval'?'Waiting for approval':'After current action'} · ${m.open?'Hide':'Read'} full message</small></summary>${editing===m.id?`<label for="edit-${m.id}" class="qm-sr">Edit message</label><textarea id="edit-${m.id}">${escape(m.text)}</textarea><div class="qm-row-actions"><button data-action="save">Save</button><button data-action="cancel">Cancel</button></div><small>This and later updates are held while you edit.</small>`:`<p class="qm-full">${escape(m.text)}</p><div class="qm-row-actions"><button data-action="edit">Edit</button><button data-action="remove">Remove</button>${m.failed?'<button data-action="retry">Retry</button>':''}${state==='done'?'<button data-action="start">Start follow-up</button>':''}</div>`}</details>`).join('');
+ if(editDraft!==null&&$('edit-'+editing))$('edit-'+editing).value=editDraft;
+ $('pause').textContent=state==='paused'?'Resume task':'Pause task';$('pause').disabled=['done','stopped','approval'].includes(state);$('stop').disabled=['done','stopped'].includes(state);
+ $('composer').hidden=state==='approval';$('send').disabled=messages.length>=5||['paused','stopped','done'].includes(state);$('timing').disabled=['paused','stopped','done'].includes(state);
+ $('gate').innerHTML=state==='approval'?'<div class="qm-gate"><p>Allow access to Salesforce account activity?</p><button id="approve">Allow and continue</button> <button id="reject">Decline and pause</button></div>':'';
+ if(state==='approval'){$('approve').onclick=()=>{state='running';render();notice('Approval granted. Updates will apply at the next safe point.');};$('reject').onclick=()=>{state='paused';render();notice('Permission declined. Task paused; messages retained.');};}
+}
+function reset(){messages=[{id:1,mode:'steer',text:'Only include enterprise accounts with more than 500 employees.'},{id:2,mode:'steer',text:'Prioritize accounts with an open renewal in the next 30 days. Include the account owner, renewal date, and the most recent customer conversation in the shortlist. Please flag missing information instead of guessing.'},{id:3,mode:'later',text:'Then draft a short internal summary of the shortlist for the sales team. Do not send it.'}];nextId=4;state='running';editing=null;collapsed=false;$('draft').value='';$('timing').value='steer';$('history').innerHTML='<div class="qm-user">Find enterprise accounts that need a follow-up this week.</div><div class="qm-assistant">I’ll review the accounts and their recent activity, then prepare a shortlist.</div>';$('task-detail').textContent='Reading Salesforce account activity. 14 accounts reviewed.';render();notice('Updates apply after the current action finishes.');}
+$('pending-list').addEventListener('toggle',e=>{const row=e.target.closest('.qm-row');if(row){const m=messages.find(x=>x.id===Number(row.dataset.id));if(m){m.open=row.open;const small=row.querySelector('summary small');if(small)small.textContent=small.textContent.replace(/(Read|Hide) full message/,row.open?'Hide full message':'Read full message');}}},true);
+$('pending-list').onclick=e=>{const button=e.target.closest('button[data-action]');if(!button)return;const id=Number(button.closest('.qm-row').dataset.id),m=messages.find(x=>x.id===id),action=button.dataset.action;if(!m)return;
+ if(action==='edit'){if(editing!==null){notice('Save or cancel the current edit first.');return;}editing=id;render();$('edit-'+id).focus();return;}
+ if(action==='save'){const text=$('edit-'+id).value.trim();if(!text){notice('Add text or remove the message.');return;}m.text=text;editing=null;notice('Message updated. Other messages are unchanged.');}
+ if(action==='cancel'){editing=null;notice('Edit canceled. Original message retained.');}
+ if(action==='remove'){if(editing!==null){notice('Save or cancel your edit before removing messages.');return;}removed={message:m,index:messages.indexOf(m)};messages=messages.filter(x=>x.id!==id);render();notice('Message removed.');const undo=document.createElement('button');undo.textContent='Undo';undo.onclick=()=>{if(messages.length>=5){notice('Queue is full. Remove a message before restoring this one.');return;}messages.splice(removed.index,0,removed.message);removed=null;render();notice('Message restored.');};$('feedback').append(undo);return;}
+ if(action==='retry'){m.failed=false;notice('Saved again. Waiting for the next safe point.');}
+ if(action==='start'){if(editing!==null){notice('Save or cancel your edit first.');return;}messages=messages.filter(x=>x.id!==id);state='running';history(m.text,'Follow-up started');notice('A new follow-up has started. Other messages remain pending.');}
+ render();};
+$('pending-list').onkeydown=e=>{if(e.key==='Escape'&&editing!==null){editing=null;render();notice('Edit canceled.');}};
+$('toggle-pending').onclick=()=>{collapsed=!collapsed;$('pending-list').hidden=collapsed;$('toggle-pending').setAttribute('aria-expanded',String(!collapsed));};
+$('composer').onsubmit=e=>{e.preventDefault();const text=$('draft').value.trim();if(!text){notice('Write a message first.');return;}if($('send').disabled)return;messages.push({id:nextId++,text,mode:$('timing').value});$('draft').value='';render();notice(messages.length===5?'5-message limit reached. Edit or remove a pending message to add another.':'Message saved. The current job keeps running.');};
+$('draft').onkeydown=e=>{if(e.key==='Enter'&&!e.shiftKey&&!e.isComposing){e.preventDefault();$('composer').requestSubmit();}};
+$('pause').onclick=()=>{state=state==='paused'?'running':'paused';render();notice(state==='paused'?'Task paused explicitly. Pending messages will not run until you resume.':'Task resumed. Pending updates wait for the next safe point.');};
+$('stop').onclick=()=>{if(window.confirm('Stop this task? It cannot resume. Pending messages will remain visible but will not run.')){state='stopped';render();notice('Task stopped explicitly. Pending messages were not sent.');}};
+$('trace').onclick=()=>{history('Trace: Salesforce account activity → 14 accounts reviewed. The current action has not been canceled.');};
+for(const button of document.querySelectorAll('[data-sim]'))button.onclick=()=>{
+ const action=button.dataset.sim;if(action==='reset'){reset();return;}
+ if(['paused','stopped','done','approval'].includes(state)){notice('This task cannot advance in its current state. Resume, resolve approval, start a follow-up, or reset.');return;}
+ if(action==='safe'){
+  const editIndex=messages.findIndex(m=>m.id===editing||m.failed);const batch=messages.filter((m,i)=>m.mode==='steer'&&!m.failed&&(editIndex<0||i<editIndex));
+  if(!batch.length){notice(editing!==null?'Pending updates are held while you edit.':'No steering updates are ready. Follow-ups wait until task completion.');return;}
+  batch.forEach(m=>history(m.text,'Applied to current task'));messages=messages.filter(m=>!batch.includes(m));state='adjusting';$('task-detail').textContent='Updating the account selection with your latest instructions.';render();notice('Updates acknowledged together. The job continues.');
+ }else if(action==='continue'){state='running';$('task-detail').textContent='Reviewing enterprise renewals with the latest instructions.';render();notice('The agent continues with the updated context.');}
+ else if(action==='done'){history('The account shortlist is ready.');state='done';const hasSteering=messages.some(m=>m.mode==='steer');const next=messages.find(m=>m.mode==='later');if(next&&!hasSteering&&editing===null){messages=messages.filter(m=>m.id!==next.id);state='running';history(next.text,'Follow-up started');$('task-detail').textContent='Preparing the internal sales summary.';notice('The next queued follow-up started as a new turn.');}else notice(hasSteering?'Task finished before all updates were applied. Open a message to start a follow-up.':'Task finished.');render();}
+ else if(action==='approval'){state='approval';render();notice('Resolve the approval before continuing. Pending messages are retained.');}
+ else if(action==='failure'){const m=messages.find(m=>m.mode==='steer');if(m){m.failed=true;m.open=true;render();notice('Message delivery failed. Retry from the message; the job is still running.');}else notice('No steering update to simulate a delivery failure.');}
+};
+$('fullscreen').onclick=()=>{if(document.fullscreenElement)document.exitFullscreen();else $('prototype-frame').requestFullscreen().catch(()=>notice('Fullscreen is unavailable in this browser.'));};
+reset();
+})();
