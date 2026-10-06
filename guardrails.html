@@ -77,7 +77,7 @@
 
   .gr-trace-step { border: 1px solid var(--border-color); border-radius: var(--radius--2xs); padding: var(--spacing--sm); margin-bottom: var(--spacing--sm); background: var(--background--surface); }
   .gr-trace-title { font-size: var(--font-size--sm); font-weight: var(--font-weight--medium); color: var(--text-color); margin-bottom: 2px; }
-  .gr-trace-detail { font-size: var(--font-size--sm); color: var(--text-color--subtle); }
+  .gr-trace-detail { font-size: var(--font-size--sm); color: var(--text-color--subtler); }
 </style>
 </head>
 <body data-default-route="guardrails">
@@ -550,15 +550,14 @@
             <span class="trace-time">14:06:12</span>
           </div>
           <div class="gr-trace-step">
-            <div class="gr-trace-title">You&#39;ve reached your session cost cap</div>
-            <div class="gr-trace-detail">This session reached its cost cap before finishing &mdash; stopped at 21,400 of 50,000 sent. Increase the cap to keep it going.</div>
-            <div style="font-size:var(--font-size--sm); font-weight:var(--font-weight--medium); color:var(--text-color); margin:var(--spacing--sm) 0 var(--spacing--3xs);">New session cap</div>
-            <div class="hifi-amount-input" style="max-width:140px; background:var(--background--surface);">
-              <div class="amt"><span>$</span><input type="text" placeholder="0" style="border:none; outline:none; background:transparent; font-family:inherit; font-size:var(--font-size--sm); font-weight:var(--font-weight--medium); width:100%; color:var(--text-color);"></div>
+            <div class="gr-trace-title">You&#39;ve reached your cost cap</div>
+            <div class="gr-trace-detail">This session used its full $12 limit before finishing &mdash; stopped at 21,400 of 50,000 sent. Add funds to keep going.</div>
+            <div class="hifi-amount-input" style="max-width:100px; margin:var(--spacing--sm) 0 0; background:var(--background--surface);">
+              <div class="amt"><span>$</span><input type="text" value="10" style="border:none; outline:none; background:transparent; font-family:inherit; font-size:var(--font-size--sm); font-weight:var(--font-weight--medium); width:100%; color:var(--text-color);"></div>
             </div>
             <div style="display:flex; gap:var(--spacing--2xs); margin-top:var(--spacing--xs);">
               <button class="n8n-button n8n-button--tertiary n8n-button--size-medium">Not now</button>
-              <button class="n8n-button n8n-button--secondary n8n-button--size-medium">Increase cap</button>
+              <button class="n8n-button n8n-button--secondary n8n-button--size-medium">Top up</button>
             </div>
           </div>
 
@@ -575,7 +574,7 @@
       </div>
     </div>
 
-    <p class="lrt-screen-desc" style="margin:12px 0 0; max-width:580px;">Copy and actions pulled from the final guardrail-alert copy shared with engineering (&ldquo;You&#39;ve reached your session cost cap&rdquo; / New session cap input / Not now &middot; Increase cap), reused directly inside the trace step so a builder reviewing this later can raise the cap and resume from the same place they noticed the problem &mdash; not just read about it. Still open: should this row sit inline in the timeline like any other step (shown here), or get pulled out as its own distinct marker given it's the reason the session stopped, not just something that happened along the way?</p>
+    <p class="lrt-screen-desc" style="margin:12px 0 0; max-width:580px;">Reuses the real top-up card from the settled Cost cap reached pattern (amount input, not a separate confirm step) directly inside the trace step, so a builder reviewing this later can fund and resume from the same place they noticed the problem &mdash; not just read about it. Top up, not Increase cap: Sales Outreach is a cloud agent, so reaching the cap is a billing moment (add funds), not a self-hosted config change (raise a limit) &mdash; the &ldquo;Increase cap&rdquo; copy shared with engineering is for that self-hosted framing instead. Still open: should this row sit inline in the timeline like any other step (shown here), or get pulled out as its own distinct marker given it's the reason the session stopped, not just something that happened along the way?</p>
   </section>
 
 </div>
