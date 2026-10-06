@@ -65,7 +65,7 @@
   /* Trace timeline — reused from the Memory: Configure + Delete prototype's Trace example */
   .trace-icon { width: 22px; height: 22px; border-radius: 6px; display: flex; align-items: center; justify-content: center; flex: none; }
   .trace-icon--tool { background: var(--color--green-100); color: var(--color--green-800); }
-  .trace-icon--guardrail { background: var(--color--red-50); color: var(--color--red-600); }
+  .trace-icon--guardrail { background: var(--color--neutral-150); color: var(--text-color--subtle); }
   .trace-step-row { display: flex; align-items: center; gap: 8px; padding: 6px 0; }
   .trace-step-row .trace-label { font-size: var(--font-size--sm); color: var(--text-color); }
   .trace-step-row .trace-time { margin-left: auto; font-size: var(--font-size--2xs); color: var(--text-color--subtler); }
@@ -75,7 +75,7 @@
   .trace-msg-head .trace-time { margin-left: auto; }
   .trace-msg-body { padding: var(--spacing--sm); font-size: var(--font-size--sm); line-height: 1.6; }
 
-  .gr-trace-step { border: 1px solid var(--color--red-200); border-radius: var(--radius--2xs); padding: var(--spacing--sm); margin-bottom: var(--spacing--sm); background: var(--color--red-50); }
+  .gr-trace-step { border: 1px solid var(--border-color); border-radius: var(--radius--2xs); padding: var(--spacing--sm); margin-bottom: var(--spacing--sm); background: var(--background--surface); }
   .gr-trace-title { font-size: var(--font-size--sm); font-weight: var(--font-weight--medium); color: var(--text-color); margin-bottom: 2px; }
   .gr-trace-detail { font-size: var(--font-size--sm); color: var(--text-color--subtle); }
 </style>
@@ -558,7 +558,7 @@
             </div>
             <div style="display:flex; gap:var(--spacing--2xs); margin-top:var(--spacing--xs);">
               <button class="n8n-button n8n-button--tertiary n8n-button--size-medium">Not now</button>
-              <button class="n8n-button n8n-button--primary n8n-button--size-medium">Add funds</button>
+              <button class="n8n-button n8n-button--secondary n8n-button--size-medium">Top up</button>
             </div>
           </div>
 
