@@ -552,6 +552,14 @@
           <div class="gr-trace-step">
             <div class="gr-trace-title">You&#39;ve reached your cost cap</div>
             <div class="gr-trace-detail">This session used its full $12 limit before finishing &mdash; stopped at 21,400 of 50,000 sent.</div>
+            <div class="hifi-amount-input" style="max-width:140px; margin:var(--spacing--sm) 0 0; background:var(--background--surface);">
+              <div class="amt"><span>$</span><input type="text" value="10" style="border:none; outline:none; background:transparent; font-family:inherit; font-size:var(--font-size--sm); font-weight:var(--font-weight--medium); width:100%; color:var(--text-color);"></div>
+              <div class="per">top up</div>
+            </div>
+            <div style="display:flex; gap:var(--spacing--2xs); margin-top:var(--spacing--xs);">
+              <button class="n8n-button n8n-button--tertiary n8n-button--size-medium">Not now</button>
+              <button class="n8n-button n8n-button--primary n8n-button--size-medium">Add funds</button>
+            </div>
           </div>
 
           <div class="trace-msg-card" style="margin-top:var(--spacing--sm);">
@@ -567,7 +575,7 @@
       </div>
     </div>
 
-    <p class="lrt-screen-desc" style="margin:12px 0 0; max-width:580px;">Open question, not yet decided: should this row sit inline in the timeline like any other step (shown here), or get pulled out as its own distinct marker given it's the reason the session stopped, not just something that happened along the way? Also unresolved: whether a builder should be able to act on it from here (e.g. raise the cap and resume), the way Approach A's memory delete acts directly from its own trace step.</p>
+    <p class="lrt-screen-desc" style="margin:12px 0 0; max-width:580px;">Reuses the real top-up card from the settled Cost cap reached pattern (amount input, not a separate confirm step) directly inside the trace step, so a builder reviewing this later can fund and resume from the same place they noticed the problem &mdash; not just read about it. Still open: should this row sit inline in the timeline like any other step (shown here), or get pulled out as its own distinct marker given it's the reason the session stopped, not just something that happened along the way?</p>
   </section>
 
 </div>
