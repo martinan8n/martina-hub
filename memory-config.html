@@ -39,6 +39,8 @@
   .mem-steer-note svg { flex: none; margin-top: 1px; }
 
   .mem-kind-label { font-size: var(--font-size--2xs); font-weight: var(--font-weight--medium); text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-color--subtler); margin: var(--spacing--sm) 0 var(--spacing--3xs); }
+  .mem-modal-section-label { font-size: var(--font-size--sm); font-weight: var(--font-weight--medium); color: var(--text-color); margin: var(--spacing--sm) 0 var(--spacing--xs); }
+  .mem-modal-section-label:first-of-type { margin-top: 0; }
   .mem-kind-label:first-child { margin-top: 0; }
   .mem-entry { font-size: var(--font-size--sm); color: var(--text-color); padding: 6px 0; border-top: 1px solid var(--border-color--subtle); }
   .mem-entry:first-of-type { border-top: none; }
@@ -728,6 +730,7 @@
           <span class="hifi-modal-title">Guidance</span>
           <span class="hifi-modal-close" onclick="memHideGuidanceModalD()">&times;</span>
         </div>
+        <div class="mem-modal-section-label">Your guidance</div>
         <div class="mem-guidance-sublabel">What to add</div>
         <textarea class="mem-guidance-textarea" placeholder="e.g. my timezone and tool preferences">My preferred notification channel.</textarea>
         <div class="mem-guidance-sublabel" style="margin-top:var(--spacing--xs);">What to exclude</div>
@@ -738,6 +741,7 @@
         </p>
 
         <div class="hifi-section-divider"></div>
+        <div class="mem-modal-section-label">Sample of what it's producing <span style="font-weight:var(--font-weight--regular); color:var(--text-color--subtler); text-transform:none; letter-spacing:normal;">&middot; read-only</span></div>
         <div class="mem-kind-label">Preferences</div>
         <div class="mem-entry">Prefers Slack notifications over email for approval requests.<div class="mem-entry-date">28 Sep 2026</div></div>
 
@@ -746,7 +750,7 @@
 
         <div class="mem-kind-label">Previous work</div>
         <div class="mem-entry">Finished configuring the weekly funnel sync and pointed it at Peter's Hex project.<div class="mem-entry-date">2 Oct 2026</div></div>
-        <p class="hifi-modal-hint" style="margin-top:var(--spacing--xs);">This sample reflects the guidance above &mdash; read-only, use Manage memory to delete.</p>
+        <p class="hifi-modal-hint" style="margin-top:var(--spacing--xs);">This sample reflects the guidance above &mdash; use Manage memory to delete.</p>
 
         <div class="hifi-modal-actions" style="justify-content:flex-end;">
           <button class="n8n-button n8n-button--tertiary n8n-button--size-medium" onclick="memHideGuidanceModalD()">Done</button>
