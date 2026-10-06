@@ -61,6 +61,23 @@
   .hifi-alert-detail { margin-top: var(--spacing--sm); }
   .hifi-select-row { display: flex; align-items: center; justify-content: space-between; border: 1px solid var(--border-color); border-radius: var(--radius--2xs); padding: var(--spacing--3xs) var(--spacing--xs); font-size: var(--font-size--sm); font-weight: var(--font-weight--medium); margin-bottom: var(--spacing--3xs); }
   .hifi-modal-actions { display: flex; justify-content: flex-end; gap: var(--spacing--3xs); padding-top: var(--spacing--sm); }
+
+  /* Trace timeline — reused from the Memory: Configure + Delete prototype's Trace example */
+  .trace-icon { width: 22px; height: 22px; border-radius: 6px; display: flex; align-items: center; justify-content: center; flex: none; }
+  .trace-icon--tool { background: var(--color--green-100); color: var(--color--green-800); }
+  .trace-icon--guardrail { background: var(--color--red-50); color: var(--color--red-600); }
+  .trace-step-row { display: flex; align-items: center; gap: 8px; padding: 6px 0; }
+  .trace-step-row .trace-label { font-size: var(--font-size--sm); color: var(--text-color); }
+  .trace-step-row .trace-time { margin-left: auto; font-size: var(--font-size--2xs); color: var(--text-color--subtler); }
+  .trace-msg-card { border: 1px solid var(--border-color); border-radius: var(--radius--xs); background: var(--background--surface); margin-bottom: var(--spacing--xs); overflow: hidden; }
+  .trace-msg-head { display: flex; align-items: center; gap: 8px; padding: var(--spacing--xs) var(--spacing--sm); border-bottom: 1px solid var(--border-color--subtle); }
+  .trace-msg-head b { font-size: var(--font-size--sm); font-weight: var(--font-weight--medium); }
+  .trace-msg-head .trace-time { margin-left: auto; }
+  .trace-msg-body { padding: var(--spacing--sm); font-size: var(--font-size--sm); line-height: 1.6; }
+
+  .gr-trace-step { border: 1px solid var(--color--red-200); border-radius: var(--radius--2xs); padding: var(--spacing--sm); margin-bottom: var(--spacing--sm); background: var(--color--red-50); }
+  .gr-trace-title { font-size: var(--font-size--sm); font-weight: var(--font-weight--medium); color: var(--text-color); margin-bottom: 2px; }
+  .gr-trace-detail { font-size: var(--font-size--sm); color: var(--text-color--subtle); }
 </style>
 </head>
 <body data-default-route="guardrails">
@@ -106,6 +123,14 @@
           <span class="status">In progress</span>
           <h3>Usage, limits &amp; running states</h3>
           <p class="desc">Settings &mdash; Usage and limits (final design); Running chat in the nav &mdash; Running &amp; Awaiting; Cost cap reached, grounded in the real AIA question-card pattern.</p>
+        </div>
+      </a>
+      <a class="screen-card" href="#/guardrails-trace-hifi">
+        <div class="thumb">&#128737;</div>
+        <div class="body">
+          <span class="status">New</span>
+          <h3>Guardrail hit in a session trace (hi-fi)</h3>
+          <p class="desc">From last Friday's grooming: we don't yet show how a guardrail being hit shows up in a session's trace/timeline view. First pass, same Cost cap scenario as the pattern above, shown inline in a real trace layout.</p>
         </div>
       </a>
       <div class="screen-card placeholder">More guardrail patterns land here as they settle elsewhere</div>
@@ -471,6 +496,78 @@
       </div></div></div>
       <p class="lrt-screen-desc" style="margin:8px 0 0; max-width:480px;"><b>Cost cap reached.</b> One card, not two &mdash; the amount input replaces a separate &quot;do you want to top up?&quot; confirmation step, since entering an amount and confirming already is the yes. Grounded in the real n8n AIA question-card pattern (<code>InstanceAiQuestions.vue</code>), adapted from its free-text question type.</p>
     </div>
+  </section>
+
+  <!-- ================= GUARDRAILS: GUARDRAIL HIT IN TRACE (HI-FI) ================= -->
+  <section data-route="guardrails-trace-hifi">
+    <a class="back-link" href="#/guardrails">&larr; Guardrails</a>
+    <div class="screen-head">
+      <h1>Guardrail hit in a session trace (hi-fi)</h1>
+      <p>From last Friday's grooming: we don't yet show how a guardrail being hit shows up in a session's trace/timeline view &mdash; only the in-chat Cost cap card above. First pass, reusing the same real Trace layout built for the Memory: Configure + Delete prototype, and the same Cost cap / Email Campaign scenario as the pattern above it, so it's grounded in something already settled rather than invented fresh.</p>
+    </div>
+
+    <div class="hifi" style="max-width:640px; position:relative;">
+      <div class="hifi-shell" style="min-height:auto;">
+        <div class="hifi-topbar" style="justify-content:space-between;">
+          <span class="hifi-crumb"><span style="color:var(--text-color--subtler);">Personal /</span> <b>Sales Outreach</b> <span style="color:var(--text-color--subtler);">/ Email Campaign</span> &#9662;</span>
+          <span style="display:flex; align-items:center; gap:10px; font-size:var(--font-size--2xs); color:var(--text-color--subtler);">
+            <span>12,900t ($12.00)</span>
+            <span>4m 12s</span>
+          </span>
+        </div>
+        <div style="padding:var(--spacing--sm) var(--spacing--md) 0;">
+          <div style="display:flex; align-items:center; gap:8px; border:1px solid var(--border-color); border-radius:var(--radius--sm); padding:7px 10px; color:var(--text-color--subtler); font-size:var(--font-size--sm);">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            Hit / to search the trace
+          </div>
+        </div>
+
+        <div class="hifi-body" style="max-width:none;">
+
+          <div class="trace-msg-card">
+            <div class="trace-msg-head">
+              <span class="trace-icon" style="background:var(--color--blue-50); color:var(--color--blue-500);"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
+              <b>User</b>
+              <span class="trace-time">14:02:00</span>
+            </div>
+            <div class="trace-msg-body">Send this campaign to our full list of 50,000 contacts.</div>
+          </div>
+
+          <div class="trace-step-row">
+            <span class="trace-icon trace-icon--tool"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></span>
+            <span class="trace-label">Mailgun &middot; send_batch</span>
+            <span class="trace-time">14:02:04</span>
+          </div>
+          <div class="trace-step-row">
+            <span class="trace-icon trace-icon--tool"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></span>
+            <span class="trace-label">Mailgun &middot; send_batch</span>
+            <span class="trace-time">14:04:51</span>
+          </div>
+
+          <div class="trace-step-row">
+            <span class="trace-icon trace-icon--guardrail"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 13c0 5-3.5 7.5-7.35 8.95a1 1 0 0 1-.6-.1C8.5 20.5 5 18 5 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C15.51 3.79 18 5 20 5a1 1 0 0 1 1 1z"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg></span>
+            <span class="trace-label">Guardrail hit &middot; Cost cap reached</span>
+            <span class="trace-time">14:06:12</span>
+          </div>
+          <div class="gr-trace-step">
+            <div class="gr-trace-title">You&#39;ve reached your cost cap</div>
+            <div class="gr-trace-detail">This session used its full $12 limit before finishing &mdash; stopped at 21,400 of 50,000 sent.</div>
+          </div>
+
+          <div class="trace-msg-card" style="margin-top:var(--spacing--sm);">
+            <div class="trace-msg-head">
+              <span class="trace-icon" style="background:var(--color--purple-50); color:var(--color--purple-500);"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4"/><path d="M8 16h.01"/><path d="M16 16h.01"/></svg></span>
+              <b>Agent</b>
+              <span class="trace-time">14:06:13</span>
+            </div>
+            <div class="trace-msg-body">Stopped partway through &mdash; 21,400 of 50,000 sent so far.</div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <p class="lrt-screen-desc" style="margin:12px 0 0; max-width:580px;">Open question, not yet decided: should this row sit inline in the timeline like any other step (shown here), or get pulled out as its own distinct marker given it's the reason the session stopped, not just something that happened along the way? Also unresolved: whether a builder should be able to act on it from here (e.g. raise the cap and resume), the way Approach A's memory delete acts directly from its own trace step.</p>
   </section>
 
 </div>
