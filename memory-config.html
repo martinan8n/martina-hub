@@ -94,8 +94,6 @@
   .mem-modal-nav-item:hover { background: var(--color--neutral-150); }
   .mem-modal-nav-item.is-active { color: var(--text-color); font-weight: var(--font-weight--medium); background: var(--background--surface); border-right: 2px solid var(--color--primary); }
   .mem-modal-content { flex: 1; min-width: 0; padding: var(--spacing--lg); overflow-y: auto; position: relative; }
-  .mem-recent-chev { transition: transform 120ms ease; }
-  .mem-recent-chev.is-open { transform: rotate(90deg); }
 
   /* Trace example (static) */
   .trace-icon { width: 22px; height: 22px; border-radius: 6px; display: flex; align-items: center; justify-content: center; flex: none; }
@@ -502,14 +500,12 @@
           <span class="hifi-modal-close" onclick="memHideModalB()">&times;</span>
         </div>
 
-        <div class="hifi-settings-row" style="cursor:pointer; padding-top:0;" onclick="memToggleRecent(this)">
-          <div class="hifi-row-label">
-            <div class="hifi-row-title">Recently captured</div>
-            <p class="hifi-row-desc">Read-only preview, grouped by kind &mdash; same entries as the full list below.</p>
-          </div>
-          <svg class="hifi-chev mem-recent-chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 6 6 6-6 6"/></svg>
+        <div class="n8n-tabs" style="margin-bottom:var(--spacing--md);">
+          <div class="n8n-tab is-active" id="memModalBTabRecent" onclick="memModalBShowTab('recent')">Recently captured</div>
+          <div class="n8n-tab" id="memModalBTabAll" onclick="memModalBShowTab('all')">All entries</div>
         </div>
-        <div class="mem-recent-preview" style="display:none; padding-bottom:var(--spacing--xs);">
+
+        <div id="memModalBPaneRecent">
           <div class="mem-kind-label">Preferences</div>
           <div class="mem-entry">Prefers Slack notifications over email for approval requests.<div class="mem-entry-date">28 Sep 2026</div></div>
 
@@ -520,43 +516,43 @@
           <div class="mem-entry">Finished configuring the weekly funnel sync and pointed it at Peter's Hex project.<div class="mem-entry-date">2 Oct 2026</div></div>
         </div>
 
-        <div class="hifi-section-divider"></div>
-        <div class="hifi-field-label">All entries</div>
-        <div class="mem-list-row">
-          <div>
-            <div class="mem-list-text">Agent spend alerts go to Sin on Slack, not email.</div>
-            <div class="mem-list-date">2 Oct 2026</div>
+        <div id="memModalBPaneAll" style="display:none;">
+          <div class="mem-list-row">
+            <div>
+              <div class="mem-list-text">Agent spend alerts go to Sin on Slack, not email.</div>
+              <div class="mem-list-date">2 Oct 2026</div>
+            </div>
+            <button class="mem-del-btn" onclick="memDeleteListRow(this)">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 11v6"/><path d="M14 11v6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+            </button>
           </div>
-          <button class="mem-del-btn" onclick="memDeleteListRow(this)">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 11v6"/><path d="M14 11v6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-          </button>
-        </div>
-        <div class="mem-list-row">
-          <div>
-            <div class="mem-list-text">This agent's funnel data comes from Peter's Hex project.</div>
-            <div class="mem-list-date">2 Oct 2026</div>
+          <div class="mem-list-row">
+            <div>
+              <div class="mem-list-text">This agent's funnel data comes from Peter's Hex project.</div>
+              <div class="mem-list-date">2 Oct 2026</div>
+            </div>
+            <button class="mem-del-btn" onclick="memDeleteListRow(this)">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 11v6"/><path d="M14 11v6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+            </button>
           </div>
-          <button class="mem-del-btn" onclick="memDeleteListRow(this)">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 11v6"/><path d="M14 11v6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-          </button>
-        </div>
-        <div class="mem-list-row">
-          <div>
-            <div class="mem-list-text">Prefers Slack notifications over email for approval requests.</div>
-            <div class="mem-list-date">28 Sep 2026</div>
+          <div class="mem-list-row">
+            <div>
+              <div class="mem-list-text">Prefers Slack notifications over email for approval requests.</div>
+              <div class="mem-list-date">28 Sep 2026</div>
+            </div>
+            <button class="mem-del-btn" onclick="memDeleteListRow(this)">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 11v6"/><path d="M14 11v6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+            </button>
           </div>
-          <button class="mem-del-btn" onclick="memDeleteListRow(this)">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 11v6"/><path d="M14 11v6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-          </button>
-        </div>
-        <div class="mem-list-row">
-          <div>
-            <div class="mem-list-text">Chose GPT-5.6 Terra as the default model for this agent's sub-agents.</div>
-            <div class="mem-list-date">25 Sep 2026</div>
+          <div class="mem-list-row">
+            <div>
+              <div class="mem-list-text">Chose GPT-5.6 Terra as the default model for this agent's sub-agents.</div>
+              <div class="mem-list-date">25 Sep 2026</div>
+            </div>
+            <button class="mem-del-btn" onclick="memDeleteListRow(this)">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 11v6"/><path d="M14 11v6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+            </button>
           </div>
-          <button class="mem-del-btn" onclick="memDeleteListRow(this)">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 11v6"/><path d="M14 11v6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-          </button>
         </div>
 
         <div class="hifi-modal-actions" style="justify-content:flex-end;">
@@ -1008,13 +1004,11 @@
         var wrap = document.getElementById("memGuidanceWrapB");
         if (wrap) wrap.classList.toggle("is-open", !isOn);
       }
-      function memToggleRecent(el) {
-        var chev = el.querySelector(".mem-recent-chev");
-        var preview = el.nextElementSibling;
-        if (!preview) return;
-        var open = preview.style.display !== "none";
-        preview.style.display = open ? "none" : "block";
-        if (chev) chev.classList.toggle("is-open", !open);
+      function memModalBShowTab(which) {
+        document.getElementById("memModalBPaneRecent").style.display = which === "recent" ? "block" : "none";
+        document.getElementById("memModalBPaneAll").style.display = which === "all" ? "block" : "none";
+        document.getElementById("memModalBTabRecent").classList.toggle("is-active", which === "recent");
+        document.getElementById("memModalBTabAll").classList.toggle("is-active", which === "all");
       }
     </script>
   </section>
