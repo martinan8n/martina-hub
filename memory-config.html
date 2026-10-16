@@ -89,6 +89,17 @@
   .mem-list-date { font-size: var(--font-size--2xs); color: var(--text-color--subtler); margin-top: 2px; }
   .mem-list-row.is-removed { display: none; }
   .mem-sidepanel { width: 480px; max-width: 90vw; height: 100%; background: var(--background--surface); padding: var(--spacing--lg); overflow-y: auto; box-shadow: -8px 0 24px rgba(0,0,0,0.1); }
+
+  .mem-meta { font-size: var(--font-size--2xs); color: var(--text-color--subtler); margin-top: 2px; }
+  .mk-empty-card { border: 1px dashed var(--border-color); border-radius: var(--radius--md); padding: var(--spacing--xl) var(--spacing--md); text-align: center; background: var(--background--surface); }
+  .mk-empty-icon { color: var(--text-color--subtler); margin-bottom: var(--spacing--sm); }
+  .mk-empty-title { font-size: var(--font-size--lg); font-weight: var(--font-weight--medium); margin-bottom: var(--spacing--2xs); }
+  .mk-empty-desc { font-size: var(--font-size--sm); color: var(--text-color--subtler); max-width: 360px; margin: 0 auto var(--spacing--md); }
+  .mk-advanced-header { display: flex; align-items: center; justify-content: space-between; cursor: pointer; padding: var(--spacing--sm) 0; font-size: var(--font-size--sm); font-weight: var(--font-weight--medium); }
+  .mk-advanced-chevron { transition: transform 120ms ease; color: var(--text-color--subtler); }
+  .mk-advanced-chevron.is-open { transform: rotate(180deg); }
+  .mk-filter-select { border: 1px solid var(--border-color); border-radius: var(--radius--2xs); padding: 6px 10px; font-family: inherit; font-size: var(--font-size--sm); color: var(--text-color); background: var(--background--surface); }
+  .mk-back-row { display: flex; align-items: center; gap: 8px; cursor: pointer; padding-bottom: var(--spacing--md); font-size: var(--font-size--sm); font-weight: var(--font-weight--medium); color: var(--text-color); }
   .mem-nav-modal { width: 620px; max-width: 94vw; max-height: 560px; padding: 0; display: flex; flex-direction: column; overflow: hidden; }
   .mem-nav-modal-head { display: flex; align-items: center; flex: none; padding: var(--spacing--md) var(--spacing--lg); border-bottom: 1px solid var(--border-color); }
   .mem-nav-modal-head .hifi-modal-close { margin-left: auto; }
@@ -810,6 +821,239 @@
       </div>
     </div>
 
+    <div class="section-title" style="margin-top:var(--spacing--xl);">Build &rarr; Knowledge: memory relocated (grounded in real Build/Knowledge screenshots, Oct 16)</div>
+    <p class="lrt-screen-desc" style="max-width:620px; margin:0 0 var(--spacing--sm);">Per the Build/Knowledge split we landed on: the memory <em>configuration</em> (Session/Cross-session toggle, Guidance) stays in Build, same as today &mdash; it's a behavior setting, not content. The stored memories themselves move to Knowledge as a new card, since they're content the agent knows, the same category as uploaded files and vector stores. Shows the last 10 inline; &ldquo;View all&rdquo; opens a filterable full list (by user, by channel) with delete &mdash; this is also where Recently captured and Manage memory converge into one list at two zoom levels, instead of staying separate surfaces.</p>
+
+    <div class="hifi" style="max-width:660px; position:relative;">
+      <div class="hifi-shell" style="min-height:auto;">
+        <div class="n8n-tabs" style="margin:0 0 var(--spacing--sm);">
+          <div class="n8n-tab" id="mkTabBuild" onclick="mkShowTab('build')">Build</div>
+          <div class="n8n-tab is-active" id="mkTabKnowledge" onclick="mkShowTab('knowledge')">Knowledge</div>
+          <div class="n8n-tab">Sessions</div>
+          <div class="n8n-tab">Settings</div>
+        </div>
+
+        <!-- BUILD: memory config only, per Martina's "remove what you have in Build except memory" -->
+        <div id="mkPaneBuild" class="hifi-body" style="display:none;">
+          <div class="hifi-card">
+            <div class="hifi-field-label">Memory</div>
+            <div class="mem-static-row">
+              <div class="hifi-row-label">
+                <div class="hifi-row-title">Session memory</div>
+                <p class="hifi-row-desc">Remembers the conversation within the current session.</p>
+              </div>
+              <div class="hifi-row-value">Always on</div>
+            </div>
+            <div class="hifi-section-divider"></div>
+            <div class="hifi-toggle-row">
+              <div class="hifi-row-label">
+                <div class="hifi-row-title">Cross-session memory</div>
+                <p class="hifi-row-desc">Remembers useful details about each user across sessions, such as their preferences, decisions, and previous work.</p>
+              </div>
+              <span id="mkToggle" class="hifi-toggle is-on" onclick="mkToggleCrossSession(this)"><span class="hifi-toggle-knob"></span></span>
+            </div>
+            <div id="mkGuidanceWrap" class="mem-guidance-wrap is-open">
+              <div class="hifi-section-divider"></div>
+              <div class="hifi-field-label">Guidance <span style="font-weight:var(--font-weight--regular); color:var(--text-color--subtler);">&middot; optional</span></div>
+              <div class="mem-guidance-sublabel">What to add</div>
+              <textarea class="mem-guidance-textarea" placeholder="e.g. my timezone and tool preferences">My preferred notification channel.</textarea>
+              <div class="mem-guidance-sublabel" style="margin-top:var(--spacing--xs);">What to exclude</div>
+              <textarea class="mem-guidance-textarea" placeholder="e.g. client names or financial figures">Specific dollar amounts.</textarea>
+              <p class="mem-steer-note">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+                This steers what gets captured &mdash; it's best-effort, not a guarantee of exclusion. See it in Knowledge &rarr; Memory.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- KNOWLEDGE: real Knowledge base card + new Memory card + real Advanced/Vector stores -->
+        <div id="mkPaneKnowledge" class="hifi-body">
+
+          <div class="hifi-field-label">Knowledge base</div>
+          <p class="hifi-row-desc" style="max-width:480px; margin:0 0 var(--spacing--sm);">n8n stores files uploaded to this agent so it can search and read their contents when answering.</p>
+          <div class="mk-empty-card">
+            <div class="mk-empty-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg></div>
+            <div class="mk-empty-title">No files uploaded</div>
+            <div class="mk-empty-desc">Upload CSV, PDF, Markdown, or TXT files this agent can search and read</div>
+            <button class="n8n-button n8n-button--primary n8n-button--size-medium">Upload file</button>
+          </div>
+
+          <div class="hifi-card" style="margin-top:var(--spacing--md);">
+            <div class="hifi-field-label">Memory</div>
+            <p class="hifi-row-desc" style="margin:0 0 var(--spacing--sm);">What this agent remembers about each user across sessions.</p>
+
+            <div class="mem-list-row">
+              <div>
+                <div class="mem-list-text">Agent spend alerts go to Sin on Slack, not email.</div>
+                <div class="mem-meta">Sin &middot; #finance-ops &middot; 2 Oct 2026</div>
+              </div>
+            </div>
+            <div class="mem-list-row">
+              <div>
+                <div class="mem-list-text">This agent's funnel data comes from Peter's Hex project.</div>
+                <div class="mem-meta">Priya &middot; #product-analytics &middot; 2 Oct 2026</div>
+              </div>
+            </div>
+            <div class="mem-list-row">
+              <div>
+                <div class="mem-list-text">Finished configuring the weekly funnel sync and pointed it at Peter's Hex project.</div>
+                <div class="mem-meta">Priya &middot; #product-analytics &middot; 2 Oct 2026</div>
+              </div>
+            </div>
+            <div class="mem-list-row">
+              <div>
+                <div class="mem-list-text">Prefers Slack notifications over email for approval requests.</div>
+                <div class="mem-meta">Sin &middot; #finance-ops &middot; 28 Sep 2026</div>
+              </div>
+            </div>
+            <div class="mem-list-row">
+              <div>
+                <div class="mem-list-text">Chose GPT-5.6 Terra as the default model for this agent's sub-agents.</div>
+                <div class="mem-meta">You &middot; Build (internal) &middot; 25 Sep 2026</div>
+              </div>
+            </div>
+            <div class="mem-list-row">
+              <div>
+                <div class="mem-list-text">Escalations should go to the on-call channel after 6pm.</div>
+                <div class="mem-meta">Marco &middot; #support-escalations &middot; 20 Sep 2026</div>
+              </div>
+            </div>
+
+            <div class="hifi-section-divider"></div>
+            <div class="hifi-settings-row" onclick="mkShowAllMemories()" style="justify-content:center; padding:var(--spacing--xs) 0;">
+              <div class="hifi-row-title" style="color:var(--color--primary); text-align:center; width:100%;">View all (14)</div>
+            </div>
+          </div>
+
+          <div style="margin-top:var(--spacing--md);">
+            <div class="mk-advanced-header" onclick="mkToggleAdvanced()">
+              <span>Advanced</span>
+              <svg id="mkAdvancedChevron" class="mk-advanced-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+            </div>
+            <div id="mkAdvancedBody" style="display:none; padding-top:var(--spacing--xs);">
+              <div class="hifi-field-label">Vector stores</div>
+              <p class="hifi-row-desc" style="max-width:480px; margin:0 0 var(--spacing--sm);">External vector databases this agent can search. Unlike knowledge base files, the data lives outside n8n and you manage its indexing yourself.</p>
+              <div class="mk-empty-card">
+                <div class="mk-empty-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5V19A9 3 0 0 0 21 19V5"/><path d="M3 12A9 3 0 0 0 21 12"/></svg></div>
+                <div class="mk-empty-title">No vector stores connected</div>
+                <div class="mk-empty-desc">Connect a vector store so this agent can search data you've already indexed.</div>
+                <button class="n8n-button n8n-button--primary n8n-button--size-medium">Connect vector store</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- VIEW ALL MEMORIES (subpage, filters by user / channel) -->
+        <div id="mkPaneMemoryAll" class="hifi-body" style="display:none;">
+          <div class="mk-back-row" onclick="mkBackToKnowledge()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+            Memory
+          </div>
+
+          <div style="display:flex; gap:var(--spacing--xs); margin-bottom:var(--spacing--md);">
+            <select class="mk-filter-select">
+              <option>User: All</option>
+              <option>Sin</option>
+              <option>Priya</option>
+              <option>Marco</option>
+              <option>You</option>
+            </select>
+            <select class="mk-filter-select">
+              <option>Channel: All</option>
+              <option>#finance-ops</option>
+              <option>#product-analytics</option>
+              <option>#support-escalations</option>
+              <option>Build (internal)</option>
+            </select>
+          </div>
+
+          <div class="mem-list-row">
+            <div>
+              <div class="mem-list-text">Agent spend alerts go to Sin on Slack, not email.</div>
+              <div class="mem-meta">Sin &middot; #finance-ops &middot; 2 Oct 2026</div>
+            </div>
+            <button class="mem-del-btn" onclick="memDeleteListRow(this)">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 11v6"/><path d="M14 11v6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+            </button>
+          </div>
+          <div class="mem-list-row">
+            <div>
+              <div class="mem-list-text">This agent's funnel data comes from Peter's Hex project.</div>
+              <div class="mem-meta">Priya &middot; #product-analytics &middot; 2 Oct 2026</div>
+            </div>
+            <button class="mem-del-btn" onclick="memDeleteListRow(this)">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 11v6"/><path d="M14 11v6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+            </button>
+          </div>
+          <div class="mem-list-row">
+            <div>
+              <div class="mem-list-text">Finished configuring the weekly funnel sync and pointed it at Peter's Hex project.</div>
+              <div class="mem-meta">Priya &middot; #product-analytics &middot; 2 Oct 2026</div>
+            </div>
+            <button class="mem-del-btn" onclick="memDeleteListRow(this)">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 11v6"/><path d="M14 11v6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+            </button>
+          </div>
+          <div class="mem-list-row">
+            <div>
+              <div class="mem-list-text">Prefers Slack notifications over email for approval requests.</div>
+              <div class="mem-meta">Sin &middot; #finance-ops &middot; 28 Sep 2026</div>
+            </div>
+            <button class="mem-del-btn" onclick="memDeleteListRow(this)">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 11v6"/><path d="M14 11v6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+            </button>
+          </div>
+          <div class="mem-list-row">
+            <div>
+              <div class="mem-list-text">Chose GPT-5.6 Terra as the default model for this agent's sub-agents.</div>
+              <div class="mem-meta">You &middot; Build (internal) &middot; 25 Sep 2026</div>
+            </div>
+            <button class="mem-del-btn" onclick="memDeleteListRow(this)">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 11v6"/><path d="M14 11v6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+            </button>
+          </div>
+          <div class="mem-list-row">
+            <div>
+              <div class="mem-list-text">Escalations should go to the on-call channel after 6pm.</div>
+              <div class="mem-meta">Marco &middot; #support-escalations &middot; 20 Sep 2026</div>
+            </div>
+            <button class="mem-del-btn" onclick="memDeleteListRow(this)">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 11v6"/><path d="M14 11v6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+            </button>
+          </div>
+          <div class="mem-list-row">
+            <div>
+              <div class="mem-list-text">Customer tier is stored in the CRM custom field <code>account_tier</code>.</div>
+              <div class="mem-meta">Priya &middot; #product-analytics &middot; 18 Sep 2026</div>
+            </div>
+            <button class="mem-del-btn" onclick="memDeleteListRow(this)">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 11v6"/><path d="M14 11v6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+            </button>
+          </div>
+          <div class="mem-list-row">
+            <div>
+              <div class="mem-list-text">Never mention internal pricing discounts in customer-facing replies.</div>
+              <div class="mem-meta">Sin &middot; #finance-ops &middot; 15 Sep 2026</div>
+            </div>
+            <button class="mem-del-btn" onclick="memDeleteListRow(this)">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 11v6"/><path d="M14 11v6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+            </button>
+          </div>
+          <div class="mem-list-row">
+            <div>
+              <div class="mem-list-text">Use EU data residency for any customer in the DACH region.</div>
+              <div class="mem-meta">Marco &middot; #support-escalations &middot; 10 Sep 2026</div>
+            </div>
+            <button class="mem-del-btn" onclick="memDeleteListRow(this)">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 11v6"/><path d="M14 11v6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
     <div class="section-title" style="margin-top:var(--spacing--xl);">Trace (opening a session) &mdash; example only, not wired into the prototype above</div>
 
     <div class="hifi" style="max-width:900px;">
@@ -1017,6 +1261,34 @@
       function memHideModalD() {
         var el = document.getElementById("memListModalD");
         if (el) el.style.display = "none";
+      }
+      function mkShowTab(which) {
+        document.getElementById("mkPaneBuild").style.display = which === "build" ? "block" : "none";
+        document.getElementById("mkPaneKnowledge").style.display = which === "knowledge" ? "block" : "none";
+        document.getElementById("mkPaneMemoryAll").style.display = "none";
+        document.getElementById("mkTabBuild").classList.toggle("is-active", which === "build");
+        document.getElementById("mkTabKnowledge").classList.toggle("is-active", which === "knowledge");
+      }
+      function mkToggleCrossSession(el) {
+        var isOn = el.classList.contains("is-on");
+        el.classList.toggle("is-on", !isOn);
+        var wrap = document.getElementById("mkGuidanceWrap");
+        if (wrap) wrap.classList.toggle("is-open", !isOn);
+      }
+      function mkToggleAdvanced() {
+        var body = document.getElementById("mkAdvancedBody");
+        var chev = document.getElementById("mkAdvancedChevron");
+        var open = body.style.display !== "none";
+        body.style.display = open ? "none" : "block";
+        chev.classList.toggle("is-open", !open);
+      }
+      function mkShowAllMemories() {
+        document.getElementById("mkPaneKnowledge").style.display = "none";
+        document.getElementById("mkPaneMemoryAll").style.display = "block";
+      }
+      function mkBackToKnowledge() {
+        document.getElementById("mkPaneMemoryAll").style.display = "none";
+        document.getElementById("mkPaneKnowledge").style.display = "block";
       }
       function memShowGuidanceModalD() {
         var el = document.getElementById("memGuidanceModalD");
