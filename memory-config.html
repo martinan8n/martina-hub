@@ -10,7 +10,7 @@
 <style>
   /* Hi-fi Memory screen — real n8n tokens, same pattern as guardrails.html's hifi section. */
   .hifi { font-family: var(--font-family); color: var(--text-color); }
-  .hifi-shell { border: 1px solid var(--border-color); border-radius: var(--radius--md); background: var(--background--subtle); overflow: hidden; min-height: 640px; }
+  .hifi-shell { border: 1px solid var(--border-color); border-radius: var(--radius--md); background: var(--background--subtle); overflow: hidden; min-height: 720px; }
   .hifi-topbar { display: flex; align-items: center; gap: var(--spacing--xs); padding: var(--spacing--sm) var(--spacing--md); border-bottom: 1px solid var(--border-color); background: var(--background--surface); }
   .hifi-crumb { font-size: var(--font-size--sm); color: var(--text-color); }
   .hifi-crumb b { font-weight: var(--font-weight--medium); }
@@ -75,7 +75,7 @@
 
   /* Modals (manage list + sample view) */
   .hifi-modal-backdrop { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.3); border-radius: inherit; z-index: 5; }
-  .hifi-modal { width: 420px; max-height: 520px; overflow-y: auto; background: var(--background--surface); border-radius: var(--radius--lg); box-shadow: 0 0 0 0.5px var(--border-color), 0 8px 8px rgba(0,0,0,0.04), 0 32px 32px rgba(0,0,0,0.04), 0 64px 64px rgba(0,0,0,0.06); padding: var(--spacing--lg); }
+  .hifi-modal { width: 460px; max-height: 640px; overflow-y: auto; background: var(--background--surface); border-radius: var(--radius--lg); box-shadow: 0 0 0 0.5px var(--border-color), 0 8px 8px rgba(0,0,0,0.04), 0 32px 32px rgba(0,0,0,0.04), 0 64px 64px rgba(0,0,0,0.06); padding: var(--spacing--lg); }
   .hifi-modal-head { display: flex; align-items: center; padding: 0 var(--spacing--lg) var(--spacing--sm); margin: 0 calc(var(--spacing--lg) * -1) var(--spacing--sm); border-bottom: 1px solid var(--border-color); }
   .hifi-modal-title { font-size: var(--font-size--lg); font-weight: var(--font-weight--medium); }
   .hifi-modal-close { cursor: pointer; color: var(--text-color--subtler); font-size: 17px; margin-left: auto; }
@@ -1141,11 +1141,11 @@
 
     <p class="lrt-screen-desc" style="max-width:620px; margin:0 0 var(--spacing--sm);">Per the Build/Knowledge split we landed on: the memory <em>configuration</em> (Session/Cross-session toggle, Guidance) stays in Build, same as today &mdash; it's a behavior setting, not content. The stored memories themselves move to Knowledge as a new card, since they're content the agent knows, the same category as uploaded files and vector stores. Shows the last 10 inline; &ldquo;View all&rdquo; opens a filterable full list (by user, by channel) with delete &mdash; this is also where Recently captured and Manage memory converge into one list at two zoom levels, instead of staying separate surfaces.</p>
 
-    <div class="hifi" style="max-width:660px; position:relative;">
-      <div class="hifi-shell" style="min-height:auto;">
+    <div class="hifi" style="max-width:760px; position:relative;">
+      <div class="hifi-shell" style="min-height:680px;">
         <div class="n8n-tabs" style="margin:0 0 var(--spacing--sm);">
           <div class="n8n-tab" id="mkTabBuild" onclick="mkShowTab('build')">Build</div>
-          <div class="n8n-tab is-active" id="mkTabKnowledge" onclick="mkShowTab('knowledge')">Knowledge</div>
+          <div class="n8n-tab is-active" id="mkTabKnowledge" onclick="mkShowTab('knowledge')">Context</div>
           <div class="n8n-tab">Sessions</div>
           <div class="n8n-tab">Settings</div>
         </div>
@@ -1201,7 +1201,7 @@
 
             <p class="mem-steer-note">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
-              Examples prefilled, editable &mdash; remove what doesn't apply, add your own. Best-effort steering, not a guarantee of exclusion. See it in Knowledge &rarr; Memory.
+              Best-effort steering, not a guarantee of exclusion.
             </p>
 
             <div class="hifi-modal-actions" style="justify-content:flex-end;">
