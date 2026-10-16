@@ -98,7 +98,9 @@
   .mk-advanced-header { display: flex; align-items: center; justify-content: space-between; cursor: pointer; padding: var(--spacing--sm) 0; font-size: var(--font-size--sm); font-weight: var(--font-weight--medium); }
   .mk-advanced-chevron { transition: transform 120ms ease; color: var(--text-color--subtler); }
   .mk-advanced-chevron.is-open { transform: rotate(180deg); }
-  .mk-filter-select { border: 1px solid var(--border-color); border-radius: var(--radius--2xs); padding: 6px 10px; font-family: inherit; font-size: var(--font-size--sm); color: var(--text-color); background: var(--background--surface); }
+  .mk-filter-group { display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 10px; border: 1px solid var(--border-color); border-radius: var(--radius--2xs); background: var(--background--surface); }
+  .mk-filter-group svg { flex: none; color: var(--text-color--subtler); }
+  .mk-filter-select { appearance: none; -webkit-appearance: none; -moz-appearance: none; border: none; outline: none; background: transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23999999' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right center/14px; height: 30px; padding: 0 18px 0 0; font-family: inherit; font-size: var(--font-size--sm); color: var(--text-color); cursor: pointer; }
   .mk-back-row { display: flex; align-items: center; gap: 8px; cursor: pointer; padding-bottom: var(--spacing--md); font-size: var(--font-size--sm); font-weight: var(--font-weight--medium); color: var(--text-color); }
 
   /* Real TagsInput pattern (packages/frontend/@n8n/design-system/src/v2/components/TagsInput) */
@@ -1176,7 +1178,7 @@
         </div>
 
         <!-- GUIDANCE MODAL: opened via the chevron next to the Cross-session memory toggle -->
-        <div id="mkGuidanceModal" class="hifi-modal-backdrop" style="display:none;">
+        <div id="mkGuidanceModal" class="hifi-modal-backdrop" style="display:none; position:fixed;">
           <div class="hifi-modal">
             <div class="hifi-modal-head">
               <span class="hifi-modal-title">Guidance</span>
@@ -1333,21 +1335,28 @@
             Memory
           </div>
 
-          <div style="display:flex; gap:var(--spacing--xs); margin-bottom:var(--spacing--md);">
-            <select class="mk-filter-select">
-              <option>User: All</option>
-              <option>Sin</option>
-              <option>Priya</option>
-              <option>Marco</option>
-              <option>You</option>
-            </select>
-            <select class="mk-filter-select">
-              <option>Channel: All</option>
-              <option>#finance-ops</option>
-              <option>#product-analytics</option>
-              <option>#support-escalations</option>
-              <option>Build (internal)</option>
-            </select>
+          <div class="hifi-card">
+          <div style="display:flex; gap:var(--spacing--xs); padding-bottom:var(--spacing--xs);">
+            <div class="mk-filter-group">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z"/></svg>
+              <select class="mk-filter-select">
+                <option>User: All</option>
+                <option>Sin</option>
+                <option>Priya</option>
+                <option>Marco</option>
+                <option>You</option>
+              </select>
+            </div>
+            <div class="mk-filter-group">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z"/></svg>
+              <select class="mk-filter-select">
+                <option>Channel: All</option>
+                <option>#finance-ops</option>
+                <option>#product-analytics</option>
+                <option>#support-escalations</option>
+                <option>Build (internal)</option>
+              </select>
+            </div>
           </div>
 
           <div class="mem-list-row">
@@ -1430,6 +1439,7 @@
             <button class="mem-del-btn" onclick="memDeleteListRow(this)">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 11v6"/><path d="M14 11v6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
             </button>
+          </div>
           </div>
         </div>
 
