@@ -91,6 +91,7 @@
 
   /* ---- right: narrow panel, icon tabs replace Build/Knowledge/Sessions/Settings ---- */
   .side { width:440px; flex:none; display:flex; flex-direction:column; overflow:hidden; }
+  #tabbar.n8n-tabs { margin:16px 20px 0; }
   .side-identity { flex:none; padding:28px 20px 16px; display:flex; flex-direction:column; align-items:center; text-align:center; }
   .side-avatar { width:56px; height:56px; border-radius:16px; margin-bottom:12px; display:flex; align-items:center; justify-content:center; background:linear-gradient(135deg,#6366F1,#22D3EE); box-shadow:0 2px 8px rgba(68,28,23,0.12); }
   .side-avatar svg { width:26px; height:26px; color:#fff; }
@@ -100,11 +101,8 @@
   .resizer::after { content:""; position:absolute; top:0; bottom:0; left:-3px; right:-3px; }
   .resizer:hover, .resizer.is-dragging { background:var(--color--primary); }
 
-  .tabbar { flex:none; display:flex; background:var(--color--neutral-100); border-radius:999px; padding:3px; gap:2px; margin:4px 20px 18px; }
-  .tabbar button { flex:1; height:32px; border:0; background:transparent; border-radius:999px; display:flex; align-items:center; justify-content:center; color:var(--text-color--subtler); cursor:pointer; font:inherit; font-size:12.5px; font-weight:500; white-space:nowrap; }
-  .tabbar button.is-active { background:#fff; color:var(--text-color); box-shadow:0 1px 2px rgba(0,0,0,0.08); }
 
-  .side-content { flex:1; min-height:0; overflow:auto; padding:0 20px 24px; }
+  .side-content { flex:1; min-height:0; overflow:auto; padding:18px 20px 24px; }
   .field { margin-bottom:20px; }
   .field-label { font-size:13px; font-weight:600; display:flex; align-items:center; gap:3px; margin-bottom:2px; }
   .field-label .req { color:var(--color--red-600); }
@@ -252,11 +250,11 @@ Both-hybrid  95 →  80 →  61 →  40 → 22</div>
           <p class="name">Agents Funnel Metrics Sync</p>
         </div>
 
-        <div class="tabbar" id="tabbar">
-          <button class="is-active" data-tab="build" title="Build">Build</button>
-          <button data-tab="knowledge" title="Knowledge">Knowledge</button>
-          <button data-tab="sessions" title="Sessions">Sessions</button>
-          <button data-tab="settings" title="Settings">Settings</button>
+        <div class="n8n-tabs" id="tabbar">
+          <span class="n8n-tab is-active" data-tab="build">Build</span>
+          <span class="n8n-tab" data-tab="knowledge">Knowledge</span>
+          <span class="n8n-tab" data-tab="sessions">Sessions</span>
+          <span class="n8n-tab" data-tab="settings">Settings</span>
         </div>
 
         <div class="side-content">
@@ -359,9 +357,9 @@ Both-hybrid  95 →  80 →  61 →  40 → 22</div>
 <script>
   var tabbar = document.getElementById("tabbar");
   tabbar.addEventListener("click", function (e) {
-    var btn = e.target.closest("button");
+    var btn = e.target.closest(".n8n-tab");
     if (!btn) return;
-    tabbar.querySelectorAll("button").forEach(function (b) { b.classList.toggle("is-active", b === btn); });
+    tabbar.querySelectorAll(".n8n-tab").forEach(function (b) { b.classList.toggle("is-active", b === btn); });
     var key = btn.dataset.tab;
     document.querySelectorAll(".tab-pane").forEach(function (p) {
       p.hidden = p.dataset.pane !== key;
