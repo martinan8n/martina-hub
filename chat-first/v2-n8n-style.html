@@ -81,6 +81,7 @@
   .mode-toggle button svg { width:14px; height:14px; flex:none; }
   .mode-toggle button:hover { color:var(--text-color); }
   .mode-toggle button.is-active { background:var(--color--purple-50); color:var(--color--purple-500); font-weight:600; animation:mode-breathe 3.2s ease-in-out infinite; }
+  .has-sent .mode-toggle button.is-active { animation:none; }
   .mode-toggle button.is-active:hover { color:var(--color--purple-500); }
   @keyframes mode-breathe {
     0%, 100% { box-shadow:0 0 0 0 var(--color--purple-alpha-200), 0 0 10px 0 var(--color--purple-alpha-200); }
@@ -369,6 +370,16 @@ Both-hybrid  95 →  80 →  61 →  40 → 22</div>
       p.hidden = p.dataset.pane !== key;
     });
   });
+
+  (function () {
+    var composer = document.getElementById("composerInput");
+    var sendBtn = document.querySelector(".send-btn");
+    function markSent() { document.querySelector(".app").classList.add("has-sent"); }
+    if (sendBtn) sendBtn.addEventListener("click", markSent);
+    if (composer) composer.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" && !e.shiftKey) markSent();
+    });
+  })();
 
   var messages = document.getElementById("messages");
   messages.scrollTop = messages.scrollHeight;
