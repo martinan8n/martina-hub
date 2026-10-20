@@ -1,0 +1,423 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agent page — chat-first layout, segmented rail tabs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles/n8n-tokens.css">
+<style>
+  html, body { margin:0; height:100%; }
+  body { font-family:"Inter",system-ui,sans-serif; background:var(--color--neutral-100); color:var(--text-color); }
+  * { box-sizing:border-box; }
+
+  .app { display:flex; height:100vh; }
+
+  /* ---- left app rail ---- */
+  .apprail { width:56px; flex:none; background:#fff; border-right:1px solid var(--border-color); display:flex; flex-direction:column; align-items:center; padding:14px 0; gap:6px; }
+  .apprail .rail-btn { width:34px; height:34px; border-radius:8px; display:flex; align-items:center; justify-content:center; color:var(--text-color--subtler); cursor:pointer; position:relative; flex:none; }
+  .apprail .rail-btn:hover { background:var(--color--neutral-100); color:var(--text-color); }
+  .apprail .rail-btn svg { width:18px; height:18px; }
+  .apprail .rail-btn.is-active { color:var(--text-color); background:var(--color--neutral-100); }
+  .apprail .rail-spacer { flex:1; }
+  .apprail .rail-sep { width:22px; height:1px; background:var(--border-color); margin:4px 0; }
+
+  /* ---- main column ---- */
+  .main { flex:1; min-width:0; display:flex; flex-direction:column; }
+
+  .topbar { height:52px; flex:none; display:flex; align-items:center; gap:8px; padding:0 20px; border-bottom:1px solid var(--border-color); background:#fff; }
+  .topbar .crumb { font-size:13px; color:var(--text-color--subtler); }
+  .topbar .crumb.is-current { color:var(--text-color); font-weight:600; }
+  .topbar .crumb-sep { color:var(--text-color--disabled); font-size:12px; }
+  .topbar .chev { color:var(--text-color--subtler); margin-left:1px; }
+  .topbar .more-btn { width:24px; height:24px; border-radius:6px; display:flex; align-items:center; justify-content:center; color:var(--text-color--subtler); cursor:pointer; }
+  .topbar .more-btn:hover { background:var(--color--neutral-100); }
+  .topbar .spacer { flex:1; }
+  .status-pill { display:flex; align-items:center; gap:6px; font-size:12.5px; color:var(--text-color--subtle); background:var(--color--neutral-50); border:1px solid var(--border-color); border-radius:999px; padding:4px 8px 4px 10px; cursor:pointer; }
+  .status-pill:hover { background:var(--color--neutral-100); }
+  .status-pill .chev { display:flex; color:var(--text-color--subtler); }
+  .status-pill .chev svg { width:12px; height:12px; }
+  .status-dot { width:7px; height:7px; border-radius:999px; background:var(--color--green-600); flex:none; }
+  .variant-tag { font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:0.04em; color:var(--text-color--subtler); background:var(--color--neutral-100); border:1px solid var(--border-color); border-radius:4px; padding:3px 8px; }
+  .variant-link { font-size:11.5px; color:var(--text-color--subtler); text-decoration:none; }
+  .variant-link:hover { color:var(--color--primary); text-decoration:underline; }
+
+  .split { flex:1; min-height:0; display:flex; }
+
+  /* ---- chat: predominant ---- */
+  .chat { flex:1; min-width:0; display:flex; flex-direction:column; }
+  .chat-header { flex:none; display:flex; align-items:center; gap:10px; padding:12px 24px; border-bottom:1px solid var(--border-color); background:#fff; }
+  .chat-header .session-name { font-size:13.5px; font-weight:600; }
+  .chat-header .chev { color:var(--text-color--subtler); }
+  .chat-header .spacer { flex:1; }
+  .chat-header .icon-btn { width:26px; height:26px; border-radius:6px; display:flex; align-items:center; justify-content:center; color:var(--text-color--subtler); cursor:pointer; }
+  .chat-header .icon-btn:hover { background:var(--color--neutral-100); }
+  .chat-header .icon-btn svg { width:15px; height:15px; }
+
+  .messages { flex:1; overflow:auto; padding:28px 32px 20px; display:flex; flex-direction:column; gap:20px; }
+  .msg-row { display:flex; }
+  .msg-row.is-user { justify-content:flex-end; }
+  .msg.agent { max-width:600px; font-size:14px; line-height:1.65; color:var(--text-color); }
+  .msg.agent p { margin:0 0 10px; }
+  .msg.agent p:last-child { margin-bottom:0; }
+  .msg.agent .fig { font-family:var(--font-family--monospace,ui-monospace,monospace); font-size:12.5px; background:var(--color--neutral-50); border:1px solid var(--border-color); border-radius:8px; padding:10px 12px; white-space:pre; color:var(--text-color--subtle); margin:10px 0; display:inline-block; }
+  .msg.user { max-width:460px; background:var(--color--neutral-150); color:var(--text-color); font-size:13.5px; line-height:1.5; border-radius:16px; padding:10px 14px; }
+
+  .composer-wrap { flex:none; padding:14px 32px 20px; }
+  .composer { position:relative; border:1px solid var(--border-color); border-radius:12px; background:#fff; transition:box-shadow 120ms ease, outline-color 120ms ease; }
+  .composer:focus-within { outline:2px solid var(--focus--outline-color); outline-offset:0; box-shadow:0 0 0 1px var(--focus--border-color); }
+  .composer textarea { display:block; width:100%; min-height:48px; max-height:160px; resize:none; border:0; outline:0; padding:14px 16px 8px; font:inherit; font-size:13.5px; color:var(--text-color); background:transparent; }
+  .composer textarea::placeholder { color:var(--text-color--subtler); }
+  .composer-row { display:flex; align-items:center; gap:6px; padding:4px 10px 10px; }
+  .composer-row .spacer { flex:1; }
+  .icon-btn-sm { width:26px; height:26px; display:flex; align-items:center; justify-content:center; color:var(--text-color--subtler); cursor:pointer; border-radius:6px; }
+  .icon-btn-sm:hover { background:var(--color--neutral-100); }
+  .icon-btn-sm svg { width:15px; height:15px; }
+
+  .mode-toggle { display:flex; align-items:center; gap:2px; flex:none; background:var(--color--neutral-100); border-radius:999px; padding:3px; }
+  .mode-toggle button { display:inline-flex; align-items:center; gap:6px; border:0; background:transparent; font:inherit; font-size:13px; font-weight:500; color:var(--text-color--subtler); height:28px; padding:0 13px; border-radius:999px; cursor:pointer; line-height:1; }
+  .mode-toggle button svg { width:14px; height:14px; flex:none; }
+  .mode-toggle button:hover { color:var(--text-color); }
+  .mode-toggle button.is-active { background:var(--color--purple-50); color:var(--color--purple-500); font-weight:600; animation:mode-breathe 3.2s ease-in-out infinite; }
+  .mode-toggle button.is-active:hover { color:var(--color--purple-500); }
+  @keyframes mode-breathe {
+    0%, 100% { box-shadow:0 0 0 0 var(--color--purple-alpha-200), 0 0 10px 0 var(--color--purple-alpha-200); }
+    50%      { box-shadow:0 0 0 3px var(--color--purple-alpha-200), 0 0 18px 2px var(--color--purple-alpha-200); }
+  }
+  .send-btn { width:28px; height:28px; border-radius:var(--radius--full,999px); background:var(--color--primary); color:#fff; display:flex; align-items:center; justify-content:center; cursor:pointer; }
+  .send-btn svg { width:14px; height:14px; }
+
+  /* ---- right: narrow panel, icon tabs replace Build/Knowledge/Sessions/Settings ---- */
+  .side { width:440px; flex:none; display:flex; flex-direction:column; overflow:hidden; background:#fff; }
+  .tabbar { flex:none; display:flex; background:var(--color--neutral-100); border-radius:999px; padding:3px; gap:2px; margin:12px 20px 4px; }
+  .tabbar button { flex:1; height:32px; border:0; background:transparent; border-radius:999px; display:flex; align-items:center; justify-content:center; color:var(--text-color--subtler); cursor:pointer; font:inherit; font-size:12.5px; font-weight:500; white-space:nowrap; }
+  .tabbar button.is-active { background:#fff; color:var(--text-color); box-shadow:0 1px 2px rgba(0,0,0,0.08); }
+  .side-identity { flex:none; padding:28px 20px 16px; display:flex; flex-direction:column; align-items:center; text-align:center; }
+  .side-avatar { width:56px; height:56px; border-radius:16px; margin-bottom:12px; display:flex; align-items:center; justify-content:center; background:linear-gradient(135deg,#6366F1,#22D3EE); box-shadow:0 2px 8px rgba(68,28,23,0.12); }
+  .side-avatar svg { width:26px; height:26px; color:#fff; }
+  .side-identity .name { font-size:15px; font-weight:600; margin:0 0 6px; line-height:1.3; }
+
+  .resizer { width:5px; flex:none; cursor:col-resize; position:relative; background:var(--border-color); }
+  .resizer::after { content:""; position:absolute; top:0; bottom:0; left:-3px; right:-3px; }
+  .resizer:hover, .resizer.is-dragging { background:var(--color--primary); }
+
+
+  .side-content { flex:1; min-height:0; overflow:auto; padding:18px 20px 24px; }
+  .field { margin-bottom:20px; }
+  .field-label { font-size:13px; font-weight:600; display:flex; align-items:center; gap:3px; margin-bottom:2px; }
+  .field-label .req { color:var(--color--red-600); }
+  .field-hint { font-size:12px; color:var(--text-color--subtler); margin:0 0 8px; }
+  .model-box { display:flex; align-items:center; gap:8px; border:1px solid var(--border-color); border-radius:8px; padding:9px 10px; font-size:13px; }
+  .model-box .model-logo { width:18px; height:18px; border-radius:4px; background:var(--color--neutral-900); color:#fff; display:flex; align-items:center; justify-content:center; flex:none; }
+  .model-box .model-logo svg { width:11px; height:11px; }
+  .model-box .model-name { font-weight:500; }
+  .model-box .model-provider { color:var(--text-color--subtler); font-size:12px; }
+  .model-box .chev { margin-left:auto; color:var(--text-color--subtler); }
+  .instructions-box { border:1px solid var(--border-color); border-radius:8px; padding:12px; font-size:12.5px; line-height:1.55; color:var(--text-color--subtle); max-height:260px; overflow:auto; }
+  .instructions-box p { margin:0 0 10px; }
+  .instructions-box p:last-child { margin-bottom:0; }
+  .instructions-box code { font-family:var(--font-family--monospace,ui-monospace,monospace); background:var(--color--neutral-100); border-radius:3px; padding:1px 4px; font-size:11.5px; }
+
+  .build-card { border:1px solid var(--border-color); border-radius:12px; padding:16px; margin-bottom:16px; position:relative; }
+  .build-card .card-title { font-size:13.5px; font-weight:600; margin:0 0 2px; }
+  .build-card .card-hint { font-size:12px; color:var(--text-color--subtler); margin:0 0 14px; }
+  .build-card .card-icon-btn { position:absolute; top:14px; right:14px; width:28px; height:28px; border:1px solid var(--border-color); border-radius:8px; display:flex; align-items:center; justify-content:center; color:var(--text-color--subtler); }
+  .build-card .card-icon-btn svg { width:14px; height:14px; }
+  .text-action { font-size:12.5px; color:var(--text-color--subtler); cursor:pointer; display:block; }
+  .text-action:hover { color:var(--text-color); }
+  .text-action + .text-action { margin-top:10px; }
+  .sub-label { font-size:12.5px; font-weight:600; margin:16px 0 8px; display:block; }
+  .sub-label:first-of-type { margin-top:0; }
+  .chip-row { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+  .chip { display:inline-flex; align-items:center; gap:6px; border:1px solid var(--border-color); border-radius:999px; padding:5px 12px 5px 6px; font-size:12.5px; font-weight:500; white-space:nowrap; }
+  .chip .chip-ic { width:18px; height:18px; border-radius:5px; display:flex; align-items:center; justify-content:center; flex:none; font-size:10px; font-weight:700; color:var(--text-color--subtler); background:var(--color--neutral-100); }
+  .chip .chip-ic svg { width:11px; height:11px; }
+  .chip-add { width:24px; height:24px; border-radius:999px; display:flex; align-items:center; justify-content:center; color:var(--text-color--subtler); cursor:pointer; flex:none; }
+  .chip-add:hover { background:var(--color--neutral-100); }
+  .chip-add svg { width:14px; height:14px; }
+  .card-divider { height:1px; background:var(--border-color--subtle); margin:16px 0; }
+  .websearch-row { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; }
+  .websearch-row .wt { font-size:13px; font-weight:600; margin:0 0 2px; }
+  .websearch-row .wh { font-size:12px; color:var(--text-color--subtler); margin:0; line-height:1.4; }
+  .provider-pill { display:flex; align-items:center; gap:4px; border:1px solid var(--border-color); border-radius:8px; padding:6px 10px; font-size:12.5px; font-weight:500; flex:none; white-space:nowrap; color:var(--text-color--subtle); }
+  .provider-pill svg { width:12px; height:12px; color:var(--text-color--subtler); }
+
+  .empty-tab { padding:28px 4px; text-align:center; }
+  .empty-tab .ic { width:40px; height:40px; border-radius:11px; background:var(--color--neutral-100); color:var(--text-color--subtler); display:flex; align-items:center; justify-content:center; margin:0 auto 12px; }
+  .empty-tab .ic svg { width:19px; height:19px; }
+  .empty-tab p { font-size:13px; color:var(--text-color--subtler); margin:0 0 14px; }
+  .ghost-btn { display:inline-flex; align-items:center; gap:6px; font-size:12.5px; font-weight:500; color:var(--text-color--subtle); background:transparent; border:1px solid var(--border-color); border-radius:7px; padding:6px 12px; cursor:pointer; }
+  .ghost-btn:hover { background:var(--color--neutral-100); }
+
+  .session-list { display:flex; flex-direction:column; }
+  .session-row { display:flex; align-items:center; gap:10px; padding:10px 2px; border-bottom:1px solid var(--border-color--subtle); }
+  .session-row:last-child { border-bottom:0; }
+  .session-row .s-name { font-size:13px; font-weight:500; display:block; }
+  .session-row .s-time { font-size:11.5px; color:var(--text-color--subtler); display:block; margin-top:1px; }
+  .session-row .s-status { margin-left:auto; display:flex; align-items:center; gap:5px; font-size:11.5px; color:var(--text-color--subtler); flex:none; }
+  .session-row .s-status .dot { width:6px; height:6px; border-radius:999px; background:var(--color--green-600); }
+
+  .settings-row { display:flex; align-items:center; justify-content:space-between; padding:11px 2px; border-bottom:1px solid var(--border-color--subtle); font-size:13px; }
+  .settings-row:last-child { border-bottom:0; }
+  .settings-row .s-label { font-weight:500; }
+  .settings-row .s-value { color:var(--text-color--subtler); font-size:12.5px; display:flex; align-items:center; gap:4px; }
+
+  [hidden] { display:none !important; }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <div class="apprail">
+    <div class="rail-btn" title="New"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></div>
+    <div class="rail-btn" title="Search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></div>
+    <div class="rail-btn" title="Panels"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16"/></svg></div>
+    <div class="rail-sep"></div>
+    <div class="rail-btn" title="Home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg></div>
+    <div class="rail-btn is-active" title="Agents"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg></div>
+    <div class="rail-btn" title="Share"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="M8.3 10.7 15.7 6.3M8.3 13.3l7.4 4.4"/></svg></div>
+    <div class="rail-btn" title="Chats"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H9l-5 4Z"/></svg></div>
+    <div class="rail-btn" title="Apps"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></div>
+    <div class="rail-spacer"></div>
+    <div class="rail-btn" title="Help"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.7.4-1 .8-1 1.7"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+    <div class="rail-btn" title="Settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15 1.65 1.65 0 0 0 3.09 14H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg></div>
+  </div>
+
+  <div class="main">
+    <div class="topbar">
+      <span class="crumb">Personal</span>
+      <span class="crumb-sep">/</span>
+      <span class="crumb is-current">Agents Funnel Metrics Sync</span>
+      <span class="chev"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg></span>
+      <span class="more-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="5" cy="12" r="1.2"/><circle cx="12" cy="12" r="1.2"/><circle cx="19" cy="12" r="1.2"/></svg></span>
+      <span class="spacer"></span>
+      <span class="status-pill"><span class="status-dot"></span>Published<span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg></span></span>
+    </div>
+
+    <div class="split">
+      <div class="chat">
+        <div class="chat-header">
+          <span class="session-name">Weekly sync — Mon 9:02am</span>
+          <span class="chev"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg></span>
+          <span class="spacer"></span>
+          <span class="icon-btn" title="New session"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719"/><path d="M8 12h8"/><path d="M12 8v8"/></svg></span>
+          <span class="icon-btn" title="More"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="5" cy="12" r="1.2"/><circle cx="12" cy="12" r="1.2"/><circle cx="19" cy="12" r="1.2"/></svg></span>
+        </div>
+
+        <div class="messages" id="messages">
+          <div class="msg-row is-user"><div class="msg user">Run the weekly funnel sync</div></div>
+          <div class="msg-row"><div class="msg agent">
+            <p>On it — pulling the agent-building funnel (created → configured → tested → published → activated) by build mode from Peter's Hex project.</p>
+          </div></div>
+          <div class="msg-row"><div class="msg agent">
+            <p>Here's the current snapshot:</p>
+            <div class="fig">AI-only     412 → 298 → 201 → 150 → 96
+Manual-only 180 → 165 → 140 → 110 → 72
+Both-hybrid  95 →  80 →  61 →  40 → 22</div>
+            <p>Writing this to the Notion page "Agents Funnel Drop-off by Build Mode" now.</p>
+          </div></div>
+          <div class="msg-row"><div class="msg agent">
+            <p>Done — Notion's updated. Drop-off is steepest between tested → published for AI-only builds (201 → 150, -25%). Want me to flag that to Sin?</p>
+          </div></div>
+          <div class="msg-row is-user"><div class="msg user">yes, send her a short summary on Slack</div></div>
+          <div class="msg-row"><div class="msg agent">
+            <p>Sent to Sin. Next sync runs automatically next Monday at 9am.</p>
+          </div></div>
+        </div>
+
+        <div class="composer-wrap">
+          <div class="composer">
+            <textarea id="composerInput" placeholder="Ask anything…" rows="1" autofocus></textarea>
+            <div class="composer-row">
+              <div class="mode-toggle" id="modeToggle">
+                <button class="is-active" data-mode="build"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>Build</button>
+                <button data-mode="test"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v7.5a2 2 0 0 1-.2.9L4.7 20.6a1 1 0 0 0 .9 1.4h12.8a1 1 0 0 0 .9-1.4l-5.1-10.2a2 2 0 0 1-.2-.9V2"/><path d="M8.5 2h7"/><path d="M7 16h10"/></svg>Test</button>
+              </div>
+              <span class="icon-btn-sm" title="Attach"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5 12.5 20a4 4 0 0 1-5.6-5.7L15 6a2.5 2.5 0 1 1 3.5 3.6L10 18"/></svg></span>
+              <span class="spacer"></span>
+              <span class="icon-btn-sm" title="Voice"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v4"/></svg></span>
+              <span class="send-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 19V5M5 12l7-7 7 7"/></svg></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="resizer" id="resizer"></div>
+
+      <div class="side" id="side">
+        <div class="side-identity">
+          <div class="side-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="7" width="14" height="11" rx="3"/><path d="M9 7V4M15 7V4"/><circle cx="9.5" cy="12.5" r="1.1" fill="currentColor" stroke="none"/><circle cx="14.5" cy="12.5" r="1.1" fill="currentColor" stroke="none"/></svg></div>
+          <p class="name">Agents Funnel Metrics Sync</p>
+        </div>
+
+        <div class="tabbar" id="tabbar">
+          <button class="is-active" data-tab="build">Build</button>
+          <button data-tab="knowledge">Knowledge</button>
+          <button data-tab="sessions">Sessions</button>
+          <button data-tab="settings">Settings</button>
+        </div>
+
+        <div class="side-content">
+          <div class="tab-pane" data-pane="build">
+            <div class="field">
+              <div class="field-label">Model <span class="req">*</span></div>
+              <p class="field-hint">What model this agent uses</p>
+              <div class="model-box">
+                <span class="model-logo"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="9"/></svg></span>
+                <span class="model-name">GPT-5.6 Terra</span>
+                <span class="model-provider">Global OpenAI</span>
+                <span class="chev"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg></span>
+              </div>
+            </div>
+            <div class="field">
+              <div class="field-label">Instructions <span class="req">*</span></div>
+              <p class="field-hint">What this agent should do</p>
+              <div class="instructions-box">
+                <p>You are a weekly metrics-sync agent. Your ONLY job: pull the current agent-building funnel (created → configured → tested → published → activated), broken out by build mode (AI-only / manual-only / both-hybrid), from the "Agents Rollout [50|50 Experiment]" Hex project via the Hex MCP tools, and write the current snapshot to the Notion page "Agents Funnel Drop-off by Build Mode".</p>
+                <p>Never hand-write <code>BigQuery</code> SQL or re-derive cohort logic — reuse what's already vetted inside the Hex dashboard.</p>
+              </div>
+            </div>
+
+            <div class="build-card">
+              <p class="card-title">Skills</p>
+              <p class="card-hint">How this agent handles specific tasks</p>
+              <span class="text-action">Add skill</span>
+            </div>
+
+            <div class="build-card">
+              <span class="card-icon-btn" title="Test"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2v6.5L4 18a2 2 0 0 0 1.8 3h12.4a2 2 0 0 0 1.8-3l-5-9.5V2"/><path d="M8 2h8"/><path d="M7 15h10"/></svg></span>
+              <p class="card-title">Triggers</p>
+              <p class="card-hint">Where and when this agent runs</p>
+              <span class="text-action">Add channel</span>
+              <span class="sub-label">Schedules</span>
+              <div class="chip-row">
+                <span class="chip"><span class="chip-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="12" height="16" rx="2"/><rect x="9" y="2" width="6" height="4" rx="1"/><path d="M9 11h6M9 15h4"/></svg></span>Daily funnel metrics s…</span>
+                <span class="chip-add" title="Add schedule"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+              </div>
+            </div>
+
+            <div class="build-card">
+              <p class="card-title">Capabilities</p>
+              <p class="card-hint">What this agent can do and how it does it</p>
+              <span class="sub-label">Tools</span>
+              <div class="chip-row">
+                <span class="chip"><span class="chip-ic" style="background:#000;color:#fff;">N</span>Notion</span>
+                <span class="chip"><span class="chip-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 2 20.66 7v10L12 22 3.34 17V7Z"/></svg></span>Hex</span>
+                <span class="chip-add" title="Add tool"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+              </div>
+              <span class="text-action" style="margin-top:14px;">Add workflow</span>
+              <span class="text-action">Add sub-agent</span>
+              <div class="card-divider"></div>
+              <div class="websearch-row">
+                <div>
+                  <p class="wt">Web search</p>
+                  <p class="wh">Let the model search the web when it needs up-to-date information.</p>
+                </div>
+                <span class="provider-pill">OpenAI<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="tab-pane" data-pane="knowledge" hidden>
+            <div class="empty-tab">
+              <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v16H6.5A2.5 2.5 0 0 0 4 20.5Z"/><path d="M4 19.5V4.5"/></svg></div>
+              <p>No knowledge sources yet</p>
+              <button class="ghost-btn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>Add source</button>
+            </div>
+          </div>
+
+          <div class="tab-pane" data-pane="sessions" hidden>
+            <div class="session-list">
+              <div class="session-row">
+                <div><span class="s-name">Weekly sync — Mon 9:02am</span><span class="s-time">Today, 9:02am</span></div>
+                <span class="s-status"><span class="dot"></span>Done</span>
+              </div>
+              <div class="session-row">
+                <div><span class="s-name">Weekly sync — Mon 9:01am</span><span class="s-time">Last Mon, 9:01am</span></div>
+                <span class="s-status"><span class="dot"></span>Done</span>
+              </div>
+              <div class="session-row">
+                <div><span class="s-name">Weekly sync — Mon 9:03am</span><span class="s-time">2 weeks ago</span></div>
+                <span class="s-status"><span class="dot"></span>Done</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="tab-pane" data-pane="settings" hidden>
+            <div class="settings-row"><span class="s-label">Visibility</span><span class="s-value">Private<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 6 6 6-6 6"/></svg></span></div>
+            <div class="settings-row"><span class="s-label">Notify on failure</span><span class="s-value">On</span></div>
+            <div class="settings-row"><span class="s-label">Runs on a schedule</span><span class="s-value">Mondays, 9am</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  var tabbar = document.getElementById("tabbar");
+  tabbar.addEventListener("click", function (e) {
+    var btn = e.target.closest("button");
+    if (!btn) return;
+    tabbar.querySelectorAll("button").forEach(function (b) { b.classList.toggle("is-active", b === btn); });
+    var key = btn.dataset.tab;
+    document.querySelectorAll(".tab-pane").forEach(function (p) {
+      p.hidden = p.dataset.pane !== key;
+    });
+  });
+
+  var messages = document.getElementById("messages");
+  messages.scrollTop = messages.scrollHeight;
+
+  document.getElementById("composerInput").focus();
+
+  (function () {
+    var modeToggle = document.getElementById("modeToggle");
+    var composerInput = document.getElementById("composerInput");
+    var PLACEHOLDERS = {
+      build: "Ask anything…",
+      test: "Test Agents Funnel Metrics Sync…"
+    };
+    modeToggle.addEventListener("click", function (e) {
+      var btn = e.target.closest("button");
+      if (!btn) return;
+      modeToggle.querySelectorAll("button").forEach(function (b) { b.classList.toggle("is-active", b === btn); });
+      composerInput.placeholder = PLACEHOLDERS[btn.dataset.mode];
+    });
+  })();
+
+  (function () {
+    var resizer = document.getElementById("resizer");
+    var side = document.getElementById("side");
+    var MIN = 360, MAX = 720;
+    var startX, startWidth;
+
+    function onMove(e) {
+      var dx = startX - e.clientX;
+      var next = Math.min(MAX, Math.max(MIN, startWidth + dx));
+      side.style.width = next + "px";
+    }
+    function onUp() {
+      resizer.classList.remove("is-dragging");
+      document.body.style.cursor = "";
+      document.body.style.userSelect = "";
+      window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("mouseup", onUp);
+    }
+    resizer.addEventListener("mousedown", function (e) {
+      startX = e.clientX;
+      startWidth = side.getBoundingClientRect().width;
+      resizer.classList.add("is-dragging");
+      document.body.style.cursor = "col-resize";
+      document.body.style.userSelect = "none";
+      window.addEventListener("mousemove", onMove);
+      window.addEventListener("mouseup", onUp);
+      e.preventDefault();
+    });
+  })();
+</script>
+
+</body>
+</html>
