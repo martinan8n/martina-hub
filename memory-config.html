@@ -98,10 +98,13 @@
   .mk-advanced-header { display: flex; align-items: center; justify-content: space-between; cursor: pointer; padding: var(--spacing--sm) 0; font-size: var(--font-size--sm); font-weight: var(--font-weight--medium); }
   .mk-advanced-chevron { transition: transform 120ms ease; color: var(--text-color--subtler); }
   .mk-advanced-chevron.is-open { transform: rotate(180deg); }
+  /* Settled Build/Context page: cards span the same width as the tab bar, per the real product */
+  .mk-pane { max-width: none; padding: 0 var(--spacing--lg) var(--spacing--xl); }
+  .mk-pane .hifi-card { padding: var(--spacing--md); margin-bottom: var(--spacing--md); }
   .mk-filter-select { appearance: none; -webkit-appearance: none; -moz-appearance: none; height: 32px; padding: 0 30px 0 12px; border: 1px solid var(--border-color); border-radius: var(--radius--2xs); background: var(--background--surface) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23999999' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 10px center/14px; font-family: inherit; font-size: var(--font-size--sm); color: var(--text-color); cursor: pointer; outline: none; }
   .mk-filter-icon-btn { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; flex: none; border: 1px solid var(--border-color); border-radius: var(--radius--2xs); background: var(--background--surface); color: var(--text-color--subtler); cursor: pointer; }
   .mk-filter-icon-btn:hover, .mk-filter-icon-btn.is-active { background: var(--color--neutral-125); color: var(--text-color); }
-  .mk-filter-popover { position: absolute; top: calc(100% + 6px); left: 0; width: 220px; background: var(--background--surface); border: 1px solid var(--border-color); border-radius: var(--radius--md); box-shadow: 0 8px 24px rgba(0,0,0,0.1); padding: var(--spacing--sm); z-index: 20; }
+  .mk-filter-popover { position: absolute; top: calc(100% + 6px); right: 0; width: 220px; background: var(--background--surface); border: 1px solid var(--border-color); border-radius: var(--radius--md); box-shadow: 0 8px 24px rgba(0,0,0,0.1); padding: var(--spacing--sm); z-index: 20; }
   .mk-filter-popover .mk-filter-select { width: 100%; }
   .mk-back-row { display: flex; align-items: center; gap: 8px; cursor: pointer; padding-bottom: var(--spacing--md); font-size: var(--font-size--sm); font-weight: var(--font-weight--medium); color: var(--text-color); }
 
@@ -1152,9 +1155,9 @@
 
     <p class="lrt-screen-desc" style="max-width:620px; margin:0 0 var(--spacing--sm);">Per the Build/Knowledge split we landed on: the memory <em>configuration</em> (Session/Cross-session toggle, Guidance) stays in Build, same as today &mdash; it's a behavior setting, not content. The stored memories themselves move to Knowledge as a new card, since they're content the agent knows, the same category as uploaded files and vector stores. Shows the last 10 inline; &ldquo;View all&rdquo; opens a filterable full list (by user, by channel) with delete &mdash; this is also where Recently captured and Manage memory converge into one list at two zoom levels, instead of staying separate surfaces.</p>
 
-    <div class="hifi" style="max-width:760px; position:relative;">
+    <div class="hifi" style="max-width:900px; position:relative;">
       <div class="hifi-shell" style="min-height:820px;">
-        <div class="n8n-tabs" style="margin:0 0 var(--spacing--sm);">
+        <div class="n8n-tabs" style="margin:0 var(--spacing--lg) var(--spacing--md);">
           <div class="n8n-tab" id="mkTabBuild" onclick="mkShowTab('build')">Build</div>
           <div class="n8n-tab is-active" id="mkTabKnowledge" onclick="mkShowTab('knowledge')">Context</div>
           <div class="n8n-tab">Sessions</div>
@@ -1162,7 +1165,7 @@
         </div>
 
         <!-- BUILD: memory config only, per Martina's "remove what you have in Build except memory" -->
-        <div id="mkPaneBuild" class="hifi-body" style="display:none;">
+        <div id="mkPaneBuild" class="hifi-body mk-pane" style="display:none;">
           <div class="hifi-card">
             <div class="hifi-field-label">Memory</div>
             <div class="mem-static-row">
@@ -1217,11 +1220,11 @@
         </div>
 
         <!-- KNOWLEDGE: real Knowledge base card + new Memory card + real Advanced/Vector stores -->
-        <div id="mkPaneKnowledge" class="hifi-body">
+        <div id="mkPaneKnowledge" class="hifi-body mk-pane">
 
-          <div class="hifi-field-label">Knowledge base</div>
-          <p class="hifi-row-desc" style="max-width:480px; margin:0 0 var(--spacing--sm);">n8n stores files uploaded to this agent so it can search and read their contents when answering.</p>
           <div class="hifi-card">
+            <div class="hifi-field-label">Knowledge base</div>
+            <p class="hifi-row-desc" style="max-width:480px; margin:0 0 var(--spacing--sm);">n8n stores files uploaded to this agent so it can search and read their contents when answering.</p>
             <div class="mem-list-row">
               <div>
                 <div class="mem-list-text">product-faq.pdf</div>
@@ -1253,7 +1256,7 @@
             <button class="n8n-button n8n-button--tertiary n8n-button--size-medium">Upload file</button>
           </div>
 
-          <div class="hifi-card" style="margin-top:var(--spacing--md);">
+          <div class="hifi-card">
             <div style="display:flex; align-items:center; justify-content:space-between; gap:var(--spacing--xs); margin-bottom:2px;">
               <div class="hifi-field-label" style="margin-bottom:0;">Memory</div>
               <a class="mk-view-all" onclick="mkShowAllMemories()">
@@ -1319,12 +1322,12 @@
             </div>
           </div>
 
-          <div style="margin-top:var(--spacing--md);">
+          <div class="hifi-card">
             <div class="mk-advanced-header" onclick="mkToggleAdvanced()">
               <span>Advanced</span>
               <svg id="mkAdvancedChevron" class="mk-advanced-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
             </div>
-            <div id="mkAdvancedBody" style="display:none; padding-top:var(--spacing--xs);">
+            <div id="mkAdvancedBody" style="display:none; padding-top:var(--spacing--sm);">
               <div class="hifi-field-label">Vector stores</div>
               <p class="hifi-row-desc" style="max-width:480px; margin:0 0 var(--spacing--sm);">External vector databases this agent can search. Unlike knowledge base files, the data lives outside n8n and you manage its indexing yourself.</p>
               <div class="mk-empty-card">
@@ -1338,14 +1341,14 @@
         </div>
 
         <!-- VIEW ALL MEMORIES (subpage, filters by user / channel) -->
-        <div id="mkPaneMemoryAll" class="hifi-body" style="display:none;">
+        <div id="mkPaneMemoryAll" class="hifi-body mk-pane" style="display:none;">
           <div class="mk-back-row" onclick="mkBackToKnowledge()">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
             Memory
           </div>
 
           <div class="hifi-card">
-          <div style="display:flex; gap:var(--spacing--xs); padding-bottom:var(--spacing--xs); position:relative;">
+          <div style="display:flex; justify-content:flex-end; gap:var(--spacing--xs); padding-bottom:var(--spacing--xs); position:relative;">
             <select class="mk-filter-select">
               <option>User: All</option>
               <option>Sin</option>
