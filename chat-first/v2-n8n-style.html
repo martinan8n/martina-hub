@@ -78,12 +78,12 @@
   .icon-btn-sm:hover { background:var(--color--neutral-100); }
   .icon-btn-sm svg { width:15px; height:15px; }
 
-  .mode-toggle { display:flex; align-items:center; gap:4px; flex:none; }
-  .mode-toggle button { display:inline-flex; align-items:center; gap:6px; border:0; background:transparent; font:inherit; font-size:13px; font-weight:500; color:var(--text-color--subtler); height:32px; padding:0 14px; border-radius:999px; cursor:pointer; line-height:1; }
+  .mode-toggle { display:flex; align-items:center; gap:2px; flex:none; background:var(--color--neutral-100); border-radius:999px; padding:3px; }
+  .mode-toggle button { display:inline-flex; align-items:center; gap:6px; border:0; background:transparent; font:inherit; font-size:13px; font-weight:500; color:var(--text-color--subtler); height:28px; padding:0 13px; border-radius:999px; cursor:pointer; line-height:1; }
   .mode-toggle button svg { width:14px; height:14px; flex:none; }
-  .mode-toggle button:hover { background:var(--color--neutral-100); color:var(--text-color); }
+  .mode-toggle button:hover { color:var(--text-color); }
   .mode-toggle button.is-active { background:var(--color--purple-50); color:var(--color--purple-500); font-weight:600; animation:mode-breathe 3.2s ease-in-out infinite; }
-  .mode-toggle button.is-active:hover { background:var(--color--purple-50); color:var(--color--purple-500); }
+  .mode-toggle button.is-active:hover { color:var(--color--purple-500); }
   @keyframes mode-breathe {
     0%, 100% { box-shadow:0 0 0 0 var(--color--purple-alpha-200), 0 0 10px 0 var(--color--purple-alpha-200); }
     50%      { box-shadow:0 0 0 3px var(--color--purple-alpha-200), 0 0 18px 2px var(--color--purple-alpha-200); }
