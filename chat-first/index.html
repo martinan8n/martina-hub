@@ -16,7 +16,7 @@
   .app { display:flex; height:100vh; }
 
   /* ---- left app rail ---- */
-  .apprail { width:56px; flex:none; background:transparent; border-right:1px solid var(--border-color); display:flex; flex-direction:column; align-items:center; padding:14px 0; gap:6px; }
+  .apprail { width:56px; flex:none; background:#fff; border-right:1px solid var(--border-color); display:flex; flex-direction:column; align-items:center; padding:14px 0; gap:6px; }
   .apprail .rail-btn { width:34px; height:34px; border-radius:8px; display:flex; align-items:center; justify-content:center; color:var(--text-color--subtler); cursor:pointer; position:relative; flex:none; }
   .apprail .rail-btn:hover { background:var(--color--neutral-100); color:var(--text-color); }
   .apprail .rail-btn svg { width:18px; height:18px; }
@@ -27,7 +27,7 @@
   /* ---- main column ---- */
   .main { flex:1; min-width:0; display:flex; flex-direction:column; }
 
-  .topbar { height:52px; flex:none; display:flex; align-items:center; gap:8px; padding:0 20px; border-bottom:1px solid var(--border-color); }
+  .topbar { height:52px; flex:none; display:flex; align-items:center; gap:8px; padding:0 20px; border-bottom:1px solid var(--border-color); background:#fff; }
   .topbar .crumb { font-size:13px; color:var(--text-color--subtler); }
   .topbar .crumb.is-current { color:var(--text-color); font-weight:600; }
   .topbar .crumb-sep { color:var(--text-color--disabled); font-size:12px; }
@@ -48,7 +48,7 @@
 
   /* ---- chat: predominant ---- */
   .chat { flex:1; min-width:0; display:flex; flex-direction:column; }
-  .chat-header { flex:none; display:flex; align-items:center; gap:10px; padding:12px 24px; border-bottom:1px solid var(--border-color); }
+  .chat-header { flex:none; display:flex; align-items:center; gap:10px; padding:12px 24px; border-bottom:1px solid var(--border-color); background:#fff; }
   .chat-header .session-name { font-size:13.5px; font-weight:600; }
   .chat-header .chev { color:var(--text-color--subtler); }
   .chat-header .spacer { flex:1; }
@@ -90,7 +90,7 @@
   .send-btn svg { width:14px; height:14px; }
 
   /* ---- right: narrow panel, icon tabs replace Build/Knowledge/Sessions/Settings ---- */
-  .side { width:440px; flex:none; display:flex; flex-direction:column; overflow:hidden; }
+  .side { width:440px; flex:none; display:flex; flex-direction:column; overflow:hidden; background:#fff; }
   #tabbar.n8n-tabs { margin:16px 20px 0; }
   .side-identity { flex:none; padding:28px 20px 16px; display:flex; flex-direction:column; align-items:center; text-align:center; }
   .side-avatar { width:56px; height:56px; border-radius:16px; margin-bottom:12px; display:flex; align-items:center; justify-content:center; background:linear-gradient(135deg,#6366F1,#22D3EE); box-shadow:0 2px 8px rgba(68,28,23,0.12); }
