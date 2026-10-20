@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Build / Test selector — three variants</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles/n8n-tokens.css">
+<style>
+  html, body { margin:0; }
+  body { font-family:"Inter",system-ui,sans-serif; color:var(--text-color); background:var(--color--neutral-50); padding:40px 24px 64px; }
+  * { box-sizing:border-box; }
+
+  .page { max-width:760px; margin:0 auto; }
+  .page > h1 { font-size:18px; font-weight:600; margin:0 0 6px; }
+  .page > p.lede { font-size:13.5px; line-height:1.6; color:var(--text-color--subtle); margin:0 0 36px; }
+
+  .variant { margin-bottom:40px; }
+  .variant h2 { font-size:14px; font-weight:600; margin:0 0 3px; }
+  .variant .note { font-size:12.5px; line-height:1.55; color:var(--text-color--subtler); margin:0 0 14px; }
+
+  /* composer shell, same as the prototype */
+  .composer { position:relative; border:1px solid var(--border-color); border-radius:12px; background:#fff; }
+  .composer textarea { display:block; width:100%; min-height:48px; resize:none; border:0; outline:0; padding:14px 16px 8px; font:inherit; font-size:13.5px; color:var(--text-color); background:transparent; }
+  .composer textarea::placeholder { color:var(--text-color--subtler); }
+  .composer-row { display:flex; align-items:center; gap:6px; padding:4px 10px 10px; }
+  .composer-row .spacer { flex:1; }
+  .icon-btn-sm { width:26px; height:26px; display:flex; align-items:center; justify-content:center; color:var(--text-color--subtler); cursor:pointer; border-radius:6px; }
+  .icon-btn-sm svg { width:15px; height:15px; }
+  .send-btn { width:28px; height:28px; border-radius:999px; background:var(--color--primary); color:#fff; display:flex; align-items:center; justify-content:center; }
+  .send-btn svg { width:14px; height:14px; }
+
+  /* shared selector bones */
+  .seg { display:flex; align-items:center; flex:none; }
+  .seg button { display:inline-flex; align-items:center; gap:6px; border:0; background:transparent; font:inherit; cursor:pointer; line-height:1; color:var(--text-color--subtler); }
+  .seg button svg { flex:none; }
+
+  /* ---- A: tinted pill, borrowed from the live "Finish setup" button ---- */
+  .seg--tinted { gap:4px; }
+  .seg--tinted button { height:32px; padding:0 14px; border-radius:999px; font-size:13px; font-weight:500; }
+  .seg--tinted button svg { width:14px; height:14px; }
+  .seg--tinted button:hover { background:var(--color--neutral-100); color:var(--text-color); }
+  .seg--tinted button.is-active { background:var(--color--purple-50); color:var(--color--purple-500); font-weight:600; }
+  .seg--tinted button.is-active:hover { background:var(--color--purple-50); }
+
+  /* ---- B: same pill, plus the breathing glow from the "Brewing…" indicator ---- */
+  .seg--glow { gap:4px; }
+  .seg--glow button { height:32px; padding:0 14px; border-radius:999px; font-size:13px; font-weight:500; }
+  .seg--glow button svg { width:14px; height:14px; }
+  .seg--glow button:hover { background:var(--color--neutral-100); color:var(--text-color); }
+  .seg--glow button.is-active { background:var(--color--purple-50); color:var(--color--purple-500); font-weight:600; animation:seg-breathe 3.2s ease-in-out infinite; }
+  @keyframes seg-breathe {
+    0%, 100% { box-shadow:0 0 0 0 var(--color--purple-alpha-200), 0 0 10px 0 var(--color--purple-alpha-200); }
+    50%      { box-shadow:0 0 0 3px var(--color--purple-alpha-200), 0 0 18px 2px var(--color--purple-alpha-200); }
+  }
+
+  /* ---- C: lifted out of the icon row onto its own line, with the mode spelled out ---- */
+  .composer--lifted .mode-bar { display:flex; align-items:center; gap:10px; padding:10px 12px 0; }
+  .seg--lifted { background:var(--color--neutral-100); border-radius:10px; padding:3px; gap:2px; }
+  .seg--lifted button { height:30px; padding:0 14px; border-radius:8px; font-size:13px; font-weight:500; }
+  .seg--lifted button svg { width:14px; height:14px; }
+  .seg--lifted button.is-active { background:#fff; color:var(--color--purple-500); font-weight:600; box-shadow:0 1px 2px rgba(0,0,0,0.10); }
+  .mode-hint { font-size:12px; color:var(--text-color--subtler); }
+
+  .foot { font-size:12.5px; line-height:1.6; color:var(--text-color--subtler); border-top:1px solid var(--border-color); padding-top:16px; }
+</style>
+</head>
+<body>
+<div class="page">
+  <h1>Build / Test selector — three ways to make it more prominent</h1>
+  <p class="lede">Each one borrows from something already live in the product. Same composer, same two modes; only the selector changes. Build is shown active in all three.</p>
+
+  <div class="variant">
+    <h2>A — Tinted pill</h2>
+    <p class="note">Takes the live “Finish setup” treatment: accent text on a soft tint of the same hue, pill-shaped. Drops the grey track, so the active mode is the only filled thing in the row. Violet because that’s the colour the product already uses for assistant-driven work.</p>
+    <div class="composer">
+      <textarea rows="1" placeholder="Ask anything…"></textarea>
+      <div class="composer-row">
+        <div class="seg seg--tinted">
+          <button class="is-active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>Build</button>
+          <button><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v7.5a2 2 0 0 1-.2.9L4.7 20.6a1 1 0 0 0 .9 1.4h12.8a1 1 0 0 0 .9-1.4l-5.1-10.2a2 2 0 0 1-.2-.9V2"/><path d="M8.5 2h7"/><path d="M7 16h10"/></svg>Test</button>
+        </div>
+        <span class="icon-btn-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5 12.5 20a4 4 0 0 1-5.6-5.7L15 6a2.5 2.5 0 1 1 3.5 3.6L10 18"/></svg></span>
+        <span class="spacer"></span>
+        <span class="send-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 19V5M5 12l7-7 7 7"/></svg></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="variant">
+    <h2>B — Tinted pill with the breathing glow</h2>
+    <p class="note">Variant A plus the halo from the “Brewing…” indicator, on a 3.2s breathe loop. Reads as live and a bit playful. Worth deciding whether it should pulse all the time, or only while the assistant is actually working — permanently animated UI gets tiring.</p>
+    <div class="composer">
+      <textarea rows="1" placeholder="Ask anything…"></textarea>
+      <div class="composer-row">
+        <div class="seg seg--glow">
+          <button class="is-active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>Build</button>
+          <button><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v7.5a2 2 0 0 1-.2.9L4.7 20.6a1 1 0 0 0 .9 1.4h12.8a1 1 0 0 0 .9-1.4l-5.1-10.2a2 2 0 0 1-.2-.9V2"/><path d="M8.5 2h7"/><path d="M7 16h10"/></svg>Test</button>
+        </div>
+        <span class="icon-btn-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5 12.5 20a4 4 0 0 1-5.6-5.7L15 6a2.5 2.5 0 1 1 3.5 3.6L10 18"/></svg></span>
+        <span class="spacer"></span>
+        <span class="send-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 19V5M5 12l7-7 7 7"/></svg></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="variant">
+    <h2>C — Lifted above the field</h2>
+    <p class="note">Moves the selector out of the icon row onto its own line at the top of the composer, where you read before you type, and spells out what the mode does. The most prominent of the three, and the only one that explains itself.</p>
+    <div class="composer composer--lifted">
+      <div class="mode-bar">
+        <div class="seg seg--lifted">
+          <button class="is-active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>Build</button>
+          <button><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v7.5a2 2 0 0 1-.2.9L4.7 20.6a1 1 0 0 0 .9 1.4h12.8a1 1 0 0 0 .9-1.4l-5.1-10.2a2 2 0 0 1-.2-.9V2"/><path d="M8.5 2h7"/><path d="M7 16h10"/></svg>Test</button>
+        </div>
+        <span class="mode-hint">Changes the agent</span>
+      </div>
+      <textarea rows="1" placeholder="Ask anything…"></textarea>
+      <div class="composer-row">
+        <span class="icon-btn-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5 12.5 20a4 4 0 0 1-5.6-5.7L15 6a2.5 2.5 0 1 1 3.5 3.6L10 18"/></svg></span>
+        <span class="spacer"></span>
+        <span class="send-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 19V5M5 12l7-7 7 7"/></svg></span>
+      </div>
+    </div>
+  </div>
+
+  <p class="foot">Not used here, but available from the same source: the “Brewing…” pill is one of ten labels that rotate every 5s (Imagining, Tinkering, Pondering, Hatching, Concocting, Sparkling, Noodling, Percolating, Doodling), with a 4-square grid spinner — that belongs on the agent while it’s being built, not on the selector.</p>
+</div>
+</body>
+</html>
