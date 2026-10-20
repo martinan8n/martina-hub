@@ -14,7 +14,7 @@
   .hifi-topbar { display: flex; align-items: center; gap: var(--spacing--xs); padding: var(--spacing--sm) var(--spacing--md); border-bottom: 1px solid var(--border-color); background: var(--background--surface); }
   .hifi-crumb { font-size: var(--font-size--sm); color: var(--text-color); }
   .hifi-crumb b { font-weight: var(--font-weight--medium); }
-  .hifi-body { padding: var(--spacing--xs) var(--spacing--xl) var(--spacing--xl); max-width: 640px; background: var(--background--subtle); }
+  .hifi-body { padding: var(--spacing--md) var(--spacing--xl) var(--spacing--xl); max-width: 640px; background: var(--background--subtle); }
   .hifi-card { border: 1px solid var(--border-color); border-radius: var(--radius--xs); background: var(--background--surface); box-shadow: 0 1px 2px rgba(0,0,0,0.04); padding: var(--spacing--md) var(--spacing--sm); margin-bottom: var(--spacing--sm); }
   .hifi-section-divider { border-top: 1px solid var(--border-color--subtle); margin: var(--spacing--md) calc(-1 * var(--spacing--sm)); }
   .hifi-field-label { font-size: var(--font-size--sm); font-weight: var(--font-weight--medium); margin-bottom: var(--spacing--xs); }
@@ -98,9 +98,11 @@
   .mk-advanced-header { display: flex; align-items: center; justify-content: space-between; cursor: pointer; padding: var(--spacing--sm) 0; font-size: var(--font-size--sm); font-weight: var(--font-weight--medium); }
   .mk-advanced-chevron { transition: transform 120ms ease; color: var(--text-color--subtler); }
   .mk-advanced-chevron.is-open { transform: rotate(180deg); }
-  .mk-filter-group { display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 10px; border: 1px solid var(--border-color); border-radius: var(--radius--2xs); background: var(--background--surface); }
-  .mk-filter-group svg { flex: none; color: var(--text-color--subtler); }
-  .mk-filter-select { appearance: none; -webkit-appearance: none; -moz-appearance: none; border: none; outline: none; background: transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23999999' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right center/14px; height: 30px; padding: 0 18px 0 0; font-family: inherit; font-size: var(--font-size--sm); color: var(--text-color); cursor: pointer; }
+  .mk-filter-select { appearance: none; -webkit-appearance: none; -moz-appearance: none; height: 32px; padding: 0 30px 0 12px; border: 1px solid var(--border-color); border-radius: var(--radius--2xs); background: var(--background--surface) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23999999' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 10px center/14px; font-family: inherit; font-size: var(--font-size--sm); color: var(--text-color); cursor: pointer; outline: none; }
+  .mk-filter-icon-btn { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; flex: none; border: 1px solid var(--border-color); border-radius: var(--radius--2xs); background: var(--background--surface); color: var(--text-color--subtler); cursor: pointer; }
+  .mk-filter-icon-btn:hover, .mk-filter-icon-btn.is-active { background: var(--color--neutral-125); color: var(--text-color); }
+  .mk-filter-popover { position: absolute; top: calc(100% + 6px); left: 0; width: 220px; background: var(--background--surface); border: 1px solid var(--border-color); border-radius: var(--radius--md); box-shadow: 0 8px 24px rgba(0,0,0,0.1); padding: var(--spacing--sm); z-index: 20; }
+  .mk-filter-popover .mk-filter-select { width: 100%; }
   .mk-back-row { display: flex; align-items: center; gap: 8px; cursor: pointer; padding-bottom: var(--spacing--md); font-size: var(--font-size--sm); font-weight: var(--font-weight--medium); color: var(--text-color); }
 
   /* Real TagsInput pattern (packages/frontend/@n8n/design-system/src/v2/components/TagsInput) */
@@ -1103,6 +1105,13 @@
         document.getElementById("mkPaneMemoryAll").style.display = "none";
         document.getElementById("mkPaneKnowledge").style.display = "block";
       }
+      function mkToggleChannelFilter() {
+        var pop = document.getElementById("mkChannelFilterPopover");
+        var btn = document.getElementById("mkChannelFilterBtn");
+        var open = pop.style.display !== "none";
+        pop.style.display = open ? "none" : "block";
+        btn.classList.toggle("is-active", !open);
+      }
       function memShowGuidanceModalD() {
         var el = document.getElementById("memGuidanceModalD");
         if (el) el.style.display = "flex";
@@ -1336,26 +1345,28 @@
           </div>
 
           <div class="hifi-card">
-          <div style="display:flex; gap:var(--spacing--xs); padding-bottom:var(--spacing--xs);">
-            <div class="mk-filter-group">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z"/></svg>
-              <select class="mk-filter-select">
-                <option>User: All</option>
-                <option>Sin</option>
-                <option>Priya</option>
-                <option>Marco</option>
-                <option>You</option>
-              </select>
-            </div>
-            <div class="mk-filter-group">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z"/></svg>
-              <select class="mk-filter-select">
-                <option>Channel: All</option>
-                <option>#finance-ops</option>
-                <option>#product-analytics</option>
-                <option>#support-escalations</option>
-                <option>Build (internal)</option>
-              </select>
+          <div style="display:flex; gap:var(--spacing--xs); padding-bottom:var(--spacing--xs); position:relative;">
+            <select class="mk-filter-select">
+              <option>User: All</option>
+              <option>Sin</option>
+              <option>Priya</option>
+              <option>Marco</option>
+              <option>You</option>
+            </select>
+            <div style="position:relative;">
+              <button type="button" class="mk-filter-icon-btn" id="mkChannelFilterBtn" onclick="mkToggleChannelFilter()">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z"/></svg>
+              </button>
+              <div id="mkChannelFilterPopover" class="mk-filter-popover" style="display:none;">
+                <div class="mem-guidance-sublabel">Channel</div>
+                <select class="mk-filter-select" onchange="mkToggleChannelFilter()">
+                  <option>All</option>
+                  <option>#finance-ops</option>
+                  <option>#product-analytics</option>
+                  <option>#support-escalations</option>
+                  <option>Build (internal)</option>
+                </select>
+              </div>
             </div>
           </div>
 
