@@ -10,13 +10,13 @@
 <link rel="stylesheet" href="styles/n8n-tokens.css">
 <style>
   html, body { margin:0; height:100%; }
-  body { font-family:"Inter",system-ui,sans-serif; background:#fff; color:var(--text-color); }
+  body { font-family:"Inter",system-ui,sans-serif; background:var(--color--neutral-100); color:var(--text-color); }
   * { box-sizing:border-box; }
 
   .app { display:flex; height:100vh; }
 
   /* ---- left app rail ---- */
-  .apprail { width:56px; flex:none; background:#fff; border-right:1px solid var(--border-color); display:flex; flex-direction:column; align-items:center; padding:14px 0; gap:6px; }
+  .apprail { width:56px; flex:none; background:transparent; border-right:1px solid var(--border-color); display:flex; flex-direction:column; align-items:center; padding:14px 0; gap:6px; }
   .apprail .rail-btn { width:34px; height:34px; border-radius:8px; display:flex; align-items:center; justify-content:center; color:var(--text-color--subtler); cursor:pointer; position:relative; flex:none; }
   .apprail .rail-btn:hover { background:var(--color--neutral-100); color:var(--text-color); }
   .apprail .rail-btn svg { width:18px; height:18px; }
@@ -63,7 +63,7 @@
   .msg.agent p { margin:0 0 10px; }
   .msg.agent p:last-child { margin-bottom:0; }
   .msg.agent .fig { font-family:var(--font-family--monospace,ui-monospace,monospace); font-size:12.5px; background:var(--color--neutral-50); border:1px solid var(--border-color); border-radius:8px; padding:10px 12px; white-space:pre; color:var(--text-color--subtle); margin:10px 0; display:inline-block; }
-  .msg.user { max-width:460px; background:var(--color--neutral-100); color:var(--text-color); font-size:13.5px; line-height:1.5; border-radius:16px; padding:10px 14px; }
+  .msg.user { max-width:460px; background:#fff; color:var(--text-color); font-size:13.5px; line-height:1.5; border-radius:16px; padding:10px 14px; }
 
   .composer-wrap { flex:none; padding:14px 32px 20px; }
   .composer { position:relative; border:1px solid var(--border-color); border-radius:12px; background:#fff; transition:box-shadow 120ms ease, outline-color 120ms ease; }
