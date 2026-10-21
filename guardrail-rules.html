@@ -1,0 +1,249 @@
+<!doctype html><html><head>
+<meta charset="utf8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Guardrails — rules &amp; dimensions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Patrick+Hand&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles/hub.css">
+<link rel="stylesheet" href="styles/notebook-ui.css">
+<style>
+  /* Everything the notebook kit ships is already scoped under .nbk, so nothing here
+     leaks into the hub chrome. These are only the few page-specific additions. */
+  .nbk-frame { border: 1px solid var(--line-soft, #d4d7da); border-radius: 10px; overflow: hidden; background: #fff; }
+  /* .nbk-main centres its children at their natural width; these screens want a real column. */
+  .nbk-frame .nbk-main { padding: 22px 26px 30px; align-items: stretch; }
+  .nbk-frame .nbk-main > * { width: 100%; max-width: 860px; margin-inline: auto; }
+
+  .gr-dim-row { display: flex; align-items: flex-start; gap: 14px; padding: 13px 0; border-top: 1px solid var(--line-soft, #d4d7da); }
+  .gr-dim-row:first-of-type { border-top: 0; }
+  .gr-dim-icon { width: 26px; height: 26px; flex: none; display: flex; align-items: center; justify-content: center; border-radius: 7px; background: #eceeef; color: #55595e; }
+  .gr-dim-body { flex: 1; min-width: 0; }
+  .gr-dim-name { font-size: 15px; color: #1a1c1e; }
+  .gr-dim-state { font-size: 13.5px; color: #55595e; margin-top: 1px; }
+  .gr-dim-where { font-size: 12.5px; color: #9298a0; margin-top: 3px; }
+  .gr-dim-where a, .gr-dim-link { color: #55595e; text-decoration: underline; text-underline-offset: 2px; cursor: pointer; }
+  .gr-dim-aside { flex: none; display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
+
+  /* Coverage, not health: an unset rule is a legitimate choice, so it must not read as an error. */
+  .gr-pill { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: #1a1c1e; background: #eceeef; border-radius: 999px; padding: 3px 10px; white-space: nowrap; }
+  .gr-pill .dot { width: 7px; height: 7px; border-radius: 999px; flex: none; background: #9298a0; }
+  .gr-pill.is-bounded .dot { background: #46a758; }
+  .gr-pill.is-partly .dot { background: #fd8925; }
+
+  .gr-flow { display: flex; align-items: stretch; gap: 0; margin: 4px 0 2px; }
+  .gr-flow-stage { flex: 1; min-width: 0; border: 1px solid var(--line-soft, #d4d7da); border-right: 0; padding: 12px 13px 14px; background: #fff; }
+  .gr-flow-stage:first-child { border-radius: 10px 0 0 10px; }
+  .gr-flow-stage:last-child { border-right: 1px solid var(--line-soft, #d4d7da); border-radius: 0 10px 10px 0; }
+  .gr-flow-stage.is-open { background: #fafbfb; }
+  .gr-flow-stage-name { font-size: 14px; color: #1a1c1e; display: flex; align-items: center; gap: 7px; }
+  .gr-flow-rule { font-size: 12.5px; color: #55595e; margin-top: 8px; padding-left: 12px; position: relative; line-height: 1.45; }
+  .gr-flow-rule::before { content: ""; position: absolute; left: 0; top: 7px; width: 5px; height: 5px; border-radius: 999px; background: #9298a0; }
+  .gr-flow-none { font-size: 12.5px; color: #9298a0; margin-top: 8px; font-style: italic; }
+  .gr-flow-add { font-size: 12.5px; color: #55595e; margin-top: 9px; text-decoration: underline; text-underline-offset: 2px; cursor: pointer; display: inline-block; }
+
+  .gr-note { font-size: 12.5px; color: var(--hub-muted); line-height: 1.6; margin: 10px 0 0; max-width: 680px; }
+  .gr-note b { color: var(--ink); }
+
+  /* Open questions read as a separate thing from the design, never as a caption on it. */
+  .gr-oq { border: 1px dashed var(--line, #a7abb0); border-radius: 10px; padding: 18px 20px; margin-top: 10px; background: #fffdf7; }
+  .gr-oq h3 { margin: 0 0 4px; font-size: 14px; }
+  .gr-oq .gr-oq-sub { font-size: 12.5px; color: var(--hub-muted); margin: 0 0 14px; }
+  .gr-oq ol { margin: 0; padding-left: 18px; }
+  .gr-oq li { font-size: 13px; line-height: 1.65; margin-bottom: 11px; }
+  .gr-oq li:last-child { margin-bottom: 0; }
+  .gr-oq .who { color: var(--hub-muted); font-size: 12px; }
+</style>
+</head>
+<body>
+
+<div class="shell">
+
+  <!-- ================= OVERVIEW ================= -->
+  <section data-route="guardrail-rules">
+    <a class="back-link" href="index.html#/home">&larr; Workstreams</a>
+    <div class="hero">
+      <div>
+        <span class="kicker">Workstream &middot; New</span>
+        <h1>Guardrails &mdash; rules &amp; dimensions</h1>
+        <p>Designing the five dimensions from the <i>Dimensions to guardrail an agent</i> doc: where a builder attaches a rule, and how they see what they've actually bounded. Hand-drawn on purpose &mdash; none of this is settled. The finished guardrail patterns (cost cap, running states, the trace) live in the <a href="guardrails.html#/guardrails">Guardrails</a> workstream instead.</p>
+      </div>
+    </div>
+
+    <div class="problem-grid">
+      <div class="problem-card">
+        <div class="eyebrow">&#129513; Problem</div>
+        <p>The rules that bound an agent don't live in one place, and shouldn't: rate limits belong at project or instance level, inbound restrictions on the channel, timeouts in Settings, memory rules attached to persistence, tool permissions per tool. Scattered by design &mdash; but that leaves a builder with no way to answer &ldquo;what is this agent actually allowed to do?&rdquo; before putting it in production.</p>
+        <span class="src">Source: Dimensions to guardrail an agent (Notion), plus Sin's comments on it, Oct 4&ndash;6</span>
+      </div>
+      <div class="problem-card">
+        <div class="eyebrow">&#129514; Hypothesis</div>
+        <p>If the rules stay where they belong, the thing to design isn't a guardrails panel &mdash; it's a <b>readable summary of what's bounded</b> that links out to wherever each rule lives. That's the &ldquo;foundation we can extend&rdquo; the doc asks for: adding a dimension later means adding a line to the summary, not redesigning a form.</p>
+      </div>
+    </div>
+
+    <div class="section-title">Screens</div>
+    <div class="card-grid">
+      <a class="screen-card" href="#/gr-bounded">
+        <div class="thumb">&#129521;</div>
+        <div class="body">
+          <span class="status">In progress</span>
+          <h3>What's bounded</h3>
+          <p class="desc">The summary view, two ways: as a list of the five dimensions, and as the path a run takes through them. Both read-only, both linking out to where each rule actually lives.</p>
+        </div>
+      </a>
+      <div class="screen-card placeholder">Output rules &mdash; destination vs content &mdash; next, then Action (tool allow), then Reach</div>
+    </div>
+
+    <div class="section-title">Open questions</div>
+    <div class="gr-oq">
+      <h3>Before this can go further</h3>
+      <p class="gr-oq-sub">Raised by the doc, by Sin's comments on it, or by designing against them. Not blockers for the summary view &mdash; they are blockers for the dimension screens.</p>
+      <ol>
+        <li><b>Are guardrail nodes / form fields even viable?</b> <span class="who">Sin, on the doc: &ldquo;Could this even be possible &mdash; do we want this to be available?&rdquo;</span> The whole authoring mechanism hangs off this. If form fields are out, rules get authored as workflows or by a vendor, and every config screen below changes shape.</li>
+        <li><b>What level do rate limits live at?</b> <span class="who">Sin: &ldquo;could be applicable at the project and instance level&rdquo;</span> &mdash; the doc scopes everything per-agent. Changes whether the summary shows an agent's own rules or inherited ones too, and who can edit them.</li>
+        <li><b>What is a memory &ldquo;persistence guardrail&rdquo;?</b> <span class="who">Sin wants rules on persistence (e.g. PII via LLMJ), not just preferences.</span> The doc only asks which preferences to expose. These are different products: one is a setting, the other is a rule that can fire.</li>
+        <li><b>Reach beyond Slack and Teams.</b> <span class="who">Sin: channel-level enforcement for popular channels, workflow hook as the escape hatch.</span> So what does a builder see for a channel that supports neither &mdash; nothing, or a worse-but-present control?</li>
+        <li><b>Is the summary read-only?</b> Mine, from designing it. Linking out keeps one source of truth but makes setting five rules a five-screen trip. Editing inline is kinder and immediately forks the truth.</li>
+        <li><b>Does &ldquo;no rule&rdquo; mean unfinished?</b> An agent with no output rule may be perfectly fine. If the summary styles every gap as a warning, builders will either chase them all or stop reading it.</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ================= WHAT'S BOUNDED ================= -->
+  <section data-route="gr-bounded">
+    <a class="back-link" href="#/guardrail-rules">&larr; Guardrails &mdash; rules &amp; dimensions</a>
+    <div class="screen-head">
+      <h1>What's bounded</h1>
+      <p>One place to read what this agent is allowed to do, with the rules themselves still living where they belong. Two takes on the same content: by dimension, and by the path a run takes. Same agent in both &mdash; a weekly metrics sync that posts to Slack.</p>
+    </div>
+
+    <h2 class="lrt-section-title">A &mdash; By dimension</h2>
+    <p class="lrt-section-sub">The five dimensions as a list, each saying what's set in plain language and where it's set. Adding a sixth dimension later is one more row.</p>
+
+    <div class="nbk">
+      <div class="nbk-frame">
+        <div class="nbk-main">
+          <div class="nbk-tabbar">
+            <span class="nbk-tab">Build</span>
+            <span class="nbk-tab">Context</span>
+            <span class="nbk-tab">Sessions</span>
+            <span class="nbk-tab is-active">Settings</span>
+          </div>
+
+          <div class="nbk-box" style="margin-top:18px;">
+            <div class="nbk-field-label">What's bounded<span class="nbk-field-sub">What this agent can do, and where each rule is set. Nothing is edited here.</span></div>
+
+            <div class="gr-dim-row">
+              <span class="gr-dim-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12h16"/><path d="m14 6 6 6-6 6"/></svg></span>
+              <div class="gr-dim-body">
+                <div class="gr-dim-name">Reach</div>
+                <div class="gr-dim-state">Anyone in <b>#metrics</b> can message it. Schedule runs Mondays 9:00.</div>
+                <div class="gr-dim-where">Set in <span class="gr-dim-link">Triggers</span></div>
+              </div>
+              <div class="gr-dim-aside"><span class="gr-pill is-partly"><span class="dot"></span> Partly</span></div>
+            </div>
+
+            <div class="gr-dim-row">
+              <span class="gr-dim-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></span>
+              <div class="gr-dim-body">
+                <div class="gr-dim-name">Action</div>
+                <div class="gr-dim-state"><b>6 tools</b> allowed, 2 ask before running. No sub-agents.</div>
+                <div class="gr-dim-where">Set per tool in <span class="gr-dim-link">Skills</span></div>
+              </div>
+              <div class="gr-dim-aside"><span class="gr-pill is-bounded"><span class="dot"></span> Bounded</span></div>
+            </div>
+
+            <div class="gr-dim-row">
+              <span class="gr-dim-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+              <div class="gr-dim-body">
+                <div class="gr-dim-name">Cost &amp; rate</div>
+                <div class="gr-dim-state"><b>$10</b> per session. No per-tool ceiling.</div>
+                <div class="gr-dim-where">Session cap in <span class="gr-dim-link">Settings</span> &middot; rate limits inherited from <span class="gr-dim-link">Personal</span></div>
+              </div>
+              <div class="gr-dim-aside"><span class="gr-pill is-partly"><span class="dot"></span> Partly</span></div>
+            </div>
+
+            <div class="gr-dim-row">
+              <span class="gr-dim-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"/><path d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z"/></svg></span>
+              <div class="gr-dim-body">
+                <div class="gr-dim-name">Memory</div>
+                <div class="gr-dim-state">Remembers across sessions. <b>No rule on what it may keep.</b></div>
+                <div class="gr-dim-where">Set in <span class="gr-dim-link">Build &rarr; Memory</span></div>
+              </div>
+              <div class="gr-dim-aside"><span class="gr-pill"><span class="dot"></span> Open</span></div>
+            </div>
+
+            <div class="gr-dim-row">
+              <span class="gr-dim-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12h16"/><path d="m18 6 6 6-6 6" transform="translate(-4)"/></svg></span>
+              <div class="gr-dim-body">
+                <div class="gr-dim-name">Output</div>
+                <div class="gr-dim-state">Can post anywhere it has a credential for. Content isn't checked.</div>
+                <div class="gr-dim-where">Nowhere to set this yet</div>
+              </div>
+              <div class="gr-dim-aside"><span class="gr-pill"><span class="dot"></span> Open</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p class="gr-note"><b>Why the states read this way.</b> Three states, no red: <i>Bounded</i>, <i>Partly</i>, <i>Open</i>. An agent with no output rule may be entirely fine, so a gap can't look like a failure &mdash; but it still has to be visible enough to notice before production. Open is grey and quiet; it doesn't demand to be fixed.</p>
+
+    <h2 class="lrt-section-title" style="margin-top:34px;">B &mdash; By the path a run takes</h2>
+    <p class="lrt-section-sub">The same five rules, ordered the way a run moves through them: something reaches the agent, it acts, it remembers, it sends. Makes the Output gap obvious because it's the end of a line you can follow, not the fifth item in a list.</p>
+
+    <div class="nbk">
+      <div class="nbk-frame">
+        <div class="nbk-main">
+          <div class="nbk-tabbar">
+            <span class="nbk-tab">Build</span>
+            <span class="nbk-tab">Context</span>
+            <span class="nbk-tab">Sessions</span>
+            <span class="nbk-tab is-active">Settings</span>
+          </div>
+
+          <div class="nbk-box" style="margin-top:18px;">
+            <div class="nbk-field-label">What's bounded<span class="nbk-field-sub">Follow a run from the moment something reaches this agent to the moment it answers.</span></div>
+
+            <div class="gr-flow">
+              <div class="gr-flow-stage">
+                <div class="gr-flow-stage-name"><span class="gr-pill is-partly" style="padding:2px 7px;"><span class="dot"></span></span> Reaches it</div>
+                <div class="gr-flow-rule">Anyone in #metrics</div>
+                <div class="gr-flow-rule">Mondays 9:00</div>
+                <span class="gr-flow-add">Triggers</span>
+              </div>
+              <div class="gr-flow-stage">
+                <div class="gr-flow-stage-name"><span class="gr-pill is-bounded" style="padding:2px 7px;"><span class="dot"></span></span> Acts</div>
+                <div class="gr-flow-rule">6 tools allowed</div>
+                <div class="gr-flow-rule">2 ask first</div>
+                <span class="gr-flow-add">Skills</span>
+              </div>
+              <div class="gr-flow-stage">
+                <div class="gr-flow-stage-name"><span class="gr-pill is-partly" style="padding:2px 7px;"><span class="dot"></span></span> Spends</div>
+                <div class="gr-flow-rule">$10 per session</div>
+                <div class="gr-flow-none">No per-tool ceiling</div>
+                <span class="gr-flow-add">Settings</span>
+              </div>
+              <div class="gr-flow-stage is-open">
+                <div class="gr-flow-stage-name"><span class="gr-pill" style="padding:2px 7px;"><span class="dot"></span></span> Remembers</div>
+                <div class="gr-flow-none">Anything it decides is useful</div>
+                <span class="gr-flow-add">Memory</span>
+              </div>
+              <div class="gr-flow-stage is-open">
+                <div class="gr-flow-stage-name"><span class="gr-pill" style="padding:2px 7px;"><span class="dot"></span></span> Sends</div>
+                <div class="gr-flow-none">Anywhere, unchecked</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p class="gr-note"><b>Trade-off between the two.</b> A is easier to extend &mdash; a new dimension is a new row, and it survives the rules living in five different places. B teaches the model better and makes the end-of-line gap land, but it implies an order that isn't quite true: cost applies at every stage, not between acting and remembering. B is also harder to grow, since a sixth stage means re-cutting the row.</p>
+  </section>
+
+</div>
+
+<script src="js/hub.js"></script>
+</body></html>
