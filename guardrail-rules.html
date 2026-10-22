@@ -383,48 +383,13 @@
           </div>
 
           <div class="nbk-box">
-            <div class="nbk-field-label">Limits <span class="gr-tag is-new">new</span><span class="nbk-field-sub">A property of the agent, not of any one channel: how often it can be started at all.</span></div>
+            <div class="nbk-field-label">How often it can be reached <span class="gr-tag is-elsewhere">elsewhere</span><span class="nbk-field-sub">A property of the agent, not of any one channel &mdash; so it belongs with the other limits.</span></div>
             <div class="gr-rule-row">
               <div class="gr-rule-main">
                 <div class="gr-rule-name">Max runs per hour</div>
-                <div class="gr-rule-sub">Applies to inbound invocations across every channel. Not to the schedule, whose frequency is already set by the schedule. Nothing like this exists today &mdash; the only time field is session idle timeout, which rotates sessions rather than capping invocations.</div>
+                <div class="gr-rule-sub">Set in <b>Settings &rarr; Usage and limits</b>, beside the monthly budget, since it's the other thing that bounds the agent over time. Nothing like it exists today.</div>
               </div>
-              <span class="gr-rule-ctl nbk-select-input">Not set <span class="chev">&#9662;</span></span>
-            </div>
-          </div>
-
-          <div class="nbk-box">
-            <div class="nbk-field-label">Slack &mdash; set access<span class="nbk-field-sub">The same step Telegram has, with the identity model Slack actually uses.</span></div>
-
-            <div class="gr-stepper">
-              <span class="st"><span class="num">1</span> Add credential</span> &rarr;
-              <span class="st is-on"><span class="num">2</span> Set access and restrictions</span> &rarr;
-              <span class="st"><span class="num">3</span> Connect</span>
-            </div>
-
-            <div class="gr-radio is-on">
-              <span class="dot"></span>
-              <div><div class="gr-radio-name">Private</div><div class="gr-radio-sub">Only the people you list below can address this agent.</div></div>
-            </div>
-            <div class="gr-radio">
-              <span class="dot"></span>
-              <div><div class="gr-radio-name">Anyone in #metrics</div><div class="gr-radio-sub">Everyone with access to the channel can use it.</div></div>
-            </div>
-            <div class="gr-radio">
-              <span class="dot"></span>
-              <div><div class="gr-radio-name">Anyone in the workspace</div><div class="gr-radio-sub">Including people who aren't in this channel, if they find the agent.</div></div>
-            </div>
-
-            <div class="gr-chipfield">
-              <span class="gr-chip">@sin <span class="x">&times;</span></span>
-              <span class="gr-chip">@priya <span class="x">&times;</span></span>
-              <span class="gr-chip">#finance-ops <span class="x">&times;</span></span>
-              <span class="ph">Add a person or channel&hellip;</span>
-            </div>
-
-            <div class="gr-warn">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex:none; margin-top:1px;"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 11h1v5h1"/></svg>
-              <span>Telegram restricts by username. Slack and Teams have workspaces, channels and groups, so &ldquo;Private&rdquo; needs to mean something different here &mdash; that's the open question, not whether the control fits.</span>
+              <span class="gr-rule-ctl gr-dim-link">Open Settings &rarr;</span>
             </div>
           </div>
         </div>
