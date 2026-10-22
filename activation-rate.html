@@ -1178,7 +1178,7 @@ flowchart LR
       <div style="display:flex; gap:24px; align-items:flex-start; flex-wrap:wrap;">
 
         <div style="flex:0 0 auto;">
-          <div class="lrt-screen-desc" style="margin:0 0 8px; width:620px;"><b>1 &mdash; Told once, where it happens.</b> A popover anchored to New chat, not a centred modal. There's nothing to do here &mdash; it's already on &mdash; and what people are missing isn't the news, it's <i>where to go</i>. A modal in the middle of the screen can't point at anything and gets dismissed by reflex; this one points at the destination. One action only &mdash; a link to settings would send people away from the place we're trying to send them, and the escape hatch belongs where the control lives, not in a notice that shows once.</div>
+          <div class="lrt-screen-desc" style="margin:0 0 8px; width:620px;"><b>1A &mdash; Next to the destination.</b> A popover anchored to New chat, not a centred modal. There's nothing to do here &mdash; it's already on &mdash; and what people are missing isn't the news, it's <i>where to go</i>. A modal in the middle of the screen can't point at anything and gets dismissed by reflex; this one points at the destination. One action only &mdash; a link to settings would send people away from the place we're trying to send them, and the escape hatch belongs where the control lives, not in a notice that shows once.</div>
           <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:620px; padding:0;">
             <div style="display:flex; height:380px;">
 
@@ -1212,6 +1212,33 @@ flowchart LR
         </div>
 
         <div style="flex:0 0 auto;">
+          <div class="lrt-screen-desc" style="margin:0 0 8px; width:460px;"><b>1B &mdash; Next to the control.</b> The same notice in the agent builder, anchored to the n8n Chat channel that's now there by default. Explains why it appeared and lets you undo it on the spot &mdash; but it never shows anyone where New chat is, which is the half people are actually missing.</div>
+          <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:460px; min-height:380px; padding:24px; position:relative;">
+            <div style="font-size:14px; font-weight:700; margin-bottom:2px;">Triggers</div>
+            <p style="margin:0 0 16px; font-size:12px; color:var(--ink-faint);">Where and when this agent runs</p>
+
+            <div style="display:flex; align-items:center; gap:10px; margin-bottom:14px;">
+              <span style="font-size:12.5px; width:62px; flex:none; color:var(--ink-soft);">Channels</span>
+              <span style="display:inline-flex; align-items:center; gap:6px; border:1px solid var(--line); border-radius:999px; padding:4px 10px; font-size:12.5px; background:var(--canvas);">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5h16v11H8l-4 3V5Z"/></svg> n8n Chat
+              </span>
+              <span style="color:var(--ink-faint); cursor:pointer;">+</span>
+            </div>
+
+            <div style="display:flex; align-items:center; gap:10px;">
+              <span style="font-size:12.5px; width:62px; flex:none; color:var(--ink-soft);">Schedules</span>
+              <span style="color:var(--ink-faint); cursor:pointer;">+</span>
+            </div>
+
+            <div style="position:absolute; left:72px; top:112px; width:290px; background:var(--paper); border:1px solid var(--line); border-radius:10px; box-shadow:0 8px 22px rgba(0,0,0,0.13); padding:14px 15px; z-index:4;">
+              <div style="font-size:13.5px; font-weight:700; margin-bottom:5px;">Now in n8n Chat</div>
+              <p style="margin:0 0 12px; font-size:12px; line-height:1.55; color:var(--ink-soft);">Anyone in your project can talk to this agent from New chat, once you publish. Remove the channel to stop that.</p>
+              <span class="btn" style="background:var(--accent-soft); border-radius:6px; font-size:12px;">Got it</span>
+            </div>
+          </div></div></div>
+        </div>
+
+        <div style="flex:0 0 auto;">
           <div class="lrt-screen-desc" style="margin:0 0 8px; width:460px;"><b>2 &mdash; The loop closes at publish.</b> The publish confirmation is the one moment we know the builder is paying attention and the agent actually exists in chat. One button, straight to that agent's chat &mdash; which also means the first message to any agent is likely to come from the person who built it, instead of waiting for a colleague who never heard about this.</div>
           <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:460px; min-height:300px; padding:0; position:relative;">
             <div class="pv-app" style="min-height:300px;">
@@ -1228,9 +1255,9 @@ flowchart LR
                   <span style="width:8px; height:8px; border-radius:50%; background:#2f9e5f; display:inline-block;"></span>
                   <span style="font-size:14px; font-weight:700;">Agent published</span>
                 </div>
-                <p style="margin:0 0 14px; font-size:12.5px; line-height:1.55; color:var(--ink-soft);">It's live in n8n Chat &mdash; anyone in <b>Personal</b> can talk to it.</p>
+                <p style="margin:0 0 14px; font-size:12.5px; line-height:1.55; color:var(--ink-soft);">It's live in n8n Chat, for anyone in <b>Personal</b>.</p>
                 <div style="display:flex; align-items:center; gap:10px;">
-                  <span class="btn" style="background:var(--accent-soft); border-radius:6px; font-size:12.5px;">Start talking to it</span>
+                  <span class="btn" style="background:var(--accent-soft); border-radius:6px; font-size:12.5px;">Talk to it</span>
                   <span style="font-size:12.5px; color:var(--ink-faint); cursor:pointer;">Done</span>
                 </div>
               </div>
@@ -1240,6 +1267,8 @@ flowchart LR
 
       </div>
     </div>
+
+    <div class="lrt-screen-desc" style="margin:14px 0 0; max-width:720px;"><b>A or B.</b> They fail in opposite directions: A shows the destination but not why anything changed; B explains the change and offers the undo, but leaves people no wiser about where to go. Given that the broken number is zero messages, I'd ship A &mdash; knowing the place matters more than knowing the reason, and B's undo is reachable from the channel anyway. B is the safer one if we expect pushback about agents appearing without anyone asking for it.</div>
 
     <div class="lrt-screen-desc" style="margin:14px 0 0; max-width:720px;"><b>What this trades away.</b> On-by-default means every published agent is reachable by everyone in the project without anyone deciding so &mdash; which is exactly what the Reach dimension of the <a href="guardrail-rules.html#/guardrail-rules">guardrails work</a> is trying to make deliberate. The two aren't reconcilable by wording; it's a real choice between adoption now and a per-agent decision later. The milder version, if that trade feels wrong: publishing makes the agent available <i>to you</i> automatically, and sharing with the project stays explicit. That alone fixes the zero-messages number, because the builder can talk to their own agent the day they make it.</div>
 
