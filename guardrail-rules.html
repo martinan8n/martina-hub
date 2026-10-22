@@ -85,6 +85,45 @@
 
   .gr-warn { display: flex; gap: 8px; align-items: flex-start; background: #fff8ee; border: 1px solid #f0dcc0; border-radius: 8px; padding: 9px 11px; font-size: 12.5px; color: #7a5a24; line-height: 1.5; margin-top: 9px; }
 
+  /* Capabilities chip rows, as the Build tab renders them */
+  .gr-chiprow { display: flex; align-items: center; flex-wrap: wrap; gap: 7px; padding: 10px 0; border-top: 1px solid var(--line-soft, #d4d7da); }
+  .gr-chiprow:first-of-type { border-top: 0; }
+  .gr-chiprow-label { font-size: 14px; color: #1a1c1e; width: 70px; flex: none; }
+  .gr-count { display: inline-flex; align-items: center; justify-content: center; min-width: 17px; height: 17px; padding: 0 4px; border-radius: 999px; background: #eceeef; color: #55595e; font-size: 11.5px; margin-left: 4px; }
+  .gr-toolchip { display: inline-flex; align-items: center; gap: 6px; border: 1.5px solid var(--line-soft, #d4d7da); border-radius: 8px; padding: 4px 9px; font-size: 13px; color: #1a1c1e; background: #fff; }
+  .gr-toolchip .ic { width: 15px; height: 15px; border-radius: 4px; background: #eceeef; flex: none; }
+  .gr-toolchip .chev { color: #9298a0; font-size: 10px; }
+  .gr-addchip { font-size: 13px; color: #55595e; border: 1.5px dashed var(--line-soft, #d4d7da); border-radius: 8px; padding: 4px 9px; cursor: pointer; }
+
+  /* The tools modal */
+  .gr-modal { border: 1.5px solid var(--line-soft, #d4d7da); border-radius: 12px; background: #fff; padding: 16px 18px 10px; box-shadow: 0 8px 24px rgba(0,0,0,0.07); max-width: 560px !important; }
+  .gr-modal-head { display: flex; align-items: center; margin-bottom: 12px; }
+  .gr-modal-title { font-size: 16px; font-weight: 700; color: #1a1c1e; }
+  .gr-modal-x { margin-left: auto; color: #9298a0; font-size: 17px; cursor: pointer; }
+  .gr-search { display: flex; align-items: center; gap: 8px; border: 1.5px solid var(--line-soft, #d4d7da); border-radius: 8px; padding: 7px 10px; font-size: 13px; color: #9298a0; }
+  .gr-toolrow { display: flex; align-items: center; gap: 11px; padding: 11px 0; border-top: 1px solid var(--line-soft, #d4d7da); }
+  .gr-toolrow .ic { width: 28px; height: 28px; border-radius: 7px; background: #eceeef; flex: none; }
+  .gr-toolrow-body { flex: 1; min-width: 0; }
+  .gr-toolrow-name { font-size: 14px; color: #1a1c1e; }
+  .gr-toolrow-desc { font-size: 12.5px; color: #9298a0; margin-top: 1px; }
+  .nbk-btn.is-done { color: #46a758; border-color: #cfe4d3; }
+
+  /* Permission groups, with per-tool override underneath */
+  .gr-permgroup { border: 1.5px solid var(--line-soft, #d4d7da); border-radius: 9px; margin-bottom: 9px; }
+  .gr-permgroup-head { display: flex; align-items: center; gap: 10px; padding: 11px 12px; }
+  .gr-permgroup-chev { color: #9298a0; font-size: 11px; transform: rotate(-90deg); flex: none; }
+  .gr-permgroup-chev.is-open { transform: none; }
+  .gr-permgroup-body { flex: 1; min-width: 0; }
+  .gr-permgroup-name { font-size: 14px; color: #1a1c1e; }
+  .gr-permgroup-sub { font-size: 12.5px; color: #9298a0; margin-top: 1px; }
+  .gr-permchild { display: flex; align-items: center; gap: 10px; padding: 8px 12px 8px 33px; border-top: 1px solid var(--line-soft, #d4d7da); background: #fafbfb; }
+  .gr-permchild-name { flex: 1; font-size: 13px; color: #55595e; }
+
+  .gr-confirm { border: 1.5px solid var(--line-soft, #d4d7da); border-radius: 12px; background: #fff; padding: 18px 20px; box-shadow: 0 8px 24px rgba(0,0,0,0.07); max-width: 420px !important; }
+  .gr-confirm-title { font-size: 15px; font-weight: 700; color: #1a1c1e; margin-bottom: 6px; }
+  .gr-confirm-body { font-size: 13px; color: #55595e; line-height: 1.55; margin: 0 0 16px; }
+  .gr-confirm-actions { display: flex; justify-content: flex-end; gap: 8px; }
+
   /* Open questions read as a separate thing from the design, never as a caption on it. */
   .gr-oq { border: 1px dashed var(--line, #a7abb0); border-radius: 10px; padding: 18px 20px; margin-top: 10px; background: #fffdf7; }
   .gr-oq h3 { margin: 0 0 4px; font-size: 14px; }
@@ -386,36 +425,152 @@
     </div>
 
     <!-- ---------- ACTION ---------- -->
-    <h2 class="lrt-section-title" style="margin-top:34px;">2 &mdash; Action &nbsp;<span style="font-size:12.5px; font-weight:400; color:var(--hub-muted);">on the tool</span></h2>
-    <p class="lrt-section-sub">Three different things that all live near the tool: whether it's allowed at all, whether its arguments are checked before the call, and whether its result is checked before coming back into context. The doc is firm that the third is a separate risk &mdash; a poisoned result isn't something you can catch by looking at the call that asked for it.</p>
+    <h2 class="lrt-section-title" style="margin-top:34px;">2 &mdash; Action &nbsp;<span style="font-size:12.5px; font-weight:400; color:var(--hub-muted);">mostly already built</span></h2>
+    <p class="lrt-section-sub">I had drawn this as a table of Allow / Ask first / Block over a list of tools. That control already exists in the product, in a better form than I'd invented: permissions are set <b>per group</b> &mdash; read-only versus write and delete &mdash; with per-tool override, inside the tool's own setup. So the screens below recreate what's there, and the only genuinely missing piece is the data validation the doc asks for.</p>
 
     <div class="nbk">
       <div class="nbk-frame">
         <div class="nbk-main">
           <div class="nbk-box">
-            <div class="nbk-field-label">Tools<span class="nbk-field-sub">Every tool gets an explicit decision. Nothing is allowed by default.</span></div>
-
-            <div class="gr-rule-row">
-              <div class="gr-rule-main"><div class="gr-rule-name">Hex &mdash; run query</div><div class="gr-rule-sub">Reads the funnel dashboard</div></div>
-              <span class="gr-rule-ctl gr-seg"><span class="is-on">Allow</span><span>Ask first</span><span>Block</span></span>
+            <div class="nbk-field-label">Capabilities <span class="gr-tag is-today">today</span><span class="nbk-field-sub">What this agent can do and how it does it</span></div>
+            <div class="gr-chiprow">
+              <span class="gr-chiprow-label">Tools <span class="gr-count">3</span></span>
+              <span class="gr-toolchip"><span class="ic"></span> Hex</span>
+              <span class="gr-toolchip"><span class="ic"></span> Notion <span class="chev">&#9662;</span></span>
+              <span class="gr-toolchip"><span class="ic"></span> Slack <span class="chev">&#9662;</span></span>
+              <span class="gr-addchip">+ Add tool</span>
             </div>
-            <div class="gr-rule-row">
-              <div class="gr-rule-main"><div class="gr-rule-name">Notion &mdash; update page</div><div class="gr-rule-sub">Writes the snapshot</div></div>
-              <span class="gr-rule-ctl gr-seg"><span>Allow</span><span class="is-on">Ask first</span><span>Block</span></span>
-            </div>
-            <div class="gr-rule-row">
-              <div class="gr-rule-main"><div class="gr-rule-name">Slack &mdash; send message <span class="gr-tag is-today">today</span></div><div class="gr-rule-sub">Approval already exists per channel action</div></div>
-              <span class="gr-rule-ctl gr-seg"><span>Allow</span><span class="is-on">Ask first</span><span>Block</span></span>
+            <div class="gr-chiprow">
+              <span class="gr-chiprow-label">Skills <span class="gr-count">0</span></span>
+              <span class="gr-addchip">+ Add skill</span>
             </div>
           </div>
+        </div>
+      </div>
+    </div>
 
+    <p class="gr-note"><b>Tools and Skills are different things.</b> A skill is a markdown instruction package &mdash; <i>&ldquo;how this agent handles specific tasks&rdquo;</i>. Guardrails attach to tools. Worth keeping straight, because the doc uses &ldquo;Skills&rdquo; for the allowed-tools list.</p>
+
+    <h3 class="lrt-section-title" style="font-size:15px; margin-top:26px;">Adding one &mdash; the real modal</h3>
+    <p class="lrt-section-sub">Browse, then drill in. Not a stepper.</p>
+
+    <div class="nbk">
+      <div class="nbk-frame">
+        <div class="nbk-main">
+          <div class="gr-modal">
+            <div class="gr-modal-head"><span class="gr-modal-title">Tools</span><span class="gr-modal-x">&times;</span></div>
+            <div class="gr-search"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg> Search all tools&hellip;</div>
+            <div class="nbk-ref-tabs" style="margin:12px 0 4px;">
+              <span class="nbk-ref-tab is-active">All</span>
+              <span class="nbk-ref-tab">Connectors</span>
+              <span class="nbk-ref-tab">n8n nodes</span>
+              <span class="nbk-ref-tab">Workflows</span>
+            </div>
+            <div class="gr-toolrow">
+              <span class="ic"></span>
+              <div class="gr-toolrow-body"><div class="gr-toolrow-name">Notion</div><div class="gr-toolrow-desc">Read and write pages, databases and blocks</div></div>
+              <span class="nbk-btn">Connect</span>
+            </div>
+            <div class="gr-toolrow">
+              <span class="ic"></span>
+              <div class="gr-toolrow-body"><div class="gr-toolrow-name">Hex</div><div class="gr-toolrow-desc">Run queries and read project outputs</div></div>
+              <span class="nbk-btn is-done">&#10003; Connected</span>
+            </div>
+            <div class="gr-toolrow">
+              <span class="ic"></span>
+              <div class="gr-toolrow-body"><div class="gr-toolrow-name">Slack</div><div class="gr-toolrow-desc">Post messages and read channel history</div></div>
+              <span class="nbk-btn">Set up</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="lrt-section-title" style="font-size:15px; margin-top:26px;">Where the decision is actually made <span class="gr-tag is-today">today</span></h3>
+    <p class="lrt-section-sub">After connecting, the tool's own settings carry a <i>Tool permissions</i> section. This is the part I'd reinvented badly: grouping by what a tool can <i>do to your data</i> is a much better default than listing every tool flat, because the risky half is already separated for you.</p>
+
+    <div class="nbk">
+      <div class="nbk-frame">
+        <div class="nbk-main">
           <div class="nbk-box">
-            <div class="nbk-field-label">Data checks <span class="gr-tag is-new">new</span><span class="nbk-field-sub">Run on the way into a tool and on the way back out of it.</span></div>
+            <div class="nbk-field-label">Tool permissions<span class="nbk-field-sub">Choose when the agent can use these tools</span></div>
+
+            <div class="gr-permgroup">
+              <div class="gr-permgroup-head">
+                <span class="gr-permgroup-chev">&#9662;</span>
+                <div class="gr-permgroup-body">
+                  <div class="gr-permgroup-name">Read-only tools <span class="gr-count">6</span></div>
+                  <div class="gr-permgroup-sub">Can look things up</div>
+                </div>
+                <span class="nbk-select-input">Allow <span class="chev">&#9662;</span></span>
+              </div>
+            </div>
+
+            <div class="gr-permgroup is-open">
+              <div class="gr-permgroup-head">
+                <span class="gr-permgroup-chev is-open">&#9662;</span>
+                <div class="gr-permgroup-body">
+                  <div class="gr-permgroup-name">Write and delete tools <span class="gr-count">4</span></div>
+                  <div class="gr-permgroup-sub">Can change or delete things</div>
+                </div>
+                <span class="nbk-select-input">Custom <span class="chev">&#9662;</span></span>
+              </div>
+              <div class="gr-permchild">
+                <span class="gr-permchild-name">Create page</span>
+                <span class="nbk-select-input">Ask first <span class="chev">&#9662;</span></span>
+              </div>
+              <div class="gr-permchild">
+                <span class="gr-permchild-name">Update page</span>
+                <span class="nbk-select-input">Allow <span class="chev">&#9662;</span></span>
+              </div>
+              <div class="gr-permchild">
+                <span class="gr-permchild-name">Delete block</span>
+                <span class="nbk-select-input">Block <span class="chev">&#9662;</span></span>
+              </div>
+            </div>
+
+            <div class="gr-rule-row" style="margin-top:6px;">
+              <div class="gr-rule-main"><div class="gr-rule-name">Timeout</div><div class="gr-rule-sub">How long a tool call may run before it fails</div></div>
+              <span class="gr-rule-ctl nbk-select-input">30s <span class="chev">&#9662;</span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p class="gr-note"><b>&ldquo;Custom&rdquo; is doing real work.</b> The group dropdown shows Custom when individual tools inside it disagree with the group &mdash; so the summary line never lies about what's underneath. That's the pattern the <a href="#/gr-bounded">What's bounded</a> view should borrow for its own partial states.</p>
+
+    <h3 class="lrt-section-title" style="font-size:15px; margin-top:26px;">And it already defends the dangerous default <span class="gr-tag is-today">today</span></h3>
+    <p class="lrt-section-sub">Setting a whole write group to Allow is challenged, which is the doc's &ldquo;never a default-allow&rdquo; requirement already honoured in one place.</p>
+
+    <div class="nbk">
+      <div class="nbk-frame">
+        <div class="nbk-main" style="padding-top:34px; padding-bottom:34px;">
+          <div class="gr-confirm">
+            <div class="gr-confirm-title">Allow all write and delete tools?</div>
+            <p class="gr-confirm-body">The agent can change or delete Notion content without asking first. This applies to all 4 tools in this group.</p>
+            <div class="gr-confirm-actions">
+              <span class="nbk-btn">Allow anyway</span>
+              <span class="nbk-btn nbk-btn-primary">Keep Ask first</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="lrt-section-title" style="font-size:15px; margin-top:26px;">The actual gap <span class="gr-tag is-new">new</span></h3>
+    <p class="lrt-section-sub">Permissions decide <i>whether</i> a tool runs. Nothing today looks at <i>what passes through it</i> &mdash; and the doc is firm that the result side is a separate risk from the argument side, because a poisoned response isn't something you can catch by inspecting the call that asked for it.</p>
+
+    <div class="nbk">
+      <div class="nbk-frame">
+        <div class="nbk-main">
+          <div class="nbk-box">
+            <div class="nbk-field-label">Data checks <span class="gr-tag is-new">new</span><span class="nbk-field-sub">Would sit under Tool permissions, in the same settings pane.</span></div>
 
             <div class="nbk-setting-row">
               <div>
                 <div class="nbk-setting-title">Check arguments before the call</div>
-                <div class="nbk-setting-sub">Stop the call if what's about to be sent breaks a content rule &mdash; e.g. an email address or a card number heading into a database write.</div>
+                <div class="nbk-setting-sub">Stop the call if what's about to be sent breaks a content rule &mdash; an email address or a card number heading into a database write.</div>
               </div>
               <span class="nbk-toggle is-on" onclick="this.classList.toggle('is-on')"><span class="nbk-toggle-knob"></span></span>
             </div>
@@ -423,7 +578,7 @@
             <div class="nbk-setting-row">
               <div>
                 <div class="nbk-setting-title">Check results before they re-enter context</div>
-                <div class="nbk-setting-sub">An external system can return adversarial or poisoned content. This is a separate risk from the argument check, and needs its own decision.</div>
+                <div class="nbk-setting-sub">An external system can return adversarial content. Separate decision, separate risk.</div>
               </div>
               <span class="nbk-toggle" onclick="this.classList.toggle('is-on')"><span class="nbk-toggle-knob"></span></span>
             </div>
