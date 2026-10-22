@@ -131,6 +131,18 @@
   .gr-chevr { color: #9298a0; font-size: 15px; flex: none; }
   .gr-numfield { border: 1.5px solid var(--line-soft, #d4d7da); border-radius: 7px; padding: 5px 12px; font-size: 13px; color: #1a1c1e; min-width: 62px; text-align: left; display: inline-block; }
 
+  /* Telegram's stepper is vertical, so the recreation has to be too */
+  .gr-vstep { display: flex; align-items: flex-start; gap: 10px; padding: 9px 0; border-top: 1px solid var(--line-soft, #d4d7da); color: #9298a0; }
+  .gr-vstep:first-of-type { border-top: 0; }
+  .gr-vstep .num { width: 20px; height: 20px; flex: none; border-radius: 999px; border: 1.5px solid currentColor; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; margin-top: 1px; }
+  .gr-vstep-name { font-size: 13.5px; }
+  .gr-vstep.is-on, .gr-vstep.is-done { color: #1a1c1e; }
+  .gr-vstep.is-on .num { background: #1a1c1e; color: #fff; border-color: #1a1c1e; }
+  .gr-vstep.is-done .num { border-color: #46a758; color: #46a758; }
+
+  .gr-modal-foot { display: flex; align-items: center; gap: 8px; margin-top: 18px; padding-top: 13px; border-top: 1px solid var(--line-soft, #d4d7da); }
+  .gr-toolpane-head { display: flex; align-items: center; gap: 10px; padding-bottom: 13px; border-bottom: 1px solid var(--line-soft, #d4d7da); }
+
   /* Open questions read as a separate thing from the design, never as a caption on it. */
   .gr-oq { border: 1px dashed var(--line, #a7abb0); border-radius: 10px; padding: 18px 20px; margin-top: 10px; background: #fffdf7; }
   .gr-oq h3 { margin: 0 0 4px; font-size: 14px; }
@@ -344,44 +356,83 @@
       <p>The summary view only reads. This is the other half: the actual settings, one section per dimension, each sitting where that rule belongs rather than in a guardrails panel. Every control is marked <span class="gr-tag is-today">today</span> if it exists in the product now, <span class="gr-tag is-new">new</span> if the doc is asking for it, or <span class="gr-tag is-elsewhere">elsewhere</span> if it belongs on another surface.</p>
     </div>
 
-    <!-- ---------- REACH ---------- -->
-    <h2 class="lrt-section-title">1 &mdash; Reach &nbsp;<span style="font-size:12.5px; font-weight:400; color:var(--hub-muted);">in the channel, not in the agent</span></h2>
-    <p class="lrt-section-sub">Telegram already ships exactly this, as a named step in its setup: <i>Set access and restrictions</i>, with an Access mode of Private/Public and a <i>Restrict to users</i> chip field. The other five channels render a details component into the same slot and leave it almost empty. So this isn't a new screen &mdash; it's generalising a pattern that's already built and shipped in one channel.</p>
+    <h2 class="lrt-section-title">1 &mdash; Reach &nbsp;<span style="font-size:12.5px; font-weight:400; color:var(--hub-muted);">inside the channel modal</span></h2>
+    <p class="lrt-section-sub">Telegram already ships this, as step 2 of a <b>vertical</b> stepper: <i>Add credential</i> &rarr; <i>Set access and restrictions</i> &rarr; <i>Connect Telegram</i>. Every other channel takes a different path &mdash; a credential block and then the channel's own fields, with no access step at all. So the work isn't designing a control, it's giving the other channels the step Telegram has.</p>
+
+    <div class="pv-nav-map">
+      <div style="display:flex; gap:20px; align-items:flex-start; flex-wrap:wrap;">
+
+        <div style="flex:0 0 auto;">
+          <div class="lrt-screen-desc" style="margin:0 0 8px; width:420px;"><b>Telegram today.</b> The one channel with an access step.</div>
+          <div class="nbk">
+            <div class="nbk-frame" style="width:420px;">
+              <div class="nbk-main" style="padding:18px 20px 16px;">
+                <div class="gr-modal-head" style="margin-bottom:14px;"><span class="gr-modal-title">Telegram</span><span class="gr-modal-x">&times;</span></div>
+
+                <div class="gr-vstep is-done"><span class="num">&#10003;</span><div><div class="gr-vstep-name">Add credential</div></div></div>
+                <div class="gr-vstep is-on">
+                  <span class="num">2</span>
+                  <div style="flex:1;">
+                    <div class="gr-vstep-name">Set access and restrictions</div>
+                    <div style="margin-top:10px;">
+                      <div style="font-size:12.5px; color:#55595e; margin-bottom:4px;">Access mode</div>
+                      <div class="gr-radio is-on" style="padding:5px 0;"><span class="dot"></span><div><div class="gr-radio-name">Private</div></div></div>
+                      <div class="gr-radio" style="padding:5px 0;"><span class="dot"></span><div><div class="gr-radio-name">Public</div><div class="gr-radio-sub">Any Telegram user will be able to chat with this agent.</div></div></div>
+                      <div style="font-size:12.5px; color:#55595e; margin:10px 0 0;">Restrict to users</div>
+                      <div class="gr-chipfield">
+                        <span class="gr-chip">@sin <span class="x">&times;</span></span>
+                        <span class="ph">Type a user ID or username and press Space</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="gr-vstep"><span class="num">3</span><div><div class="gr-vstep-name">Connect Telegram</div></div></div>
+
+                <div class="gr-modal-foot"><span class="nbk-btn" style="color:#b54242;">Remove channel</span><span style="flex:1;"></span><span class="nbk-btn nbk-btn-primary">Save</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="flex:0 0 auto;">
+          <div class="lrt-screen-desc" style="margin:0 0 8px; width:420px;"><b>Slack, with the step added.</b> Its edit view is a credential block then the channel's own fields &mdash; agent name, description, online switch. The access block slots in between, in Telegram's shape but with Slack's identities.</div>
+          <div class="nbk">
+            <div class="nbk-frame" style="width:420px;">
+              <div class="nbk-main" style="padding:18px 20px 16px;">
+                <div class="gr-modal-head" style="margin-bottom:14px;"><span class="gr-modal-title">Slack</span><span class="gr-modal-x">&times;</span></div>
+
+                <div style="font-size:13px; color:#1a1c1e; margin-bottom:5px;">Slack Credential</div>
+                <div class="gr-rule-ctl nbk-select-input" style="display:flex; width:100%; justify-content:space-between; margin-bottom:16px;">n8n workspace <span class="chev">&#9662;</span></div>
+
+                <div style="border:1.5px dashed #d8a657; border-radius:9px; padding:12px 13px; margin-bottom:16px;">
+                  <div style="font-size:13px; color:#1a1c1e;">Who can use this <span class="gr-tag is-new">new</span></div>
+                  <div class="gr-radio is-on" style="padding:5px 0;"><span class="dot"></span><div><div class="gr-radio-name">Anyone in #metrics</div></div></div>
+                  <div class="gr-radio" style="padding:5px 0;"><span class="dot"></span><div><div class="gr-radio-name">Specific people</div></div></div>
+                  <div class="gr-radio" style="padding:5px 0;"><span class="dot"></span><div><div class="gr-radio-name">Anyone in the workspace</div><div class="gr-radio-sub">Including people outside this channel.</div></div></div>
+                </div>
+
+                <div style="font-size:13px; color:#1a1c1e; margin-bottom:3px;">Agent name</div>
+                <div style="font-size:11.5px; color:#9298a0; margin-bottom:10px;">The name displayed for this agent in Slack</div>
+                <div style="font-size:13px; color:#1a1c1e; margin-bottom:10px;">Description</div>
+                <div style="display:flex; align-items:center; gap:10px;">
+                  <span style="flex:1; font-size:13px; color:#1a1c1e;">Always show my bot as online</span>
+                  <span class="nbk-toggle" onclick="this.classList.toggle('is-on')"><span class="nbk-toggle-knob"></span></span>
+                </div>
+
+                <div class="gr-modal-foot"><span class="nbk-btn" style="color:#b54242;">Remove channel</span><span style="flex:1;"></span><span class="nbk-btn nbk-btn-primary">Save</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <p class="gr-note"><b>Telegram's wording doesn't survive the move.</b> &ldquo;Private&rdquo; there means a list of usernames; Slack has channels, workspaces and groups, so the same two options would be a lie. The shape transfers, the labels don't &mdash; and whoever builds this will have to answer it per channel, which is an argument for doing one channel properly rather than all five shallowly.</p>
 
     <div class="nbk">
       <div class="nbk-frame">
         <div class="nbk-main">
-          <div class="nbk-box">
-            <div class="nbk-field-label">Channels<span class="nbk-field-sub">Who can start a run, and how often.</span></div>
-
-            <div class="gr-rule-row">
-              <div class="gr-rule-main">
-                <div class="gr-rule-name">Telegram <span class="gr-tag is-today">today</span></div>
-                <div class="gr-rule-sub">Private &middot; 3 users allowed</div>
-              </div>
-              <span class="gr-rule-ctl nbk-select-input">Edit <span class="chev">&#9662;</span></span>
-            </div>
-
-            <div class="gr-rule-row">
-              <div class="gr-rule-main">
-                <div class="gr-rule-name">Slack &mdash; #metrics <span class="gr-tag is-new">new</span></div>
-                <div class="gr-rule-sub">Anyone in the channel can message it. No restriction set.</div>
-              </div>
-              <span class="gr-rule-ctl nbk-select-input">Set access <span class="chev">&#9662;</span></span>
-            </div>
-
-          </div>
-
-          <div class="nbk-box">
-            <div class="nbk-field-label">Schedules<span class="nbk-field-sub">Its own row in the product, not a channel &mdash; a schedule invokes itself, so there's no caller to restrict.</span></div>
-            <div class="gr-rule-row">
-              <div class="gr-rule-main">
-                <div class="gr-rule-name">Mondays 9:00 <span class="gr-tag is-today">today</span></div>
-                <div class="gr-rule-sub">Frequency is the schedule itself. Nothing to add here.</div>
-              </div>
-            </div>
-          </div>
-
           <div class="nbk-box">
             <div class="nbk-field-label">How often it can be reached <span class="gr-tag is-elsewhere">elsewhere</span><span class="nbk-field-sub">A property of the agent, not of any one channel &mdash; so it belongs with the other limits.</span></div>
             <div class="gr-rule-row">
@@ -458,95 +509,53 @@
       </div>
     </div>
 
-    <h3 class="lrt-section-title" style="font-size:15px; margin-top:26px;">Where the decision is actually made <span class="gr-tag is-today">today</span></h3>
-    <p class="lrt-section-sub">After connecting, the tool's own settings carry a <i>Tool permissions</i> section. This is the part I'd reinvented badly: grouping by what a tool can <i>do to your data</i> is a much better default than listing every tool flat, because the risky half is already separated for you.</p>
+    <h3 class="lrt-section-title" style="font-size:15px; margin-top:26px;">The tool's own pane &mdash; permissions, and where the checks belong <span class="gr-tag is-today">today</span></h3>
+    <p class="lrt-section-sub">A full pane inside the modal: back arrow, tool icon, name, credential picker, close. Then the body &mdash; server details, then <b>Tool permissions</b> with its two groups. Footer carries Remove, Cancel and Save. The data checks go in the body, after permissions, because they're the same kind of decision about the same tool.</p>
 
     <div class="nbk">
       <div class="nbk-frame">
         <div class="nbk-main">
-          <div class="nbk-box">
-            <div class="nbk-field-label">Tool permissions<span class="nbk-field-sub">Choose when the agent can use these tools</span></div>
+          <div class="gr-modal" style="max-width:620px !important;">
+            <div class="gr-toolpane-head">
+              <span class="gr-chevr" style="transform:rotate(180deg);">&#8250;</span>
+              <span class="ic" style="width:24px; height:24px; border-radius:6px; background:#eceeef; display:inline-block;"></span>
+              <span class="gr-modal-title">Notion</span>
+              <span style="flex:1;"></span>
+              <span class="nbk-select-input" style="font-size:12.5px;">Workspace cred <span class="chev">&#9662;</span></span>
+              <span class="gr-modal-x">&times;</span>
+            </div>
 
+            <div style="font-size:13.5px; font-weight:700; color:#1a1c1e; margin:14px 0 3px;">Official Notion MCP server</div>
+            <div style="font-size:12px; color:#9298a0; margin-bottom:16px;">Published by Notion &middot; Version 1.4.0</div>
+
+            <div style="font-size:13.5px; font-weight:700; color:#1a1c1e; margin-bottom:9px;">Tool permissions</div>
             <div class="gr-permgroup">
               <div class="gr-permgroup-head">
                 <span class="gr-permgroup-chev">&#9662;</span>
-                <div class="gr-permgroup-body">
-                  <div class="gr-permgroup-name">Read-only tools <span class="gr-count">6</span></div>
-                  <div class="gr-permgroup-sub">Can look things up</div>
-                </div>
+                <div class="gr-permgroup-body"><div class="gr-permgroup-name">Read-only tools <span class="gr-count">6</span></div><div class="gr-permgroup-sub">Can look things up</div></div>
                 <span class="nbk-select-input">Allow <span class="chev">&#9662;</span></span>
               </div>
             </div>
-
             <div class="gr-permgroup is-open">
               <div class="gr-permgroup-head">
                 <span class="gr-permgroup-chev is-open">&#9662;</span>
-                <div class="gr-permgroup-body">
-                  <div class="gr-permgroup-name">Write and delete tools <span class="gr-count">4</span></div>
-                  <div class="gr-permgroup-sub">Can change or delete things</div>
-                </div>
+                <div class="gr-permgroup-body"><div class="gr-permgroup-name">Write and delete tools <span class="gr-count">4</span></div><div class="gr-permgroup-sub">Can change or delete things</div></div>
                 <span class="nbk-select-input">Custom <span class="chev">&#9662;</span></span>
               </div>
-              <div class="gr-permchild">
-                <span class="gr-permchild-name">Create page</span>
-                <span class="nbk-select-input">Ask first <span class="chev">&#9662;</span></span>
-              </div>
-              <div class="gr-permchild">
-                <span class="gr-permchild-name">Update page</span>
-                <span class="nbk-select-input">Allow <span class="chev">&#9662;</span></span>
-              </div>
-              <div class="gr-permchild">
-                <span class="gr-permchild-name">Delete block</span>
-                <span class="nbk-select-input">Block <span class="chev">&#9662;</span></span>
-              </div>
+              <div class="gr-permchild"><span class="gr-permchild-name">Create page</span><span class="nbk-select-input">Ask first <span class="chev">&#9662;</span></span></div>
+              <div class="gr-permchild"><span class="gr-permchild-name">Delete block</span><span class="nbk-select-input">Block <span class="chev">&#9662;</span></span></div>
             </div>
 
-            <div class="gr-rule-row" style="margin-top:6px;">
-              <div class="gr-rule-main"><div class="gr-rule-name">Timeout</div><div class="gr-rule-sub">How long a tool call may run before it fails</div></div>
-              <span class="gr-rule-ctl nbk-select-input">30s <span class="chev">&#9662;</span></span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <p class="gr-note"><b>&ldquo;Custom&rdquo; is doing real work.</b> The group dropdown shows Custom when individual tools inside it disagree with the group &mdash; so the summary line never lies about what's underneath. That's the pattern the <a href="#/gr-bounded">What's bounded</a> view should borrow for its own partial states.</p>
-
-    <h3 class="lrt-section-title" style="font-size:15px; margin-top:26px;">And it already defends the dangerous default <span class="gr-tag is-today">today</span></h3>
-    <p class="lrt-section-sub">Setting a whole write group to Allow is challenged, which is the doc's &ldquo;never a default-allow&rdquo; requirement already honoured in one place.</p>
-
-    <div class="nbk">
-      <div class="nbk-frame">
-        <div class="nbk-main" style="padding-top:34px; padding-bottom:34px;">
-          <div class="gr-confirm">
-            <div class="gr-confirm-title">Allow all write and delete tools?</div>
-            <p class="gr-confirm-body">The agent can change or delete Notion content without asking first. This applies to all 4 tools in this group.</p>
-            <div class="gr-confirm-actions">
-              <span class="nbk-btn">Allow anyway</span>
-              <span class="nbk-btn nbk-btn-primary">Keep Ask first</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <h3 class="lrt-section-title" style="font-size:15px; margin-top:26px;">The actual gap <span class="gr-tag is-new">new</span></h3>
-    <p class="lrt-section-sub">Permissions decide <i>whether</i> a tool runs. Nothing today looks at <i>what passes through it</i> &mdash; and the doc is firm that the result side is a separate risk from the argument side, because a poisoned response isn't something you can catch by inspecting the call that asked for it.</p>
-
-    <div class="nbk">
-      <div class="nbk-frame">
-        <div class="nbk-main">
-          <div class="nbk-box">
-            <div class="nbk-field-label">Data checks <span class="gr-tag is-new">new</span><span class="nbk-field-sub">Would sit under Tool permissions, in the same settings pane.</span></div>
+            <div style="font-size:13.5px; font-weight:700; color:#1a1c1e; margin:18px 0 3px;">Data checks <span class="gr-tag is-new">new</span></div>
+            <div style="font-size:12px; color:#9298a0; margin-bottom:6px;">Permissions decide whether a tool runs. These look at what passes through it.</div>
 
             <div class="nbk-setting-row">
               <div>
                 <div class="nbk-setting-title">Check arguments before the call</div>
-                <div class="nbk-setting-sub">Stop the call if what's about to be sent breaks a content rule &mdash; an email address or a card number heading into a database write.</div>
+                <div class="nbk-setting-sub">Stops the call if what's about to be sent breaks the agent's content policy.</div>
               </div>
               <span class="nbk-toggle is-on" onclick="this.classList.toggle('is-on')"><span class="nbk-toggle-knob"></span></span>
             </div>
-
             <div class="nbk-setting-row">
               <div>
                 <div class="nbk-setting-title">Check results before they re-enter context</div>
@@ -554,10 +563,31 @@
               </div>
               <span class="nbk-toggle" onclick="this.classList.toggle('is-on')"><span class="nbk-toggle-knob"></span></span>
             </div>
-
             <div class="gr-rule-row">
               <div class="gr-rule-main"><div class="gr-rule-name">What counts as a violation</div><div class="gr-rule-sub">Uses the agent's content policy. Not defined here &mdash; otherwise every tool would carry its own copy.</div></div>
               <span class="gr-rule-ctl gr-dim-link">Settings &rarr;</span>
+            </div>
+
+            <div class="gr-modal-foot"><span class="nbk-btn" style="color:#b54242;">Remove</span><span style="flex:1;"></span><span class="nbk-btn">Cancel</span><span class="nbk-btn nbk-btn-primary">Save</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p class="gr-note"><b>Two different tool panes exist, and they don't agree.</b> This MCP one has the Allow / Ask first / Block dropdowns per group. A plain tool gets a different pane entirely, whose approval control is a single switch &mdash; <i>&ldquo;Require approval: Pause before this tool runs until a human approves it.&rdquo;</i> Same decision, two shapes. Any data check added has to land in both, and it's worth asking whether the switch should just become the dropdown.</p>
+
+    <h3 class="lrt-section-title" style="font-size:15px; margin-top:26px;">It already defends the dangerous default <span class="gr-tag is-today">today</span></h3>
+    <p class="lrt-section-sub">Setting a whole write group to Allow is challenged &mdash; the doc's &ldquo;never a default-allow&rdquo; requirement, already honoured in one place.</p>
+
+    <div class="nbk">
+      <div class="nbk-frame">
+        <div class="nbk-main" style="padding-top:30px; padding-bottom:30px;">
+          <div class="gr-confirm">
+            <div class="gr-confirm-title">Allow all write and delete tools?</div>
+            <p class="gr-confirm-body">The agent can change or delete Notion content without asking first. This applies to all 4 tools in this group.</p>
+            <div class="gr-confirm-actions">
+              <span class="nbk-btn">Allow anyway</span>
+              <span class="nbk-btn nbk-btn-primary">Keep Ask first</span>
             </div>
           </div>
         </div>
@@ -594,14 +624,14 @@
             </div>
 
             <div class="gr-budget-row is-new">
-              <div class="gr-rule-main"><div class="gr-rule-name">Cost cap per operation <span class="gr-tag is-new">new</span></div><div class="gr-rule-sub">Maximum any single tool call can spend.</div></div>
-              <span class="gr-budget-val" style="color:#9298a0;">Not set</span>
+              <div class="gr-rule-main"><div class="gr-rule-name">Cost cap per operation <span class="gr-tag is-new">new</span></div><div class="gr-rule-sub">Maximum any single tool call can spend. Starts at a figure no ordinary call reaches.</div></div>
+              <span class="gr-budget-val">$5<br><span style="color:#9298a0;">Default</span></span>
               <span class="gr-chevr">&#8250;</span>
             </div>
 
             <div class="gr-budget-row is-new">
-              <div class="gr-rule-main"><div class="gr-rule-name">Max runs per hour <span class="gr-tag is-new">new</span></div><div class="gr-rule-sub">How often this agent can be started, across every channel.</div></div>
-              <span class="gr-budget-val" style="color:#9298a0;">Not set</span>
+              <div class="gr-rule-main"><div class="gr-rule-name">Max runs per hour <span class="gr-tag is-new">new</span></div><div class="gr-rule-sub">How often this agent can be started, across every channel. High enough that only a loop hits it.</div></div>
+              <span class="gr-budget-val">60<br><span style="color:#9298a0;">Default</span></span>
               <span class="gr-chevr">&#8250;</span>
             </div>
           </div>
@@ -609,7 +639,9 @@
       </div>
     </div>
 
-    <p class="gr-note"><b>This is where &ldquo;Not set&rdquo; stops being a dead end.</b> The budget rows aren't dropdowns &mdash; they're buttons with a chevron that open a modal for that one value. So the pattern for setting a limit already exists, and a new limit inherits it for free rather than needing a control invented for it.</p>
+    <p class="gr-note"><b>Why these two ship with a value and the budgets don't.</b> The product already splits this way: technical limits come with a number (max iterations 100, tool concurrency 5, max sub-agents 10), money ones don't. Setting a default budget means deciding what someone else's money is worth, and being too tight cuts legitimate work. These two can carry a default because they can be pitched where no ordinary run reaches them &mdash; only a runaway loop or a pathological call does. A guardrail default should be invisible to the people it isn't for. <b>The side effect:</b> a limit that's set because nobody touched it isn't the same as one somebody chose, so the summary view needs to tell those apart rather than showing both as bounded.</div>
+
+    <p class="gr-note"><b>And this is where &ldquo;Not set&rdquo; stops being a dead end.</b> The budget rows aren't dropdowns &mdash; they're buttons with a chevron that open a modal for that one value. So the pattern for setting a limit already exists, and a new limit inherits it for free rather than needing a control invented for it.</p>
 
     <h3 class="lrt-section-title" style="font-size:15px; margin-top:26px;">What the modal has to answer <span class="gr-tag is-new">new</span></h3>
     <p class="lrt-section-sub">The existing budget modals set an amount and, optionally, an alert before you reach it. A per-operation cap needs a third thing the budget ones don't: what happens to the run when a call is refused. Running out of money and one call being too expensive are different problems, so &ldquo;top up&rdquo; is the wrong answer here.</p>
