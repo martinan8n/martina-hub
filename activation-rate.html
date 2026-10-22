@@ -1239,7 +1239,7 @@ flowchart LR
         </div>
 
         <div style="flex:0 0 auto;">
-          <div class="lrt-screen-desc" style="margin:0 0 8px; width:460px;"><b>2 &mdash; The loop closes at publish.</b> The publish confirmation is the one moment we know the builder is paying attention and the agent actually exists in chat. One button, straight to that agent's chat &mdash; which also means the first message to any agent is likely to come from the person who built it, instead of waiting for a colleague who never heard about this.</div>
+          <div class="lrt-screen-desc" style="margin:0 0 8px; width:460px;"><b>2 &mdash; The loop closes at publish.</b> This modal already exists (<code>AgentPublishedModal.vue</code>) &mdash; today it says &ldquo;Your agent is now published and ready to use&rdquo; plus a line about republishing, with a single <i>Got it</i> and no link anywhere. Both existing lines stay; the change is one added line and one added button: the agent is in chat, and here's the way in. It's the one moment we know the builder is looking and the agent actually exists in chat, so the first message is likely to come from the person who built it rather than a colleague who never heard about any of this.</div>
           <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:460px; min-height:300px; padding:0; position:relative;">
             <div class="pv-app" style="min-height:300px;">
               <div class="pv-topbar">
@@ -1250,15 +1250,16 @@ flowchart LR
               <div style="padding:20px; color:var(--ink-faint); font-size:12.5px;">Agent config</div>
             </div>
             <div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(20,20,22,0.35);">
-              <div style="width:330px; background:var(--paper); border:1px solid var(--line); border-radius:10px; box-shadow:0 8px 24px rgba(0,0,0,0.16); padding:18px;">
-                <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
-                  <span style="width:8px; height:8px; border-radius:50%; background:#2f9e5f; display:inline-block;"></span>
-                  <span style="font-size:14px; font-weight:700;">Agent published</span>
-                </div>
-                <p style="margin:0 0 14px; font-size:12.5px; line-height:1.55; color:var(--ink-soft);">It's live in n8n Chat, for anyone in <b>Personal</b>.</p>
+              <div style="width:360px; background:var(--paper); border:1px solid var(--line); border-radius:10px; box-shadow:0 8px 24px rgba(0,0,0,0.16); padding:18px;">
+                <div style="font-size:14px; font-weight:700; margin-bottom:8px;">Agent published</div>
+                <p style="margin:0 0 7px; font-size:12.5px; line-height:1.55; color:var(--ink-soft);">Your agent is now published and ready to use.</p>
+                <p style="margin:0 0 7px; font-size:12.5px; line-height:1.55; color:var(--ink-soft);">It's live in n8n Chat &mdash; anyone in <b>Personal</b> can talk to it.</p>
+                <p style="margin:0 0 16px; font-size:12.5px; line-height:1.55; color:var(--ink-faint);">Any changes you make to this agent will not be published until you publish it again.</p>
                 <div style="display:flex; align-items:center; gap:10px;">
+                  <span style="display:inline-flex; align-items:center; gap:6px; font-size:12px; color:var(--ink-faint);"><span style="width:12px; height:12px; border:1.5px solid var(--line); border-radius:3px; display:inline-block;"></span> Don't show again</span>
+                  <span class="spacer" style="flex:1;"></span>
+                  <span style="font-size:12.5px; color:var(--ink-faint); cursor:pointer;">Got it</span>
                   <span class="btn" style="background:var(--accent-soft); border-radius:6px; font-size:12.5px;">Talk to it</span>
-                  <span style="font-size:12.5px; color:var(--ink-faint); cursor:pointer;">Done</span>
                 </div>
               </div>
             </div>
@@ -1267,6 +1268,8 @@ flowchart LR
 
       </div>
     </div>
+
+    <div class="lrt-screen-desc" style="margin:14px 0 0; max-width:720px;"><b>Two things the real modal brings with it.</b> It carries a <b>Don't show again</b> checkbox that writes to localStorage &mdash; so the people who publish most are the first to silence the one screen we'd be using to drive them to chat. And version-history rollback reuses the same modal, where &ldquo;it's live in n8n Chat&rdquo; reads oddly, since it already was. Both are solvable, neither is visible from a mockup.</div>
 
     <div class="lrt-screen-desc" style="margin:14px 0 0; max-width:720px;"><b>A or B.</b> They fail in opposite directions: A shows the destination but not why anything changed; B explains the change and offers the undo, but leaves people no wiser about where to go. Given that the broken number is zero messages, I'd ship A &mdash; knowing the place matters more than knowing the reason, and B's undo is reachable from the channel anyway. B is the safer one if we expect pushback about agents appearing without anyone asking for it.</div>
 
