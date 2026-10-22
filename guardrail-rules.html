@@ -324,17 +324,24 @@
               <span class="gr-rule-ctl nbk-select-input">Set access <span class="chev">&#9662;</span></span>
             </div>
 
+          </div>
+
+          <div class="nbk-box">
+            <div class="nbk-field-label">Schedules<span class="nbk-field-sub">Its own row in the product, not a channel &mdash; a schedule invokes itself, so there's no caller to restrict.</span></div>
             <div class="gr-rule-row">
               <div class="gr-rule-main">
-                <div class="gr-rule-name">Schedule &mdash; Mondays 9:00 <span class="gr-tag is-today">today</span></div>
-                <div class="gr-rule-sub">Runs itself. No caller to restrict.</div>
+                <div class="gr-rule-name">Mondays 9:00 <span class="gr-tag is-today">today</span></div>
+                <div class="gr-rule-sub">Frequency is the schedule itself. Nothing to add here.</div>
               </div>
             </div>
+          </div>
 
+          <div class="nbk-box">
+            <div class="nbk-field-label">Limits <span class="gr-tag is-new">new</span><span class="nbk-field-sub">A property of the agent, not of any one channel: how often it can be started at all.</span></div>
             <div class="gr-rule-row">
               <div class="gr-rule-main">
-                <div class="gr-rule-name">Max runs per hour <span class="gr-tag is-new">new</span></div>
-                <div class="gr-rule-sub">Caps how often an external trigger can invoke this agent. Nothing like this exists today &mdash; the only time field is session idle timeout, which rotates sessions rather than limiting invocations.</div>
+                <div class="gr-rule-name">Max runs per hour</div>
+                <div class="gr-rule-sub">Applies to inbound invocations across every channel. Not to the schedule, whose frequency is already set by the schedule. Nothing like this exists today &mdash; the only time field is session idle timeout, which rotates sessions rather than capping invocations.</div>
               </div>
               <span class="gr-rule-ctl nbk-select-input">Not set <span class="chev">&#9662;</span></span>
             </div>
