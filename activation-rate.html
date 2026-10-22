@@ -75,7 +75,8 @@
     <a class="back-link" href="#/activation-rate">&larr; Improve Activation Rate</a>
 
     <div class="lrt-page-tabs" id="chatNavPageTabs">
-      <span class="lrt-page-tab is-active" data-page-tab="2" onclick="chatNavShowTab(2)">Hi-fi</span>
+      <span class="lrt-page-tab is-active" data-page-tab="3" onclick="chatNavShowTab(3)">On by default</span>
+      <span class="lrt-page-tab" data-page-tab="2" onclick="chatNavShowTab(2)">Hi-fi</span>
       <span class="lrt-page-tab" data-page-tab="0" onclick="chatNavShowTab(0)">Draft</span>
       <span class="lrt-page-tab" data-page-tab="1" onclick="chatNavShowTab(1)">Proposal</span>
     </div>
@@ -822,7 +823,7 @@
       </div>
     </div></div></div>
 
-    <h2 class="lrt-section-title" style="margin-top:32px;">Agent config &mdash; Publish, then make available in Chat</h2>
+    <h2 class="lrt-section-title" style="margin-top:32px;">Agent config &mdash; Publish, then make available in Chat <span style="font-size:12.5px; font-weight:400; color:var(--hub-muted);">&middot; superseded, kept for reference</span></h2>
     <p class="lrt-section-sub">Publish and Make available are two separate, separately-tracked actions, not one combined step. <b>Publish</b> makes this version of the agent live/executable &mdash; it doesn&#39;t expose the agent to anyone else. <b>Make it available</b> is the later step that distributes an already-published agent through n8n Chat, and stays disabled until something&#39;s actually published. Starter prompts are onboarding copy inside that step &mdash; optional, never a requirement.</p>
 
     <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:560px;">
@@ -1164,7 +1165,88 @@ flowchart LR
     </div>
     </div>
 
-    <div class="chatnav-page-panel" data-page-panel="2">
+    <div class="chatnav-page-panel" data-page-panel="3">
+      <div class="screen-head">
+        <h1>n8n Chat on by default</h1>
+        <p>Written after the first 24 hours of the experiment, and after reading what the code actually does. Supersedes the two-step publish-then-make-available flow in the Proposal tab.</p>
+      </div>
+
+    <div id="chat-on-by-default"></div>
+    <p class="lrt-screen-desc" style="max-width:720px; margin:0 0 18px;">24 hours in: under 1% enabled n8n Chat, half of those never published, and nobody messaged an agent. The code explains why &mdash; n8n Chat <b>never appears in the channel catalog</b>, it's injected into the list only while the flag is on, so finding it takes a deliberate trip into the channels modal. And availability is derived from the published snapshot, so an agent that was never published simply doesn't exist in chat. So: turn it on by default, tell people once, and close the loop at the moment they publish.</p>
+
+    <div class="pv-nav-map">
+      <div style="display:flex; gap:24px; align-items:flex-start; flex-wrap:wrap;">
+
+        <div style="flex:0 0 auto;">
+          <div class="lrt-screen-desc" style="margin:0 0 8px; width:620px;"><b>1 &mdash; Told once, where it happens.</b> A popover anchored to New chat, not a centred modal. There's nothing to do here &mdash; it's already on &mdash; and what people are missing isn't the news, it's <i>where to go</i>. A modal in the middle of the screen can't point at anything and gets dismissed by reflex; this one points at the destination.</div>
+          <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:620px; padding:0;">
+            <div style="display:flex; height:380px;">
+
+              <div style="width:188px; flex:none; border-right:1px solid var(--line); padding:14px 12px; position:relative;">
+                <div style="display:flex; align-items:center; gap:6px; margin-bottom:16px;">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ea4b71" stroke-width="2.5"><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="M8.2 11 15.8 7M8.2 13 15.8 17"/></svg>
+                  <span style="font-weight:700; font-size:13px;">n8n</span>
+                </div>
+
+                <div id="chDefNewChat" style="display:flex; align-items:center; gap:8px; padding:6px 7px; font-size:13px; font-weight:600; background:var(--canvas); border-radius:6px; position:relative; z-index:3;">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5h16v11H8l-4 3V5Z"/></svg> New chat
+                </div>
+                <div style="display:flex; align-items:center; gap:8px; padding:6px 7px; font-size:13px; color:var(--ink-soft);"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 17l5-5 4 4 8-8"/></svg> Overview</div>
+                <div style="display:flex; align-items:center; gap:8px; padding:6px 7px; font-size:13px; color:var(--ink-soft);"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="3.2"/><path d="M5 20c0-3.5 3-6 7-6s7 2.5 7 6"/></svg> Personal</div>
+
+                <div style="position:absolute; left:196px; top:38px; width:270px; background:var(--paper); border:1px solid var(--line); border-radius:10px; box-shadow:0 8px 22px rgba(0,0,0,0.13); padding:14px 15px; z-index:4;">
+                  <div style="font-size:13.5px; font-weight:700; margin-bottom:5px;">Talk to your agents here</div>
+                  <p style="margin:0 0 12px; font-size:12px; line-height:1.55; color:var(--ink-soft);">Agents you publish now show up in New chat, for everyone in your project. You can turn this off per agent.</p>
+                  <div style="display:flex; align-items:center; gap:10px;">
+                    <span class="btn" style="background:var(--accent-soft); border-radius:6px; font-size:12px;">Got it</span>
+                    <span style="font-size:12px; color:var(--ink-faint); cursor:pointer; text-decoration:underline;">Agent settings</span>
+                  </div>
+                </div>
+              </div>
+
+              <div style="flex:1; background:var(--canvas); position:relative;">
+                <div style="padding:14px 18px; border-bottom:1px solid var(--line); font-size:12.5px; color:var(--ink-faint);">Personal / <b style="color:var(--ink);">Agents Funnel Metrics Sync</b></div>
+                <div style="padding:24px 18px; color:var(--ink-faint); font-size:12.5px;">Agent builder &mdash; unchanged</div>
+              </div>
+            </div>
+          </div></div></div>
+        </div>
+
+        <div style="flex:0 0 auto;">
+          <div class="lrt-screen-desc" style="margin:0 0 8px; width:460px;"><b>2 &mdash; The loop closes at publish.</b> The publish confirmation is the one moment we know the builder is paying attention and the agent actually exists in chat. One button, straight to that agent's chat &mdash; which also means the first message to any agent is likely to come from the person who built it, instead of waiting for a colleague who never heard about this.</div>
+          <div class="wf-scale-wrap"><div class="wf"><div class="frame" style="width:460px; min-height:300px; padding:0; position:relative;">
+            <div class="pv-app" style="min-height:300px;">
+              <div class="pv-topbar">
+                <span class="pv-crumb">Personal / <b>Agents Funnel Metrics Sync</b></span>
+                <span class="spacer" style="flex:1;"></span>
+                <span class="btn" style="opacity:0.6;"><span style="width:7px; height:7px; border-radius:50%; background:#2f9e5f; display:inline-block;"></span> Published</span>
+              </div>
+              <div style="padding:20px; color:var(--ink-faint); font-size:12.5px;">Agent config</div>
+            </div>
+            <div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(20,20,22,0.35);">
+              <div style="width:330px; background:var(--paper); border:1px solid var(--line); border-radius:10px; box-shadow:0 8px 24px rgba(0,0,0,0.16); padding:18px;">
+                <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+                  <span style="width:8px; height:8px; border-radius:50%; background:#2f9e5f; display:inline-block;"></span>
+                  <span style="font-size:14px; font-weight:700;">Agent published</span>
+                </div>
+                <p style="margin:0 0 14px; font-size:12.5px; line-height:1.55; color:var(--ink-soft);">It's live in n8n Chat &mdash; anyone in <b>Personal</b> can talk to it.</p>
+                <div style="display:flex; align-items:center; gap:10px;">
+                  <span class="btn" style="background:var(--accent-soft); border-radius:6px; font-size:12.5px;">Start talking to it</span>
+                  <span style="font-size:12.5px; color:var(--ink-faint); cursor:pointer;">Done</span>
+                </div>
+              </div>
+            </div>
+          </div></div></div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="lrt-screen-desc" style="margin:14px 0 0; max-width:720px;"><b>What this trades away.</b> On-by-default means every published agent is reachable by everyone in the project without anyone deciding so &mdash; which is exactly what the Reach dimension of the <a href="guardrail-rules.html#/guardrail-rules">guardrails work</a> is trying to make deliberate. The two aren't reconcilable by wording; it's a real choice between adoption now and a per-agent decision later. The milder version, if that trade feels wrong: publishing makes the agent available <i>to you</i> automatically, and sharing with the project stays explicit. That alone fixes the zero-messages number, because the builder can talk to their own agent the day they make it.</div>
+
+    </div>
+
+    <div class="chatnav-page-panel" data-page-panel="2" style="display:none;">
       <div class="screen-head">
         <h1>Making an agent available &mdash; as a channel (hi-fi)</h1>
         <p>Same content and decisions as the channels-based proposal above &mdash; nothing redesigned here, just rebuilt with real n8n typography, spacing/radius scale, and colour tokens, the same way the Skills and Settings hi-fi builds were. Scoped to this direction only (not the earlier separate-button variant, and not the &quot;current behaviour today&quot; reference section, which is deliberately not a proposal).</p>
