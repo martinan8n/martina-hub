@@ -65,6 +65,30 @@
   .gr-seg span { font-size: 12.5px; color: #55595e; padding: 3px 11px; border-radius: 999px; cursor: pointer; }
   .gr-seg span.is-on { background: #fff; color: #1a1c1e; box-shadow: 0 1px 2px rgba(0,0,0,0.08); }
 
+  /* legend under a card label, spelling out what each control value does */
+  .gr-legend { display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: 12px; color: #55595e; padding: 8px 0 2px; }
+  .gr-legend b { font-weight: 600; color: #1a1c1e; }
+
+  /* anything that actually opens something in the mockup */
+  .gr-click { cursor: pointer; }
+  .gr-click:hover { color: #1a1c1e; }
+  .gr-chevr.gr-click:hover { color: #1a1c1e; }
+
+  /* panel that opens inline under its row, so it can't fall outside the frame */
+  .gr-inline { display: none; margin: 2px 0 10px; padding: 14px 16px; border: 1.5px solid var(--line-soft,#d4d7da); border-radius: 9px; background: #fbfbfa; }
+  .gr-inline.is-open { display: block; }
+  .gr-inline-head { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: #1a1c1e; margin-bottom: 3px; }
+  .gr-inline-head .x { margin-left: auto; color: #9298a0; cursor: pointer; font-size: 15px; }
+  .gr-inline-sub { font-size: 12px; color: #55595e; margin-bottom: 11px; }
+  .gr-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .gr-chip { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; color: #1a1c1e; background: #fff; border: 1.5px solid var(--line-soft,#d4d7da); border-radius: 999px; padding: 3px 10px; }
+  .gr-chip .x { color: #9298a0; cursor: pointer; }
+  .gr-chip.is-add { border-style: dashed; color: #55595e; cursor: pointer; }
+  .gr-cat { display: flex; align-items: center; gap: 10px; padding: 7px 0; border-top: 1px solid var(--line-soft,#d4d7da); font-size: 13px; color: #1a1c1e; }
+  .gr-cat:first-of-type { border-top: 0; }
+  .gr-cat .bin { margin-left: auto; color: #55595e; cursor: pointer; display: flex; }
+  .gr-cat .bin svg { width: 14px; height: 14px; }
+
   .gr-chipfield { display: flex; flex-wrap: wrap; align-items: center; gap: 5px; border: 1.5px solid var(--line-soft, #d4d7da); border-radius: 8px; padding: 6px 8px; margin-top: 7px; background: #fff; }
   .gr-chip { display: inline-flex; align-items: center; gap: 5px; background: #eceeef; border-radius: 6px; padding: 2px 7px; font-size: 12.5px; color: #1a1c1e; }
   .gr-chip .x { color: #9298a0; cursor: pointer; }
@@ -732,17 +756,44 @@
             <div class="gr-rule-row">
               <div class="gr-rule-main"><div class="gr-rule-name">Cross-session memory</div><div class="gr-rule-sub">Remembers useful details about each user across sessions.</div></div>
               <span class="nbk-toggle is-on" onclick="this.classList.toggle('is-on')"><span class="nbk-toggle-knob"></span></span>
-              <span class="gr-chevr">&#8250;</span>
+              <span class="gr-chevr gr-click" onclick="grOpen('gr-mem-guidance')">&#8250;</span>
             </div>
 
             <div style="padding-left:16px; border-left:2px solid var(--line-soft,#d4d7da); margin-left:2px;">
               <div class="gr-rule-row" style="border-top:0;">
                 <div class="gr-rule-main"><div class="gr-rule-name">Guidance <span class="gr-tag is-today">today</span></div><div class="gr-rule-sub">What to add, what to exclude, as tags. Behind the chevron above. Best-effort steering &mdash; the agent reads it and tries.</div></div>
-                <span class="gr-rule-ctl gr-dim-link">Open &rarr;</span>
+                <span class="gr-rule-ctl gr-dim-link" onclick="grOpen('gr-mem-guidance')">Open &rarr;</span>
               </div>
+
+              <div class="gr-inline" id="gr-mem-guidance">
+                <div class="gr-inline-head">Guidance <span class="x" onclick="grClose('gr-mem-guidance')">&times;</span></div>
+                <div class="gr-inline-sub">Behind the chevron, and the same screen as in Memory: Configure&nbsp;+&nbsp;Delete. The agent reads these and tries &mdash; nothing here can refuse a write.</div>
+                <div style="font-size:12px; color:#55595e; margin-bottom:5px;">Worth remembering</div>
+                <div class="gr-chips" style="margin-bottom:12px;">
+                  <span class="gr-chip">Preferred report format <span class="x">&times;</span></span>
+                  <span class="gr-chip">Which entity they work in <span class="x">&times;</span></span>
+                  <span class="gr-chip is-add">+ Add</span>
+                </div>
+                <div style="font-size:12px; color:#55595e; margin-bottom:5px;">Leave out</div>
+                <div class="gr-chips">
+                  <span class="gr-chip">One-off figures <span class="x">&times;</span></span>
+                  <span class="gr-chip is-add">+ Add</span>
+                </div>
+              </div>
+
               <div class="gr-rule-row">
                 <div class="gr-rule-main"><div class="gr-rule-name">Never store <span class="gr-tag is-new">new</span></div><div class="gr-rule-sub">Checked at the moment of writing, by a model, because the content is dynamic. If it matches, the fact isn't stored &mdash; not a hint the agent can talk itself out of.</div></div>
-                <span class="gr-rule-ctl nbk-select-input">3 categories <span class="chev">&#9662;</span></span>
+                <span class="gr-rule-ctl nbk-select-input gr-click" onclick="grOpen('gr-mem-never')">3 categories <span class="chev">&#9662;</span></span>
+              </div>
+
+              <div class="gr-inline" id="gr-mem-never">
+                <div class="gr-inline-head">Never store <span class="x" onclick="grClose('gr-mem-never')">&times;</span></div>
+                <div class="gr-inline-sub">Kinds of content that are never written to memory, whatever the conversation says. Checked at the moment of writing.</div>
+                <div class="gr-cat">Card and account numbers <span class="bin"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg></span></div>
+                <div class="gr-cat">Home addresses and phone numbers <span class="bin"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg></span></div>
+                <div class="gr-cat">Anything about a third person <span class="bin"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg></span></div>
+                <div style="margin-top:10px;"><span class="gr-chip is-add">+ Add category</span></div>
+                <div style="font-size:12px; color:#55595e; margin-top:11px; padding-top:9px; border-top:1px solid var(--line-soft,#d4d7da);">The first and third are already in the content policy in Settings. Open question below: whether this list should just point at that policy instead of repeating it.</div>
               </div>
             </div>
           </div>
@@ -775,38 +826,67 @@
           </div>
 
           <div class="nbk-box" style="margin-top:16px;">
-            <div class="nbk-field-label">Usage and limits <span class="gr-tag is-today">today</span></div>
-            <div class="gr-rule-row"><div class="gr-rule-main"><div class="gr-rule-name">Monthly budget &middot; Cost cap per session</div></div><span class="gr-rule-ctl" style="font-size:12.5px; color:#9298a0;">$200/month &middot; $10</span></div>
-            <div class="gr-rule-row"><div class="gr-rule-main"><div class="gr-rule-name">Cost cap per operation &middot; Max runs per hour <span class="gr-tag is-new">new</span></div><div class="gr-rule-sub">The two that bound the agent rather than one execution.</div></div><span class="gr-rule-ctl" style="font-size:12.5px; color:#9298a0;">$5 &middot; 60</span></div>
-          </div>
+            <div class="nbk-field-label">Usage and limits <span class="gr-tag is-today">today</span><span class="nbk-field-sub">Two rows added to the card that's already here.</span></div>
 
-          <div class="nbk-box">
-            <div class="nbk-field-label">Content policy <span class="gr-tag is-new">new</span><span class="nbk-field-sub">Defined once, enforced in three places. Judged by a model, since none of it can be matched with a pattern.</span></div>
-            <div class="gr-rule-row"><div class="gr-rule-main"><div class="gr-rule-name">Personal data</div></div><span class="gr-rule-ctl gr-seg"><span>Allow</span><span class="is-on">Redact</span><span>Block</span></span></div>
-            <div class="gr-rule-row"><div class="gr-rule-main"><div class="gr-rule-name">Anything about a third person</div><div class="gr-rule-sub">The doc's own example</div></div><span class="gr-rule-ctl gr-seg"><span>Allow</span><span>Redact</span><span class="is-on">Block</span></span></div>
-            <div class="gr-rule-row"><div class="gr-rule-main"><div class="gr-rule-name">Financial figures</div></div><span class="gr-rule-ctl gr-seg"><span>Allow</span><span class="is-on">Redact</span><span>Block</span></span></div>
-            <div class="gr-rule-row">
-              <div class="gr-rule-main"><div class="gr-rule-name">Where it's enforced</div><div class="gr-rule-sub">Switched on in each place's own settings. Nothing redefines the policy.</div></div>
-              <span class="gr-rule-ctl" style="display:flex; gap:6px;">
-                <span class="gr-pill is-bounded"><span class="dot"></span> Tools</span>
-                <span class="gr-pill is-bounded"><span class="dot"></span> Memory</span>
-                <span class="gr-pill"><span class="dot"></span> Output</span>
-              </span>
+            <div style="padding:10px 0 14px;">
+              <div style="display:flex; align-items:center; font-size:13.5px; color:#1a1c1e;"><span>Monthly usage</span><span style="flex:1;"></span><span style="color:#55595e;">42%</span></div>
+              <div style="font-size:12.5px; color:#55595e; margin:3px 0 7px;">$84 of $200 used</div>
+              <div style="height:6px; border-radius:999px; background:#eceeef; overflow:hidden;"><div style="width:42%; height:100%; background:#9298a0;"></div></div>
+            </div>
+
+            <div class="gr-budget-row">
+              <div class="gr-rule-main"><div class="gr-rule-name">Monthly budget</div><div class="gr-rule-sub">Maximum this agent can spend across all sessions each month.</div></div>
+              <span class="gr-budget-val">$200/month<br><span style="color:#9298a0;">Alert at 80%</span></span>
+              <span class="gr-chevr">&#8250;</span>
+            </div>
+            <div class="gr-budget-row">
+              <div class="gr-rule-main"><div class="gr-rule-name">Cost cap per session</div><div class="gr-rule-sub">Maximum a single session can spend.</div></div>
+              <span class="gr-budget-val">$10</span>
+              <span class="gr-chevr">&#8250;</span>
+            </div>
+            <div class="gr-budget-row">
+              <div class="gr-rule-main"><div class="gr-rule-name">Cost cap per operation <span class="gr-tag is-new">new</span></div><div class="gr-rule-sub">Maximum any single tool call can spend.</div></div>
+              <span class="gr-budget-val">$5</span>
+              <span class="gr-chevr">&#8250;</span>
+            </div>
+            <div class="gr-budget-row">
+              <div class="gr-rule-main"><div class="gr-rule-name">Max runs per hour <span class="gr-tag is-new">new</span></div><div class="gr-rule-sub">How often this agent can be started, across every channel.</div></div>
+              <span class="gr-budget-val">60</span>
+              <span class="gr-chevr">&#8250;</span>
             </div>
           </div>
 
           <div class="nbk-box">
-            <div class="nbk-field-label">Where it can send <span class="gr-tag is-new">new</span><span class="nbk-field-sub">Destination and recipient. Says nothing about what the message contains.</span></div>
-            <div class="gr-rule-row"><div class="gr-rule-main"><div class="gr-rule-name">Back to whoever invoked it</div><div class="gr-rule-sub">The channel and person the run started from</div></div><span class="gr-rule-ctl gr-seg"><span class="is-on">Allow</span><span>Ask first</span><span>Block</span></span></div>
-            <div class="gr-rule-row"><div class="gr-rule-main"><div class="gr-rule-name">#finance-ops</div></div><span class="gr-rule-ctl gr-seg"><span>Allow</span><span class="is-on">Ask first</span><span>Block</span></span></div>
-            <div class="gr-rule-row"><div class="gr-rule-main"><div class="gr-rule-name">Anywhere else</div></div><span class="gr-rule-ctl gr-seg"><span>Allow</span><span>Ask first</span><span class="is-on">Block</span></span></div>
+            <div class="nbk-field-label">Content policy <span class="gr-tag is-new">new</span><span class="nbk-field-sub">Kinds of information this agent must not pass on. One list, written once here, checked everywhere the agent could leak it.</span></div>
+            <div class="gr-legend"><span><b>Allow</b> &mdash; passes through</span><span><b>Redact</b> &mdash; removed, and the gap is marked</span><span><b>Block</b> &mdash; the whole action is stopped</span></div>
+            <div class="gr-rule-row"><div class="gr-rule-main"><div class="gr-rule-name">Personal data</div><div class="gr-rule-sub">Names, emails, phone numbers, addresses.</div></div><span class="gr-rule-ctl gr-seg"><span>Allow</span><span class="is-on">Redact</span><span>Block</span></span></div>
+            <div class="gr-rule-row"><div class="gr-rule-main"><div class="gr-rule-name">Anything about a third person</div><div class="gr-rule-sub">Someone who isn't in the conversation. The doc's own example.</div></div><span class="gr-rule-ctl gr-seg"><span>Allow</span><span>Redact</span><span class="is-on">Block</span></span></div>
+            <div class="gr-rule-row"><div class="gr-rule-main"><div class="gr-rule-name">Financial figures</div><div class="gr-rule-sub">Amounts, balances, account numbers.</div></div><span class="gr-rule-ctl gr-seg"><span>Allow</span><span class="is-on">Redact</span><span>Block</span></span></div>
+            <div class="gr-rule-row"><div class="gr-rule-main"><div class="gr-rule-name"><span class="gr-chip is-add">+ Add a kind of content</span></div></div></div>
+            <div class="gr-rule-row">
+              <div class="gr-rule-main"><div class="gr-rule-name">Checked in</div><div class="gr-rule-sub">The three moments the agent can let something out: what it sends to a tool, what it writes to memory, what it replies. Each is switched on in its own settings &mdash; none of them change the list.</div></div>
+              <span class="gr-rule-ctl" style="display:flex; gap:6px;">
+                <span class="gr-pill is-bounded"><span class="dot"></span> Tool calls</span>
+                <span class="gr-pill is-bounded"><span class="dot"></span> What it remembers</span>
+                <span class="gr-pill"><span class="dot"></span> Replies</span>
+              </span>
+            </div>
+            <div class="gr-legend" style="padding-top:10px;"><span>A model makes the judgement &mdash; none of this can be matched with a pattern.</span></div>
+          </div>
+
+          <div class="nbk-box">
+            <div class="nbk-field-label">Who it can message <span class="gr-tag is-new">new</span><span class="nbk-field-sub">An agent connected to Slack can message anyone in the workspace, not only the person who asked. This is the list of who it's allowed to reach &mdash; nothing about what the message says.</span></div>
+            <div class="gr-legend"><span><b>Allow</b> &mdash; sends</span><span><b>Ask first</b> &mdash; waits for someone to approve</span><span><b>Block</b> &mdash; doesn't send</span></div>
+            <div class="gr-rule-row"><div class="gr-rule-main"><div class="gr-rule-name">Whoever started the run</div><div class="gr-rule-sub">Replying in the conversation it was asked in &mdash; the Slack thread, the Telegram chat, n8n&nbsp;Chat. The one case that can only be expressed here, because a channel can't know where the run began.</div></div><span class="gr-rule-ctl gr-seg"><span class="is-on">Allow</span><span>Ask first</span><span>Block</span></span></div>
+            <div class="gr-rule-row"><div class="gr-rule-main"><div class="gr-rule-name">#finance-ops</div><div class="gr-rule-sub">A destination added here, so the agent can post somewhere nobody asked it to.</div></div><span class="gr-rule-ctl gr-seg"><span>Allow</span><span class="is-on">Ask first</span><span>Block</span></span></div>
+            <div class="gr-rule-row"><div class="gr-rule-main"><div class="gr-rule-name">Everyone else</div><div class="gr-rule-sub">Any channel, chat or person not listed above.</div></div><span class="gr-rule-ctl gr-seg"><span>Allow</span><span>Ask first</span><span class="is-on">Block</span></span></div>
             <div class="nbk-cap-row" style="margin-top:4px;"><span class="nbk-cap-row-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg> Another destination</span><span class="nbk-cap-add">+ Add</span></div>
           </div>
 
           <div class="nbk-box">
-            <div class="nbk-field-label">When a rule is hit <span class="gr-tag is-new">new</span><span class="nbk-field-sub">Only the fallback. Each rule says what it does in its own control &mdash; this is for everything that doesn't.</span></div>
-            <div class="gr-rule-row"><div class="gr-rule-main"><div class="gr-rule-name">Default reaction</div><div class="gr-rule-sub">Detection always shows up in the trace. This is what happens on top of that.</div></div><span class="gr-rule-ctl nbk-select-input">Ask in the same channel <span class="chev">&#9662;</span></span></div>
-            <div class="gr-rule-row"><div class="gr-rule-main"><div class="gr-rule-name">Where to ask</div><div class="gr-rule-sub">When the run started on a schedule there's no channel to ask in.</div></div><span class="gr-rule-ctl nbk-select-input">#finance-ops <span class="chev">&#9662;</span></span></div>
+            <div class="nbk-field-label">Where it asks for approval <span class="gr-tag is-new">new</span><span class="nbk-field-sub">Several rules above are set to <i>Ask first</i>. Normally the agent asks in the conversation it's in &mdash; but a run started by a schedule has no conversation and nobody waiting. This is who it asks then.</span></div>
+            <div class="gr-rule-row"><div class="gr-rule-main"><div class="gr-rule-name">When nobody started the run</div><div class="gr-rule-sub">Scheduled runs, and anything triggered by another system.</div></div><span class="gr-rule-ctl nbk-select-input">#finance-ops <span class="chev">&#9662;</span></span></div>
+            <div class="gr-rule-row"><div class="gr-rule-main"><div class="gr-rule-name">If nobody answers</div><div class="gr-rule-sub">An unattended run can't sit waiting forever.</div></div><span class="gr-rule-ctl nbk-select-input">Stop after 1 hour <span class="chev">&#9662;</span></span></div>
           </div>
 
           <div class="nbk-box" style="opacity:0.55;">
@@ -816,7 +896,7 @@
       </div>
     </div>
 
-    <p class="gr-note"><b>I had Reactions as a table, and that was wrong.</b> A rule that can fire has to say what it does right where you set it &mdash; which is what the cost-cap modal above already does with <i>&ldquo;When a call is refused&rdquo;</i>. A separate table would be a second place to define the same thing, and the two would drift. What genuinely is agent-wide is the fallback: what to do when a rule doesn't say, and where to ask when there's no channel to ask in &mdash; which is a real gap, since a scheduled run has nobody to interrupt.</p>
+    <p class="gr-note"><b>I had Reactions as a table, and that was wrong.</b> A rule that can fire has to say what it does right where you set it &mdash; which is what the cost-cap modal above already does with <i>&ldquo;When a call is refused&rdquo;</i>. A separate table would be a second place to define the same thing, and the two would drift. So the last card doesn't set reactions at all. The one thing that genuinely can't be answered rule by rule is <i>who to ask</i> when a run has nobody attached to it, and that's all it does.</p>
 
     <p class="gr-note"><b>Is this a junk drawer?</b> Four cards is a lot, and three of them are new. The honest counter-argument is that Settings has become where we put anything that doesn't belong elsewhere. I think it holds, on one test: everything here is a property of <i>the agent</i>, and everything that belongs to a channel, a tool or the memory card stayed with it. If a fifth agent-wide rule turns up, that's the moment to group them under one heading rather than keep stacking cards.</p>
 
@@ -825,5 +905,9 @@
 
 </div>
 
+<script>
+  function grOpen(id){ var el = document.getElementById(id); if(!el) return; el.classList.toggle('is-open'); }
+  function grClose(id){ var el = document.getElementById(id); if(el) el.classList.remove('is-open'); }
+</script>
 <script src="js/hub.js"></script>
 </body></html>
