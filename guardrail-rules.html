@@ -124,6 +124,13 @@
   .gr-confirm-body { font-size: 13px; color: #55595e; line-height: 1.55; margin: 0 0 16px; }
   .gr-confirm-actions { display: flex; justify-content: flex-end; gap: 8px; }
 
+  /* Budget rows are buttons that open a modal, not inline controls — the real pattern */
+  .gr-budget-row { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-top: 1px solid var(--line-soft, #d4d7da); cursor: pointer; }
+  .gr-budget-row:hover { background: #fafbfb; }
+  .gr-budget-val { font-size: 13px; color: #1a1c1e; text-align: right; line-height: 1.4; flex: none; }
+  .gr-chevr { color: #9298a0; font-size: 15px; flex: none; }
+  .gr-numfield { border: 1.5px solid var(--line-soft, #d4d7da); border-radius: 7px; padding: 5px 12px; font-size: 13px; color: #1a1c1e; min-width: 62px; text-align: left; display: inline-block; }
+
   /* Open questions read as a separate thing from the design, never as a caption on it. */
   .gr-oq { border: 1px dashed var(--line, #a7abb0); border-radius: 10px; padding: 18px 20px; margin-top: 10px; background: #fffdf7; }
   .gr-oq h3 { margin: 0 0 4px; font-size: 14px; }
@@ -593,52 +600,139 @@
     </div>
 
     <!-- ---------- COST ---------- -->
-    <h2 class="lrt-section-title" style="margin-top:34px;">3 &mdash; Cost &amp; rate &nbsp;<span style="font-size:12.5px; font-weight:400; color:var(--hub-muted);">two levels, on purpose</span></h2>
-    <p class="lrt-section-sub">The doc's phrase is &ldquo;running totals, not one blended number&rdquo;: a per-tool total so one expensive source can't hide inside an agent-wide figure that still looks fine, plus the whole-agent cap. Sin adds a third level &mdash; project and instance &mdash; which the doc never scopes for.</p>
+    <h2 class="lrt-section-title" style="margin-top:34px;">3 &mdash; Cost &amp; rate &nbsp;<span style="font-size:12.5px; font-weight:400; color:var(--hub-muted);">two panels that already exist</span></h2>
+    <p class="lrt-section-sub">Both live in <b>Settings</b>, which renders four cards in this order: <i>Usage and limits</i>, <i>Sub-agent settings</i>, <i>MCP</i>, <i>Advanced</i>. So there are already two homes for a limit, and they behave differently &mdash; budget rows open a modal to edit one value, Advanced edits inline. Where a new control goes decides which interaction it inherits, which is the real reason placement matters here.</p>
 
     <div class="nbk">
       <div class="nbk-frame">
         <div class="nbk-main">
           <div class="nbk-box">
-            <div class="nbk-field-label">This agent<span class="nbk-field-sub">Spend and time, per run and per month.</span></div>
+            <div class="nbk-field-label">Usage and limits <span class="gr-tag is-today">today</span><span class="nbk-field-sub">First card in Settings. Its heading is visually hidden in the real product &mdash; screen readers get it, nobody else does.</span></div>
 
-            <div class="gr-rule-row">
-              <div class="gr-rule-main"><div class="gr-rule-name">Session cap <span class="gr-tag is-today">today</span></div><div class="gr-rule-sub">Stops the run and asks before spending more</div></div>
-              <span class="gr-rule-ctl nbk-select-input">$10 <span class="chev">&#9662;</span></span>
+            <div style="padding:10px 0 14px;">
+              <div style="display:flex; align-items:center; font-size:13.5px; color:#1a1c1e;"><span>Monthly usage</span><span style="flex:1;"></span><span style="color:#55595e;">42%</span></div>
+              <div style="font-size:12.5px; color:#55595e; margin:3px 0 7px;">$84 of $200 used</div>
+              <div style="height:6px; border-radius:999px; background:#eceeef; overflow:hidden;"><div style="width:42%; height:100%; background:#9298a0;"></div></div>
+              <div style="font-size:11.5px; color:#9298a0; margin-top:6px;">This figure is an estimate. It covers this agent's executions only.</div>
             </div>
-            <div class="gr-rule-row">
-              <div class="gr-rule-main"><div class="gr-rule-name">Monthly cap <span class="gr-tag is-today">today</span></div><div class="gr-rule-sub">Across every run of this agent</div></div>
-              <span class="gr-rule-ctl nbk-select-input">$200 <span class="chev">&#9662;</span></span>
+
+            <div class="gr-budget-row">
+              <div class="gr-rule-main"><div class="gr-rule-name">Monthly budget</div><div class="gr-rule-sub">Maximum this agent can spend across all sessions each month.</div></div>
+              <span class="gr-budget-val">$200/month<br><span style="color:#9298a0;">Alert at 80%</span></span>
+              <span class="gr-chevr">&#8250;</span>
             </div>
-            <div class="gr-rule-row">
-              <div class="gr-rule-main"><div class="gr-rule-name">Ceiling on a single operation <span class="gr-tag is-new">new</span></div><div class="gr-rule-sub">One call that costs more than this never runs</div></div>
-              <span class="gr-rule-ctl nbk-select-input">Not set <span class="chev">&#9662;</span></span>
+
+            <div class="gr-budget-row">
+              <div class="gr-rule-main"><div class="gr-rule-name">Cost cap per session</div><div class="gr-rule-sub">Maximum a single session can spend.</div></div>
+              <span class="gr-budget-val">$10</span>
+              <span class="gr-chevr">&#8250;</span>
             </div>
-            <div class="gr-rule-row">
-              <div class="gr-rule-main"><div class="gr-rule-name">Timeouts and total run duration <span class="gr-tag is-elsewhere">elsewhere</span></div><div class="gr-rule-sub">Sin: &ldquo;agent architecture optimization and not a guardrail per say &mdash; should go on a setting nevertheless.&rdquo; Lives in Settings.</div></div>
-              <span class="gr-rule-ctl gr-dim-link">Open Settings &rarr;</span>
+
+            <div class="gr-budget-row is-new">
+              <div class="gr-rule-main"><div class="gr-rule-name">Cost cap per operation <span class="gr-tag is-new">new</span></div><div class="gr-rule-sub">Maximum any single tool call can spend.</div></div>
+              <span class="gr-budget-val" style="color:#9298a0;">Not set</span>
+              <span class="gr-chevr">&#8250;</span>
+            </div>
+
+            <div class="gr-budget-row is-new">
+              <div class="gr-rule-main"><div class="gr-rule-name">Max runs per hour <span class="gr-tag is-new">new</span></div><div class="gr-rule-sub">How often this agent can be started, across every channel.</div></div>
+              <span class="gr-budget-val" style="color:#9298a0;">Not set</span>
+              <span class="gr-chevr">&#8250;</span>
             </div>
           </div>
+        </div>
+      </div>
+    </div>
 
+    <p class="gr-note"><b>This is where &ldquo;Not set&rdquo; stops being a dead end.</b> The budget rows aren't dropdowns &mdash; they're buttons with a chevron that open a modal for that one value. So the pattern for setting a limit already exists, and a new limit inherits it for free rather than needing a control invented for it.</p>
+
+    <h3 class="lrt-section-title" style="font-size:15px; margin-top:26px;">What the modal has to answer <span class="gr-tag is-new">new</span></h3>
+    <p class="lrt-section-sub">The existing budget modals set an amount and, optionally, an alert before you reach it. A per-operation cap needs a third thing the budget ones don't: what happens to the run when a call is refused. Running out of money and one call being too expensive are different problems, so &ldquo;top up&rdquo; is the wrong answer here.</p>
+
+    <div class="nbk">
+      <div class="nbk-frame">
+        <div class="nbk-main" style="padding-top:30px; padding-bottom:30px;">
+          <div class="gr-confirm" style="max-width:420px !important;">
+            <div class="gr-confirm-title">Cost cap per operation</div>
+            <div style="display:flex; align-items:center; gap:8px; border:1.5px solid var(--line-soft,#d4d7da); border-radius:8px; padding:8px 11px; margin-bottom:6px;">
+              <span style="color:#9298a0; font-size:13px;">$</span>
+              <span style="flex:1; font-size:13px; color:#1a1c1e;">2.00</span>
+              <span style="font-size:12.5px; color:#9298a0;">per call</span>
+            </div>
+            <p style="margin:0 0 16px; font-size:12px; color:#55595e;">A tool call estimated above this never runs.</p>
+
+            <div style="font-size:13px; color:#1a1c1e; margin-bottom:7px;">When a call is refused</div>
+            <div class="gr-radio is-on"><span class="dot"></span><div><div class="gr-radio-name">Skip it and carry on</div><div class="gr-radio-sub">The agent works around it and says what it couldn't do.</div></div></div>
+            <div class="gr-radio"><span class="dot"></span><div><div class="gr-radio-name">Ask before running it</div><div class="gr-radio-sub">Pauses for approval, like an Ask first tool.</div></div></div>
+            <div class="gr-radio"><span class="dot"></span><div><div class="gr-radio-name">Stop the run</div><div class="gr-radio-sub">Nothing further happens.</div></div></div>
+
+            <div class="gr-confirm-actions" style="margin-top:16px;"><span class="nbk-btn nbk-btn-primary">Save</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="lrt-section-title" style="font-size:15px; margin-top:26px;">Advanced &mdash; where the per-run numbers already are <span class="gr-tag is-today">today</span></h3>
+    <p class="lrt-section-sub">Last card in Settings. Everything here bounds <i>one execution</i>. Max runs per hour is the odd one out &mdash; it bounds how many executions there are &mdash; which is the argument for keeping it in Usage and limits above, next to the monthly budget, the only other thing in the product that bounds anything across runs.</p>
+
+    <div class="nbk">
+      <div class="nbk-frame">
+        <div class="nbk-main">
           <div class="nbk-box">
-            <div class="nbk-field-label">Per tool <span class="gr-tag is-new">new</span><span class="nbk-field-sub">A cumulative total per source, so an expensive one can't hide inside the agent-wide figure.</span></div>
+            <div class="nbk-field-label">Advanced<span class="nbk-field-sub">Configure memory and tune how this agent runs.</span></div>
 
             <div class="gr-rule-row">
-              <div class="gr-rule-main"><div class="gr-rule-name">Hex &mdash; run query</div><div class="gr-rule-sub">$0.42 average per run &middot; the expensive one</div></div>
-              <span class="gr-rule-ctl nbk-select-input">$5 / session <span class="chev">&#9662;</span></span>
+              <div class="gr-rule-main"><div class="gr-rule-name">Memory model</div><div class="gr-rule-sub">Choose the model that creates, reviews, and retrieves memories. Uses the agent model by default.</div></div>
+              <span class="gr-rule-ctl nbk-select-input">Agent model <span class="chev">&#9662;</span></span>
             </div>
             <div class="gr-rule-row">
-              <div class="gr-rule-main"><div class="gr-rule-name">Notion &mdash; update page</div><div class="gr-rule-sub">Negligible</div></div>
-              <span class="gr-rule-ctl nbk-select-input">No cap <span class="chev">&#9662;</span></span>
+              <div class="gr-rule-main"><div class="gr-rule-name">Reasoning</div><div class="gr-rule-sub">Let the model reason before responding.</div></div>
+              <span class="nbk-toggle is-on" onclick="this.classList.toggle('is-on')"><span class="nbk-toggle-knob"></span></span>
+            </div>
+            <div style="padding-left:16px; border-left:2px solid var(--line-soft,#d4d7da); margin-left:2px;">
+              <div class="gr-rule-row" style="border-top:0;">
+                <div class="gr-rule-main"><div class="gr-rule-name">Reasoning effort</div></div>
+                <span class="gr-rule-ctl nbk-select-input">Medium <span class="chev">&#9662;</span></span>
+              </div>
             </div>
             <div class="gr-rule-row">
-              <div class="gr-rule-main"><div class="gr-rule-name">Rate limit &amp; back-off <span class="gr-tag is-new">new</span></div><div class="gr-rule-sub">How often this tool may be called, and what happens when the limit is reached</div></div>
+              <div class="gr-rule-main"><div class="gr-rule-name">Tool call concurrency</div><div class="gr-rule-sub">How many tool calls the agent can run in parallel.</div></div>
+              <span class="gr-rule-ctl gr-numfield">5</span>
+            </div>
+            <div class="gr-rule-row">
+              <div class="gr-rule-main"><div class="gr-rule-name">Max iterations</div><div class="gr-rule-sub">Maximum number of agent loop iterations per run (1&ndash;200).</div></div>
+              <span class="gr-rule-ctl gr-numfield">100</span>
+            </div>
+            <div class="gr-rule-row" style="opacity:0.55;">
+              <div class="gr-rule-main"><div class="gr-rule-name">Max runs per hour <span class="gr-tag is-new">if it went here instead</span></div><div class="gr-rule-sub">Sits oddly: everything above bounds one run, this bounds how many runs there are. It would also inherit inline editing, so there'd be nowhere to say what happens when the limit is hit.</div></div>
+              <span class="gr-rule-ctl gr-numfield">20</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p class="gr-note"><b>So: Usage and limits, not Advanced.</b> Two reasons, and neither is taste. Everything in Advanced bounds a single execution, while Usage and limits is the only place in the product that bounds anything over time &mdash; the monthly budget. And Advanced edits inline, which leaves nowhere to ask the question every one of these limits raises: what happens when it's reached. The budget rows open a modal, which has room for it. <i>Max iterations</i> also carries a schema note &mdash; <i>&ldquo;Do not set unless the user explicitly asks&rdquo;</i> &mdash; so that card is deliberately the quiet corner, and a guardrail people are meant to set doesn't belong in it.</p>
+
+    <h3 class="lrt-section-title" style="font-size:15px; margin-top:26px;">Still per tool <span class="gr-tag is-new">new</span></h3>
+    <p class="lrt-section-sub">One thing genuinely doesn't belong in either panel: a cumulative total per source, so an expensive tool can't hide inside an agent-wide figure that still looks fine. That has to sit with the tool, next to its permissions.</p>
+
+    <div class="nbk">
+      <div class="nbk-frame">
+        <div class="nbk-main">
+          <div class="nbk-box">
+            <div class="nbk-field-label">Limits for this tool <span class="gr-tag is-new">new</span><span class="nbk-field-sub">Alongside Tool permissions, in the tool's own settings.</span></div>
+            <div class="gr-rule-row">
+              <div class="gr-rule-main"><div class="gr-rule-name">Spend per session</div><div class="gr-rule-sub">Hex averages $0.42 a run &mdash; the expensive one here.</div></div>
+              <span class="gr-rule-ctl nbk-select-input">$5 <span class="chev">&#9662;</span></span>
+            </div>
+            <div class="gr-rule-row">
+              <div class="gr-rule-main"><div class="gr-rule-name">Calls per minute</div><div class="gr-rule-sub">From the doc's checklist: &ldquo;a rate limit or back-off policy&hellip; at the tool level&rdquo;. Back-off &mdash; what to do when the limit is hit &mdash; is a second decision, not part of this number.</div></div>
               <span class="gr-rule-ctl nbk-select-input">Not set <span class="chev">&#9662;</span></span>
             </div>
-
             <div class="gr-warn">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex:none; margin-top:1px;"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 11h1v5h1"/></svg>
-              <span>Sin: rate limits &ldquo;could be applicable at the project and instance level&rdquo;. If so, this box shows inherited limits a builder can't edit, and the screen needs a third column for where a limit came from.</span>
+              <span>Sin: rate limits &ldquo;could be applicable at the project and instance level&rdquo;. If so, this row shows an inherited limit a builder can't edit, and needs to say where it came from.</span>
             </div>
           </div>
         </div>
