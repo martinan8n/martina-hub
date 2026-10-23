@@ -175,6 +175,7 @@
   .gr-oq li { font-size: 13px; line-height: 1.65; margin-bottom: 11px; }
   .gr-oq li:last-child { margin-bottom: 0; }
   .gr-oq .who { color: var(--hub-muted); font-size: 12px; }
+  .gr-note .who { color: var(--hub-muted); font-style: italic; }
 </style>
 </head>
 <body>
@@ -200,7 +201,8 @@
       </div>
       <div class="problem-card">
         <div class="eyebrow">&#129514; Hypothesis</div>
-        <p>If the rules stay where they belong, the thing to design isn't a guardrails panel &mdash; it's a <b>readable summary of what's bounded</b> that links out to wherever each rule lives. That's the &ldquo;foundation we can extend&rdquo; the doc asks for: adding a dimension later means adding a line to the summary, not redesigning a form.</p>
+        <p>A rule lives wherever the thing it constrains lives: identities in the channel, permissions on the tool, spend in Settings. The exception is <b>content</b> &mdash; nothing about what a message contains can be checked with a form field, so those become a <b>guardrail object</b> you build once and attach wherever it should run. Everything else that looked like it needed a new panel turned out to have a home already.</p>
+        <span class="src">Revised after the review with Michael, Anne and Sin, 22 Oct 2026</span>
       </div>
     </div>
 
@@ -211,7 +213,7 @@
         <div class="body">
           <span class="status">In progress</span>
           <h3>What's bounded</h3>
-          <p class="desc">The summary view, two ways: as a list of the five dimensions, and as the path a run takes through them. Both read-only, both linking out to where each rule actually lives.</p>
+          <p class="desc">The summary view, two ways: as a list of the five dimensions, and as the path a run takes through them. P1, and it appears when you publish rather than in Settings.</p>
         </div>
       </a>
       <a class="screen-card" href="#/gr-config">
@@ -219,24 +221,36 @@
         <div class="body">
           <span class="status">In progress</span>
           <h3>Where rules get configured</h3>
-          <p class="desc">The five dimensions as actual settings, each marked with what exists in the product today and what the doc is asking us to add. Reach is grounded in Telegram's real access step.</p>
+          <p class="desc">Each dimension drawn in the container it ships in. Revised after the 22 Oct review: half of what was proposed is cut, and a guardrail becomes its own reusable object.</p>
         </div>
       </a>
     </div>
 
     <div class="section-title">Open questions</div>
     <div class="gr-oq">
-      <h3>Before this can go further</h3>
-      <p class="gr-oq-sub">Raised by the doc, by Sin's comments on it, or by designing against them. Not blockers for the summary view &mdash; they are blockers for the dimension screens.</p>
+      <h3>Still unanswered after the 22 Oct review</h3>
+      <p class="gr-oq-sub">The review settled most of the structure. These are what's left, and the first three block design rather than engineering.</p>
       <ol>
-        <li><b>Are guardrail nodes / form fields even viable?</b> <span class="who">Sin, on the doc: &ldquo;Could this even be possible &mdash; do we want this to be available?&rdquo;</span> The whole authoring mechanism hangs off this. If form fields are out, rules get authored as workflows or by a vendor, and every config screen below changes shape.</li>
-        <li><b>What level do rate limits live at?</b> <span class="who">Sin: &ldquo;could be applicable at the project and instance level&rdquo;</span> &mdash; the doc scopes everything per-agent. Changes whether the summary shows an agent's own rules or inherited ones too, and who can edit them.</li>
-        <li><b>What is a memory &ldquo;persistence guardrail&rdquo;?</b> <span class="who">Sin wants rules on persistence (e.g. PII via LLMJ), not just preferences.</span> The doc only asks which preferences to expose. These are different products: one is a setting, the other is a rule that can fire.</li>
-        <li><b>Reach beyond Slack and Teams.</b> <span class="who">Sin: channel-level enforcement for popular channels, workflow hook as the escape hatch.</span> So what does a builder see for a channel that supports neither &mdash; nothing, or a worse-but-present control?</li>
-        <li><b>Is the summary read-only?</b> Mine, from designing it. Linking out keeps one source of truth but makes setting five rules a five-screen trip. Editing inline is kinder and immediately forks the truth.</li>
-        <li><b>Does &ldquo;no rule&rdquo; mean unfinished?</b> An agent with no output rule may be perfectly fine. If the summary styles every gap as a warning, builders will either chase them all or stop reading it.</li>
+        <li><b>Where does a guardrail live, and when does it die?</b> <span class="who">Michael: &ldquo;when do they stop existing? Is there somewhere you can actually delete them?&rdquo;</span> It's now an object with a lifecycle &mdash; shared, orphaned, edited under a tool that depends on it. Whether the list sits in agent Settings or outside the agent next to the Skills hub decides whether it's reusable across agents at all.</li>
+        <li><b>Is the PII row in Advanced just a guardrail with a shortcut?</b> Both exist on the page and both have the same four hooks. Either the row creates a guardrail behind the scenes, or there are two doors to one room and they'll drift.</li>
+        <li><b>Who owns content policy &mdash; us or the instance?</b> If an admin sets it, this is read-only for the builder. But a single-user account has no admin, and nobody knows whether instance policies exist outside enterprise. Needs the conversation with Jan's team.</li>
+        <li><b>Is <i>never stop</i> really the default</b> when nobody answers an approval request? It contradicts the reasoning used to cap the wait options at a day.</li>
+        <li><b>Does &ldquo;no rule&rdquo; mean unfinished?</b> An agent with no content check may be perfectly fine. If the summary styles every gap as a warning, builders will either chase them all or stop reading it.</li>
+        <li><b>Where does the summary live between publishes?</b> It's shown at publish, but the question it answers comes back later.</li>
       </ol>
     </div>
+
+    <div class="gr-oq" style="margin-top:14px; background:#fbfbfa;">
+      <h3>Parked on purpose</h3>
+      <p class="gr-oq-sub">Agreed to be guardrails, agreed to be out of scope for now.</p>
+      <ol>
+        <li><b>Sandbox command execution</b> &mdash; whitelisting what can run, modes, watching for suspicious activity.</li>
+        <li><b>Network egress.</b></li>
+        <li><b>Guardrails on the raw message in and out of the agent</b> &mdash; what the current AI Agent node has. Probably workflow hooks; no home picked.</li>
+        <li><b>Tool response max size</b> &mdash; exists today, not tunable, likely an environment variable rather than UI.</li>
+      </ol>
+    </div>
+
   </section>
 
   <!-- ================= WHAT'S BOUNDED ================= -->
@@ -245,6 +259,7 @@
     <div class="screen-head">
       <h1>What's bounded</h1>
       <p>One place to read what this agent is allowed to do, with the rules themselves still living where they belong. Two takes on the same content: by dimension, and by the path a run takes. Same agent in both &mdash; a weekly metrics sync that posts to Slack.</p>
+      <p style="margin-top:10px;"><b>Revised 22 Oct: this is P1, and it isn't in Settings.</b> It gets built after the permissions it summarises, and it appears <b>when you hit publish</b> &mdash; the moment you're actually deciding whether this agent is safe to let out. There's a publish modal in the product already; it says nothing useful. <span class="who">Michael: &ldquo;I think it would be cool to have a place where you can see all the permissions, but I don't think it's a P0.&rdquo;</span></p>
     </div>
 
     <h2 class="lrt-section-title">A &mdash; By dimension</h2>
@@ -253,12 +268,8 @@
     <div class="nbk">
       <div class="nbk-frame">
         <div class="nbk-main">
-          <div class="nbk-tabbar">
-            <span class="nbk-tab">Build</span>
-            <span class="nbk-tab">Context</span>
-            <span class="nbk-tab">Sessions</span>
-            <span class="nbk-tab is-active">Settings</span>
-          </div>
+          <div class="gr-modal-head" style="margin-bottom:4px;"><span class="gr-modal-title">Publish agent</span><span class="gr-modal-x">&times;</span></div>
+          <div style="font-size:12.5px; color:#55595e; margin-bottom:12px;">Here's what this agent is allowed to do once it's live.</div>
 
           <div class="nbk-box" style="margin-top:18px;">
             <div class="nbk-field-label">What's bounded<span class="nbk-field-sub">What this agent can do, and where each rule is set. Nothing is edited here.</span></div>
@@ -307,12 +318,13 @@
               <span class="gr-dim-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12h16"/><path d="m18 6 6 6-6 6" transform="translate(-4)"/></svg></span>
               <div class="gr-dim-body">
                 <div class="gr-dim-name">Output</div>
-                <div class="gr-dim-state">Can post anywhere it has a credential for. Content isn't checked.</div>
-                <div class="gr-dim-where">Nowhere to set this yet</div>
+                <div class="gr-dim-state">Replies in #metrics only. Content isn't checked.</div>
+                <div class="gr-dim-where">Destinations per channel in <span class="gr-dim-link">Triggers</span> &middot; content in <span class="gr-dim-link">Settings</span></div>
               </div>
               <div class="gr-dim-aside"><span class="gr-pill"><span class="dot"></span> Open</span></div>
             </div>
           </div>
+          <div class="gr-modal-foot" style="margin-top:14px;"><span style="flex:1;"></span><span class="nbk-btn">Cancel</span><span class="nbk-btn nbk-btn-primary">Publish</span></div>
         </div>
       </div>
     </div>
@@ -320,17 +332,13 @@
     <p class="gr-note"><b>Why the states read this way.</b> Three states, no red: <i>Bounded</i>, <i>Partly</i>, <i>Open</i>. An agent with no output rule may be entirely fine, so a gap can't look like a failure &mdash; but it still has to be visible enough to notice before production. Open is grey and quiet; it doesn't demand to be fixed.</p>
 
     <h2 class="lrt-section-title" style="margin-top:34px;">B &mdash; By the path a run takes</h2>
-    <p class="lrt-section-sub">The same five rules, ordered the way a run moves through them: something reaches the agent, it acts, it remembers, it sends. Makes the Output gap obvious because it's the end of a line you can follow, not the fifth item in a list.</p>
+    <p class="lrt-section-sub">The same five rules, ordered the way a run moves through them: something reaches the agent, it acts, it remembers, it sends. Makes the Output gap obvious because it's the end of a line you can follow, not the fifth item in a list &mdash; which is how the gap got spotted, even though it then turned out to be two gaps with homes of their own.</p>
 
     <div class="nbk">
       <div class="nbk-frame">
         <div class="nbk-main">
-          <div class="nbk-tabbar">
-            <span class="nbk-tab">Build</span>
-            <span class="nbk-tab">Context</span>
-            <span class="nbk-tab">Sessions</span>
-            <span class="nbk-tab is-active">Settings</span>
-          </div>
+          <div class="gr-modal-head" style="margin-bottom:4px;"><span class="gr-modal-title">Publish agent</span><span class="gr-modal-x">&times;</span></div>
+          <div style="font-size:12.5px; color:#55595e; margin-bottom:12px;">Here's what this agent is allowed to do once it's live.</div>
 
           <div class="nbk-box" style="margin-top:18px;">
             <div class="nbk-field-label">What's bounded<span class="nbk-field-sub">Follow a run from the moment something reaches this agent to the moment it answers.</span></div>
@@ -360,16 +368,23 @@
                 <span class="gr-flow-add">Memory</span>
               </div>
               <div class="gr-flow-stage is-open">
-                <div class="gr-flow-stage-name"><span class="gr-pill" style="padding:2px 7px;"><span class="dot"></span></span> Sends</div>
-                <div class="gr-flow-none">Anywhere, unchecked</div>
+                <div class="gr-flow-stage-name"><span class="gr-pill is-partly" style="padding:2px 7px;"><span class="dot"></span></span> Sends</div>
+                <div class="gr-flow-rule">#metrics only</div>
+                <div class="gr-flow-none">Content unchecked</div>
+                <span class="gr-flow-add">Triggers</span>
               </div>
             </div>
           </div>
+          <div class="gr-modal-foot" style="margin-top:14px;"><span style="flex:1;"></span><span class="nbk-btn">Cancel</span><span class="nbk-btn nbk-btn-primary">Publish</span></div>
         </div>
       </div>
     </div>
 
     <p class="gr-note"><b>Trade-off between the two.</b> A is easier to extend &mdash; a new dimension is a new row, and it survives the rules living in five different places. B teaches the model better and makes the end-of-line gap land, but it implies an order that isn't quite true: cost applies at every stage, not between acting and remembering. B is also harder to grow, since a sixth stage means re-cutting the row.</p>
+
+    <p class="gr-note"><b>Publish answers when, not where.</b> Showing this before you publish catches the one moment a builder is receptive to it. But it's a modal you dismiss, and the question comes back a week later when you're wondering why the agent didn't post something. So it needs a second, permanent entry point &mdash; an icon on the agent, a line in the trace, somewhere in Build &mdash; and that's undesigned. Putting it in Build was the first instinct and it clutters a page that's already full.</p>
+
+    <p class="gr-note"><b>Both takes assume the rules exist.</b> Every pill above reads a state we haven't built yet. If this ships before the permissions it summarises, it summarises nothing &mdash; which is exactly the argument for it being P1, and the reason it's drawn here rather than queued.</p>
   </section>
 
   <!-- ================= WHERE RULES GET CONFIGURED ================= -->
@@ -377,7 +392,19 @@
     <a class="back-link" href="#/guardrail-rules">&larr; Guardrails &mdash; rules &amp; dimensions</a>
     <div class="screen-head">
       <h1>Where rules get configured</h1>
-      <p>The summary view only reads. This is the other half: the actual settings, one section per dimension, each sitting where that rule belongs rather than in a guardrails panel. Every control is marked <span class="gr-tag is-today">today</span> if it exists in the product now, <span class="gr-tag is-new">new</span> if the doc is asking for it, or <span class="gr-tag is-elsewhere">elsewhere</span> if it belongs on another surface.</p>
+      <p>One section per dimension, each control drawn inside the real container it would ship in. Marked <span class="gr-tag is-today">today</span> if it exists in the product now, or <span class="gr-tag is-new">new</span> if it doesn't. <b>Revised after the 22 Oct review with Michael, Anne and Sin</b> &mdash; roughly half of what was here is gone, and the notes say why rather than quietly deleting it.</p>
+    </div>
+
+    <div class="gr-oq" style="margin-bottom:26px;">
+      <h3>What the review changed</h3>
+      <p class="gr-oq-sub">The short version, so the sections below read in the right light.</p>
+      <ol>
+        <li><b>Cut:</b> cost cap per operation, max runs per hour, per-tool spend, the content policy card, and the central &ldquo;who it can message&rdquo; panel.</li>
+        <li><b>New shape:</b> a guardrail is <b>its own reusable object</b> &mdash; built once, applied to many tools &mdash; not a form inside each tool.</li>
+        <li><b>Content checks need a model, not a list.</b> PII detection via a model trained for it; anything else is a workflow hook you write.</li>
+        <li><b>Reach goes to the channel,</b> not to a central card. The one cross-channel rule turned out not to be a setting.</li>
+        <li><b>The summary view is P1</b> and moves to publish time.</li>
+      </ol>
     </div>
 
     <h2 class="lrt-section-title">1 &mdash; Reach &nbsp;<span style="font-size:12.5px; font-weight:400; color:var(--hub-muted);">inside the channel modal</span></h2>
@@ -419,7 +446,7 @@
         </div>
 
         <div style="flex:0 0 auto;">
-          <div class="lrt-screen-desc" style="margin:0 0 8px; width:420px;"><b>Slack, with the step added.</b> Its edit view is a credential block then the channel's own fields &mdash; agent name, description, online switch. The access block slots in between, in Telegram's shape but with Slack's identities.</div>
+          <div class="lrt-screen-desc" style="margin:0 0 8px; width:420px;"><b>Slack, with the step added.</b> Not a choice between three options &mdash; a list you build from channels, people <i>and</i> user groups at once, because that's how the requests come in. Default is anyone in the workspace; turning that off reveals the pickers.</div>
           <div class="nbk">
             <div class="nbk-frame" style="width:420px;">
               <div class="nbk-main" style="padding:18px 20px 16px;">
@@ -429,10 +456,22 @@
                 <div class="gr-rule-ctl nbk-select-input" style="display:flex; width:100%; justify-content:space-between; margin-bottom:16px;">n8n workspace <span class="chev">&#9662;</span></div>
 
                 <div style="border:1.5px dashed #d8a657; border-radius:9px; padding:12px 13px; margin-bottom:16px;">
-                  <div style="font-size:13px; color:#1a1c1e;">Who can use this <span class="gr-tag is-new">new</span></div>
-                  <div class="gr-radio is-on" style="padding:5px 0;"><span class="dot"></span><div><div class="gr-radio-name">Anyone in #metrics</div></div></div>
-                  <div class="gr-radio" style="padding:5px 0;"><span class="dot"></span><div><div class="gr-radio-name">Specific people</div></div></div>
-                  <div class="gr-radio" style="padding:5px 0;"><span class="dot"></span><div><div class="gr-radio-name">Anyone in the workspace</div><div class="gr-radio-sub">Including people outside this channel.</div></div></div>
+                  <div style="font-size:13px; color:#1a1c1e; margin-bottom:8px;">Who can use this <span class="gr-tag is-new">new</span></div>
+                  <div style="display:flex; align-items:center; gap:10px; padding-bottom:9px;">
+                    <div style="flex:1;">
+                      <div style="font-size:13px; color:#1a1c1e;">Anyone in the workspace</div>
+                      <div style="font-size:11.5px; color:#9298a0;">On by default. Turn it off to pick who.</div>
+                    </div>
+                    <span class="nbk-toggle" onclick="this.classList.toggle('is-on')"><span class="nbk-toggle-knob"></span></span>
+                  </div>
+                  <div style="padding-left:12px; border-left:2px solid var(--line-soft,#d4d7da);">
+                    <div style="font-size:12px; color:#55595e; margin:2px 0 4px;">Channels</div>
+                    <div class="gr-chipfield" style="margin-bottom:9px;"><span class="gr-chip">#metrics <span class="x">&times;</span></span><span class="ph">Search channels</span></div>
+                    <div style="font-size:12px; color:#55595e; margin:0 0 4px;">People</div>
+                    <div class="gr-chipfield" style="margin-bottom:9px;"><span class="gr-chip">Sin <span class="x">&times;</span></span><span class="ph">Search people</span></div>
+                    <div style="font-size:12px; color:#55595e; margin:0 0 4px;">User groups</div>
+                    <div class="gr-chipfield"><span class="gr-chip">@aia <span class="x">&times;</span></span><span class="ph">Search groups</span></div>
+                  </div>
                 </div>
 
                 <div style="font-size:13px; color:#1a1c1e; margin-bottom:3px;">Agent name</div>
@@ -454,11 +493,13 @@
 
     <p class="gr-note"><b>Telegram's wording doesn't survive the move.</b> &ldquo;Private&rdquo; there means a list of usernames; Slack has channels, workspaces and groups, so the same two options would be a lie. The shape transfers, the labels don't &mdash; and whoever builds this will have to answer it per channel, which is an argument for doing one channel properly rather than all five shallowly.</p>
 
-    <p class="gr-note"><b>The one Reach rule that isn't in the channel.</b> How often the agent can be started isn't a property of any single channel &mdash; it's the agent's. So it sits in <b>Settings &rarr; Usage and limits</b>, beside the monthly budget, the only other thing in the product that bounds the agent over time. It's drawn there in section 3, not here, because here it would be a box that doesn't correspond to any screen.</p>
+    <p class="gr-note"><b>We looked at doing this centrally instead, and dropped it.</b> A single card in Settings listing who the agent can talk to reads well until you try to fill it: every identity in it belongs to one channel, so the control has to reach into Slack, Telegram and the rest to populate itself, and you'd still be configuring Slack &mdash; just somewhere further from Slack. The deciding argument was the builder's: you set this while you're in the channel's head, not while reading a list. <span class="who">Michael: &ldquo;then I would probably get rid of the central aspect.&rdquo;</span></p>
+
+    <p class="gr-note"><b>What that leaves without a home.</b> One rule genuinely isn't channel-specific: <i>only the person who started the thread can talk to it</i>. And it turns out not to be a setting either &mdash; whoever started a run must always be able to follow up, or the agent is unreachable, so the only real question is whether anyone <i>else</i> can join. Ask&nbsp;first doesn't work for it: Slack can't stop a bystander clicking Approve in a thread they can see. So for P0 it's allow or block, and it's a single switch on the channel, not a panel.</p>
 
     <!-- ---------- ACTION ---------- -->
-    <h2 class="lrt-section-title" style="margin-top:34px;">2 &mdash; Action &nbsp;<span style="font-size:12.5px; font-weight:400; color:var(--hub-muted);">mostly already built</span></h2>
-    <p class="lrt-section-sub">I had drawn this as a table of Allow / Ask first / Block over a list of tools. That control already exists in the product, in a better form than I'd invented: permissions are set <b>per group</b> &mdash; read-only versus write and delete &mdash; with per-tool override, inside the tool's own setup. So the screens below recreate what's there, and the only genuinely missing piece is the data validation the doc asks for.</p>
+    <h2 class="lrt-section-title" style="margin-top:34px;">2 &mdash; Tools &nbsp;<span style="font-size:12.5px; font-weight:400; color:var(--hub-muted);">permissions here, checks in a guardrail you reuse</span></h2>
+    <p class="lrt-section-sub">Permissions already exist and are better than what I'd invented: set <b>per group</b> &mdash; read-only versus write and delete &mdash; with per-tool override, inside the tool's own setup. What's new is everything else. The checks and limits don't live in the tool at all: a <b>guardrail is its own object</b>, built once and applied to as many tools as you like.</p>
 
     <div class="nbk">
       <div class="nbk-frame">
@@ -518,8 +559,8 @@
       </div>
     </div>
 
-    <h3 class="lrt-section-title" style="font-size:15px; margin-top:26px;">The tool's own pane &mdash; permissions, and where the checks belong <span class="gr-tag is-today">today</span></h3>
-    <p class="lrt-section-sub">A full pane inside the modal: back arrow, tool icon, name, credential picker, close. Then the body &mdash; server details, then <b>Tool permissions</b> with its two groups. Footer carries Remove, Cancel and Save. The data checks go in the body, after permissions, because they're the same kind of decision about the same tool.</p>
+    <h3 class="lrt-section-title" style="font-size:15px; margin-top:26px;">The tool's own pane &mdash; permissions today, guardrail attached <span class="gr-tag is-today">today</span></h3>
+    <p class="lrt-section-sub">A full pane inside the modal: back arrow, tool icon, name, credential picker, close. Then the body &mdash; server details, then <b>Tool permissions</b> with its two groups. Footer carries Remove, Cancel and Save. The guardrail row goes after permissions, and it's a picker, not a form: one line saying which guardrail is attached, with a way to make a new one.</p>
 
     <div class="nbk">
       <div class="nbk-frame">
@@ -555,42 +596,20 @@
               <div class="gr-permchild"><span class="gr-permchild-name">Delete block</span><span class="nbk-select-input">Block <span class="chev">&#9662;</span></span></div>
             </div>
 
-            <div style="font-size:13.5px; font-weight:700; color:#1a1c1e; margin:18px 0 3px;">Data checks <span class="gr-tag is-new">new</span></div>
-            <div style="font-size:12px; color:#9298a0; margin-bottom:6px;">Permissions decide whether a tool runs. These look at what passes through it.</div>
-
-            <div class="nbk-setting-row">
-              <div>
-                <div class="nbk-setting-title">Check arguments before the call</div>
-                <div class="nbk-setting-sub">Stops the call if what's about to be sent breaks the agent's content policy.</div>
-              </div>
-              <span class="nbk-toggle is-on" onclick="this.classList.toggle('is-on')"><span class="nbk-toggle-knob"></span></span>
-            </div>
-            <div class="nbk-setting-row">
-              <div>
-                <div class="nbk-setting-title">Check results before they re-enter context</div>
-                <div class="nbk-setting-sub">An external system can return adversarial content. Separate decision, separate risk.</div>
-              </div>
-              <span class="nbk-toggle" onclick="this.classList.toggle('is-on')"><span class="nbk-toggle-knob"></span></span>
-            </div>
-            <div class="gr-rule-row">
-              <div class="gr-rule-main"><div class="gr-rule-name">What counts as a violation</div><div class="gr-rule-sub">Uses the agent's content policy. Not defined here &mdash; otherwise every tool would carry its own copy.</div></div>
-              <span class="gr-rule-ctl gr-dim-link">Settings &rarr;</span>
-            </div>
-
-            <div style="font-size:13.5px; font-weight:700; color:#1a1c1e; margin:18px 0 3px;">Limits <span class="gr-tag is-new">new</span></div>
-            <div style="font-size:12px; color:#9298a0; margin-bottom:6px;">Per tool, because an expensive one shouldn't hide inside an agent-wide figure that still looks fine.</div>
+            <div style="font-size:13.5px; font-weight:700; color:#1a1c1e; margin:18px 0 3px;">Guardrail <span class="gr-tag is-new">new</span></div>
+            <div style="font-size:12px; color:#9298a0; margin-bottom:6px;">Permissions decide whether a tool runs. A guardrail looks at what passes through it &mdash; and is built once and reused, not configured here.</div>
 
             <div class="gr-rule-row">
-              <div class="gr-rule-main"><div class="gr-rule-name">Spend per session</div><div class="gr-rule-sub">Counts only this tool's calls, separately from the agent's session cap.</div></div>
-              <span class="gr-rule-ctl nbk-select-input">$5 <span class="chev">&#9662;</span></span>
+              <div class="gr-rule-main"><div class="gr-rule-name">Applied guardrail</div><div class="gr-rule-sub">One object, shared across tools. Nine data-table tools take the same one.</div></div>
+              <span class="gr-rule-ctl nbk-select-input gr-click" onclick="grOpen('gr-guardrail-picker')">None applied <span class="chev">&#9662;</span></span>
             </div>
-            <div class="gr-rule-row">
-              <div class="gr-rule-main"><div class="gr-rule-name">Calls per minute</div><div class="gr-rule-sub">Follows Notion's own published limit unless you go lower. We shouldn't invent this number &mdash; it belongs to the API, which already tells us when we've exceeded it.</div></div>
-              <span class="gr-rule-ctl nbk-select-input">Provider limit <span class="chev">&#9662;</span></span>
-            </div>
-            <div class="gr-rule-row">
-              <div class="gr-rule-main"><div class="gr-rule-name">When the limit is hit</div><div class="gr-rule-sub">Retrying with a growing wait is almost always right and only changes how long the run takes, so it can be the default.</div></div>
-              <span class="gr-rule-ctl nbk-select-input">Wait and retry <span class="chev">&#9662;</span></span>
+
+            <div class="gr-inline" id="gr-guardrail-picker">
+              <div class="gr-inline-head">Apply a guardrail <span class="x" onclick="grClose('gr-guardrail-picker')">&times;</span></div>
+              <div class="gr-inline-sub">Guardrails you've already built. Picking one here doesn't copy it &mdash; editing it later changes every tool using it.</div>
+              <div class="gr-cat">PII redaction <span style="font-size:12px; color:#9298a0; margin-left:8px;">on 9 tools</span></div>
+              <div class="gr-cat">Finance data check <span style="font-size:12px; color:#9298a0; margin-left:8px;">on 2 tools</span></div>
+              <div style="margin-top:10px;"><span class="gr-chip is-add">+ Create guardrail</span></div>
             </div>
 
             <div class="gr-modal-foot"><span class="nbk-btn" style="color:#b54242;">Remove</span><span style="flex:1;"></span><span class="nbk-btn">Cancel</span><span class="nbk-btn nbk-btn-primary">Save</span></div>
@@ -599,7 +618,7 @@
       </div>
     </div>
 
-    <p class="gr-note"><b>Two different tool panes exist, and they don't agree.</b> This MCP one has the Allow / Ask first / Block dropdowns per group. A plain tool gets a different pane entirely, whose approval control is a single switch &mdash; <i>&ldquo;Require approval: Pause before this tool runs until a human approves it.&rdquo;</i> Same decision, two shapes. Any data check added has to land in both, and it's worth asking whether the switch should just become the dropdown.</p>
+    <p class="gr-note"><b>Two different tool panes exist, and they don't agree.</b> This MCP one has the Allow / Ask first / Block dropdowns per group. A plain tool gets a different pane entirely, whose approval control is a single switch &mdash; <i>&ldquo;Require approval: Pause before this tool runs until a human approves it.&rdquo;</i> Same decision, two shapes. The guardrail row has to land in both, and it's worth asking whether the switch should just become the dropdown.</p>
 
     <h3 class="lrt-section-title" style="font-size:15px; margin-top:26px;">It already defends the dangerous default <span class="gr-tag is-today">today</span></h3>
     <p class="lrt-section-sub">Setting a whole write group to Allow is challenged &mdash; the doc's &ldquo;never a default-allow&rdquo; requirement, already honoured in one place.</p>
@@ -619,9 +638,58 @@
       </div>
     </div>
 
+    <h3 class="lrt-section-title" style="font-size:15px; margin-top:26px;">Creating one <span class="gr-tag is-new">new</span></h3>
+    <p class="lrt-section-sub">The thing that doesn't exist anywhere yet. A guardrail has three parts: what it checks, where in the run it checks it, and what it does when it fires. Everything that used to be drawn inside the tool pane &mdash; data checks, timeouts, rate limits &mdash; moved in here, because configuring that per tool means filling the same form nine times and storing nine copies of it.</p>
+
+    <div class="nbk">
+      <div class="nbk-frame">
+        <div class="nbk-main" style="padding-top:26px; padding-bottom:26px;">
+          <div class="gr-modal" style="max-width:520px !important;">
+            <div class="gr-modal-head"><span class="gr-modal-title">Create guardrail</span><span class="gr-modal-x">&times;</span></div>
+
+            <div style="font-size:13px; color:#1a1c1e; margin:14px 0 4px;">Name</div>
+            <div class="gr-rule-ctl nbk-select-input" style="display:flex; width:100%; justify-content:flex-start; color:#1a1c1e;">PII redaction</div>
+
+            <div style="font-size:13.5px; font-weight:700; color:#1a1c1e; margin:18px 0 3px;">What it checks</div>
+            <div style="font-size:12px; color:#9298a0; margin-bottom:7px;">Not a list of rules you type. You point it at something that can actually judge.</div>
+            <div class="gr-radio is-on"><span class="dot"></span><div><div class="gr-radio-name">A PII model</div><div class="gr-radio-sub">Models trained to spot personally identifiable information &mdash; card details, emails, addresses, API keys. Cheap, fast, and far better at it than any pattern we could write.</div></div></div>
+            <div class="gr-radio"><span class="dot"></span><div><div class="gr-radio-name">A workflow</div><div class="gr-radio-sub">Your own logic, as a hook. The escape hatch for anything we don't cover.</div></div></div>
+            <div class="gr-radio" style="opacity:0.5;"><span class="dot"></span><div><div class="gr-radio-name">A guardrail service <span class="gr-tag is-new">later</span></div><div class="gr-radio-sub">A vendor's prebuilt checks.</div></div></div>
+
+            <div style="margin:9px 0 0; padding-left:18px;">
+              <div style="font-size:12.5px; color:#55595e; margin-bottom:4px;">Model</div>
+              <div class="gr-rule-ctl nbk-select-input" style="display:flex; width:100%; justify-content:space-between;">Pick a PII model <span class="chev">&#9662;</span></div>
+            </div>
+
+            <div style="font-size:13.5px; font-weight:700; color:#1a1c1e; margin:18px 0 3px;">Where it runs</div>
+            <div style="font-size:12px; color:#9298a0; margin-bottom:7px;">The same guardrail can sit at more than one point in a run.</div>
+            <div class="nbk-setting-row"><div><div class="nbk-setting-title">Before a tool call</div><div class="nbk-setting-sub">Checks what's about to be sent out.</div></div><span class="nbk-toggle is-on" onclick="this.classList.toggle('is-on')"><span class="nbk-toggle-knob"></span></span></div>
+            <div class="nbk-setting-row"><div><div class="nbk-setting-title">After a tool call</div><div class="nbk-setting-sub">What comes back can be adversarial. Separate decision, separate risk.</div></div><span class="nbk-toggle" onclick="this.classList.toggle('is-on')"><span class="nbk-toggle-knob"></span></span></div>
+            <div class="nbk-setting-row"><div><div class="nbk-setting-title">Before a memory write</div><div class="nbk-setting-sub">The only way memory gets a check that can actually refuse.</div></div><span class="nbk-toggle is-on" onclick="this.classList.toggle('is-on')"><span class="nbk-toggle-knob"></span></span></div>
+            <div class="nbk-setting-row"><div><div class="nbk-setting-title">Before a reply</div><div class="nbk-setting-sub">What the agent says back to a person.</div></div><span class="nbk-toggle" onclick="this.classList.toggle('is-on')"><span class="nbk-toggle-knob"></span></span></div>
+
+            <div style="font-size:13.5px; font-weight:700; color:#1a1c1e; margin:18px 0 3px;">Limits</div>
+            <div style="font-size:12px; color:#9298a0; margin-bottom:6px;">No spend figure here. We can't price a tool call before making it, so these bound time and frequency instead.</div>
+            <div class="gr-rule-row"><div class="gr-rule-main"><div class="gr-rule-name">Timeout</div><div class="gr-rule-sub">How long a single operation may take.</div></div><span class="gr-rule-ctl nbk-select-input">30s <span class="chev">&#9662;</span></span></div>
+            <div class="gr-rule-row"><div class="gr-rule-main"><div class="gr-rule-name">Calls per minute</div><div class="gr-rule-sub">Follows the provider's own published limit unless you go lower.</div></div><span class="gr-rule-ctl nbk-select-input">Provider limit <span class="chev">&#9662;</span></span></div>
+            <div class="gr-rule-row"><div class="gr-rule-main"><div class="gr-rule-name">When the limit is hit</div><div class="gr-rule-sub">Retrying with a growing wait only changes how long the run takes, so it can be the default.</div></div><span class="gr-rule-ctl nbk-select-input">Wait and retry <span class="chev">&#9662;</span></span></div>
+
+            <div style="font-size:13.5px; font-weight:700; color:#1a1c1e; margin:18px 0 3px;">Applies to</div>
+            <div class="gr-chipfield"><span class="gr-chip">Notion <span class="x">&times;</span></span><span class="gr-chip">Hex <span class="x">&times;</span></span><span class="ph">Add tools</span></div>
+
+            <div class="gr-modal-foot"><span style="flex:1;"></span><span class="nbk-btn">Cancel</span><span class="nbk-btn nbk-btn-primary">Create</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p class="gr-note"><b>Two entry points, and they want opposite flows.</b> From a tool you attach one guardrail to one tool, which is the natural move while you're setting that tool up. But the moment you have nine data-table tools, you want the other direction: make the guardrail, then tick the tools it covers &mdash; which is why <i>Applies to</i> is in the modal rather than only on the tool. Both exist above; whether the central list of guardrails lives in agent Settings or outside the agent entirely, next to the Skills hub, isn't decided.</p>
+
+    <p class="gr-note"><b>What a separate object costs.</b> It stops being a setting and becomes a thing with a lifecycle: it can be shared, orphaned, edited from under a tool that depends on it, and deleted. <span class="who">Michael: &ldquo;when do they stop existing? If they're not in use, does that remove them, or is there somewhere you can actually delete them?&rdquo;</span> None of that is designed. Editing one also silently changes every tool using it, so the picker says so and a real edit screen will need to say it louder.</p>
+
     <!-- ---------- COST ---------- -->
-    <h2 class="lrt-section-title" style="margin-top:34px;">3 &mdash; Cost &amp; rate &nbsp;<span style="font-size:12.5px; font-weight:400; color:var(--hub-muted);">two panels that already exist</span></h2>
-    <p class="lrt-section-sub">Both live in <b>Settings</b>, which renders four cards in this order: <i>Usage and limits</i>, <i>Sub-agent settings</i>, <i>MCP</i>, <i>Advanced</i>. So there are already two homes for a limit, and they behave differently &mdash; budget rows open a modal to edit one value, Advanced edits inline. Where a new control goes decides which interaction it inherits, which is the real reason placement matters here.</p>
+    <h2 class="lrt-section-title" style="margin-top:34px;">3 &mdash; Cost &nbsp;<span style="font-size:12.5px; font-weight:400; color:var(--hub-muted);">nothing to add</span></h2>
+    <p class="lrt-section-sub">I had two new rows here and both are gone. This is the section where the review cut the most, so what's drawn below is the card exactly as it ships today &mdash; included so the cuts are legible, not because anything changes.</p>
 
     <div class="nbk">
       <div class="nbk-frame">
@@ -648,54 +716,19 @@
               <span class="gr-chevr">&#8250;</span>
             </div>
 
-            <div class="gr-budget-row is-new">
-              <div class="gr-rule-main"><div class="gr-rule-name">Cost cap per operation <span class="gr-tag is-new">new</span></div><div class="gr-rule-sub">Maximum any single tool call can spend. Starts at a figure no ordinary call reaches.</div></div>
-              <span class="gr-budget-val">$5</span>
-              <span class="gr-chevr">&#8250;</span>
-            </div>
-
-            <div class="gr-budget-row is-new">
-              <div class="gr-rule-main"><div class="gr-rule-name">Max runs per hour <span class="gr-tag is-new">new</span></div><div class="gr-rule-sub">How often this agent can be started, across every channel. High enough that only a loop hits it.</div></div>
-              <span class="gr-budget-val">60</span>
-              <span class="gr-chevr">&#8250;</span>
-            </div>
           </div>
         </div>
       </div>
     </div>
 
-    <p class="gr-note"><b>Why these two ship with a value and the budgets don't.</b> The product already splits this way: technical limits come with a number (max iterations 100, tool concurrency 5, max sub-agents 10), money ones don't. Setting a default budget means deciding what someone else's money is worth, and being too tight cuts legitimate work. These two can carry a default because they can be pitched where no ordinary run reaches them &mdash; only a runaway loop or a pathological call does. A guardrail default should be invisible to the people it isn't for. <b>The side effect:</b> a limit that's set because nobody touched it isn't the same as one somebody chose, so the summary view needs to tell those apart rather than showing both as bounded.</div>
+    <p class="gr-note"><b>Cost cap per operation is out.</b> You can't know what a call costs until it has cost it. Pricing it in advance would mean running the model's own tokenizer over the input first, which is itself a cost, and the output price isn't knowable at all. <span class="who">Michael: &ldquo;the only way we can know cost about the model is to send it to the model and then it tells us what it costs.&rdquo;</span> What replaces it isn't in this card: a <b>timeout</b> and a <b>calls-per-minute</b> limit, both in the guardrail object in section 2. Those bound the two things we can actually measure before the fact.</p>
 
-    <p class="gr-note"><b>And this is where &ldquo;Not set&rdquo; stops being a dead end.</b> The budget rows aren't dropdowns &mdash; they're buttons with a chevron that open a modal for that one value. So the pattern for setting a limit already exists, and a new limit inherits it for free rather than needing a control invented for it.</p>
+    <p class="gr-note"><b>Max runs per hour is out too.</b> Not because it's hard to build &mdash; because nobody can set it. A run isn't a unit a builder has a feel for: one message, one session, a sub-agent's work? Two people with long sessions look identical to one runaway loop. The budget already bounds the thing anyone actually cares about, in a unit they understand. <span class="who">Michael: &ldquo;I would just remove it. The cost cap is the best measurement.&rdquo;</span></p>
 
-    <h3 class="lrt-section-title" style="font-size:15px; margin-top:26px;">What the modal has to answer <span class="gr-tag is-new">new</span></h3>
-    <p class="lrt-section-sub">The existing budget modals set an amount and, optionally, an alert before you reach it. A per-operation cap needs a third thing the budget ones don't: what happens to the run when a call is refused. Running out of money and one call being too expensive are different problems, so &ldquo;top up&rdquo; is the wrong answer here.</p>
+    <p class="gr-note"><b>Which leaves this section with no new control at all</b> &mdash; and that's the useful result. Every cost guardrail worth having either already exists here, or turned out to belong to a tool rather than the agent. The one open thread is per-tool override: we're starting with one global setting, and only splitting it per tool if people ask. <span class="who">Michael: &ldquo;per tool is going to add a lot of configuration that's not going to be used an awful lot.&rdquo;</span></p>
 
-    <div class="nbk">
-      <div class="nbk-frame">
-        <div class="nbk-main" style="padding-top:30px; padding-bottom:30px;">
-          <div class="gr-confirm" style="max-width:420px !important;">
-            <div class="gr-confirm-title">Cost cap per operation</div>
-            <div style="display:flex; align-items:center; gap:8px; border:1.5px solid var(--line-soft,#d4d7da); border-radius:8px; padding:8px 11px; margin-bottom:6px;">
-              <span style="color:#9298a0; font-size:13px;">$</span>
-              <span style="flex:1; font-size:13px; color:#1a1c1e;">2.00</span>
-              <span style="font-size:12.5px; color:#9298a0;">per call</span>
-            </div>
-            <p style="margin:0 0 16px; font-size:12px; color:#55595e;">A tool call estimated above this never runs.</p>
-
-            <div style="font-size:13px; color:#1a1c1e; margin-bottom:7px;">When a call is refused</div>
-            <div class="gr-radio is-on"><span class="dot"></span><div><div class="gr-radio-name">Skip it and carry on</div><div class="gr-radio-sub">The agent works around it and says what it couldn't do.</div></div></div>
-            <div class="gr-radio"><span class="dot"></span><div><div class="gr-radio-name">Ask before running it</div><div class="gr-radio-sub">Pauses for approval, like an Ask first tool.</div></div></div>
-            <div class="gr-radio"><span class="dot"></span><div><div class="gr-radio-name">Stop the run</div><div class="gr-radio-sub">Nothing further happens.</div></div></div>
-
-            <div class="gr-confirm-actions" style="margin-top:16px;"><span class="nbk-btn nbk-btn-primary">Save</span></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <h3 class="lrt-section-title" style="font-size:15px; margin-top:26px;">Advanced &mdash; where the per-run numbers already are <span class="gr-tag is-today">today</span></h3>
-    <p class="lrt-section-sub">Last card in Settings. Everything here bounds <i>one execution</i>. Max runs per hour is the odd one out &mdash; it bounds how many executions there are &mdash; which is the argument for keeping it in Usage and limits above, next to the monthly budget, the only other thing in the product that bounds anything across runs.</p>
+    <h3 class="lrt-section-title" style="font-size:15px; margin-top:26px;">Advanced &mdash; and the one thing that does get added <span class="gr-tag is-today">today</span></h3>
+    <p class="lrt-section-sub">Last card in Settings, and deliberately the quiet corner &mdash; <i>Max iterations</i> even carries a schema note saying not to set it unless asked. That makes it the right home for the PII check: enterprise-shaped, set once, not something most builders touch. It's the only agent-wide addition that survived the review.</p>
 
     <div class="nbk">
       <div class="nbk-frame">
@@ -725,28 +758,38 @@
               <div class="gr-rule-main"><div class="gr-rule-name">Max iterations</div><div class="gr-rule-sub">Maximum number of agent loop iterations per run (1&ndash;200).</div></div>
               <span class="gr-rule-ctl gr-numfield">100</span>
             </div>
-            <div class="gr-rule-row" style="opacity:0.55;">
-              <div class="gr-rule-main"><div class="gr-rule-name">Max runs per hour <span class="gr-tag is-new">if it went here instead</span></div><div class="gr-rule-sub">Sits oddly: everything above bounds one run, this bounds how many runs there are. It would also inherit inline editing, so there'd be nowhere to say what happens when the limit is hit.</div></div>
-              <span class="gr-rule-ctl gr-numfield">20</span>
+            <div class="gr-rule-row">
+              <div class="gr-rule-main"><div class="gr-rule-name">Sensitive content <span class="gr-tag is-new">new</span></div><div class="gr-rule-sub">Run a PII model over what this agent sends, stores and replies. Pick where it runs; it applies to every tool and channel at once.</div></div>
+              <span class="gr-rule-ctl nbk-select-input gr-click" onclick="grOpen('gr-pii-hooks')">Off <span class="chev">&#9662;</span></span>
+            </div>
+            <div class="gr-inline" id="gr-pii-hooks">
+              <div class="gr-inline-head">Sensitive content <span class="x" onclick="grClose('gr-pii-hooks')">&times;</span></div>
+              <div class="gr-inline-sub">Personally identifiable information &mdash; card details, emails, addresses, API keys. A model trained for it, not a list of patterns.</div>
+              <div style="font-size:12.5px; color:#55595e; margin-bottom:4px;">Model</div>
+              <div class="gr-rule-ctl nbk-select-input" style="display:flex; width:100%; justify-content:space-between; margin-bottom:12px;">Pick a PII model <span class="chev">&#9662;</span></div>
+              <div style="font-size:12.5px; color:#55595e; margin-bottom:2px;">Check</div>
+              <div class="nbk-setting-row"><div><div class="nbk-setting-title">Before a tool call</div></div><span class="nbk-toggle is-on" onclick="this.classList.toggle('is-on')"><span class="nbk-toggle-knob"></span></span></div>
+              <div class="nbk-setting-row"><div><div class="nbk-setting-title">After a tool call</div></div><span class="nbk-toggle" onclick="this.classList.toggle('is-on')"><span class="nbk-toggle-knob"></span></span></div>
+              <div class="nbk-setting-row"><div><div class="nbk-setting-title">Before a memory write</div></div><span class="nbk-toggle is-on" onclick="this.classList.toggle('is-on')"><span class="nbk-toggle-knob"></span></span></div>
+              <div class="nbk-setting-row"><div><div class="nbk-setting-title">Before a reply</div></div><span class="nbk-toggle" onclick="this.classList.toggle('is-on')"><span class="nbk-toggle-knob"></span></span></div>
+              <div style="font-size:12.5px; color:#55595e; margin-top:11px; padding-top:9px; border-top:1px solid var(--line-soft,#d4d7da);">Same four hooks as a guardrail in section 2 &mdash; open question below whether this row is just a guardrail with a shortcut, or a second way to say the same thing.</div>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <p class="gr-note"><b>So: Usage and limits, not Advanced.</b> Two reasons, and neither is taste. Everything in Advanced bounds a single execution, while Usage and limits is the only place in the product that bounds anything over time &mdash; the monthly budget. And Advanced edits inline, which leaves nowhere to ask the question every one of these limits raises: what happens when it's reached. The budget rows open a modal, which has room for it. <i>Max iterations</i> also carries a schema note &mdash; <i>&ldquo;Do not set unless the user explicitly asks&rdquo;</i> &mdash; so that card is deliberately the quiet corner, and a guardrail people are meant to set doesn't belong in it.</p>
-
-    <p class="gr-note"><b>And one set of limits isn't in either panel.</b> A cumulative total per source, a calls-per-minute ceiling and what to do when it's hit all belong to a specific tool, so they sit in that tool's own pane next to its permissions &mdash; drawn in section 2. Their defaults also come from somewhere else: a per-tool rate limit is the provider's number, not ours to guess. Sin's note applies here too &mdash; rate limits &ldquo;could be applicable at the project and instance level&rdquo;, in which case that row shows an inherited limit a builder can't edit and has to say where it came from.</p>
+    <p class="gr-note"><b>Why the PII row is a row and not a card.</b> It's one decision with a handful of hooks behind it, and it's for the minority of teams that need it. A card would announce it to everyone. <span class="who">Michael: &ldquo;I would potentially put it under advanced and then give it toggles for the different areas.&rdquo;</span> The thing to resolve is the overlap with section 2 &mdash; a guardrail can already be a PII model with the same four hooks, so either this row creates one of those behind the scenes, or we have two doors to one room.</p>
 
     <!-- ---------- MEMORY ---------- -->
-    <h2 class="lrt-section-title" style="margin-top:34px;">4 &mdash; Memory &nbsp;<span style="font-size:12.5px; font-weight:400; color:var(--hub-muted);">in the Memory card, where the toggle already is</span></h2>
-    <p class="lrt-section-sub">The card that exists today has two rows: Session memory, always on, and a Cross-session toggle. The doc's &ldquo;named categories&rdquo; are the Guidance tags from <a href="memory-config.html#/memory-config-knowledge">Memory: Configure + Delete</a>, reached from the chevron beside that toggle. The persistence rule is a third thing, and it only makes sense while cross-session is on &mdash; so it belongs in the same place, not in a guardrails panel somewhere else.</p>
+    <h2 class="lrt-section-title" style="margin-top:34px;">4 &mdash; Memory &nbsp;<span style="font-size:12.5px; font-weight:400; color:var(--hub-muted);">one modal behind the chevron, not two things</span></h2>
+    <p class="lrt-section-sub">I had Guidance and <i>Never store</i> as two rows under the toggle. They merge: one modal, opened by the chevron beside Cross-session memory, with guidance and the hard check in it. The card itself doesn't grow.</p>
 
     <div class="nbk">
       <div class="nbk-frame">
         <div class="nbk-main">
           <div class="nbk-box">
-            <div class="nbk-field-label">Memory <span class="gr-tag is-today">today</span><span class="nbk-field-sub">The card as it stands, with one row added.</span></div>
+            <div class="nbk-field-label">Memory <span class="gr-tag is-today">today</span><span class="nbk-field-sub">Unchanged. Everything new is behind the chevron.</span></div>
 
             <div class="gr-rule-row">
               <div class="gr-rule-main"><div class="gr-rule-name">Session memory</div><div class="gr-rule-sub">Remembers the conversation within the current session.</div></div>
@@ -756,44 +799,35 @@
             <div class="gr-rule-row">
               <div class="gr-rule-main"><div class="gr-rule-name">Cross-session memory</div><div class="gr-rule-sub">Remembers useful details about each user across sessions.</div></div>
               <span class="nbk-toggle is-on" onclick="this.classList.toggle('is-on')"><span class="nbk-toggle-knob"></span></span>
-              <span class="gr-chevr gr-click" onclick="grOpen('gr-mem-guidance')">&#8250;</span>
+              <span class="gr-chevr gr-click" onclick="grOpen('gr-mem-modal')">&#8250;</span>
             </div>
 
-            <div style="padding-left:16px; border-left:2px solid var(--line-soft,#d4d7da); margin-left:2px;">
-              <div class="gr-rule-row" style="border-top:0;">
-                <div class="gr-rule-main"><div class="gr-rule-name">Guidance <span class="gr-tag is-today">today</span></div><div class="gr-rule-sub">What to add, what to exclude, as tags. Behind the chevron above. Best-effort steering &mdash; the agent reads it and tries.</div></div>
-                <span class="gr-rule-ctl gr-dim-link" onclick="grOpen('gr-mem-guidance')">Open &rarr;</span>
+            <div class="gr-inline" id="gr-mem-modal">
+              <div class="gr-inline-head">Memory <span class="x" onclick="grClose('gr-mem-modal')">&times;</span></div>
+              <div class="gr-inline-sub">Drawn inline here; in the product it's the modal the chevron opens.</div>
+
+              <div style="font-size:13.5px; font-weight:700; color:#1a1c1e; margin-bottom:2px;">Guidance</div>
+              <div style="font-size:12px; color:#9298a0; margin-bottom:9px;">Steering, not a rule. The agent reads this and tries.</div>
+              <div style="font-size:12px; color:#55595e; margin-bottom:5px;">Worth remembering</div>
+              <div class="gr-chips" style="margin-bottom:11px;">
+                <span class="gr-chip">Preferred report format <span class="x">&times;</span></span>
+                <span class="gr-chip">Which entity they work in <span class="x">&times;</span></span>
+                <span class="gr-chip is-add">+ Add</span>
+              </div>
+              <div style="font-size:12px; color:#55595e; margin-bottom:5px;">Leave out</div>
+              <div class="gr-chips" style="margin-bottom:16px;">
+                <span class="gr-chip">One-off figures <span class="x">&times;</span></span>
+                <span class="gr-chip is-add">+ Add</span>
               </div>
 
-              <div class="gr-inline" id="gr-mem-guidance">
-                <div class="gr-inline-head">Guidance <span class="x" onclick="grClose('gr-mem-guidance')">&times;</span></div>
-                <div class="gr-inline-sub">Behind the chevron, and the same screen as in Memory: Configure&nbsp;+&nbsp;Delete. The agent reads these and tries &mdash; nothing here can refuse a write.</div>
-                <div style="font-size:12px; color:#55595e; margin-bottom:5px;">Worth remembering</div>
-                <div class="gr-chips" style="margin-bottom:12px;">
-                  <span class="gr-chip">Preferred report format <span class="x">&times;</span></span>
-                  <span class="gr-chip">Which entity they work in <span class="x">&times;</span></span>
-                  <span class="gr-chip is-add">+ Add</span>
+              <div style="border-top:1px solid var(--line-soft,#d4d7da); padding-top:14px;">
+                <div style="font-size:13.5px; font-weight:700; color:#1a1c1e; margin-bottom:2px;">Never store <span class="gr-tag is-new">P1</span></div>
+                <div style="font-size:12px; color:#9298a0; margin-bottom:9px;">A check that can refuse a write, not advice the agent can talk itself out of.</div>
+                <div class="gr-rule-row" style="border-top:0; padding-top:0;">
+                  <div class="gr-rule-main"><div class="gr-rule-name">Personally identifiable information</div><div class="gr-rule-sub">Card details, emails, addresses, API keys. Uses the model set in Settings &rarr; Advanced.</div></div>
+                  <span class="nbk-toggle is-on" onclick="this.classList.toggle('is-on')"><span class="nbk-toggle-knob"></span></span>
                 </div>
-                <div style="font-size:12px; color:#55595e; margin-bottom:5px;">Leave out</div>
-                <div class="gr-chips">
-                  <span class="gr-chip">One-off figures <span class="x">&times;</span></span>
-                  <span class="gr-chip is-add">+ Add</span>
-                </div>
-              </div>
-
-              <div class="gr-rule-row">
-                <div class="gr-rule-main"><div class="gr-rule-name">Never store <span class="gr-tag is-new">new</span></div><div class="gr-rule-sub">Checked at the moment of writing, by a model, because the content is dynamic. If it matches, the fact isn't stored &mdash; not a hint the agent can talk itself out of.</div></div>
-                <span class="gr-rule-ctl nbk-select-input gr-click" onclick="grOpen('gr-mem-never')">3 categories <span class="chev">&#9662;</span></span>
-              </div>
-
-              <div class="gr-inline" id="gr-mem-never">
-                <div class="gr-inline-head">Never store <span class="x" onclick="grClose('gr-mem-never')">&times;</span></div>
-                <div class="gr-inline-sub">Kinds of content that are never written to memory, whatever the conversation says. Checked at the moment of writing.</div>
-                <div class="gr-cat">Card and account numbers <span class="bin"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg></span></div>
-                <div class="gr-cat">Home addresses and phone numbers <span class="bin"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg></span></div>
-                <div class="gr-cat">Anything about a third person <span class="bin"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg></span></div>
-                <div style="margin-top:10px;"><span class="gr-chip is-add">+ Add category</span></div>
-                <div style="font-size:12px; color:#55595e; margin-top:11px; padding-top:9px; border-top:1px solid var(--line-soft,#d4d7da);">The first and third are already in the content policy in Settings. Open question below: whether this list should just point at that policy instead of repeating it.</div>
+                <div style="font-size:12px; color:#55595e; margin-top:9px;">Anything beyond PII is a guardrail you build yourself and hook to <i>before a memory write</i>.</div>
               </div>
             </div>
           </div>
@@ -801,19 +835,59 @@
       </div>
     </div>
 
-    <p class="gr-note"><b>Why these two sit together and still aren't the same control.</b> Guidance is an instruction; <i>Never store</i> is a check that can refuse. Putting them one under the other, indented under the toggle they both depend on, is the clearest way to show that one is advice and the other is a rule &mdash; and that turning cross-session off makes both irrelevant.</p>
+    <p class="gr-note"><b>A list of categories you type would have been theatre.</b> That was the design, and it dies on one question: what checks it? If the answer is &ldquo;the model reads the list and tries&rdquo;, it's the <i>Leave out</i> guidance again with a sterner label, and a label isn't a guarantee. <span class="who">Michael: &ldquo;I don't think that really makes any difference compared to the leave-out guidance.&rdquo;</span> A real check has to be deterministic, and memory is the one dimension where that's impossible &mdash; it's handed an arbitrary string with no criteria to verify against. So the only honest control is to point at a model trained for the job, and the only category it covers today is PII.</p>
+
+    <p class="gr-note"><b>This makes memory guardrails P1, not P0.</b> The P0 line was &ldquo;things we can check deterministically&rdquo;, and this falls the other side of it. Worth being explicit rather than shipping the category list as a P0 placeholder that implies a guarantee it can't make.</p>
+
+    <p class="gr-note"><b>And it may not be the builder's setting at all.</b> If an admin sets a policy at instance level &mdash; Jan's team's work &mdash; this becomes read-only here, showing what's enforced rather than offering a toggle. But a single-user account with no admin still needs the control, and nobody knows yet whether instance policies exist outside enterprise. So the row has to work in two modes, and which one is the default is unresolved.</p>
 
     <!-- ---------- OUTPUT ---------- -->
-    <h2 class="lrt-section-title" style="margin-top:34px;">5 &mdash; Output &nbsp;<span style="font-size:12.5px; font-weight:400; color:var(--hub-muted);">in Settings, with the content policy</span></h2>
-    <p class="lrt-section-sub">Every other dimension had somewhere to go. Output has nothing &mdash; the doc calls it &ldquo;a total gap&rdquo;. It goes in <b>Settings</b>, with the content policy and the limits, for one reason that settles it: &ldquo;reply only to whoever invoked it&rdquo; <i>cannot be expressed inside a channel</i>. It's about the relationship between the way in and the way out, and a Slack channel has no idea the conversation started in Telegram. Per-channel also means repeating the rule everywhere and every new channel arriving unguarded.</p>
+    <h2 class="lrt-section-title" style="margin-top:34px;">5 &mdash; Output &nbsp;<span style="font-size:12.5px; font-weight:400; color:var(--hub-muted);">it dissolved</span></h2>
+    <p class="lrt-section-sub">The doc called this &ldquo;a total gap&rdquo; and I gave it a card in Settings. There's nothing left to put in it, and that's a finding rather than a failure &mdash; the dimension split cleanly in two and both halves already had somewhere to go.</p>
 
-    <p class="gr-note" style="margin-bottom:12px;">Drawn in the assembled Settings view below, alongside the content policy it works with.</p>
+    <div class="gr-oq" style="background:#fbfbfa;">
+      <h3 style="margin-bottom:8px;">Where the three parts went</h3>
+      <ol style="margin:0; padding-left:20px; font-size:13px; line-height:1.65;">
+        <li><b>Who it can reach</b> &mdash; every destination belongs to a channel, so it's configured in the channel, with the channels and people pickers in section 1.</li>
+        <li><b>What the message may contain</b> &mdash; the PII check, hooked to <i>before a reply</i> in section 3.</li>
+        <li><b>Reply only to whoever invoked it</b> &mdash; the one genuinely cross-channel rule, and it isn't a setting: whoever starts a run must always be able to follow up, or the agent can't be used. What's left is whether anyone <i>else</i> may join, which is a switch on the channel.</li>
+      </ol>
+    </div>
 
-    <p class="gr-note"><b>What this costs.</b> Destinations are channel objects &mdash; a Slack channel, a Telegram chat &mdash; so picking them from Settings needs a picker that reaches across channels, which is more work than a list inside each channel would have been. Worth it: the alternative is a rule that can't express the one case everyone wants, and that silently doesn't apply to channels added later. Note this puts three things in Settings &mdash; limits, content policy, outbound rules &mdash; which starts to look like a guardrails section. That's fine and still consistent: rules that belong to a <i>thing</i> live with that thing, rules that belong to the <i>agent</i> live in Settings.</p>
+    <p class="gr-note"><b>This is the part of the review I'd push back on hardest if it were wrong, and I don't think it is.</b> A central outbound panel was my proposal and it had one good argument: a channel can't know where a run began. But that argument only carries the third item, and the third item turned out not to need a control. Everything else in the panel would have been Slack's identities rendered somewhere that isn't Slack.</p>
+
+    <!-- ---------- APPROVAL ---------- -->
+    <h2 class="lrt-section-title" style="margin-top:34px;">6 &mdash; When it has to ask &nbsp;<span style="font-size:12.5px; font-weight:400; color:var(--hub-muted);">in Settings, and it survived intact</span></h2>
+    <p class="lrt-section-sub">Tools set to <i>Ask first</i>, a guardrail that pauses, a sub-agent waiting on approval &mdash; all of them need a person. Normally that's whoever is in the conversation. A run started by a schedule has no conversation, so this is the only question none of the other screens can answer.</p>
+
+    <div class="nbk">
+      <div class="nbk-frame">
+        <div class="nbk-main">
+          <div class="nbk-box">
+            <div class="nbk-field-label">Where it asks for approval <span class="gr-tag is-new">new</span><span class="nbk-field-sub">Used when nobody started the run &mdash; scheduled runs, and anything triggered by another system.</span></div>
+            <div class="gr-rule-row">
+              <div class="gr-rule-main"><div class="gr-rule-name">Ask in</div><div class="gr-rule-sub">Pick the channel, then search inside it. Not only channels later &mdash; email and others are coming, so this shouldn't assume Slack.</div></div>
+              <span class="gr-rule-ctl" style="display:flex; gap:6px;">
+                <span class="nbk-select-input">Slack <span class="chev">&#9662;</span></span>
+                <span class="nbk-select-input">#finance-ops <span class="chev">&#9662;</span></span>
+              </span>
+            </div>
+            <div class="gr-rule-row">
+              <div class="gr-rule-main"><div class="gr-rule-name">If nobody answers</div><div class="gr-rule-sub">5 minutes, 30 minutes, 1 hour, 1 day, or never stop.</div></div>
+              <span class="gr-rule-ctl nbk-select-input">Never stop <span class="chev">&#9662;</span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p class="gr-note"><b>Two dropdowns, not one.</b> A flat list of destinations would have to pull every channel's identities into one control. Picking the channel first keeps each lookup inside the integration that owns it, and it's the same shape as the destination picker a guardrail will need. <span class="who">Michael: &ldquo;it's like a double drop down where you'd pick a channel and then search.&rdquo;</span></p>
+
+    <p class="gr-note"><b>The default is the one thing I'd check.</b> <i>Never stop</i> is drawn as the default and it's what the call landed on, but it argues against itself: the reason not to offer waits longer than a day was that a month-old pending request isn't meaningful any more &mdash; the model may not even exist. If that's true, a run waiting forever is the one outcome we said was useless. Worth confirming it wasn't a crossed wire.</p>
 
     <!-- ---------- SETTINGS, ASSEMBLED ---------- -->
     <h2 class="lrt-section-title" style="margin-top:34px;">What ends up in Settings</h2>
-    <p class="lrt-section-sub">Three of these rules belong to the agent rather than to any one channel, tool or card &mdash; so they land in the same tab, which today renders four cards: <i>Usage and limits</i>, <i>Sub-agent settings</i>, <i>MCP</i>, <i>Advanced</i>. Seeing them stacked is the only way to judge whether this is a coherent place or a junk drawer.</p>
+    <p class="lrt-section-sub">Before the review this was four new cards and it looked like a junk drawer. After it, Settings gains <b>one card</b> and <b>one row</b>. Everything else either went to the channel, went into a guardrail, or was cut.</p>
 
     <div class="nbk">
       <div class="nbk-frame">
@@ -826,81 +900,50 @@
           </div>
 
           <div class="nbk-box" style="margin-top:16px;">
-            <div class="nbk-field-label">Usage and limits <span class="gr-tag is-today">today</span><span class="nbk-field-sub">Two rows added to the card that's already here.</span></div>
-
+            <div class="nbk-field-label">Usage and limits <span class="gr-tag is-today">today</span><span class="nbk-field-sub">Unchanged. Both rows I proposed were cut.</span></div>
             <div style="padding:10px 0 14px;">
               <div style="display:flex; align-items:center; font-size:13.5px; color:#1a1c1e;"><span>Monthly usage</span><span style="flex:1;"></span><span style="color:#55595e;">42%</span></div>
               <div style="font-size:12.5px; color:#55595e; margin:3px 0 7px;">$84 of $200 used</div>
               <div style="height:6px; border-radius:999px; background:#eceeef; overflow:hidden;"><div style="width:42%; height:100%; background:#9298a0;"></div></div>
             </div>
-
             <div class="gr-budget-row">
-              <div class="gr-rule-main"><div class="gr-rule-name">Monthly budget</div><div class="gr-rule-sub">Maximum this agent can spend across all sessions each month.</div></div>
+              <div class="gr-rule-main"><div class="gr-rule-name">Monthly budget</div></div>
               <span class="gr-budget-val">$200/month<br><span style="color:#9298a0;">Alert at 80%</span></span>
               <span class="gr-chevr">&#8250;</span>
             </div>
             <div class="gr-budget-row">
-              <div class="gr-rule-main"><div class="gr-rule-name">Cost cap per session</div><div class="gr-rule-sub">Maximum a single session can spend.</div></div>
+              <div class="gr-rule-main"><div class="gr-rule-name">Cost cap per session</div></div>
               <span class="gr-budget-val">$10</span>
               <span class="gr-chevr">&#8250;</span>
             </div>
-            <div class="gr-budget-row">
-              <div class="gr-rule-main"><div class="gr-rule-name">Cost cap per operation <span class="gr-tag is-new">new</span></div><div class="gr-rule-sub">Maximum any single tool call can spend.</div></div>
-              <span class="gr-budget-val">$5</span>
-              <span class="gr-chevr">&#8250;</span>
-            </div>
-            <div class="gr-budget-row">
-              <div class="gr-rule-main"><div class="gr-rule-name">Max runs per hour <span class="gr-tag is-new">new</span></div><div class="gr-rule-sub">How often this agent can be started, across every channel.</div></div>
-              <span class="gr-budget-val">60</span>
-              <span class="gr-chevr">&#8250;</span>
-            </div>
           </div>
 
           <div class="nbk-box">
-            <div class="nbk-field-label">Content policy <span class="gr-tag is-new">new</span><span class="nbk-field-sub">Kinds of information this agent must not pass on. One list, written once here, checked everywhere the agent could leak it.</span></div>
-            <div class="gr-legend"><span><b>Allow</b> &mdash; passes through</span><span><b>Redact</b> &mdash; removed, and the gap is marked</span><span><b>Block</b> &mdash; the whole action is stopped</span></div>
-            <div class="gr-rule-row"><div class="gr-rule-main"><div class="gr-rule-name">Personal data</div><div class="gr-rule-sub">Names, emails, phone numbers, addresses.</div></div><span class="gr-rule-ctl gr-seg"><span>Allow</span><span class="is-on">Redact</span><span>Block</span></span></div>
-            <div class="gr-rule-row"><div class="gr-rule-main"><div class="gr-rule-name">Anything about a third person</div><div class="gr-rule-sub">Someone who isn't in the conversation. The doc's own example.</div></div><span class="gr-rule-ctl gr-seg"><span>Allow</span><span>Redact</span><span class="is-on">Block</span></span></div>
-            <div class="gr-rule-row"><div class="gr-rule-main"><div class="gr-rule-name">Financial figures</div><div class="gr-rule-sub">Amounts, balances, account numbers.</div></div><span class="gr-rule-ctl gr-seg"><span>Allow</span><span class="is-on">Redact</span><span>Block</span></span></div>
-            <div class="gr-rule-row"><div class="gr-rule-main"><div class="gr-rule-name"><span class="gr-chip is-add">+ Add a kind of content</span></div></div></div>
-            <div class="gr-rule-row">
-              <div class="gr-rule-main"><div class="gr-rule-name">Checked in</div><div class="gr-rule-sub">The three moments the agent can let something out: what it sends to a tool, what it writes to memory, what it replies. Each is switched on in its own settings &mdash; none of them change the list.</div></div>
-              <span class="gr-rule-ctl" style="display:flex; gap:6px;">
-                <span class="gr-pill is-bounded"><span class="dot"></span> Tool calls</span>
-                <span class="gr-pill is-bounded"><span class="dot"></span> What it remembers</span>
-                <span class="gr-pill"><span class="dot"></span> Replies</span>
-              </span>
-            </div>
-            <div class="gr-legend" style="padding-top:10px;"><span>A model makes the judgement &mdash; none of this can be matched with a pattern.</span></div>
+            <div class="nbk-field-label">Where it asks for approval <span class="gr-tag is-new">new</span><span class="nbk-field-sub">The one new card. Collapsed by default &mdash; most agents never need it.</span></div>
+            <div class="gr-rule-row"><div class="gr-rule-main"><div class="gr-rule-name">Ask in</div></div><span class="gr-rule-ctl" style="display:flex; gap:6px;"><span class="nbk-select-input">Slack <span class="chev">&#9662;</span></span><span class="nbk-select-input">#finance-ops <span class="chev">&#9662;</span></span></span></div>
+            <div class="gr-rule-row"><div class="gr-rule-main"><div class="gr-rule-name">If nobody answers</div></div><span class="gr-rule-ctl nbk-select-input">Never stop <span class="chev">&#9662;</span></span></div>
           </div>
 
           <div class="nbk-box">
-            <div class="nbk-field-label">Who it can message <span class="gr-tag is-new">new</span><span class="nbk-field-sub">An agent connected to Slack can message anyone in the workspace, not only the person who asked. This is the list of who it's allowed to reach &mdash; nothing about what the message says.</span></div>
-            <div class="gr-legend"><span><b>Allow</b> &mdash; sends</span><span><b>Ask first</b> &mdash; waits for someone to approve</span><span><b>Block</b> &mdash; doesn't send</span></div>
-            <div class="gr-rule-row"><div class="gr-rule-main"><div class="gr-rule-name">Whoever started the run</div><div class="gr-rule-sub">Replying in the conversation it was asked in &mdash; the Slack thread, the Telegram chat, n8n&nbsp;Chat. The one case that can only be expressed here, because a channel can't know where the run began.</div></div><span class="gr-rule-ctl gr-seg"><span class="is-on">Allow</span><span>Ask first</span><span>Block</span></span></div>
-            <div class="gr-rule-row"><div class="gr-rule-main"><div class="gr-rule-name">#finance-ops</div><div class="gr-rule-sub">A destination added here, so the agent can post somewhere nobody asked it to.</div></div><span class="gr-rule-ctl gr-seg"><span>Allow</span><span class="is-on">Ask first</span><span>Block</span></span></div>
-            <div class="gr-rule-row"><div class="gr-rule-main"><div class="gr-rule-name">Everyone else</div><div class="gr-rule-sub">Any channel, chat or person not listed above.</div></div><span class="gr-rule-ctl gr-seg"><span>Allow</span><span>Ask first</span><span class="is-on">Block</span></span></div>
-            <div class="nbk-cap-row" style="margin-top:4px;"><span class="nbk-cap-row-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg> Another destination</span><span class="nbk-cap-add">+ Add</span></div>
-          </div>
-
-          <div class="nbk-box">
-            <div class="nbk-field-label">Where it asks for approval <span class="gr-tag is-new">new</span><span class="nbk-field-sub">Several rules above are set to <i>Ask first</i>. Normally the agent asks in the conversation it's in &mdash; but a run started by a schedule has no conversation and nobody waiting. This is who it asks then.</span></div>
-            <div class="gr-rule-row"><div class="gr-rule-main"><div class="gr-rule-name">When nobody started the run</div><div class="gr-rule-sub">Scheduled runs, and anything triggered by another system.</div></div><span class="gr-rule-ctl nbk-select-input">#finance-ops <span class="chev">&#9662;</span></span></div>
-            <div class="gr-rule-row"><div class="gr-rule-main"><div class="gr-rule-name">If nobody answers</div><div class="gr-rule-sub">An unattended run can't sit waiting forever.</div></div><span class="gr-rule-ctl nbk-select-input">Stop after 1 hour <span class="chev">&#9662;</span></span></div>
+            <div class="nbk-field-label">Advanced <span class="gr-tag is-today">today</span><span class="nbk-field-sub">One row added to a card that already exists.</span></div>
+            <div class="gr-rule-row" style="opacity:0.5;"><div class="gr-rule-main"><div class="gr-rule-name">Memory model &middot; Reasoning &middot; Tool call concurrency &middot; Max iterations</div></div></div>
+            <div class="gr-rule-row"><div class="gr-rule-main"><div class="gr-rule-name">Sensitive content <span class="gr-tag is-new">new</span></div><div class="gr-rule-sub">PII model, and where it runs.</div></div><span class="gr-rule-ctl nbk-select-input">Off <span class="chev">&#9662;</span></span></div>
           </div>
 
           <div class="nbk-box" style="opacity:0.55;">
-            <div class="nbk-field-label">Sub-agent settings &middot; MCP &middot; Advanced <span class="gr-tag is-today">today</span><span class="nbk-field-sub">Unchanged. Advanced still holds max iterations and tool call concurrency.</span></div>
+            <div class="nbk-field-label">Sub-agent settings &middot; MCP <span class="gr-tag is-today">today</span><span class="nbk-field-sub">Unchanged.</span></div>
           </div>
         </div>
       </div>
     </div>
 
-    <p class="gr-note"><b>I had Reactions as a table, and that was wrong.</b> A rule that can fire has to say what it does right where you set it &mdash; which is what the cost-cap modal above already does with <i>&ldquo;When a call is refused&rdquo;</i>. A separate table would be a second place to define the same thing, and the two would drift. So the last card doesn't set reactions at all. The one thing that genuinely can't be answered rule by rule is <i>who to ask</i> when a run has nobody attached to it, and that's all it does.</p>
+    <p class="gr-note"><b>The junk-drawer problem solved itself.</b> I'd argued Settings could carry four new cards as long as each one was a property of the agent. That test was too weak &mdash; it would have admitted anything. The review applied a harder one, and it holds better: a rule lives wherever the thing it constrains lives. Identities live in channels. Checks live in a guardrail that can be reused. Only the two questions with no other owner &mdash; who to ask when nobody is there, and which model reads sensitive content &mdash; are left in Settings.</p>
 
-    <p class="gr-note"><b>Is this a junk drawer?</b> Four cards is a lot, and three of them are new. The honest counter-argument is that Settings has become where we put anything that doesn't belong elsewhere. I think it holds, on one test: everything here is a property of <i>the agent</i>, and everything that belongs to a channel, a tool or the memory card stayed with it. If a fifth agent-wide rule turns up, that's the moment to group them under one heading rather than keep stacking cards.</p>
+    <p class="gr-note"><b>What the summary view costs now.</b> With rules this distributed, a builder has even less chance of seeing the whole picture: channel modals, a guardrail object, two Settings cards. That's the argument for <a href="#/gr-bounded">What's bounded</a> &mdash; except it's now P1 and moves to publish time, so for the whole of P0 there is no single place to read what an agent is allowed to do. Worth naming as a known gap rather than pretending the distribution is free.</p>
 
-    <p class="gr-note" style="margin-top:22px;"><b>The thing this screen assumes, and shouldn't.</b> Every control above is drawn as a form field, which is the one thing Sin openly doubts: <i>&ldquo;Could this even be possible &mdash; do we want this to be available?&rdquo;</i> If form fields are out, these rules get authored as workflows or handed to a vendor, and most of this becomes a list of attached workflows instead of toggles and dropdowns. Worth resolving before any of it gets built.</p>
+    <p class="gr-note" style="margin-top:22px;"><b>The question the whole page used to hang on is now answered.</b> Sin's doubt on the doc was whether form fields could express any of this: <i>&ldquo;Could this even be possible &mdash; do we want this to be available?&rdquo;</i> The review answered it both ways. Permissions, limits and routing stay as form fields, because they bound things we can actually measure. Anything about <i>content</i> doesn't &mdash; it's a model or a workflow you attach. That split is why the guardrail object exists, and it's the single biggest change on this page.</p>
+
+    <p class="gr-note"><b>Deliberately parked.</b> Sandbox command execution (whitelisting, modes, watching for suspicious activity) and network egress are both guardrails and both big enough to derail this. Guardrails on the raw message in and out of the agent &mdash; what the current AI Agent node has &mdash; are also unplaced; they'd most likely be workflow hooks, but nobody picked a home for them.</p>
   </section>
 
 </div>
