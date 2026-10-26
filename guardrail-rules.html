@@ -176,6 +176,35 @@
   .gr-oq li:last-child { margin-bottom: 0; }
   .gr-oq .who { color: var(--hub-muted); font-size: 12px; }
   .gr-note .who { color: var(--hub-muted); font-style: italic; }
+
+  /* guardrails library table, modelled on the real SkillsTable */
+  .gr-tbl { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .gr-tbl th { text-align: left; font-weight: 400; font-size: 11.5px; color: #9298a0; padding: 0 10px 7px 0; border-bottom: 1px solid var(--line-soft,#d4d7da); }
+  .gr-tbl td { padding: 11px 10px 11px 0; border-bottom: 1px solid var(--line-soft,#d4d7da); color: #1a1c1e; vertical-align: top; }
+  .gr-tbl tr:last-child td { border-bottom: 0; }
+  .gr-tbl .sub { font-size: 11.5px; color: #9298a0; margin-top: 2px; }
+  .gr-tbl .muted { color: #55595e; }
+  .gr-tbl .act { color: #9298a0; white-space: nowrap; }
+  .gr-scope { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; color: #1a1c1e; border: 1.5px solid var(--line-soft,#d4d7da); border-radius: 6px; padding: 2px 8px; white-space: nowrap; }
+  .gr-scope svg { width: 12px; height: 12px; flex: none; color: #55595e; }
+  .gr-tblwrap { overflow-x: auto; }
+
+  /* modal title doubling as the name field */
+  .gr-titlefield { display: inline-flex; align-items: center; gap: 7px; border-radius: 6px; padding: 2px 7px; margin-left: -7px; border: 1.5px solid transparent; cursor: text; }
+  .gr-titlefield:hover { border-color: var(--line-soft,#d4d7da); background: #fbfbfa; }
+  .gr-titlefield svg { width: 13px; height: 13px; color: #9298a0; flex: none; }
+  .gr-titlefield.is-empty { color: #9298a0; }
+
+  /* N8nSegmentControl: one exclusive choice, 2-5 options */
+  .gr-segctl { display: inline-flex; background: #eceeef; border-radius: 8px; padding: 3px; gap: 2px; }
+  .gr-segctl span { font-size: 12.5px; color: #55595e; padding: 5px 13px; border-radius: 6px; cursor: pointer; white-space: nowrap; }
+  .gr-segctl span.is-on { background: #fff; color: #1a1c1e; box-shadow: 0 1px 2px rgba(0,0,0,0.08); }
+
+  /* N8nToggleGroup type="multiple": several can be on at once */
+  .gr-tgroup { display: flex; flex-wrap: wrap; gap: 6px; }
+  .gr-tgroup span { font-size: 12.5px; color: #55595e; border: 1.5px solid var(--line-soft,#d4d7da); background: #fff; border-radius: 7px; padding: 5px 11px; cursor: pointer; white-space: nowrap; }
+  .gr-tgroup span.is-on { background: #1a1c1e; border-color: #1a1c1e; color: #fff; }
+  .gr-help { font-size: 12px; color: #9298a0; margin-top: 7px; }
 </style>
 </head>
 <body>
@@ -231,7 +260,7 @@
       <h3>Still unanswered after the 22 Oct review</h3>
       <p class="gr-oq-sub">The review settled most of the structure. These are what's left, and the first three block design rather than engineering.</p>
       <ol>
-        <li><b>Where does a guardrail live, and when does it die?</b> <span class="who">Michael: &ldquo;when do they stop existing? Is there somewhere you can actually delete them?&rdquo;</span> It's now an object with a lifecycle &mdash; shared, orphaned, edited under a tool that depends on it. Whether the list sits in agent Settings or outside the agent next to the Skills hub decides whether it's reusable across agents at all.</li>
+        <li><b>Does the Skills pattern transfer wholesale?</b> Mostly answered rather than open: Skills already ships a reusable object at Settings &rarr; Context with a three-rung scope, a usage count, a read-only state and a deletion rule, and a guardrail wants all four. What needs deciding is whether guardrails share that page as a second tab or get their own, and whether a guardrail may be scoped <i>above</i> the person who has to live with it &mdash; a Global one set by an admin is, in effect, instance policy by another route.</li>
         <li><b>Is the PII row in Advanced just a guardrail with a shortcut?</b> Both exist on the page and both have the same four hooks. Either the row creates a guardrail behind the scenes, or there are two doors to one room and they'll drift.</li>
         <li><b>Who owns content policy &mdash; us or the instance?</b> If an admin sets it, this is read-only for the builder. But a single-user account has no admin, and nobody knows whether instance policies exist outside enterprise. Needs the conversation with Jan's team.</li>
         <li><b>Is <i>never stop</i> really the default</b> when nobody answers an approval request? It contradicts the reasoning used to cap the wait options at a day.</li>
@@ -639,40 +668,39 @@
     </div>
 
     <h3 class="lrt-section-title" style="font-size:15px; margin-top:26px;">Creating one <span class="gr-tag is-new">new</span></h3>
-    <p class="lrt-section-sub">The thing that doesn't exist anywhere yet. A guardrail has three parts: what it checks, where in the run it checks it, and what it does when it fires. Everything that used to be drawn inside the tool pane &mdash; data checks, timeouts, rate limits &mdash; moved in here, because configuring that per tool means filling the same form nine times and storing nine copies of it.</p>
+    <p class="lrt-section-sub">The thing that doesn't exist anywhere yet. A guardrail has three parts: what it checks, where in the run it checks it, and what it does when it fires. Everything that used to be drawn inside the tool pane &mdash; data checks, timeouts, rate limits &mdash; moved in here, because configuring that per tool means filling the same form nine times and storing nine copies of it. The name is the modal's title, edited in place, so the form opens on the decision rather than on a label.</p>
 
     <div class="nbk">
       <div class="nbk-frame">
         <div class="nbk-main" style="padding-top:26px; padding-bottom:26px;">
           <div class="gr-modal" style="max-width:520px !important;">
-            <div class="gr-modal-head"><span class="gr-modal-title">Create guardrail</span><span class="gr-modal-x">&times;</span></div>
+            <div class="gr-modal-head"><span class="gr-modal-title gr-titlefield">PII redaction <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></span><span class="gr-modal-x">&times;</span></div>
 
-            <div style="font-size:13px; color:#1a1c1e; margin:14px 0 4px;">Name</div>
-            <div class="gr-rule-ctl nbk-select-input" style="display:flex; width:100%; justify-content:flex-start; color:#1a1c1e;">PII redaction</div>
-
-            <div style="font-size:13.5px; font-weight:700; color:#1a1c1e; margin:18px 0 3px;">What it checks</div>
-            <div style="font-size:12px; color:#9298a0; margin-bottom:7px;">Not a list of rules you type. You point it at something that can actually judge.</div>
-            <div class="gr-radio is-on"><span class="dot"></span><div><div class="gr-radio-name">A PII model</div><div class="gr-radio-sub">Models trained to spot personally identifiable information &mdash; card details, emails, addresses, API keys. Cheap, fast, and far better at it than any pattern we could write.</div></div></div>
-            <div class="gr-radio"><span class="dot"></span><div><div class="gr-radio-name">A workflow</div><div class="gr-radio-sub">Your own logic, as a hook. The escape hatch for anything we don't cover.</div></div></div>
-            <div class="gr-radio" style="opacity:0.5;"><span class="dot"></span><div><div class="gr-radio-name">A guardrail service <span class="gr-tag is-new">later</span></div><div class="gr-radio-sub">A vendor's prebuilt checks.</div></div></div>
-
-            <div style="margin:9px 0 0; padding-left:18px;">
-              <div style="font-size:12.5px; color:#55595e; margin-bottom:4px;">Model</div>
+            <div style="font-size:13.5px; font-weight:700; color:#1a1c1e; margin:18px 0 5px;">What it checks</div>
+            <div class="gr-segctl"><span class="is-on">A PII model</span><span>A workflow</span><span style="opacity:0.45;">A service</span></div>
+            <div class="gr-help">Trained to spot card details, emails, addresses and API keys. A vendor service comes later.</div>
+            <div style="margin-top:10px;">
               <div class="gr-rule-ctl nbk-select-input" style="display:flex; width:100%; justify-content:space-between;">Pick a PII model <span class="chev">&#9662;</span></div>
             </div>
 
-            <div style="font-size:13.5px; font-weight:700; color:#1a1c1e; margin:18px 0 3px;">Where it runs</div>
-            <div style="font-size:12px; color:#9298a0; margin-bottom:7px;">The same guardrail can sit at more than one point in a run.</div>
-            <div class="nbk-setting-row"><div><div class="nbk-setting-title">Before a tool call</div><div class="nbk-setting-sub">Checks what's about to be sent out.</div></div><span class="nbk-toggle is-on" onclick="this.classList.toggle('is-on')"><span class="nbk-toggle-knob"></span></span></div>
-            <div class="nbk-setting-row"><div><div class="nbk-setting-title">After a tool call</div><div class="nbk-setting-sub">What comes back can be adversarial. Separate decision, separate risk.</div></div><span class="nbk-toggle" onclick="this.classList.toggle('is-on')"><span class="nbk-toggle-knob"></span></span></div>
-            <div class="nbk-setting-row"><div><div class="nbk-setting-title">Before a memory write</div><div class="nbk-setting-sub">The only way memory gets a check that can actually refuse.</div></div><span class="nbk-toggle is-on" onclick="this.classList.toggle('is-on')"><span class="nbk-toggle-knob"></span></span></div>
-            <div class="nbk-setting-row"><div><div class="nbk-setting-title">Before a reply</div><div class="nbk-setting-sub">What the agent says back to a person.</div></div><span class="nbk-toggle" onclick="this.classList.toggle('is-on')"><span class="nbk-toggle-knob"></span></span></div>
+            <div style="font-size:13.5px; font-weight:700; color:#1a1c1e; margin:18px 0 5px;">Where it runs</div>
+            <div class="gr-tgroup">
+              <span class="is-on" onclick="this.classList.toggle('is-on')">Before a tool call</span>
+              <span onclick="this.classList.toggle('is-on')">After a tool call</span>
+              <span class="is-on" onclick="this.classList.toggle('is-on')">Before a memory write</span>
+              <span onclick="this.classList.toggle('is-on')">Before a reply</span>
+            </div>
+            <div class="gr-help">Pick as many as you need &mdash; one guardrail can run at several points. At least one is required.</div>
 
             <div style="font-size:13.5px; font-weight:700; color:#1a1c1e; margin:18px 0 3px;">Limits</div>
             <div style="font-size:12px; color:#9298a0; margin-bottom:6px;">No spend figure here. We can't price a tool call before making it, so these bound time and frequency instead.</div>
             <div class="gr-rule-row"><div class="gr-rule-main"><div class="gr-rule-name">Timeout</div><div class="gr-rule-sub">How long a single operation may take.</div></div><span class="gr-rule-ctl nbk-select-input">30s <span class="chev">&#9662;</span></span></div>
             <div class="gr-rule-row"><div class="gr-rule-main"><div class="gr-rule-name">Calls per minute</div><div class="gr-rule-sub">Follows the provider's own published limit unless you go lower.</div></div><span class="gr-rule-ctl nbk-select-input">Provider limit <span class="chev">&#9662;</span></span></div>
             <div class="gr-rule-row"><div class="gr-rule-main"><div class="gr-rule-name">When the limit is hit</div><div class="gr-rule-sub">Retrying with a growing wait only changes how long the run takes, so it can be the default.</div></div><span class="gr-rule-ctl nbk-select-input">Wait and retry <span class="chev">&#9662;</span></span></div>
+
+            <div style="font-size:13.5px; font-weight:700; color:#1a1c1e; margin:18px 0 3px;">Where can this guardrail be used?</div>
+            <div style="font-size:12px; color:#9298a0; margin-bottom:7px;">A global guardrail can be added to any agent. A project guardrail can be added to the agents of that project. An agent guardrail belongs to one agent.</div>
+            <div class="gr-rule-ctl nbk-select-input" style="display:flex; width:100%; justify-content:space-between; margin-bottom:4px;">Analytics (project) <span class="chev">&#9662;</span></div>
 
             <div style="font-size:13.5px; font-weight:700; color:#1a1c1e; margin:18px 0 3px;">Applies to</div>
             <div class="gr-chipfield"><span class="gr-chip">Notion <span class="x">&times;</span></span><span class="gr-chip">Hex <span class="x">&times;</span></span><span class="ph">Add tools</span></div>
@@ -683,9 +711,93 @@
       </div>
     </div>
 
-    <p class="gr-note"><b>Two entry points, and they want opposite flows.</b> From a tool you attach one guardrail to one tool, which is the natural move while you're setting that tool up. But the moment you have nine data-table tools, you want the other direction: make the guardrail, then tick the tools it covers &mdash; which is why <i>Applies to</i> is in the modal rather than only on the tool. Both exist above; whether the central list of guardrails lives in agent Settings or outside the agent entirely, next to the Skills hub, isn't decided.</p>
+    <p class="gr-note"><b>Both controls come from the design system, and they're deliberately different shapes.</b> <i>What it checks</i> is one choice out of three, which is exactly what <b>N8nSegmentControl</b> is for &mdash; its own spec says to prefer it over a select or a radio group when there are two to five options and you switch between them immediately. <i>Where it runs</i> is <b>N8nToggleGroup</b> with <code>type=&quot;multiple&quot;</code>, because several can be on at once. Using a segmented row for the exclusive one and outlined toggles for the multiple one means the shape tells you which is which before you read a word.</p>
 
-    <p class="gr-note"><b>What a separate object costs.</b> It stops being a setting and becomes a thing with a lifecycle: it can be shared, orphaned, edited from under a tool that depends on it, and deleted. <span class="who">Michael: &ldquo;when do they stop existing? If they're not in use, does that remove them, or is there somewhere you can actually delete them?&rdquo;</span> None of that is designed. Editing one also silently changes every tool using it, so the picker says so and a real edit screen will need to say it louder.</p>
+    <p class="gr-note"><b>Two entry points, and they want opposite flows.</b> From a tool you attach one guardrail to one tool, which is the natural move while you're setting that tool up. But the moment you have nine data-table tools, you want the other direction: make the guardrail, then tick the tools it covers &mdash; which is why <i>Applies to</i> is in the modal rather than only on the tool. Both exist above. The list itself isn't a new invention &mdash; it goes beside Skills in Settings &rarr; Context, drawn in the next section.</p>
+
+    <p class="gr-note"><b>What a separate object costs.</b> It stops being a setting and becomes a thing with a lifecycle: it can be shared, orphaned, edited from under a tool that depends on it, and deleted. <span class="who">Michael: &ldquo;when do they stop existing? If they're not in use, does that remove them, or is there somewhere you can actually delete them?&rdquo;</span> Most of that is already answered &mdash; by Skills, which has the same lifecycle and solved it. The next section is that answer. The part it doesn't cover is editing: changing one silently changes every tool using it.</p>
+
+    <!-- ---------- WHERE GUARDRAILS LIVE ---------- -->
+    <h2 class="lrt-section-title" style="margin-top:34px;">Where guardrails live &nbsp;<span style="font-size:12.5px; font-weight:400; color:var(--hub-muted);">Settings &rarr; Context, beside Skills</span></h2>
+    <p class="lrt-section-sub">I was going to design this and then found the product has already answered it. <b>Skills</b> is the same problem &mdash; a reusable object, made by a builder or imposed by an admin, attached to many agents &mdash; and it ships today at <b>Settings &rarr; Context</b> with a scope, a usage count and a deletion rule. Every question we had about guardrails has an answer there. So this isn't a new screen, it's a second table.</p>
+
+    <div class="nbk">
+      <div class="nbk-frame">
+        <div class="nbk-main">
+          <div class="nbk-tabbar">
+            <span class="nbk-tab">Skills</span>
+            <span class="nbk-tab is-active">Guardrails</span>
+          </div>
+          <div style="display:flex; align-items:flex-end; gap:12px; margin:16px auto 4px;">
+            <div style="flex:1;">
+              <div style="font-size:15px; font-weight:700; color:#1a1c1e;">Guardrails <span class="gr-tag is-new">new</span></div>
+              <div style="font-size:12.5px; color:#55595e; margin-top:2px;">Check what agents send, store and reply</div>
+            </div>
+            <span class="nbk-select-input" style="font-size:12.5px;">Filters <span class="chev">&#9662;</span></span>
+            <span class="nbk-btn nbk-btn-primary">Create guardrail</span>
+          </div>
+
+          <div class="gr-tblwrap">
+          <table class="gr-tbl">
+            <thead><tr><th>Guardrail</th><th>Scope</th><th>Agents</th><th>Created by</th><th>Last updated</th><th></th></tr></thead>
+            <tbody>
+              <tr>
+                <td>PII redaction<div class="sub">PII model &middot; before tool call, before memory write</div></td>
+                <td><span class="gr-scope"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></svg> Global</span></td>
+                <td class="muted">12</td>
+                <td class="muted">Admin</td>
+                <td class="muted">2 days ago</td>
+                <td class="act">You can use but not change this guardrail</td>
+              </tr>
+              <tr>
+                <td>Finance data check<div class="sub">Workflow &middot; after tool call</div></td>
+                <td><span class="gr-scope"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 2 9 5-9 5-9-5 9-5z"/><path d="m3 12 9 5 9-5"/><path d="m3 17 9 5 9-5"/></svg> Analytics</span></td>
+                <td class="muted">3</td>
+                <td class="muted">Martina</td>
+                <td class="muted">1 week ago</td>
+                <td class="act">&hellip;</td>
+              </tr>
+              <tr>
+                <td>Slow API back-off<div class="sub">Timeout 30s &middot; 20 calls/min &middot; wait and retry</div></td>
+                <td><span class="gr-scope"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="8" width="16" height="12" rx="3"/><path d="M12 4v4"/><circle cx="9" cy="14" r="1"/><circle cx="15" cy="14" r="1"/></svg> Metrics sync only</span></td>
+                <td class="muted">1</td>
+                <td class="muted">Martina</td>
+                <td class="muted">1 week ago</td>
+                <td class="act">&hellip;</td>
+              </tr>
+            </tbody>
+          </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p class="gr-note"><b>The scope ladder already exists, and it's three rungs, not one.</b> I'd recommended putting guardrails at project level. That was wrong in shape: Skills doesn't pick a level for you, it asks per object &mdash; <i>Global</i>, a named project, or <i>&ldquo;{agent} only&rdquo;</i> &mdash; and the real tooltip explains it in one line: <i>&ldquo;A global skill can be added to any agent. A project skill can be added to the agents of that project. An agent skill belongs to one agent.&rdquo;</i> A guardrail wants exactly the same three, because the admin's PII policy and the one-off back-off for a slow API are both guardrails and belong at different heights.</p>
+
+    <p class="gr-note"><b>And it answers Michael's lifecycle question without us designing anything.</b> Skills can't be deleted while they're attached: <i>&ldquo;Used by 3 agents. Remove the skill from each agent first.&rdquo;</i> No cascade, no orphans, no silently breaking an agent you can't see. Inherited ones say <i>&ldquo;You can use but not change this skill&rdquo;</i>, which is the same read-only state we drew for the PII row in section 3 &mdash; arrived at twice, independently, which is a good sign it's right. Moving one between scopes even has its own rule: you need delete permission, because moving removes it from where it is.</p>
+
+    <p class="gr-note"><b>Where a guardrail is not like a skill, and it matters.</b> A skill is additive: worst case the agent ignores it and behaves as it would have anyway. A guardrail is subtractive &mdash; if it stops applying, something gets out. So the same table carries more risk: editing a Global guardrail changes 12 agents at once, and the delete rule protects the object without protecting the agents from an edit. Skills doesn't need an impact warning before saving. Guardrails probably do, and that's the one screen this pattern doesn't hand us.</p>
+
+    <h3 class="lrt-section-title" style="font-size:15px; margin-top:26px;">The one screen Skills doesn't hand us <span class="gr-tag is-new">new</span></h3>
+    <p class="lrt-section-sub">Deleting is already protected. Editing isn't, and for a guardrail that's the riskier of the two: deleting is blocked while in use, but saving a change quietly reaches every agent attached. So saving a shared guardrail says who it touches before it does it.</p>
+
+    <div class="nbk">
+      <div class="nbk-frame">
+        <div class="nbk-main" style="padding-top:30px; padding-bottom:30px;">
+          <div class="gr-confirm" style="max-width:420px !important;">
+            <div class="gr-confirm-title">Save changes to PII redaction?</div>
+            <p class="gr-confirm-body">This guardrail runs in <b>12 agents</b> across 3 projects. The change applies to all of them the next time each one runs.</p>
+            <div class="gr-dim-where" style="margin:-4px 0 14px;"><span class="gr-dim-link">See which agents</span></div>
+            <div class="gr-confirm-actions">
+              <span class="nbk-btn">Cancel</span>
+              <span class="nbk-btn nbk-btn-primary">Save</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p class="gr-note"><b>Not styled as a warning, on purpose.</b> Editing a shared guardrail is a normal thing to do &mdash; it's the reason the object exists. The dialog's job is to make the blast radius visible, not to imply a mistake, which is the same reasoning behind the summary view using grey for an unset rule rather than red. If it nags, people will click through it and it will have cost us a step without buying anything. It only appears when the count is above one.</p>
 
     <!-- ---------- COST ---------- -->
     <h2 class="lrt-section-title" style="margin-top:34px;">3 &mdash; Cost &nbsp;<span style="font-size:12.5px; font-weight:400; color:var(--hub-muted);">nothing to add</span></h2>
@@ -767,11 +879,13 @@
               <div class="gr-inline-sub">Personally identifiable information &mdash; card details, emails, addresses, API keys. A model trained for it, not a list of patterns.</div>
               <div style="font-size:12.5px; color:#55595e; margin-bottom:4px;">Model</div>
               <div class="gr-rule-ctl nbk-select-input" style="display:flex; width:100%; justify-content:space-between; margin-bottom:12px;">Pick a PII model <span class="chev">&#9662;</span></div>
-              <div style="font-size:12.5px; color:#55595e; margin-bottom:2px;">Check</div>
-              <div class="nbk-setting-row"><div><div class="nbk-setting-title">Before a tool call</div></div><span class="nbk-toggle is-on" onclick="this.classList.toggle('is-on')"><span class="nbk-toggle-knob"></span></span></div>
-              <div class="nbk-setting-row"><div><div class="nbk-setting-title">After a tool call</div></div><span class="nbk-toggle" onclick="this.classList.toggle('is-on')"><span class="nbk-toggle-knob"></span></span></div>
-              <div class="nbk-setting-row"><div><div class="nbk-setting-title">Before a memory write</div></div><span class="nbk-toggle is-on" onclick="this.classList.toggle('is-on')"><span class="nbk-toggle-knob"></span></span></div>
-              <div class="nbk-setting-row"><div><div class="nbk-setting-title">Before a reply</div></div><span class="nbk-toggle" onclick="this.classList.toggle('is-on')"><span class="nbk-toggle-knob"></span></span></div>
+              <div style="font-size:12.5px; color:#55595e; margin-bottom:5px;">Check</div>
+              <div class="gr-tgroup">
+                <span class="is-on" onclick="this.classList.toggle('is-on')">Before a tool call</span>
+                <span onclick="this.classList.toggle('is-on')">After a tool call</span>
+                <span class="is-on" onclick="this.classList.toggle('is-on')">Before a memory write</span>
+                <span onclick="this.classList.toggle('is-on')">Before a reply</span>
+              </div>
               <div style="font-size:12.5px; color:#55595e; margin-top:11px; padding-top:9px; border-top:1px solid var(--line-soft,#d4d7da);">Same four hooks as a guardrail in section 2 &mdash; open question below whether this row is just a guardrail with a shortcut, or a second way to say the same thing.</div>
             </div>
           </div>
