@@ -1022,7 +1022,7 @@
     <h2 class="lrt-section-title" style="margin-top:34px;">5 &mdash; Output &nbsp;<span style="font-size:12.5px; font-weight:400; color:var(--hub-muted);">one row survived, in Settings</span></h2>
     <p class="lrt-section-sub">I had a card with three rows and a destination list. The card is gone and almost all of it went to the channel &mdash; but not quite all. One row is genuinely agent-wide, and it's the one that decides whether people other than the requester can use this agent at all.</p>
 
-    <p class="gr-note" style="margin-top:0;"><b>Drawn in the assembled Settings view at the end of this page</b>, not here &mdash; it's one row in a tab that already exists, so a mockup of it on its own would just be the same card twice.</p>
+    <p class="gr-note" style="margin-top:0;"><b>Drawn in the assembled Settings view at the end</b>, as the first row of <i>Access and approvals</i> &mdash; the card it shares with the approval routing in section 6.</p>
 
     <p class="gr-note"><b>Two options, not three.</b> <i>Ask first</i> looks sensible and can't be built: the approval would have to go to someone in the thread, and Slack can't stop a bystander clicking the button on a request they can see. So the control that enforces who may talk would be approved by whoever happens to be looking. Allow or block.</p>
 
@@ -1041,7 +1041,7 @@
     <h2 class="lrt-section-title" style="margin-top:34px;">6 &mdash; When it has to ask &nbsp;<span style="font-size:12.5px; font-weight:400; color:var(--hub-muted);">in Settings, and it survived intact</span></h2>
     <p class="lrt-section-sub">Tools set to <i>Ask first</i>, a guardrail that pauses, a sub-agent waiting on approval &mdash; all of them need a person. Normally that's whoever is in the conversation. A run started by a schedule has no conversation, so this is the only question none of the other screens can answer.</p>
 
-    <p class="gr-note" style="margin-top:0;"><b>Also drawn in the assembled Settings view below.</b></p>
+    <p class="gr-note" style="margin-top:0;"><b>Also in <i>Access and approvals</i> below</b>, under the reach rule from section 5. Two dimensions, one card, because both come down to which person is on the other end.</p>
 
     <p class="gr-note"><b>Two dropdowns, not one.</b> A flat list of destinations would have to pull every channel's identities into one control. Picking the channel first keeps each lookup inside the integration that owns it, and it's the same shape as the destination picker a guardrail will need. <span class="who">Michael: &ldquo;it's like a double drop down where you'd pick a channel and then search.&rdquo;</span></p>
 
@@ -1107,13 +1107,9 @@
           </div>
 
           <div class="nbk-box">
-            <div class="nbk-field-label">Who can talk to it <span class="gr-tag is-new">new</span><span class="nbk-field-sub">The only reach rule that isn't a channel's. Whoever starts a run can always follow up &mdash; that isn't configurable.</span></div>
-            <div class="gr-rule-row"><div class="gr-rule-main"><div class="gr-rule-name">Everyone else</div><div class="gr-rule-sub">Anyone who didn't start the run.</div></div><span class="gr-rule-ctl gr-seg"><span class="is-on">Allow</span><span>Block</span></span></div>
-          </div>
-
-          <div class="nbk-box">
-            <div class="nbk-field-label">Where it asks for approval <span class="gr-tag is-new">new</span><span class="nbk-field-sub">Collapsed by default &mdash; most agents never need it.</span></div>
-            <div class="gr-rule-row"><div class="gr-rule-main"><div class="gr-rule-name">Ask in</div><div class="gr-rule-sub">Used when nobody started the run.</div></div><span class="gr-rule-ctl" style="display:flex; gap:6px;"><span class="nbk-select-input">Slack <span class="chev">&#9662;</span></span><span class="nbk-select-input">#finance-ops <span class="chev">&#9662;</span></span></span></div>
+            <div class="nbk-field-label">Access and approvals <span class="gr-tag is-new">new</span><span class="nbk-field-sub">Who can use this agent, and who it asks when it needs permission.</span></div>
+            <div class="gr-rule-row"><div class="gr-rule-main"><div class="gr-rule-name">Everyone else</div><div class="gr-rule-sub">Anyone who didn't start the run. Whoever did can always follow up &mdash; that isn't configurable.</div></div><span class="gr-rule-ctl gr-seg"><span class="is-on">Allow</span><span>Block</span></span></div>
+            <div class="gr-rule-row"><div class="gr-rule-main"><div class="gr-rule-name">Ask for approval in</div><div class="gr-rule-sub">Used when nobody started the run &mdash; scheduled runs, and anything triggered by another system.</div></div><span class="gr-rule-ctl" style="display:flex; gap:6px;"><span class="nbk-select-input">Slack <span class="chev">&#9662;</span></span><span class="nbk-select-input">#finance-ops <span class="chev">&#9662;</span></span></span></div>
             <div class="gr-rule-row"><div class="gr-rule-main"><div class="gr-rule-name">If nobody answers</div></div><span class="gr-rule-ctl nbk-select-input">Stop after 1 day <span class="chev">&#9662;</span></span></div>
           </div>
 
@@ -1151,6 +1147,8 @@
         </div>
       </div>
     </div>
+
+    <p class="gr-note"><b>The two new cards became one, and the merge is the point rather than tidying.</b> <i>Who can talk to it</i> and <i>where it asks for approval</i> look like different subjects &mdash; one is permission, the other is routing &mdash; but they answer the same question: who is on the other end of this agent. Both only matter because a person is involved, and both are the ones nobody else can answer, since a channel doesn't know who started a run and a tool doesn't know who to interrupt. One card of three rows also survives the junk-drawer test that two cards of one and two rows does not.</p>
 
     <p class="gr-note"><b>Seen whole, the additions are smaller than the tab already is.</b> Sub-agents alone carries five controls and three model pickers; Advanced carries five more. Two new cards of one and two rows, plus one row in Advanced, is not what tipped this tab into being a lot &mdash; it was a lot already. That's an argument for the additions and also a warning: the next one genuinely won't fit, and the honest response then is to group rather than stack.</p>
 
