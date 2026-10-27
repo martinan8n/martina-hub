@@ -1,0 +1,439 @@
+<!doctype html><html><head>
+<meta charset="utf8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Agent summary</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Patrick+Hand&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles/hub.css">
+<link rel="stylesheet" href="styles/notebook-ui.css">
+<style>
+  /* Everything the notebook kit ships is already scoped under .nbk, so nothing here
+     leaks into the hub chrome. These are only the few page-specific additions. */
+  .nbk-frame { border: 1px solid var(--line-soft, #d4d7da); border-radius: 10px; overflow: hidden; background: #fff; }
+  /* .nbk-main centres its children at their natural width; these screens want a real column. */
+  .nbk-frame .nbk-main { padding: 22px 26px 30px; align-items: stretch; }
+  .nbk-frame .nbk-main > * { width: 100%; max-width: 860px; margin-inline: auto; }
+
+  .gr-dim-row { display: flex; align-items: flex-start; gap: 14px; padding: 13px 0; border-top: 1px solid var(--line-soft, #d4d7da); }
+  .gr-dim-row:first-of-type { border-top: 0; }
+  .gr-dim-icon { width: 26px; height: 26px; flex: none; display: flex; align-items: center; justify-content: center; border-radius: 7px; background: #eceeef; color: #55595e; }
+  .gr-dim-body { flex: 1; min-width: 0; }
+  .gr-dim-name { font-size: 15px; color: #1a1c1e; }
+  .gr-dim-state { font-size: 13.5px; color: #55595e; margin-top: 1px; }
+  .gr-dim-where { font-size: 12.5px; color: #9298a0; margin-top: 3px; }
+  .gr-dim-where a, .gr-dim-link { color: #55595e; text-decoration: underline; text-underline-offset: 2px; cursor: pointer; }
+  .gr-dim-aside { flex: none; display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
+
+  /* Coverage, not health: an unset rule is a legitimate choice, so it must not read as an error. */
+  .gr-pill { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: #1a1c1e; background: #eceeef; border-radius: 999px; padding: 3px 10px; white-space: nowrap; }
+  .gr-pill .dot { width: 7px; height: 7px; border-radius: 999px; flex: none; background: #9298a0; }
+  .gr-pill.is-bounded .dot { background: #46a758; }
+  .gr-pill.is-partly .dot { background: #fd8925; }
+
+  .gr-flow { display: flex; align-items: stretch; gap: 0; margin: 4px 0 2px; }
+  .gr-flow-stage { flex: 1; min-width: 0; border: 1px solid var(--line-soft, #d4d7da); border-right: 0; padding: 12px 13px 14px; background: #fff; }
+  .gr-flow-stage:first-child { border-radius: 10px 0 0 10px; }
+  .gr-flow-stage:last-child { border-right: 1px solid var(--line-soft, #d4d7da); border-radius: 0 10px 10px 0; }
+  .gr-flow-stage.is-open { background: #fafbfb; }
+  .gr-flow-stage-name { font-size: 14px; color: #1a1c1e; display: flex; align-items: center; gap: 7px; }
+  .gr-flow-rule { font-size: 12.5px; color: #55595e; margin-top: 8px; padding-left: 12px; position: relative; line-height: 1.45; }
+  .gr-flow-rule::before { content: ""; position: absolute; left: 0; top: 7px; width: 5px; height: 5px; border-radius: 999px; background: #9298a0; }
+  .gr-flow-none { font-size: 12.5px; color: #9298a0; margin-top: 8px; font-style: italic; }
+  .gr-flow-add { font-size: 12.5px; color: #55595e; margin-top: 9px; text-decoration: underline; text-underline-offset: 2px; cursor: pointer; display: inline-block; }
+
+  .gr-note { font-size: 12.5px; color: var(--hub-muted); line-height: 1.6; margin: 10px 0 0; max-width: 680px; }
+  .gr-note b { color: var(--ink); }
+
+  /* Whether a control exists in the product today or is something the doc is asking for. */
+  .gr-tag { display: inline-flex; align-items: center; font-size: 10.5px; letter-spacing: 0.03em; text-transform: uppercase; border-radius: 4px; padding: 2px 6px; margin-left: 8px; vertical-align: 2px; white-space: nowrap; }
+  .gr-tag.is-today { background: #eceeef; color: #55595e; }
+  .gr-tag.is-new { background: #fff; color: #9b5d10; border: 1px dashed #d8a657; }
+  .gr-tag.is-elsewhere { background: #fff; color: #55595e; border: 1px solid #d4d7da; }
+  /* .nbk-field-label is a flex column, so a tag inside it stretches full width unless pinned. */
+  .nbk-field-label .gr-tag { align-self: flex-start; margin-left: 0; margin-top: 2px; }
+
+  .gr-rule-row { display: flex; align-items: center; gap: 12px; padding: 11px 0; border-top: 1px solid var(--line-soft, #d4d7da); }
+  .gr-rule-row:first-of-type { border-top: 0; }
+  .gr-rule-main { flex: 1; min-width: 0; }
+  .gr-rule-name { font-size: 14.5px; color: #1a1c1e; }
+  .gr-rule-sub { font-size: 12.5px; color: #55595e; margin-top: 2px; line-height: 1.45; }
+  .gr-rule-ctl { flex: none; }
+
+  /* Three-way choice, for content categories (allow / redact / block). */
+  .gr-seg { display: inline-flex; background: #eceeef; border-radius: 999px; padding: 2px; gap: 1px; }
+  .gr-seg span { font-size: 12.5px; color: #55595e; padding: 3px 11px; border-radius: 999px; cursor: pointer; }
+  .gr-seg span.is-on { background: #fff; color: #1a1c1e; box-shadow: 0 1px 2px rgba(0,0,0,0.08); }
+
+  /* legend under a card label, spelling out what each control value does */
+  .gr-legend { display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: 12px; color: #55595e; padding: 8px 0 2px; }
+  .gr-legend b { font-weight: 600; color: #1a1c1e; }
+
+  /* anything that actually opens something in the mockup */
+  .gr-click { cursor: pointer; }
+  .gr-click:hover { color: #1a1c1e; }
+  .gr-chevr.gr-click:hover { color: #1a1c1e; }
+
+  /* panel that opens inline under its row, so it can't fall outside the frame */
+  .gr-inline { display: none; margin: 2px 0 10px; padding: 14px 16px; border: 1.5px solid var(--line-soft,#d4d7da); border-radius: 9px; background: #fbfbfa; }
+  .gr-inline.is-open { display: block; }
+  .gr-inline-head { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: #1a1c1e; margin-bottom: 3px; }
+  .gr-inline-head .x { margin-left: auto; color: #9298a0; cursor: pointer; font-size: 15px; }
+  .gr-inline-sub { font-size: 12px; color: #55595e; margin-bottom: 11px; }
+  .gr-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .gr-chip { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; color: #1a1c1e; background: #fff; border: 1.5px solid var(--line-soft,#d4d7da); border-radius: 999px; padding: 3px 10px; }
+  .gr-chip .x { color: #9298a0; cursor: pointer; }
+  .gr-chip.is-add { border-style: dashed; color: #55595e; cursor: pointer; }
+  .gr-cat { display: flex; align-items: center; gap: 10px; padding: 7px 0; border-top: 1px solid var(--line-soft,#d4d7da); font-size: 13px; color: #1a1c1e; }
+  .gr-cat:first-of-type { border-top: 0; }
+  .gr-cat .bin { margin-left: auto; color: #55595e; cursor: pointer; display: flex; }
+  .gr-cat .bin svg { width: 14px; height: 14px; }
+
+  .gr-chipfield { display: flex; flex-wrap: wrap; align-items: center; gap: 5px; border: 1.5px solid var(--line-soft, #d4d7da); border-radius: 8px; padding: 6px 8px; margin-top: 7px; background: #fff; }
+  .gr-chip { display: inline-flex; align-items: center; gap: 5px; background: #eceeef; border-radius: 6px; padding: 2px 7px; font-size: 12.5px; color: #1a1c1e; }
+  .gr-chip .x { color: #9298a0; cursor: pointer; }
+  .gr-chipfield .ph { font-size: 12.5px; color: #9298a0; }
+
+  .gr-stepper { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; font-size: 13px; color: #9298a0; }
+  .gr-stepper .st { display: inline-flex; align-items: center; gap: 6px; }
+  .gr-stepper .st.is-on { color: #1a1c1e; }
+  .gr-stepper .num { width: 19px; height: 19px; border-radius: 999px; border: 1.5px solid currentColor; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; }
+  .gr-stepper .st.is-on .num { background: #1a1c1e; color: #fff; border-color: #1a1c1e; }
+
+  .gr-radio { display: flex; align-items: flex-start; gap: 9px; padding: 8px 0; }
+  .gr-radio .dot { width: 15px; height: 15px; border-radius: 999px; border: 1.5px solid #9298a0; flex: none; margin-top: 2px; position: relative; }
+  .gr-radio.is-on .dot { border-color: #1a1c1e; }
+  .gr-radio.is-on .dot::after { content: ""; position: absolute; inset: 3px; border-radius: 999px; background: #1a1c1e; }
+  .gr-radio-name { font-size: 14px; color: #1a1c1e; }
+  .gr-radio-sub { font-size: 12.5px; color: #55595e; margin-top: 1px; }
+
+  .gr-warn { display: flex; gap: 8px; align-items: flex-start; background: #fff8ee; border: 1px solid #f0dcc0; border-radius: 8px; padding: 9px 11px; font-size: 12.5px; color: #7a5a24; line-height: 1.5; margin-top: 9px; }
+
+  /* Capabilities chip rows, as the Build tab renders them */
+  .gr-chiprow { display: flex; align-items: center; flex-wrap: wrap; gap: 7px; padding: 10px 0; border-top: 1px solid var(--line-soft, #d4d7da); }
+  .gr-chiprow:first-of-type { border-top: 0; }
+  .gr-chiprow-label { font-size: 14px; color: #1a1c1e; width: 70px; flex: none; }
+  .gr-count { display: inline-flex; align-items: center; justify-content: center; min-width: 17px; height: 17px; padding: 0 4px; border-radius: 999px; background: #eceeef; color: #55595e; font-size: 11.5px; margin-left: 4px; }
+  .gr-toolchip { display: inline-flex; align-items: center; gap: 6px; border: 1.5px solid var(--line-soft, #d4d7da); border-radius: 8px; padding: 4px 9px; font-size: 13px; color: #1a1c1e; background: #fff; }
+  .gr-toolchip .ic { width: 15px; height: 15px; border-radius: 4px; background: #eceeef; flex: none; }
+  .gr-toolchip .chev { color: #9298a0; font-size: 10px; }
+  .gr-addchip { font-size: 13px; color: #55595e; border: 1.5px dashed var(--line-soft, #d4d7da); border-radius: 8px; padding: 4px 9px; cursor: pointer; }
+
+  /* The tools modal */
+  .gr-modal { border: 1.5px solid var(--line-soft, #d4d7da); border-radius: 12px; background: #fff; padding: 16px 18px 10px; box-shadow: 0 8px 24px rgba(0,0,0,0.07); max-width: 560px !important; }
+  .gr-modal-head { display: flex; align-items: center; margin-bottom: 12px; }
+  .gr-modal-title { font-size: 16px; font-weight: 700; color: #1a1c1e; }
+  .gr-modal-x { margin-left: auto; color: #9298a0; font-size: 17px; cursor: pointer; }
+  .gr-search { display: flex; align-items: center; gap: 8px; border: 1.5px solid var(--line-soft, #d4d7da); border-radius: 8px; padding: 7px 10px; font-size: 13px; color: #9298a0; }
+  .gr-toolrow { display: flex; align-items: center; gap: 11px; padding: 11px 0; border-top: 1px solid var(--line-soft, #d4d7da); }
+  .gr-toolrow .ic { width: 28px; height: 28px; border-radius: 7px; background: #eceeef; flex: none; }
+  .gr-toolrow-body { flex: 1; min-width: 0; }
+  .gr-toolrow-name { font-size: 14px; color: #1a1c1e; }
+  .gr-toolrow-desc { font-size: 12.5px; color: #9298a0; margin-top: 1px; }
+  .nbk-btn.is-done { color: #46a758; border-color: #cfe4d3; }
+
+  /* Permission groups, with per-tool override underneath */
+  .gr-permgroup { border: 1.5px solid var(--line-soft, #d4d7da); border-radius: 9px; margin-bottom: 9px; }
+  .gr-permgroup-head { display: flex; align-items: center; gap: 10px; padding: 11px 12px; }
+  .gr-permgroup-chev { color: #9298a0; font-size: 11px; transform: rotate(-90deg); flex: none; }
+  .gr-permgroup-chev.is-open { transform: none; }
+  .gr-permgroup-body { flex: 1; min-width: 0; }
+  .gr-permgroup-name { font-size: 14px; color: #1a1c1e; }
+  .gr-permgroup-sub { font-size: 12.5px; color: #9298a0; margin-top: 1px; }
+  .gr-permchild { display: flex; align-items: center; gap: 10px; padding: 8px 12px 8px 33px; border-top: 1px solid var(--line-soft, #d4d7da); background: #fafbfb; }
+  .gr-permchild-name { flex: 1; font-size: 13px; color: #55595e; }
+
+  .gr-confirm { border: 1.5px solid var(--line-soft, #d4d7da); border-radius: 12px; background: #fff; padding: 18px 20px; box-shadow: 0 8px 24px rgba(0,0,0,0.07); max-width: 420px !important; }
+  .gr-confirm-title { font-size: 15px; font-weight: 700; color: #1a1c1e; margin-bottom: 6px; }
+  .gr-confirm-body { font-size: 13px; color: #55595e; line-height: 1.55; margin: 0 0 16px; }
+  .gr-confirm-actions { display: flex; justify-content: flex-end; gap: 8px; }
+
+  /* Budget rows are buttons that open a modal, not inline controls — the real pattern */
+  .gr-budget-row { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-top: 1px solid var(--line-soft, #d4d7da); cursor: pointer; }
+  .gr-budget-row:hover { background: #fafbfb; }
+  .gr-budget-val { font-size: 13px; color: #1a1c1e; text-align: right; line-height: 1.4; flex: none; }
+  .gr-chevr { color: #9298a0; font-size: 15px; flex: none; }
+  .gr-numfield { border: 1.5px solid var(--line-soft, #d4d7da); border-radius: 7px; padding: 5px 12px; font-size: 13px; color: #1a1c1e; min-width: 62px; text-align: left; display: inline-block; }
+
+  /* Telegram's stepper is vertical, so the recreation has to be too */
+  .gr-vstep { display: flex; align-items: flex-start; gap: 10px; padding: 9px 0; border-top: 1px solid var(--line-soft, #d4d7da); color: #9298a0; }
+  .gr-vstep:first-of-type { border-top: 0; }
+  .gr-vstep .num { width: 20px; height: 20px; flex: none; border-radius: 999px; border: 1.5px solid currentColor; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; margin-top: 1px; }
+  .gr-vstep-name { font-size: 13.5px; }
+  .gr-vstep.is-on, .gr-vstep.is-done { color: #1a1c1e; }
+  .gr-vstep.is-on .num { background: #1a1c1e; color: #fff; border-color: #1a1c1e; }
+  .gr-vstep.is-done .num { border-color: #46a758; color: #46a758; }
+
+  .gr-modal-foot { display: flex; align-items: center; gap: 8px; margin-top: 18px; padding-top: 13px; border-top: 1px solid var(--line-soft, #d4d7da); }
+  .gr-toolpane-head { display: flex; align-items: center; gap: 10px; padding-bottom: 13px; border-bottom: 1px solid var(--line-soft, #d4d7da); }
+
+  /* Open questions read as a separate thing from the design, never as a caption on it. */
+  .gr-oq { border: 1px dashed var(--line, #a7abb0); border-radius: 10px; padding: 18px 20px; margin-top: 10px; background: #fffdf7; }
+  .gr-oq h3 { margin: 0 0 4px; font-size: 14px; }
+  .gr-oq .gr-oq-sub { font-size: 12.5px; color: var(--hub-muted); margin: 0 0 14px; }
+  .gr-oq ol { margin: 0; padding-left: 18px; }
+  .gr-oq li { font-size: 13px; line-height: 1.65; margin-bottom: 11px; }
+  .gr-oq li:last-child { margin-bottom: 0; }
+  .gr-oq .who { color: var(--hub-muted); font-size: 12px; }
+  .gr-note .who { color: var(--hub-muted); font-style: italic; }
+
+  /* guardrails library table, modelled on the real SkillsTable */
+  .gr-tbl { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .gr-tbl th { text-align: left; font-weight: 400; font-size: 11.5px; color: #9298a0; padding: 0 10px 7px 0; border-bottom: 1px solid var(--line-soft,#d4d7da); }
+  .gr-tbl td { padding: 11px 10px 11px 0; border-bottom: 1px solid var(--line-soft,#d4d7da); color: #1a1c1e; vertical-align: top; }
+  .gr-tbl tr:last-child td { border-bottom: 0; }
+  .gr-tbl .sub { font-size: 11.5px; color: #9298a0; margin-top: 2px; }
+  .gr-tbl .muted { color: #55595e; }
+  .gr-tbl .act { color: #9298a0; white-space: nowrap; }
+  .gr-scope { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; color: #1a1c1e; border: 1.5px solid var(--line-soft,#d4d7da); border-radius: 6px; padding: 2px 8px; white-space: nowrap; }
+  .gr-scope svg { width: 12px; height: 12px; flex: none; color: #55595e; }
+  .gr-tblwrap { overflow-x: auto; }
+
+  /* modal title doubling as the name field */
+  .gr-titlefield { display: inline-flex; align-items: center; gap: 7px; border-radius: 6px; padding: 2px 7px; margin-left: -7px; border: 1.5px solid transparent; cursor: text; }
+  .gr-titlefield:hover { border-color: var(--line-soft,#d4d7da); background: #fbfbfa; }
+  .gr-titlefield svg { width: 13px; height: 13px; color: #9298a0; flex: none; }
+  .gr-titlefield.is-empty { color: #9298a0; }
+
+  /* N8nSegmentControl: one exclusive choice, 2-5 options */
+  .gr-segctl { display: inline-flex; background: #eceeef; border-radius: 8px; padding: 3px; gap: 2px; }
+  .gr-segctl span { font-size: 12.5px; color: #55595e; padding: 5px 13px; border-radius: 6px; cursor: pointer; white-space: nowrap; }
+  .gr-segctl span.is-on { background: #fff; color: #1a1c1e; box-shadow: 0 1px 2px rgba(0,0,0,0.08); }
+
+  /* N8nToggleGroup type="multiple": several can be on at once */
+  .gr-tgroup { display: flex; flex-wrap: wrap; gap: 6px; }
+  .gr-tgroup span { font-size: 12.5px; color: #55595e; border: 1.5px solid var(--line-soft,#d4d7da); background: #fff; border-radius: 7px; padding: 5px 11px; cursor: pointer; white-space: nowrap; }
+  .gr-tgroup span.is-on { background: #1a1c1e; border-color: #1a1c1e; color: #fff; }
+  .gr-help { font-size: 12px; color: #9298a0; margin-top: 7px; }
+
+  /* guardrail picker: a real dropdown, Create at the bottom */
+  .gr-ddwrap { position: relative; display: inline-block; }
+  .gr-dd { display: none; position: absolute; top: calc(100% + 5px); right: 0; min-width: 268px; background: #fff; border: 1.5px solid var(--line-soft,#d4d7da); border-radius: 9px; padding: 5px; z-index: 40; box-shadow: 0 6px 18px rgba(0,0,0,0.10); text-align: left; }
+  .gr-dd.is-open { display: block; }
+  .gr-dd-item { display: flex; align-items: baseline; gap: 8px; padding: 7px 9px; border-radius: 6px; font-size: 13px; color: #1a1c1e; cursor: pointer; }
+  .gr-dd-item:hover { background: #f4f5f6; }
+  .gr-dd-item .n { font-size: 11.5px; color: #9298a0; margin-left: auto; white-space: nowrap; }
+  .gr-dd-item.is-on::after { content: "\2713"; color: #55595e; margin-left: 6px; }
+  .gr-dd-note { font-size: 11.5px; color: #9298a0; padding: 4px 9px 7px; line-height: 1.45; }
+  .gr-dd-sep { height: 1px; background: var(--line-soft,#d4d7da); margin: 5px 0; }
+
+  /* collapsed section inside a modal */
+  .gr-collapse-head { display: flex; align-items: center; gap: 8px; padding: 10px 0; margin-top: 8px; border-top: 1px solid var(--line-soft,#d4d7da); cursor: pointer; }
+  .gr-collapse-head .nm { font-size: 13.5px; font-weight: 700; color: #1a1c1e; }
+  .gr-collapse-head .sum { margin-left: auto; font-size: 12px; color: #9298a0; white-space: nowrap; }
+  .gr-collapse-chev { color: #9298a0; font-size: 11px; transition: transform .12s; }
+  .gr-collapse-head.is-open .gr-collapse-chev { transform: rotate(90deg); }
+  .gr-collapse-head.is-open .sum { display: none; }
+  .gr-collapse-body { display: none; }
+  .gr-collapse-body.is-open { display: block; }
+
+  .gr-info { display: inline-flex; color: #9298a0; cursor: help; }
+  .gr-info svg { width: 13px; height: 13px; }
+
+  /* a switch you can read but not move */
+  .nbk-toggle.is-locked { opacity: 0.55; cursor: not-allowed; pointer-events: none; }
+</style>
+</head>
+<body data-default-route="agent-summary">
+
+<div class="shell">
+
+  <!-- ================= WORKSTREAM OVERVIEW ================= -->
+  <section data-route="agent-summary">
+    <a class="back-link" href="index.html#/home">&larr; Workstreams</a>
+    <div class="hero">
+      <div>
+        <span class="kicker">Workstream &middot; New</span>
+        <h1>Agent summary</h1>
+        <p>One place to read what an agent actually is before you let it out: what it can reach, what it can do, what it spends, what it keeps. Moved out of <a href="guardrail-rules.html#/guardrail-rules">Guardrails &mdash; rules &amp; dimensions</a> on 27 Oct, because it stopped being a guardrails screen the moment it landed at publish time.</p>
+      </div>
+    </div>
+
+    <div class="problem-grid">
+      <div class="problem-card">
+        <div class="eyebrow">&#129513; Problem</div>
+        <p>The rules that bound an agent live in five different places by design &mdash; the channel, the tool, a guardrail object, two Settings cards. Each decision is sound on its own, and together they leave a builder with no way to answer the question they actually have before shipping: <i>what is this thing allowed to do?</i></p>
+        <span class="src">Source: the guardrails review with Michael, Anne and Sin, 22 Oct 2026</span>
+      </div>
+      <div class="problem-card">
+        <div class="eyebrow">&#129514; Hypothesis</div>
+        <p>A read-only summary, shown <b>when you hit publish</b>, is worth more than a sixth settings panel. Publish is the one moment a builder is receptive to it, and the existing publish modal says nothing useful today. It reads the rules rather than storing any, so adding a dimension later means adding a line, not redesigning a form.</p>
+      </div>
+    </div>
+
+    <div class="section-title">Screens</div>
+    <div class="card-grid">
+      <a class="screen-card" href="#/agent-summary-screen">
+        <div class="thumb">&#129521;</div>
+        <div class="body">
+          <span class="status">In progress</span>
+          <h3>Agent summary</h3>
+          <p class="desc">Two takes on the same content: the five dimensions as a list, and the path a run takes through them. Both read-only, both inside the publish modal.</p>
+        </div>
+      </a>
+    </div>
+
+    <div class="section-title">Open questions</div>
+    <div class="gr-oq">
+      <h3>Before this can go further</h3>
+      <p class="gr-oq-sub">Raised on the 22 Oct call, or by designing against it since.</p>
+      <ol>
+        <li><b>Where does it live between publishes?</b> Publish catches the right moment but it's a modal you dismiss, and the question comes back a week later when you're wondering why the agent didn't post something. It needs a second, permanent entry point &mdash; an icon on the agent, a line in the trace, somewhere in Build &mdash; and that's undesigned. <span class="who">Martina, on the call: &ldquo;maybe I want to go back to it later on another day. Where does this live?&rdquo;</span></li>
+        <li><b>List or path?</b> A is easier to extend and survives the rules living in five places. B teaches the model better and makes a gap land, because it's the end of a line you can follow. Nobody picked.</li>
+        <li><b>Does &ldquo;no rule&rdquo; mean unfinished?</b> An agent with no content check may be perfectly fine. If every gap is styled as a warning, builders either chase them all or stop reading.</li>
+        <li><b>Could it be prose instead?</b> <span class="who">Martina, on the call: &ldquo;this can be in this way, or this can be text like a paragraph explaining what the agent does.&rdquo;</span> A sentence a person can check is a different product from a table, and it's the version an LLM could write.</li>
+        <li><b>It assumes the rules exist.</b> Every pill reads a state we haven't built. Shipping this before the permissions it summarises means summarising nothing &mdash; which is why it's <b>P1</b>.</li>
+      </ol>
+    </div>
+  </section>
+
+  <section data-route="agent-summary-screen">
+    <a class="back-link" href="#/agent-summary">&larr; Agent summary</a>
+    <div class="screen-head">
+      <h1>The publish flow</h1>
+      <p>Hitting <b>Publish</b> is the one moment a builder is deciding whether this agent is safe to let out, so it's where the summary goes. Two steps: read what it's allowed to do, then confirm. Step&nbsp;2 already exists in the product and keeps everything it carries today. Same agent throughout &mdash; a weekly metrics sync that posts to Slack.</p>
+      <p style="margin-top:10px;"><b>P1, and not in Settings.</b> It gets built after the permissions it summarises. <span class="who">Michael: &ldquo;I think it would be cool to have a place where you can see all the permissions, but I don't think it's a P0.&rdquo;</span> <span class="who">Martina and Anne, on the call: &ldquo;this doesn't belong in the settings. Idea: when you hit Publish.&rdquo;</span></p>
+    </div>
+
+    <h2 class="lrt-section-title">Step 1, option A &mdash; By dimension</h2>
+    <p class="lrt-section-sub">The dimensions as a list, each saying what's set in plain language and where it's set. Adding a sixth dimension later is one more row.</p>
+
+    <div class="nbk">
+      <div class="nbk-frame">
+        <div class="nbk-main">
+          <div class="gr-modal-head" style="margin-bottom:4px;"><span class="gr-modal-title">Publish agent</span><span class="gr-modal-x">&times;</span></div>
+          <div style="font-size:12.5px; color:#55595e; margin-bottom:12px;">Here's what this agent is allowed to do once it's live.</div>
+
+          <div class="nbk-box" style="margin-top:18px;">
+            <div class="nbk-field-label">What's bounded<span class="nbk-field-sub">What this agent can do, and where each rule is set. Nothing is edited here.</span></div>
+
+            <div class="gr-dim-row">
+              <span class="gr-dim-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12h16"/><path d="m14 6 6 6-6 6"/></svg></span>
+              <div class="gr-dim-body">
+                <div class="gr-dim-name">Reach</div>
+                <div class="gr-dim-state">Anyone in <b>#metrics</b> can message it. Schedule runs Mondays 9:00.</div>
+                <div class="gr-dim-where">Set in <span class="gr-dim-link">Triggers</span></div>
+              </div>
+              <div class="gr-dim-aside"><span class="gr-pill is-partly"><span class="dot"></span> Partly</span></div>
+            </div>
+
+            <div class="gr-dim-row">
+              <span class="gr-dim-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></span>
+              <div class="gr-dim-body">
+                <div class="gr-dim-name">Action</div>
+                <div class="gr-dim-state"><b>6 tools</b> allowed, 2 ask before running. No sub-agents.</div>
+                <div class="gr-dim-where">Set per tool in <span class="gr-dim-link">Skills</span></div>
+              </div>
+              <div class="gr-dim-aside"><span class="gr-pill is-bounded"><span class="dot"></span> Bounded</span></div>
+            </div>
+
+            <div class="gr-dim-row">
+              <span class="gr-dim-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+              <div class="gr-dim-body">
+                <div class="gr-dim-name">Cost &amp; rate</div>
+                <div class="gr-dim-state"><b>$10</b> per session. No per-tool ceiling.</div>
+                <div class="gr-dim-where">Session cap in <span class="gr-dim-link">Settings</span> &middot; rate limits inherited from <span class="gr-dim-link">Personal</span></div>
+              </div>
+              <div class="gr-dim-aside"><span class="gr-pill is-partly"><span class="dot"></span> Partly</span></div>
+            </div>
+
+            <div class="gr-dim-row">
+              <span class="gr-dim-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12h16"/><path d="m18 6 6 6-6 6" transform="translate(-4)"/></svg></span>
+              <div class="gr-dim-body">
+                <div class="gr-dim-name">Output</div>
+                <div class="gr-dim-state">Replies in #metrics only. Content isn't checked.</div>
+                <div class="gr-dim-where">Destinations per channel in <span class="gr-dim-link">Triggers</span> &middot; content in <span class="gr-dim-link">Settings</span></div>
+              </div>
+              <div class="gr-dim-aside"><span class="gr-pill"><span class="dot"></span> Open</span></div>
+            </div>
+          </div>
+          <div class="gr-modal-foot" style="margin-top:14px;"><span style="flex:1;"></span><span class="nbk-btn">Cancel</span><span class="nbk-btn nbk-btn-primary">Publish</span></div>
+        </div>
+      </div>
+    </div>
+
+    <p class="gr-note"><b>Why the states read this way.</b> Three states, no red: <i>Bounded</i>, <i>Partly</i>, <i>Open</i>. An agent with no output rule may be entirely fine, so a gap can't look like a failure &mdash; but it still has to be visible enough to notice before production. Open is grey and quiet; it doesn't demand to be fixed.</p>
+
+    <h2 class="lrt-section-title" style="margin-top:34px;">Step 1, option B &mdash; By the path a run takes</h2>
+    <p class="lrt-section-sub">The same rules, ordered the way a run moves through them: something reaches the agent, it acts, it sends. Makes the Output gap obvious because it's the end of a line you can follow, not the fifth item in a list &mdash; which is how the gap got spotted, even though it then turned out to be two gaps with homes of their own.</p>
+
+    <div class="nbk">
+      <div class="nbk-frame">
+        <div class="nbk-main">
+          <div class="gr-modal-head" style="margin-bottom:4px;"><span class="gr-modal-title">Publish agent</span><span class="gr-modal-x">&times;</span></div>
+          <div style="font-size:12.5px; color:#55595e; margin-bottom:12px;">Here's what this agent is allowed to do once it's live.</div>
+
+          <div class="nbk-box" style="margin-top:18px;">
+            <div class="nbk-field-label">What's bounded<span class="nbk-field-sub">Follow a run from the moment something reaches this agent to the moment it answers.</span></div>
+
+            <div class="gr-flow">
+              <div class="gr-flow-stage">
+                <div class="gr-flow-stage-name"><span class="gr-pill is-partly" style="padding:2px 7px;"><span class="dot"></span></span> Reaches it</div>
+                <div class="gr-flow-rule">Anyone in #metrics</div>
+                <div class="gr-flow-rule">Mondays 9:00</div>
+                <span class="gr-flow-add">Triggers</span>
+              </div>
+              <div class="gr-flow-stage">
+                <div class="gr-flow-stage-name"><span class="gr-pill is-bounded" style="padding:2px 7px;"><span class="dot"></span></span> Acts</div>
+                <div class="gr-flow-rule">6 tools allowed</div>
+                <div class="gr-flow-rule">2 ask first</div>
+                <span class="gr-flow-add">Skills</span>
+              </div>
+              <div class="gr-flow-stage">
+                <div class="gr-flow-stage-name"><span class="gr-pill is-partly" style="padding:2px 7px;"><span class="dot"></span></span> Spends</div>
+                <div class="gr-flow-rule">$10 per session</div>
+                <div class="gr-flow-none">No per-tool ceiling</div>
+                <span class="gr-flow-add">Settings</span>
+              </div>
+                            <div class="gr-flow-stage is-open">
+                <div class="gr-flow-stage-name"><span class="gr-pill is-partly" style="padding:2px 7px;"><span class="dot"></span></span> Sends</div>
+                <div class="gr-flow-rule">#metrics only</div>
+                <div class="gr-flow-none">Content unchecked</div>
+                <span class="gr-flow-add">Triggers</span>
+              </div>
+            </div>
+          </div>
+          <div class="gr-modal-foot" style="margin-top:14px;"><span style="flex:1;"></span><span class="nbk-btn">Cancel</span><span class="nbk-btn nbk-btn-primary">Publish</span></div>
+        </div>
+      </div>
+    </div>
+
+    <p class="gr-note"><b>Trade-off between the two.</b> A is easier to extend &mdash; a new dimension is a new row, and it survives the rules living in five different places. B teaches the model better and makes the end-of-line gap land, but it implies an order that isn't quite true: cost applies at every stage, not between acting and remembering. B is also harder to grow, since a sixth stage means re-cutting the row.</p>
+
+    <p class="gr-note"><b>Publish answers when, not where.</b> Showing this before you publish catches the one moment a builder is receptive to it. But it's a modal you dismiss, and the question comes back a week later when you're wondering why the agent didn't post something. So it needs a second, permanent entry point &mdash; an icon on the agent, a line in the trace, somewhere in Build &mdash; and that's undesigned. Putting it in Build was the first instinct and it clutters a page that's already full.</p>
+
+    <h2 class="lrt-section-title" style="margin-top:34px;">Step 2 &mdash; Agent published &nbsp;<span style="font-size:12.5px; font-weight:400; color:var(--hub-muted);">exists today, unchanged</span></h2>
+    <p class="lrt-section-sub">Whichever option step 1 uses, confirming lands here. This modal already ships, so the summary has to sit <i>before</i> it rather than replace it &mdash; everything it carries is still needed.</p>
+
+    <div class="nbk">
+      <div class="nbk-frame">
+        <div class="nbk-main" style="padding-top:30px; padding-bottom:30px;">
+          <div class="gr-confirm" style="max-width:400px !important;">
+            <div class="gr-confirm-title">Agent published</div>
+            <p class="gr-confirm-body" style="margin-bottom:7px;">Your agent is now published and ready to use.</p>
+            <p class="gr-confirm-body" style="margin-bottom:7px;">You can talk to it in n8n Chat now. Make it available when your project should have it too.</p>
+            <p class="gr-confirm-body" style="color:#9298a0; margin-bottom:16px;">Any changes you make to this agent will not be published until you publish it again.</p>
+            <div style="display:flex; align-items:center; gap:10px;">
+              <span style="display:inline-flex; align-items:center; gap:6px; font-size:12px; color:#9298a0;"><span style="width:12px; height:12px; border:1.5px solid var(--line-soft,#d4d7da); border-radius:3px; display:inline-block;"></span> Don't show again</span>
+              <span style="flex:1;"></span>
+              <span class="nbk-btn">Got it</span>
+              <span class="nbk-btn nbk-btn-primary">Talk to agent</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p class="gr-note"><b>The checkbox is the problem this flow inherits.</b> <i>Don't show again</i> writes to localStorage, so whoever publishes most is the first to silence step 2 &mdash; and if the summary gets folded into the same modal, they silence that too. The summary is the one screen you don't want dismissable for the people shipping the most agents, which argues for keeping the two steps separate: step 1 always shows, step 2 stays skippable.</p>
+
+    <p class="gr-note"><b>And rollback reuses this modal.</b> Restoring an old version publishes it, so a builder lands on &ldquo;Agent published&rdquo; for an agent that was already live. If step 1 runs there too it's arguably more useful than at first publish &mdash; you're reinstating rules you may not remember &mdash; but &ldquo;you can talk to it in n8n Chat now&rdquo; reads oddly when it already could.</p>
+
+    <p class="gr-note"><b>Memory came out of the summary.</b> It was the one row with no rule to report &mdash; <i>&ldquo;remembers across sessions, no rule on what it may keep&rdquo;</i> is a fact about the product, not about this agent, and it will stay that way until the PII check ships as P1. A summary row that reads the same for every agent teaches nobody anything, and four rows that all say something beats five where one is filler.</p>
+
+    <p class="gr-note"><b>Both takes assume the rules exist.</b> Every pill above reads a state we haven't built yet. If this ships before the permissions it summarises, it summarises nothing &mdash; which is exactly the argument for it being P1, and the reason it's drawn here rather than queued.</p>
+  </section>
+
+</div>
+
+<script src="js/hub.js"></script>
+</body></html>
