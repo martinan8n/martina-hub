@@ -703,14 +703,12 @@
 
             <div style="font-size:13.5px; font-weight:700; color:#1a1c1e; margin:18px 0 5px;">What it checks</div>
             <div class="gr-segctl"><span class="is-on">A PII model</span><span>A workflow</span><span style="opacity:0.45;">A service</span></div>
-            <div class="gr-help">Trained to spot card details, emails, addresses and API keys. A vendor service comes later.</div>
             <div style="margin-top:10px;">
               <div class="gr-rule-ctl nbk-select-input" style="display:flex; width:100%; justify-content:space-between;">Pick a PII model <span class="chev">&#9662;</span></div>
             </div>
 
             <div style="font-size:13.5px; font-weight:700; color:#1a1c1e; margin:18px 0 5px;">Where it runs</div>
             <div class="gr-rule-ctl nbk-select-input" style="display:flex; width:100%; justify-content:space-between;">Before a tool call <span class="chev">&#9662;</span></div>
-            <div class="gr-help">One point in the run. Before a tool call &middot; After a tool call &middot; Before a memory write &middot; Before a reply.</div>
 
             <div class="gr-collapse-head" onclick="grCollapse(this)">
               <span class="gr-collapse-chev">&#9656;</span>
@@ -718,10 +716,9 @@
               <span class="sum">30s &middot; Provider limit &middot; Wait and retry</span>
             </div>
             <div class="gr-collapse-body">
-              <div style="font-size:12px; color:#9298a0; margin-bottom:6px;">No spend figure here. We can't price a tool call before making it, so these bound time and frequency instead.</div>
               <div class="gr-rule-row" style="border-top:0;"><div class="gr-rule-main"><div class="gr-rule-name">Timeout</div><div class="gr-rule-sub">How long a single operation may take.</div></div><span class="gr-rule-ctl nbk-select-input">30s <span class="chev">&#9662;</span></span></div>
               <div class="gr-rule-row"><div class="gr-rule-main"><div class="gr-rule-name">Calls per minute</div><div class="gr-rule-sub">Follows the provider's own published limit unless you go lower.</div></div><span class="gr-rule-ctl nbk-select-input">Provider limit <span class="chev">&#9662;</span></span></div>
-              <div class="gr-rule-row"><div class="gr-rule-main"><div class="gr-rule-name">When the limit is hit</div><div class="gr-rule-sub">Retrying with a growing wait only changes how long the run takes, so it can be the default.</div></div><span class="gr-rule-ctl nbk-select-input">Wait and retry <span class="chev">&#9662;</span></span></div>
+              <div class="gr-rule-row"><div class="gr-rule-main"><div class="gr-rule-name">When the limit is hit</div></div><span class="gr-rule-ctl nbk-select-input">Wait and retry <span class="chev">&#9662;</span></span></div>
             </div>
 
             <div style="display:flex; align-items:center; gap:5px; font-size:13.5px; font-weight:700; color:#1a1c1e; margin:18px 0 5px;">Where can this guardrail be used?<span class="gr-info" title="A global guardrail can be added to any agent. A project guardrail can be added to the agents of that project. An agent guardrail belongs to one agent."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 16v-5M12 8h.01"/></svg></span></div>
@@ -752,6 +749,8 @@
     <p class="gr-note"><b>Which is what separates this from the row in Advanced.</b> They looked like duplicates and they aren't. A guardrail is one attached check; the <i>Sensitive content</i> row in Settings is a standing policy that runs everywhere you tick, which is how Michael described it &mdash; <span class="who">&ldquo;turn on the PII model and a whole bunch of different hooks&rdquo;</span>. So that one keeps multi-select and this one doesn't, and the difference in control is the difference in meaning.</p>
 
     <p class="gr-note"><b>And <i>what it checks</i> uses the right component for three exclusive options.</b> <b>N8nSegmentControl</b>'s own spec says to prefer it over a select or a radio group when there are two to five options and you switch between them immediately.</p>
+
+    <p class="gr-note"><b>Why <i>wait and retry</i> can ship as the default.</b> It's the only one of the three that can't lose you anything: hitting a rate limit and backing off changes how long a run takes and nothing else, where skipping the call silently drops work and stopping the run throws away everything done so far. A default is safe to set when the worst case is slowness.</p>
 
     <p class="gr-note"><b>All tools is the default, and it's the same shape as the Slack access block in section 1.</b> A guardrail you went to the trouble of creating is usually meant to apply, so making you list the tools is work that produces the answer you already had. The deciding case is the one a list gets wrong silently: a tool added next month is covered by <i>all</i> and missed by an enumeration nobody remembers to update. Narrowing stays one toggle away for the guardrail that really is about one slow API.</p>
 
