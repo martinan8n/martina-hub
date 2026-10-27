@@ -892,27 +892,42 @@
               <span class="gr-rule-ctl gr-numfield">100</span>
             </div>
             <div class="gr-rule-row">
-              <div class="gr-rule-main"><div class="gr-rule-name">Sensitive content <span class="gr-tag is-new">new</span></div><div class="gr-rule-sub">Run a PII model over what this agent sends, stores and replies. Pick where it runs; it applies to every tool and channel at once.</div></div>
-              <span class="gr-rule-ctl nbk-select-input gr-click" onclick="grOpen('gr-pii-hooks')">Off <span class="chev">&#9662;</span></span>
-            </div>
-            <div class="gr-inline" id="gr-pii-hooks">
-              <div class="gr-inline-head">Sensitive content <span class="x" onclick="grClose('gr-pii-hooks')">&times;</span></div>
-              <div class="gr-inline-sub">PII &mdash; passwords, card details, API keys, emails, addresses. A model trained for it, not a list of patterns.</div>
-              <div style="font-size:12.5px; color:#55595e; margin-bottom:4px;">Model</div>
-              <div class="gr-rule-ctl nbk-select-input" style="display:flex; width:100%; justify-content:space-between; margin-bottom:12px;">Pick a PII model <span class="chev">&#9662;</span></div>
-              <div style="font-size:12.5px; color:#55595e; margin-bottom:5px;">Check</div>
-              <div class="gr-tgroup">
-                <span class="is-on" onclick="this.classList.toggle('is-on')">Before a tool call</span>
-                <span onclick="this.classList.toggle('is-on')">After a tool call</span>
-                <span class="is-on" onclick="this.classList.toggle('is-on')">Before a memory write</span>
-                <span onclick="this.classList.toggle('is-on')">Before a reply</span>
-              </div>
-              <div style="font-size:12.5px; color:#55595e; margin-top:11px; padding-top:9px; border-top:1px solid var(--line-soft,#d4d7da);">Same four hooks as a guardrail in section 2 &mdash; open question below whether this row is just a guardrail with a shortcut, or a second way to say the same thing.</div>
+              <div class="gr-rule-main"><div class="gr-rule-name">Sensitive content <span class="gr-tag is-new">new</span></div><div class="gr-rule-sub">Run a PII model over what this agent sends, stores and replies.</div></div>
+              <span class="nbk-toggle" onclick="this.classList.toggle('is-on')"><span class="nbk-toggle-knob"></span></span>
+              <span class="gr-chevr">&#8250;</span>
             </div>
           </div>
         </div>
       </div>
     </div>
+
+    <h3 class="lrt-section-title" style="font-size:15px; margin-top:26px;">What that chevron opens</h3>
+    <p class="lrt-section-sub">Same shape as Cross-session memory one card up: a switch for whether it runs at all, a chevron for how. The row stays one line whatever you set inside it.</p>
+
+    <div class="nbk">
+      <div class="nbk-frame">
+        <div class="nbk-main" style="padding-top:26px; padding-bottom:26px;">
+          <div class="gr-modal" style="max-width:480px !important;">
+            <div class="gr-modal-head"><span class="gr-modal-title">Sensitive content</span><span class="gr-modal-x">&times;</span></div>
+
+            <div style="font-size:12.5px; color:#55595e; margin:16px 0 4px;">Model</div>
+            <div class="gr-rule-ctl nbk-select-input" style="display:flex; width:100%; justify-content:space-between;">Pick a PII model <span class="chev">&#9662;</span></div>
+
+            <div style="font-size:12.5px; color:#55595e; margin:16px 0 5px;">Check</div>
+            <div class="gr-tgroup">
+              <span class="is-on" onclick="this.classList.toggle('is-on')">Before a tool call</span>
+              <span onclick="this.classList.toggle('is-on')">After a tool call</span>
+              <span class="is-on" onclick="this.classList.toggle('is-on')">Before a memory write</span>
+              <span onclick="this.classList.toggle('is-on')">Before a reply</span>
+            </div>
+
+            <div class="gr-modal-foot"><span style="flex:1;"></span><span class="nbk-btn">Cancel</span><span class="nbk-btn nbk-btn-primary">Save</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p class="gr-note"><b>Multi-select here, single-select in a guardrail, and that's the difference between them.</b> A guardrail is one check attached at one point. This is a standing policy: switch it on and it watches wherever you tick, which is how Michael described it &mdash; <span class="who">&ldquo;turn on the PII model and a whole bunch of different hooks&rdquo;</span>. Same four hooks, opposite controls, because one is an instance of a check and the other is a rule about all of them.</p>
 
     <h3 class="lrt-section-title" style="font-size:15px; margin-top:26px;">And the same row when an admin owns it <span class="gr-tag is-new">new</span></h3>
     <p class="lrt-section-sub">If the instance has a policy, this stops being the builder's decision. It shouldn't disappear &mdash; a builder who can't see it will assume nothing is checked and design around a guardrail that's already there. So it stays visible and becomes read-only, saying who set it.</p>
@@ -930,6 +945,7 @@
                 <div class="gr-dim-where" style="margin-top:4px;">Instance settings &rarr;</div>
               </div>
               <span class="gr-rule-ctl" style="font-size:13px; color:#55595e;">On</span>
+              <span class="gr-chevr">&#8250;</span>
             </div>
           </div>
         </div>
@@ -990,7 +1006,7 @@
 
             <div style="border-top:1px solid var(--line-soft,#d4d7da); margin-top:18px; padding-top:16px;">
               <div style="font-size:13.5px; font-weight:700; color:#1a1c1e; margin-bottom:2px;">Never store <span class="gr-tag is-new">P1</span></div>
-              <div style="font-size:12px; color:#9298a0; margin-bottom:8px;">A check that can refuse a write, not advice the agent can talk itself out of.</div>
+              <div style="font-size:12px; color:#9298a0; margin-bottom:8px;">Never written to memory, whatever the conversation says.</div>
               <div class="gr-rule-row" style="border-top:0; padding-top:0;">
                 <div class="gr-rule-main"><div class="gr-rule-name">PII</div><div class="gr-rule-sub">Passwords, card details, API keys, emails, addresses.</div></div>
                 <span class="nbk-toggle is-on" onclick="this.classList.toggle('is-on')"><span class="nbk-toggle-knob"></span></span>
@@ -1136,7 +1152,8 @@
             </div>
             <div class="gr-rule-row">
               <div class="gr-rule-main"><div class="gr-rule-name">Sensitive content <span class="gr-tag is-new">new</span></div><div class="gr-rule-sub">Run a PII model over what this agent sends, stores and replies.</div></div>
-              <span class="gr-rule-ctl nbk-select-input">Off <span class="chev">&#9662;</span></span>
+              <span class="nbk-toggle" onclick="this.classList.toggle('is-on')"><span class="nbk-toggle-knob"></span></span>
+              <span class="gr-chevr">&#8250;</span>
             </div>
           </div>
 
