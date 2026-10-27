@@ -245,6 +245,10 @@
 
   /* a switch you can read but not move */
   .nbk-toggle.is-locked { opacity: 0.55; cursor: not-allowed; pointer-events: none; }
+
+  /* a picker you can read but not change */
+  .gr-sel-locked { display: inline-flex; align-items: center; gap: 7px; border: 1.5px solid var(--line-soft,#d4d7da); border-radius: 7px; background: #fbfbfa; padding: 5px 11px; font-size: 12.5px; color: #55595e; cursor: not-allowed; }
+  .gr-sel-locked svg { width: 12px; height: 12px; color: #9298a0; }
 </style>
 </head>
 <body>
@@ -852,63 +856,21 @@
             </div>
             <div class="gr-rule-row">
               <div class="gr-rule-main"><div class="gr-rule-name">Sensitive content <span class="gr-tag is-new">new</span></div><div class="gr-rule-sub">Apply a PII model to tool calls, memories and agent responses.</div></div>
-              <span class="nbk-toggle" onclick="this.classList.toggle('is-on')"><span class="nbk-toggle-knob"></span></span>
-              <span class="gr-chevr">&#8250;</span>
+              <span class="gr-rule-ctl nbk-select-input">Off <span class="chev">&#9662;</span></span>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <h3 class="lrt-section-title" style="font-size:15px; margin-top:26px;">What that chevron opens</h3>
-    <p class="lrt-section-sub">Same shape as Cross-session memory one card up: a switch for whether it runs at all, a chevron for which model. Coverage isn't configurable &mdash; the modal says what it covers.</p>
+    <p class="gr-note"><b>One dropdown on the row, and the modal disappears.</b> It only ever held a single field, which is not worth a screen. More to the point, this is already how the card works: <i>Memory model</i> and <i>Cache duration</i> are both pickers sitting on their own row, so the new control is the same shape as its neighbours instead of the one thing in Advanced that opens something.</p>
 
-    <div class="nbk">
-      <div class="nbk-frame">
-        <div class="nbk-main" style="padding-top:26px; padding-bottom:26px;">
-          <div style="display:flex; gap:22px; flex-wrap:wrap; justify-content:center; align-items:flex-start;">
+    <p class="gr-note"><b>And the switch goes with it.</b> A separate on/off plus a model picker is two controls answering one question, with a nonsense state available &mdash; on, with no model. The picker carries both: <i>Off</i> is a value in the list. Reading the row left to right now gives you the whole answer without opening anything.</p>
 
-            <div style="flex:0 0 auto; width:420px;">
-              <div class="lrt-screen-desc" style="margin:0 0 8px;"><b>Yours to set.</b></div>
-              <div class="gr-modal" style="max-width:420px !important; width:100%;">
-                <div class="gr-modal-head"><span class="gr-modal-title">Sensitive content</span><span class="gr-modal-x">&times;</span></div>
-                <div style="font-size:12.5px; color:#55595e; margin:4px 0 0;">PII will be applied to tool calls, memories and agent responses.</div>
-
-                <div style="font-size:12.5px; color:#55595e; margin:18px 0 4px;">Model</div>
-                <div class="gr-rule-ctl nbk-select-input" style="display:flex; width:100%; justify-content:space-between;">Pick a PII model <span class="chev">&#9662;</span></div>
-
-                <div class="gr-modal-foot" style="margin-top:20px;"><span style="flex:1;"></span><span class="nbk-btn">Cancel</span><span class="nbk-btn nbk-btn-primary">Save</span></div>
-              </div>
-            </div>
-
-            <div style="flex:0 0 auto; width:420px;">
-              <div class="lrt-screen-desc" style="margin:0 0 8px;"><b>Set by your admin.</b> Read-only, and it still shows which model is doing it.</div>
-              <div class="gr-modal" style="max-width:420px !important; width:100%;">
-                <div class="gr-modal-head"><span class="gr-modal-title">Sensitive content</span><span class="gr-tag is-elsewhere" style="margin-left:7px;">set by your admin</span><span style="flex:1;"></span><span class="gr-modal-x">&times;</span></div>
-                <div style="font-size:12.5px; color:#55595e; margin:4px 0 0;">PII is applied to tool calls, memories and agent responses.</div>
-
-                <div style="font-size:12.5px; color:#55595e; margin:18px 0 4px;">Model</div>
-                <div style="display:flex; align-items:center; gap:8px; border:1.5px solid var(--line-soft,#d4d7da); border-radius:7px; background:#fbfbfa; padding:7px 11px; font-size:13px; color:#55595e;">
-                  <span>Presidio</span>
-                  <span style="flex:1;"></span>
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:#9298a0;"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
-                </div>
-
-                <div class="gr-modal-foot" style="margin-top:20px;"><span style="flex:1;"></span><span class="nbk-btn">Close</span></div>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <p class="gr-note"><b>Read-only still shows the model, which is the point of opening it at all.</b> A builder can't change the policy, but they very much need to know <i>what</i> is reading their content before they design around it &mdash; a check they can't see is a check they'll be surprised by. Hiding the model would make the chevron pointless and leave them guessing whether PII detection is strict or loose. So the modal keeps its shape and loses only what they can act on: the picker becomes a value with a padlock, and Save becomes Close.</p>
-
-    <p class="gr-note"><b>No hooks to pick, and that's the difference from a guardrail.</b> A guardrail is one check you attach at one point, so it asks where. This is a standing policy &mdash; switching it on means everywhere the agent could leak something, so asking where would only offer people a way to leave a hole in it. The modal states the coverage instead of making you assemble it, which also makes the two impossible to confuse: one has a <i>where</i>, the other doesn't.</p>
+    <p class="gr-note"><b>No hooks to pick, and that's the difference from a guardrail.</b> A guardrail is one check you attach at one point, so it asks where. This is a standing policy &mdash; switching it on means everywhere the agent could leak something, so asking where would only offer people a way to leave a hole in it. The row states the coverage instead of making you assemble it, which also makes the two impossible to confuse: one has a <i>where</i>, the other doesn't.</p>
 
     <h3 class="lrt-section-title" style="font-size:15px; margin-top:26px;">And the same row when an admin owns it <span class="gr-tag is-new">new</span></h3>
-    <p class="lrt-section-sub">If the instance has a policy, this stops being the builder's decision. It shouldn't disappear &mdash; a builder who can't see it will assume nothing is checked and design around a guardrail that's already there. So it stays visible and becomes read-only, saying who set it. The row reads differently depending on whether you can do anything about it.</p>
+    <p class="lrt-section-sub">If the instance has a policy, this stops being the builder's decision. It shouldn't disappear &mdash; a builder who can't see it will assume nothing is checked and design around a guardrail that's already there. So the picker stays, shows the model the admin chose, and is disabled. The row reads differently depending on whether you can do anything about it.</p>
 
     <div class="nbk">
       <div class="nbk-frame">
@@ -922,8 +884,7 @@
                 <div class="gr-rule-name">Sensitive content <span class="gr-tag is-elsewhere">set by your admin</span></div>
                 <div class="gr-rule-sub">PII is applied to tool calls, memories and agent responses. You can't turn this off for this agent.</div>
               </div>
-              <span class="nbk-toggle is-on is-locked"><span class="nbk-toggle-knob"></span></span>
-              <span class="gr-chevr">&#8250;</span>
+              <span class="gr-rule-ctl gr-sel-locked">Presidio <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></span>
             </div>
           </div>
 
@@ -937,8 +898,7 @@
                 <div class="gr-rule-sub">PII is applied to tool calls, memories and agent responses. Change it for every agent in this instance.</div>
                 <div class="gr-dim-where" style="margin-top:4px;"><span class="gr-dim-link">Instance settings &rarr;</span></div>
               </div>
-              <span class="nbk-toggle is-on is-locked"><span class="nbk-toggle-knob"></span></span>
-              <span class="gr-chevr">&#8250;</span>
+              <span class="gr-rule-ctl gr-sel-locked">Presidio <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></span>
             </div>
           </div>
         </div>
@@ -1110,8 +1070,7 @@
             </div>
             <div class="gr-rule-row">
               <div class="gr-rule-main"><div class="gr-rule-name">Sensitive content <span class="gr-tag is-new">new</span></div><div class="gr-rule-sub">Apply a PII model to tool calls, memories and agent responses.</div></div>
-              <span class="nbk-toggle" onclick="this.classList.toggle('is-on')"><span class="nbk-toggle-knob"></span></span>
-              <span class="gr-chevr">&#8250;</span>
+              <span class="gr-rule-ctl nbk-select-input">Off <span class="chev">&#9662;</span></span>
             </div>
           </div>
 
