@@ -1,0 +1,472 @@
+<!doctype html><html><head>
+<meta charset="utf8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Starter prompts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Patrick+Hand&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles/hub.css">
+<link rel="stylesheet" href="styles/notebook-ui.css">
+<style>
+  /* Everything the notebook kit ships is already scoped under .nbk, so nothing here
+     leaks into the hub chrome. These are only the few page-specific additions. */
+  .nbk-frame { border: 1px solid var(--line-soft, #d4d7da); border-radius: 10px; overflow: hidden; background: #fff; }
+  /* .nbk-main centres its children at their natural width; these screens want a real column. */
+  .nbk-frame .nbk-main { padding: 22px 26px 30px; align-items: stretch; }
+  .nbk-frame .nbk-main > * { width: 100%; max-width: 860px; margin-inline: auto; }
+
+  .gr-dim-row { display: flex; align-items: flex-start; gap: 14px; padding: 13px 0; border-top: 1px solid var(--line-soft, #d4d7da); }
+  .gr-dim-row:first-of-type { border-top: 0; }
+  .gr-dim-icon { width: 26px; height: 26px; flex: none; display: flex; align-items: center; justify-content: center; border-radius: 7px; background: #eceeef; color: #55595e; }
+  .gr-dim-body { flex: 1; min-width: 0; }
+  .gr-dim-name { font-size: 15px; color: #1a1c1e; }
+  .gr-dim-state { font-size: 13.5px; color: #55595e; margin-top: 1px; }
+  .gr-dim-where { font-size: 12.5px; color: #9298a0; margin-top: 3px; }
+  .gr-dim-where a, .gr-dim-link { color: #55595e; text-decoration: underline; text-underline-offset: 2px; cursor: pointer; }
+  .gr-dim-aside { flex: none; display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
+
+  /* Coverage, not health: an unset rule is a legitimate choice, so it must not read as an error. */
+  .gr-pill { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: #1a1c1e; background: #eceeef; border-radius: 999px; padding: 3px 10px; white-space: nowrap; }
+  .gr-pill .dot { width: 7px; height: 7px; border-radius: 999px; flex: none; background: #9298a0; }
+  .gr-pill.is-bounded .dot { background: #46a758; }
+  .gr-pill.is-partly .dot { background: #fd8925; }
+
+  .gr-flow { display: flex; align-items: stretch; gap: 0; margin: 4px 0 2px; }
+  .gr-flow-stage { flex: 1; min-width: 0; border: 1px solid var(--line-soft, #d4d7da); border-right: 0; padding: 12px 13px 14px; background: #fff; }
+  .gr-flow-stage:first-child { border-radius: 10px 0 0 10px; }
+  .gr-flow-stage:last-child { border-right: 1px solid var(--line-soft, #d4d7da); border-radius: 0 10px 10px 0; }
+  .gr-flow-stage.is-open { background: #fafbfb; }
+  .gr-flow-stage-name { font-size: 14px; color: #1a1c1e; display: flex; align-items: center; gap: 7px; }
+  .gr-flow-rule { font-size: 12.5px; color: #55595e; margin-top: 8px; padding-left: 12px; position: relative; line-height: 1.45; }
+  .gr-flow-rule::before { content: ""; position: absolute; left: 0; top: 7px; width: 5px; height: 5px; border-radius: 999px; background: #9298a0; }
+  .gr-flow-none { font-size: 12.5px; color: #9298a0; margin-top: 8px; font-style: italic; }
+  .gr-flow-add { font-size: 12.5px; color: #55595e; margin-top: 9px; text-decoration: underline; text-underline-offset: 2px; cursor: pointer; display: inline-block; }
+
+  .gr-note { font-size: 12.5px; color: var(--hub-muted); line-height: 1.6; margin: 10px 0 0; max-width: 680px; }
+  .gr-note b { color: var(--ink); }
+
+  /* Whether a control exists in the product today or is something the doc is asking for. */
+  .gr-tag { display: inline-flex; align-items: center; font-size: 10.5px; letter-spacing: 0.03em; text-transform: uppercase; border-radius: 4px; padding: 2px 6px; margin-left: 8px; vertical-align: 2px; white-space: nowrap; }
+  .gr-tag.is-today { background: #eceeef; color: #55595e; }
+  .gr-tag.is-new { background: #fff; color: #9b5d10; border: 1px dashed #d8a657; }
+  .gr-tag.is-elsewhere { background: #fff; color: #55595e; border: 1px solid #d4d7da; }
+  /* .nbk-field-label is a flex column, so a tag inside it stretches full width unless pinned. */
+  .nbk-field-label .gr-tag { align-self: flex-start; margin-left: 0; margin-top: 2px; }
+
+  .gr-rule-row { display: flex; align-items: center; gap: 12px; padding: 11px 0; border-top: 1px solid var(--line-soft, #d4d7da); }
+  .gr-rule-row:first-of-type { border-top: 0; }
+  .gr-rule-main { flex: 1; min-width: 0; }
+  .gr-rule-name { font-size: 14.5px; color: #1a1c1e; }
+  .gr-rule-sub { font-size: 12.5px; color: #55595e; margin-top: 2px; line-height: 1.45; }
+  .gr-rule-ctl { flex: none; }
+
+  /* Three-way choice, for content categories (allow / redact / block). */
+  .gr-seg { display: inline-flex; background: #eceeef; border-radius: 999px; padding: 2px; gap: 1px; }
+  .gr-seg span { font-size: 12.5px; color: #55595e; padding: 3px 11px; border-radius: 999px; cursor: pointer; }
+  .gr-seg span.is-on { background: #fff; color: #1a1c1e; box-shadow: 0 1px 2px rgba(0,0,0,0.08); }
+
+  /* legend under a card label, spelling out what each control value does */
+  .gr-legend { display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: 12px; color: #55595e; padding: 8px 0 2px; }
+  .gr-legend b { font-weight: 600; color: #1a1c1e; }
+
+  /* anything that actually opens something in the mockup */
+  .gr-click { cursor: pointer; }
+  .gr-click:hover { color: #1a1c1e; }
+  .gr-chevr.gr-click:hover { color: #1a1c1e; }
+
+  /* panel that opens inline under its row, so it can't fall outside the frame */
+  .gr-inline { display: none; margin: 2px 0 10px; padding: 14px 16px; border: 1.5px solid var(--line-soft,#d4d7da); border-radius: 9px; background: #fbfbfa; }
+  .gr-inline.is-open { display: block; }
+  .gr-inline-head { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: #1a1c1e; margin-bottom: 3px; }
+  .gr-inline-head .x { margin-left: auto; color: #9298a0; cursor: pointer; font-size: 15px; }
+  .gr-inline-sub { font-size: 12px; color: #55595e; margin-bottom: 11px; }
+  .gr-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .gr-chip { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; color: #1a1c1e; background: #fff; border: 1.5px solid var(--line-soft,#d4d7da); border-radius: 999px; padding: 3px 10px; }
+  .gr-chip .x { color: #9298a0; cursor: pointer; }
+  .gr-chip.is-add { border-style: dashed; color: #55595e; cursor: pointer; }
+  .gr-cat { display: flex; align-items: center; gap: 10px; padding: 7px 0; border-top: 1px solid var(--line-soft,#d4d7da); font-size: 13px; color: #1a1c1e; }
+  .gr-cat:first-of-type { border-top: 0; }
+  .gr-cat .bin { margin-left: auto; color: #55595e; cursor: pointer; display: flex; }
+  .gr-cat .bin svg { width: 14px; height: 14px; }
+
+  .gr-chipfield { display: flex; flex-wrap: wrap; align-items: center; gap: 5px; border: 1.5px solid var(--line-soft, #d4d7da); border-radius: 8px; padding: 6px 8px; margin-top: 7px; background: #fff; }
+  .gr-chip { display: inline-flex; align-items: center; gap: 5px; background: #eceeef; border-radius: 6px; padding: 2px 7px; font-size: 12.5px; color: #1a1c1e; }
+  .gr-chip .x { color: #9298a0; cursor: pointer; }
+  .gr-chipfield .ph { font-size: 12.5px; color: #9298a0; }
+
+  .gr-stepper { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; font-size: 13px; color: #9298a0; }
+  .gr-stepper .st { display: inline-flex; align-items: center; gap: 6px; }
+  .gr-stepper .st.is-on { color: #1a1c1e; }
+  .gr-stepper .num { width: 19px; height: 19px; border-radius: 999px; border: 1.5px solid currentColor; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; }
+  .gr-stepper .st.is-on .num { background: #1a1c1e; color: #fff; border-color: #1a1c1e; }
+
+  .gr-radio { display: flex; align-items: flex-start; gap: 9px; padding: 8px 0; }
+  .gr-radio .dot { width: 15px; height: 15px; border-radius: 999px; border: 1.5px solid #9298a0; flex: none; margin-top: 2px; position: relative; }
+  .gr-radio.is-on .dot { border-color: #1a1c1e; }
+  .gr-radio.is-on .dot::after { content: ""; position: absolute; inset: 3px; border-radius: 999px; background: #1a1c1e; }
+  .gr-radio-name { font-size: 14px; color: #1a1c1e; }
+  .gr-radio-sub { font-size: 12.5px; color: #55595e; margin-top: 1px; }
+
+  .gr-warn { display: flex; gap: 8px; align-items: flex-start; background: #fff8ee; border: 1px solid #f0dcc0; border-radius: 8px; padding: 9px 11px; font-size: 12.5px; color: #7a5a24; line-height: 1.5; margin-top: 9px; }
+
+  /* Capabilities chip rows, as the Build tab renders them */
+  .gr-chiprow { display: flex; align-items: center; flex-wrap: wrap; gap: 7px; padding: 10px 0; border-top: 1px solid var(--line-soft, #d4d7da); }
+  .gr-chiprow:first-of-type { border-top: 0; }
+  .gr-chiprow-label { font-size: 14px; color: #1a1c1e; width: 70px; flex: none; }
+  .gr-count { display: inline-flex; align-items: center; justify-content: center; min-width: 17px; height: 17px; padding: 0 4px; border-radius: 999px; background: #eceeef; color: #55595e; font-size: 11.5px; margin-left: 4px; }
+  .gr-toolchip { display: inline-flex; align-items: center; gap: 6px; border: 1.5px solid var(--line-soft, #d4d7da); border-radius: 8px; padding: 4px 9px; font-size: 13px; color: #1a1c1e; background: #fff; }
+  .gr-toolchip .ic { width: 15px; height: 15px; border-radius: 4px; background: #eceeef; flex: none; }
+  .gr-toolchip .chev { color: #9298a0; font-size: 10px; }
+  .gr-addchip { font-size: 13px; color: #55595e; border: 1.5px dashed var(--line-soft, #d4d7da); border-radius: 8px; padding: 4px 9px; cursor: pointer; }
+
+  /* The tools modal */
+  .gr-modal { border: 1.5px solid var(--line-soft, #d4d7da); border-radius: 12px; background: #fff; padding: 16px 18px 10px; box-shadow: 0 8px 24px rgba(0,0,0,0.07); max-width: 560px !important; }
+  .gr-modal-head { display: flex; align-items: center; margin-bottom: 12px; }
+  .gr-modal-title { font-size: 16px; font-weight: 700; color: #1a1c1e; }
+  .gr-modal-x { margin-left: auto; color: #9298a0; font-size: 17px; cursor: pointer; }
+  .gr-search { display: flex; align-items: center; gap: 8px; border: 1.5px solid var(--line-soft, #d4d7da); border-radius: 8px; padding: 7px 10px; font-size: 13px; color: #9298a0; }
+  .gr-toolrow { display: flex; align-items: center; gap: 11px; padding: 11px 0; border-top: 1px solid var(--line-soft, #d4d7da); }
+  .gr-toolrow .ic { width: 28px; height: 28px; border-radius: 7px; background: #eceeef; flex: none; }
+  .gr-toolrow-body { flex: 1; min-width: 0; }
+  .gr-toolrow-name { font-size: 14px; color: #1a1c1e; }
+  .gr-toolrow-desc { font-size: 12.5px; color: #9298a0; margin-top: 1px; }
+  .nbk-btn.is-done { color: #46a758; border-color: #cfe4d3; }
+
+  /* Permission groups, with per-tool override underneath */
+  .gr-permgroup { border: 1.5px solid var(--line-soft, #d4d7da); border-radius: 9px; margin-bottom: 9px; }
+  .gr-permgroup-head { display: flex; align-items: center; gap: 10px; padding: 11px 12px; }
+  .gr-permgroup-chev { color: #9298a0; font-size: 11px; transform: rotate(-90deg); flex: none; }
+  .gr-permgroup-chev.is-open { transform: none; }
+  .gr-permgroup-body { flex: 1; min-width: 0; }
+  .gr-permgroup-name { font-size: 14px; color: #1a1c1e; }
+  .gr-permgroup-sub { font-size: 12.5px; color: #9298a0; margin-top: 1px; }
+  .gr-permchild { display: flex; align-items: center; gap: 10px; padding: 8px 12px 8px 33px; border-top: 1px solid var(--line-soft, #d4d7da); background: #fafbfb; }
+  .gr-permchild-name { flex: 1; font-size: 13px; color: #55595e; }
+
+  .gr-confirm { border: 1.5px solid var(--line-soft, #d4d7da); border-radius: 12px; background: #fff; padding: 18px 20px; box-shadow: 0 8px 24px rgba(0,0,0,0.07); max-width: 420px !important; }
+  .gr-confirm-title { font-size: 15px; font-weight: 700; color: #1a1c1e; margin-bottom: 6px; }
+  .gr-confirm-body { font-size: 13px; color: #55595e; line-height: 1.55; margin: 0 0 16px; }
+  .gr-confirm-actions { display: flex; justify-content: flex-end; gap: 8px; }
+
+  /* Budget rows are buttons that open a modal, not inline controls — the real pattern */
+  .gr-budget-row { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-top: 1px solid var(--line-soft, #d4d7da); cursor: pointer; }
+  .gr-budget-row:hover { background: #fafbfb; }
+  .gr-budget-val { font-size: 13px; color: #1a1c1e; text-align: right; line-height: 1.4; flex: none; }
+  .gr-chevr { color: #9298a0; font-size: 15px; flex: none; }
+  .gr-numfield { border: 1.5px solid var(--line-soft, #d4d7da); border-radius: 7px; padding: 5px 12px; font-size: 13px; color: #1a1c1e; min-width: 62px; text-align: left; display: inline-block; }
+
+  /* Telegram's stepper is vertical, so the recreation has to be too */
+  .gr-vstep { display: flex; align-items: flex-start; gap: 10px; padding: 9px 0; border-top: 1px solid var(--line-soft, #d4d7da); color: #9298a0; }
+  .gr-vstep:first-of-type { border-top: 0; }
+  .gr-vstep .num { width: 20px; height: 20px; flex: none; border-radius: 999px; border: 1.5px solid currentColor; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; margin-top: 1px; }
+  .gr-vstep-name { font-size: 13.5px; }
+  .gr-vstep.is-on, .gr-vstep.is-done { color: #1a1c1e; }
+  .gr-vstep.is-on .num { background: #1a1c1e; color: #fff; border-color: #1a1c1e; }
+  .gr-vstep.is-done .num { border-color: #46a758; color: #46a758; }
+
+  .gr-modal-foot { display: flex; align-items: center; gap: 8px; margin-top: 18px; padding-top: 13px; border-top: 1px solid var(--line-soft, #d4d7da); }
+  .gr-toolpane-head { display: flex; align-items: center; gap: 10px; padding-bottom: 13px; border-bottom: 1px solid var(--line-soft, #d4d7da); }
+
+  /* Open questions read as a separate thing from the design, never as a caption on it. */
+  /* a modal drawn over the page it covers */
+  .gr-stage { position: relative; background: #f4f5f6; min-height: 700px; }
+  .gr-stage-top { display: flex; align-items: center; gap: 10px; padding: 11px 16px; border-bottom: 1px solid var(--line-soft,#d4d7da); background: #fff; font-size: 12.5px; color: #55595e; }
+  .gr-stage-top .pub { display: inline-flex; align-items: center; gap: 6px; border: 1.5px solid var(--line-soft,#d4d7da); border-radius: 7px; padding: 3px 9px; opacity: 0.6; }
+  .gr-stage-top .pub .dot { width: 7px; height: 7px; border-radius: 50%; background: #46a758; }
+  .gr-stage-body { padding: 22px 16px; font-size: 12.5px; color: #9298a0; }
+  .gr-backdrop { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(20,20,22,0.32); padding: 20px; }
+  .gr-backdrop .gr-modal { background: #fff; border: 1px solid var(--line-soft,#d4d7da); border-radius: 11px; box-shadow: 0 10px 30px rgba(0,0,0,0.18); padding: 18px 20px; }
+  .gr-foot-note { font-size: 12px; color: #55595e; display: inline-flex; align-items: center; gap: 6px; }
+  .gr-foot-note svg { width: 13px; height: 13px; color: #9298a0; }
+
+  .na-sep { height: 1px; background: var(--line-soft,#d4d7da); margin: 6px 4px; }
+  .na-grouped { font-size: 12px; color: #9298a0; padding: 7px 9px; display: flex; align-items: center; gap: 6px; }
+
+  /* the agent page, for context */
+  .ag-top { display: flex; align-items: center; gap: 12px; padding: 2px 0 14px; }
+  .ag-avatar { width: 34px; height: 34px; border-radius: 10px; background: linear-gradient(135deg,#6db7e8,#a78bd6,#e89ab0); flex: none; }
+  .ag-title { font-size: 20px; font-weight: 600; color: #1a1c1e; }
+  .ag-tabs { display: flex; gap: 18px; border-bottom: 1px solid var(--line-soft,#d4d7da); margin-bottom: 16px; }
+  .ag-tab { font-size: 13px; color: #9298a0; padding: 0 0 9px; }
+  .ag-tab.is-active { color: #1a1c1e; font-weight: 600; box-shadow: inset 0 -2px 0 #1a1c1e; }
+  .ag-req { color: #c2452f; }
+  .ag-banner { display: flex; gap: 9px; align-items: flex-start; border: 1px solid var(--line-soft,#d4d7da); border-radius: 8px; padding: 9px 11px; font-size: 12.5px; color: #55595e; margin-top: 9px; }
+  .ag-banner svg { width: 14px; height: 14px; color: #9298a0; flex: none; margin-top: 1px; }
+  .ag-field { border: 1px solid var(--line-soft,#d4d7da); border-radius: 8px; padding: 9px 12px; font-size: 13px; color: #1a1c1e; display: flex; align-items: center; gap: 9px; }
+  .ag-textarea { border: 1px solid var(--line-soft,#d4d7da); border-radius: 8px; padding: 11px 12px; font-size: 13px; color: #9298a0; min-height: 62px; }
+
+  .bld-card { border: 1px solid var(--line-soft,#d4d7da); border-radius: 10px; background: #fff; padding: 16px 18px; margin-bottom: 14px; }
+  .bld-card h4 { margin: 0; font-size: 14px; font-weight: 600; color: #1a1c1e; }
+  .bld-card .sub { font-size: 12.5px; color: #9298a0; margin: 2px 0 12px; }
+  .bld-add { font-size: 13px; color: #9298a0; padding: 7px 0; cursor: pointer; }
+
+  .gr-tbl { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  .gr-tbl th { text-align: left; font-weight: 400; font-size: 11.5px; color: #9298a0; padding: 0 12px 7px 0; border-bottom: 1px solid var(--line-soft,#d4d7da); }
+  .gr-tbl td { padding: 9px 12px 9px 0; border-bottom: 1px solid var(--line-soft,#d4d7da); color: #1a1c1e; vertical-align: top; }
+  .gr-tbl tr:last-child td { border-bottom: 0; }
+  .gr-tbl .muted { color: #55595e; }
+  .gr-tblwrap { overflow-x: auto; margin-top: 10px; }
+
+  /* Patrick Hand has one weight, so bold can't mark anything. Highlight instead. */
+  .gr-open-mark { background: #fdf1d8; border-radius: 3px; padding: 0 3px; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+
+  /* the panel at the top of Build */
+  .na-panel { border-radius: 12px; padding: 18px 20px; margin-bottom: 14px; background: #f4f2fd; }
+  .na-panel-title { font-size: 14px; color: #5b46c9; margin-bottom: 10px; }
+  .na-task { display: flex; align-items: flex-start; gap: 13px; padding: 9px 0; font-size: 14px; color: #1a1c1e; cursor: pointer; border-radius: 7px; }
+  .na-task:hover { background: rgba(255,255,255,0.55); margin: 0 -8px; padding-left: 8px; padding-right: 8px; }
+  .na-task .mark { width: 17px; height: 17px; flex: none; margin-top: 1px; border-radius: 50%; border: 1.5px solid #a79ad6; background: transparent; display: inline-flex; align-items: center; justify-content: center; }
+  .na-task.is-done .mark { border-color: #cfc9e4; background: #e7e3f6; }
+  .na-task.is-done .mark::after { content: ""; width: 6px; height: 3px; border-left: 1.5px solid #8b82b8; border-bottom: 1.5px solid #8b82b8; transform: rotate(-45deg) translate(1px,-1px); }
+  .na-task.is-done .nm { color: #8b82b8; text-decoration: line-through; }
+  .na-task .sub { font-size: 12px; color: #7d7799; margin-top: 2px; }
+
+  .gr-tbl { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  .gr-tbl th { text-align: left; font-weight: 400; font-size: 11.5px; color: #9298a0; padding: 0 12px 7px 0; border-bottom: 1px solid var(--line-soft,#d4d7da); }
+  .gr-tbl td { padding: 9px 12px 9px 0; border-bottom: 1px solid var(--line-soft,#d4d7da); color: #1a1c1e; vertical-align: top; }
+  .gr-tbl tr:last-child td { border-bottom: 0; }
+  .gr-tbl .muted { color: #55595e; }
+  .gr-tblwrap { overflow-x: auto; margin-top: 10px; }
+
+  /* Patrick Hand has one weight, so bold can't mark anything. Highlight instead. */
+  .gr-open-mark { background: #fdf1d8; border-radius: 3px; padding: 0 3px; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+
+  /* the panel at the top of Build */
+  .na-panel { border-radius: 10px; padding: 14px 16px; margin-bottom: 14px; border: 1px solid #cfc6f7; background: #f5f2fe; }
+  .na-task { display: flex; align-items: flex-start; gap: 9px; padding: 6px 0; font-size: 13px; color: #1a1c1e; }
+  .na-task .mark { width: 15px; height: 15px; flex: none; margin-top: 1px; border-radius: 50%; border: 1.5px solid #c3b9ef; background: #fff; display: inline-flex; align-items: center; justify-content: center; }
+  .na-task.is-done .mark { border-color: #cfc9e4; background: #e7e3f6; }
+  .na-task.is-done .mark::after { content: ""; width: 6px; height: 3px; border-left: 1.5px solid #8b82b8; border-bottom: 1.5px solid #8b82b8; transform: rotate(-45deg) translate(1px,-1px); }
+  .na-task.is-done .nm { color: #8b82b8; text-decoration: line-through; }
+  .na-task .sub { font-size: 11.5px; color: #9298a0; margin-top: 2px; }
+
+  .gr-oq { border: 1px dashed var(--line, #a7abb0); border-radius: 10px; padding: 18px 20px; margin-top: 10px; background: #fffdf7; }
+  .gr-oq h3 { margin: 0 0 4px; font-size: 14px; }
+  .gr-oq .gr-oq-sub { font-size: 12.5px; color: var(--hub-muted); margin: 0 0 14px; }
+  .gr-oq ol { margin: 0; padding-left: 18px; }
+  .gr-oq li { font-size: 13px; line-height: 1.65; margin-bottom: 11px; }
+  .gr-oq li:last-child { margin-bottom: 0; }
+  .gr-oq .who { color: var(--hub-muted); font-size: 12px; }
+  .gr-note .who { color: var(--hub-muted); font-style: italic; }
+
+  /* guardrails library table, modelled on the real SkillsTable */
+  .gr-tbl { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .gr-tbl th { text-align: left; font-weight: 400; font-size: 11.5px; color: #9298a0; padding: 0 10px 7px 0; border-bottom: 1px solid var(--line-soft,#d4d7da); }
+  .gr-tbl td { padding: 11px 10px 11px 0; border-bottom: 1px solid var(--line-soft,#d4d7da); color: #1a1c1e; vertical-align: top; }
+  .gr-tbl tr:last-child td { border-bottom: 0; }
+  .gr-tbl .sub { font-size: 11.5px; color: #9298a0; margin-top: 2px; }
+  .gr-tbl .muted { color: #55595e; }
+  .gr-tbl .act { color: #9298a0; white-space: nowrap; }
+  .gr-scope { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; color: #1a1c1e; border: 1.5px solid var(--line-soft,#d4d7da); border-radius: 6px; padding: 2px 8px; white-space: nowrap; }
+  .gr-scope svg { width: 12px; height: 12px; flex: none; color: #55595e; }
+  .gr-tblwrap { overflow-x: auto; }
+
+  /* modal title doubling as the name field */
+  .gr-titlefield { display: inline-flex; align-items: center; gap: 7px; border-radius: 6px; padding: 2px 7px; margin-left: -7px; border: 1.5px solid transparent; cursor: text; }
+  .gr-titlefield:hover { border-color: var(--line-soft,#d4d7da); background: #fbfbfa; }
+  .gr-titlefield svg { width: 13px; height: 13px; color: #9298a0; flex: none; }
+  .gr-titlefield.is-empty { color: #9298a0; }
+
+  /* N8nSegmentControl: one exclusive choice, 2-5 options */
+  .gr-segctl { display: inline-flex; background: #eceeef; border-radius: 8px; padding: 3px; gap: 2px; }
+  .gr-segctl span { font-size: 12.5px; color: #55595e; padding: 5px 13px; border-radius: 6px; cursor: pointer; white-space: nowrap; }
+  .gr-segctl span.is-on { background: #fff; color: #1a1c1e; box-shadow: 0 1px 2px rgba(0,0,0,0.08); }
+
+  /* N8nToggleGroup type="multiple": several can be on at once */
+  .gr-tgroup { display: flex; flex-wrap: wrap; gap: 6px; }
+  .gr-tgroup span { font-size: 12.5px; color: #55595e; border: 1.5px solid var(--line-soft,#d4d7da); background: #fff; border-radius: 7px; padding: 5px 11px; cursor: pointer; white-space: nowrap; }
+  .gr-tgroup span.is-on { background: #1a1c1e; border-color: #1a1c1e; color: #fff; }
+  .gr-help { font-size: 12px; color: #9298a0; margin-top: 7px; }
+
+  /* guardrail picker: a real dropdown, Create at the bottom */
+  .gr-ddwrap { position: relative; display: inline-block; }
+  .gr-dd { display: none; position: absolute; top: calc(100% + 5px); right: 0; min-width: 268px; background: #fff; border: 1.5px solid var(--line-soft,#d4d7da); border-radius: 9px; padding: 5px; z-index: 40; box-shadow: 0 6px 18px rgba(0,0,0,0.10); text-align: left; }
+  .gr-dd.is-open { display: block; }
+  .gr-dd-item { display: flex; align-items: baseline; gap: 8px; padding: 7px 9px; border-radius: 6px; font-size: 13px; color: #1a1c1e; cursor: pointer; }
+  .gr-dd-item:hover { background: #f4f5f6; }
+  .gr-dd-item .n { font-size: 11.5px; color: #9298a0; margin-left: auto; white-space: nowrap; }
+  .gr-dd-item.is-on::after { content: "\2713"; color: #55595e; margin-left: 6px; }
+  .gr-dd-note { font-size: 11.5px; color: #9298a0; padding: 4px 9px 7px; line-height: 1.45; }
+  .gr-dd-sep { height: 1px; background: var(--line-soft,#d4d7da); margin: 5px 0; }
+
+  /* collapsed section inside a modal */
+  .gr-collapse-head { display: flex; align-items: center; gap: 8px; padding: 10px 0; margin-top: 8px; border-top: 1px solid var(--line-soft,#d4d7da); cursor: pointer; }
+  .gr-collapse-head .nm { font-size: 13.5px; font-weight: 700; color: #1a1c1e; }
+  .gr-collapse-head .sum { margin-left: auto; font-size: 12px; color: #9298a0; white-space: nowrap; }
+  .gr-collapse-chev { color: #9298a0; font-size: 11px; transition: transform .12s; }
+  .gr-collapse-head.is-open .gr-collapse-chev { transform: rotate(90deg); }
+  .gr-collapse-head.is-open .sum { display: none; }
+  .gr-collapse-body { display: none; }
+  .gr-collapse-body.is-open { display: block; }
+
+  .gr-info { display: inline-flex; color: #9298a0; cursor: help; }
+  .gr-info svg { width: 13px; height: 13px; }
+
+  /* a switch you can read but not move */
+  .nbk-toggle.is-locked { opacity: 0.55; cursor: not-allowed; pointer-events: none; }
+
+  /* the Test panel, docked */
+  .tp-panel { border: 1px solid var(--line-soft,#d4d7da); border-radius: 11px; background: #fff; display: flex; flex-direction: column; min-height: 440px; max-width: 460px; margin-inline: auto; width: 100%; }
+  .tp-head { display: flex; align-items: center; gap: 9px; padding: 11px 14px; border-bottom: 1px solid var(--line-soft,#d4d7da); font-size: 13px; color: #1a1c1e; }
+  .tp-head .ic { color: #9298a0; display: inline-flex; }
+  .tp-head .ic svg { width: 14px; height: 14px; }
+  .tp-body { flex: 1; padding: 16px 14px; display: flex; flex-direction: column; gap: 12px; }
+  .tp-foot { border-top: 1px solid var(--line-soft,#d4d7da); padding: 10px 14px; }
+  .tp-composer { border: 1.5px solid var(--line-soft,#d4d7da); border-radius: 9px; padding: 9px 11px; font-size: 13px; color: #9298a0; }
+  .tp-msg { display: flex; gap: 10px; align-items: flex-start; }
+  .tp-ava { width: 24px; height: 24px; border-radius: 7px; background: linear-gradient(135deg,#6db7e8,#a78bd6,#e89ab0); flex: none; }
+  .tp-bubble { font-size: 13.5px; color: #1a1c1e; line-height: 1.55; }
+  .tp-note { font-size: 12px; color: #9298a0; margin-top: 5px; }
+  .tp-prompt { border: 1.5px solid var(--line-soft,#d4d7da); border-radius: 9px; padding: 10px 12px; font-size: 13px; color: #1a1c1e; cursor: pointer; }
+  .tp-prompt:hover { border-color: #a79ad6; background: #fbfaff; }
+  .tp-prompts { display: flex; flex-direction: column; gap: 7px; }
+  .tp-more { font-size: 12.5px; color: #5b46c9; cursor: pointer; }
+  .tp-dim { font-size: 12.5px; color: #9298a0; }
+  .tp-spin { display: inline-block; width: 13px; height: 13px; border: 2px solid #d4d7da; border-top-color: #6b4ef0; border-radius: 50%; animation: tp-rot 0.9s linear infinite; }
+  @keyframes tp-rot { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body data-default-route="starter-prompts">
+
+<div class="shell">
+
+  <section data-route="starter-prompts">
+    <a class="back-link" href="index.html#/home">&larr; Workstreams</a>
+    <div class="hero">
+      <div>
+        <span class="kicker">Workstream &middot; New</span>
+        <h1>Starter prompts</h1>
+        <p>Opening the Test panel on a new agent gives you an empty chat and a cursor. The hardest part of testing an agent is the first message &mdash; you wrote the instructions, so you already know what it does, and that's exactly why nothing comes to mind. This offers to write a few.</p>
+      </div>
+    </div>
+
+    <div class="problem-grid">
+      <div class="problem-card">
+        <div class="eyebrow">&#129513; Problem</div>
+        <p><i>Test agent</i> is one of the six Finish setup tasks, and it's the one with nothing behind it. The other five hand you a picker or a field; this one hands you a blank composer and the placeholder <i>&ldquo;Type a message&hellip;&rdquo;</i>. A builder who can't think of an example doesn't test, and an agent that was never tested gets published anyway.</p>
+        <span class="src">Source: agentSetupTasks registry, and the empty state of the preview panel</span>
+      </div>
+      <div class="problem-card">
+        <div class="eyebrow">&#129514; Hypothesis</div>
+        <p>The agent's own instructions already describe what it should handle, so the examples can be written from them. Offering rather than auto-filling keeps the panel quiet for people who know what they want to type, and the product already does this twice &mdash; evals generates test cases from the instructions, and chat agents carry suggested prompts.</p>
+      </div>
+    </div>
+
+    <div class="section-title">Screens</div>
+    <div class="card-grid">
+      <a class="screen-card" href="#/starter-prompts-screen">
+        <div class="thumb">&#128172;</div>
+        <div class="body">
+          <span class="status">In progress</span>
+          <h3>The Test panel, three states</h3>
+          <p class="desc">The offer, the wait, and the prompts. Grounded in the vocabulary the product already uses for practice runs.</p>
+        </div>
+      </a>
+    </div>
+
+    <div class="section-title">Open questions</div>
+    <div class="gr-oq">
+      <h3>Before this can go further</h3>
+      <ol>
+        <li><b>Offer, or just write them?</b> Drawn as an offer, so the panel stays quiet for someone who already knows what to type. The argument the other way is that a button between you and the examples is one more thing to click when the whole point is removing friction.</li>
+        <li><b>What happens to a prompt once used?</b> It could vanish, grey out, or stay. If they stay, the second message is as easy as the first; if they vanish, the panel empties out and you're back where you started.</li>
+        <li><b>Does this overlap with evals?</b> <i>Generate test cases</i> already writes examples from the instructions, and the preview flow already runs one and saves it as a check. This is the same generator with a different purpose &mdash; try it once, versus keep it as a test. Worth deciding whether trying a starter prompt should offer to save it as a check.</li>
+        <li><b>Agents with no instructions yet.</b> The generator has nothing to read. Either the offer doesn't appear, or it reads the tools instead, which gives much vaguer examples.</li>
+        <li><b>Who writes them &mdash; and what does that cost?</b> A model call on opening a panel, for every agent, whether or not anyone uses the examples. Offering rather than auto-generating also solves that.</li>
+      </ol>
+    </div>
+  </section>
+
+  <section data-route="starter-prompts-screen">
+    <a class="back-link" href="#/starter-prompts">&larr; Starter prompts</a>
+    <div class="screen-head">
+      <h1>The Test panel, three states</h1>
+      <p>The panel docked beside Build. Same agent as elsewhere &mdash; its instructions read <i>&ldquo;Summarize new tickets in the Customer Support Slack channel&rdquo;</i>, and every example below is written from that sentence.</p>
+    </div>
+
+    <h2 class="lrt-section-title">1 &mdash; The offer</h2>
+    <p class="lrt-section-sub">What you see instead of an empty chat. One sentence, one button, and the reassurance the product already uses elsewhere: <i>nothing is sent, saved or changed</i>.</p>
+
+    <div class="nbk"><div class="nbk-frame"><div class="nbk-main" style="padding-top:26px; padding-bottom:26px;">
+          <div class="tp-panel">
+            <div class="tp-head"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v7.5a2 2 0 0 1-.2.9L4.7 20.6a1 1 0 0 0 .9 1.4h12.8a1 1 0 0 0 .9-1.4l-5.1-10.2a2 2 0 0 1-.2-.9V2"/><path d="M8.5 2h7"/><path d="M7 16h10"/></svg></span> Test agent <span style="flex:1;"></span><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg></span></div>
+            <div class="tp-body">
+              <div class="tp-msg">
+                <span class="tp-ava"></span>
+                <div>
+                  <div class="tp-bubble">I can try this agent with a few example messages, written from its instructions. Want me to?</div>
+                  <div style="margin-top:10px;"><span class="nbk-btn nbk-btn-primary">Write examples</span></div>
+                  <div class="tp-note">Practice run. Nothing is sent, saved or changed.</div>
+                </div>
+              </div>
+            </div>
+            <div class="tp-foot"><div class="tp-composer">Message Metrics Sync&hellip;</div></div>
+          </div>
+    </div></div></div>
+
+    <p class="gr-note"><b>&ldquo;Practice run. Nothing is sent, saved or changed.&rdquo;</b> Lifted verbatim from the preview flow, and it's load-bearing here rather than decorative. This agent posts to Slack. Without that line the first thing a builder weighs is whether testing will message a real channel, and the safe move is not to test.</p>
+
+    <h2 class="lrt-section-title" style="margin-top:34px;">2 &mdash; Writing them</h2>
+    <p class="lrt-section-sub">A couple of seconds of model time. The original message stays, so the panel doesn't flash empty.</p>
+
+    <div class="nbk"><div class="nbk-frame"><div class="nbk-main" style="padding-top:26px; padding-bottom:26px;">
+          <div class="tp-panel">
+            <div class="tp-head"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v7.5a2 2 0 0 1-.2.9L4.7 20.6a1 1 0 0 0 .9 1.4h12.8a1 1 0 0 0 .9-1.4l-5.1-10.2a2 2 0 0 1-.2-.9V2"/><path d="M8.5 2h7"/><path d="M7 16h10"/></svg></span> Test agent <span style="flex:1;"></span><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg></span></div>
+            <div class="tp-body">
+              <div class="tp-msg">
+                <span class="tp-ava"></span>
+                <div>
+                  <div class="tp-bubble">I can try this agent with a few example messages, written from its instructions. Want me to?</div>
+                </div>
+              </div>
+              <div class="tp-msg">
+                <span class="tp-ava"></span>
+                <div class="tp-dim"><span class="tp-spin"></span> &nbsp;Reading the instructions and writing examples&hellip;</div>
+              </div>
+            </div>
+            <div class="tp-foot"><div class="tp-composer">Message Metrics Sync&hellip;</div></div>
+          </div>
+    </div></div></div>
+
+    <p class="gr-note"><b>The wait says what it's reading.</b> <i>Reading the instructions and writing examples</i> rather than a bare spinner, because it sets up why the examples are relevant when they arrive &mdash; and because a builder who sees it and gets poor examples knows immediately that the instructions are the thing to fix.</p>
+
+    <h2 class="lrt-section-title" style="margin-top:34px;">3 &mdash; The prompts</h2>
+    <p class="lrt-section-sub">Four, each a message someone would actually send this agent. Clicking one sends it. Below them, a way to get different ones and a reminder that the composer still works.</p>
+
+    <div class="nbk"><div class="nbk-frame"><div class="nbk-main" style="padding-top:26px; padding-bottom:26px;">
+          <div class="tp-panel">
+            <div class="tp-head"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v7.5a2 2 0 0 1-.2.9L4.7 20.6a1 1 0 0 0 .9 1.4h12.8a1 1 0 0 0 .9-1.4l-5.1-10.2a2 2 0 0 1-.2-.9V2"/><path d="M8.5 2h7"/><path d="M7 16h10"/></svg></span> Test agent <span style="flex:1;"></span><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg></span></div>
+            <div class="tp-body">
+              <div class="tp-msg">
+                <span class="tp-ava"></span>
+                <div>
+                  <div class="tp-bubble">Four messages this agent should handle. Pick one to try it, or write your own.</div>
+                  <div class="tp-prompts" style="margin-top:11px;">
+                    <div class="tp-prompt">Summarise the tickets that came in this morning</div>
+                    <div class="tp-prompt">What are people complaining about most this week?</div>
+                    <div class="tp-prompt">Post today's ticket summary to #customer-support</div>
+                    <div class="tp-prompt">Which tickets has nobody replied to yet?</div>
+                  </div>
+                  <div style="margin-top:10px; display:flex; gap:14px; align-items:center;">
+                    <span class="tp-more">Write different ones</span>
+                    <span class="tp-dim">or type your own below</span>
+                  </div>
+                  <div class="tp-note">Practice run. Nothing is sent, saved or changed.</div>
+                </div>
+              </div>
+            </div>
+            <div class="tp-foot"><div class="tp-composer">Message Metrics Sync&hellip;</div></div>
+          </div>
+    </div></div></div>
+
+    <p class="gr-note"><b>Four, not one, and not ten.</b> One example tests one path and tells you nothing about the rest; ten is a wall of text in a narrow panel. Four fits without scrolling and covers different shapes of request &mdash; a summary, an analysis, an action that writes somewhere, and a gap-finding question. The fourth is the useful one: it's the kind of request builders don't think to try and agents most often get wrong.</p>
+
+    <p class="gr-note"><b>They're written from the instructions, which makes them a test of the instructions too.</b> If the generator produces something the agent obviously can't do, the instructions promise something the tools don't deliver &mdash; and that's worth knowing before publishing. The same generator already exists for evals: <i>&ldquo;Draft a few realistic requests from your agent's own instructions&rdquo;</i>.</p>
+
+    <p class="gr-note"><b>Written as messages, not as topics.</b> <i>&ldquo;Which tickets has nobody replied to yet?&rdquo;</i> rather than <i>&ldquo;Unanswered tickets&rdquo;</i>. A topic makes you compose the sentence yourself, which is the work we're trying to remove; a full message can be sent with one click and shows the builder the register real users will write in.</p>
+  </section>
+
+</div>
+
+<script src="js/hub.js"></script>
+</body></html>
