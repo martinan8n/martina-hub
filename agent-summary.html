@@ -236,6 +236,9 @@
   .gr-tbl .muted { color: #55595e; }
   .gr-tblwrap { overflow-x: auto; margin-top: 10px; }
 
+  /* Patrick Hand has one weight, so bold can't mark anything. Highlight instead. */
+  .gr-open-mark { background: #fdf1d8; border-radius: 3px; padding: 0 3px; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+
   /* the panel at the top of Build */
   .na-panel { border-radius: 10px; padding: 14px 16px; margin-bottom: 14px; border: 1px solid #cfc6f7; background: #f5f2fe; }
   .na-panel-head { display: flex; align-items: center; gap: 9px; }
@@ -402,16 +405,15 @@
               <div style="font-size:12.5px; color:#55595e; margin-bottom:12px;">Here's what this agent is allowed to do once it's live.</div>
 
           <div class="nbk-box" style="margin-top:18px;">
-            <div class="nbk-field-label">What's bounded<span class="nbk-field-sub">What this agent can do, and where each rule is set. Nothing is edited here.</span></div>
+            <div class="nbk-field-label">What's bounded<span class="nbk-field-sub">What this agent can do, and where each rule is set. Highlighted means nothing bounds it.</span></div>
 
             <div class="gr-dim-row">
               <span class="gr-dim-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12h16"/><path d="m14 6 6 6-6 6"/></svg></span>
               <div class="gr-dim-body">
                 <div class="gr-dim-name">Reach</div>
-                <div class="gr-dim-state">#metrics is restricted to <b>4 people</b>. <b>Telegram is open to any user.</b></div>
-                <div class="gr-dim-where">1 of 2 channels &middot; set in <span class="gr-dim-link">Triggers</span></div>
+                <div class="gr-dim-state">#metrics is restricted to 4 people. <span class="gr-open-mark">Telegram is open to any user.</span></div>
+                <div class="gr-dim-where">Set in <span class="gr-dim-link">Triggers</span></div>
               </div>
-              <div class="gr-dim-aside"><span class="gr-pill is-partly"><span class="dot"></span> Partly</span></div>
             </div>
 
             <div class="gr-dim-row">
@@ -419,104 +421,25 @@
               <div class="gr-dim-body">
                 <div class="gr-dim-name">Action</div>
                 <div class="gr-dim-state">6 tools allowed. Nothing destructive runs without asking.</div>
-                <div class="gr-dim-where">6 of 6 tools &middot; set per tool in <span class="gr-dim-link">Capabilities</span></div>
+                <div class="gr-dim-where">Set per tool in <span class="gr-dim-link">Capabilities</span></div>
               </div>
-              <div class="gr-dim-aside"><span class="gr-pill is-bounded"><span class="dot"></span> Bounded</span></div>
             </div>
 
             <div class="gr-dim-row">
               <span class="gr-dim-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
               <div class="gr-dim-body">
                 <div class="gr-dim-name">Cost &amp; rate</div>
-                <div class="gr-dim-state">$10 per session. <b>No monthly budget.</b></div>
-                <div class="gr-dim-where">1 of 2 limits &middot; set in <span class="gr-dim-link">Settings</span></div>
+                <div class="gr-dim-state">$10 per session. <span class="gr-open-mark">No monthly budget.</span></div>
+                <div class="gr-dim-where">Set in <span class="gr-dim-link">Settings</span></div>
               </div>
-              <div class="gr-dim-aside"><span class="gr-pill is-partly"><span class="dot"></span> Partly</span></div>
             </div>
 
             <div class="gr-dim-row">
               <span class="gr-dim-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12h16"/><path d="m18 6 6 6-6 6" transform="translate(-4)"/></svg></span>
               <div class="gr-dim-body">
                 <div class="gr-dim-name">Output</div>
-                <div class="gr-dim-state"><b>Nothing checks what it sends.</b></div>
-                <div class="gr-dim-where">Content policy is off &middot; set in <span class="gr-dim-link">Settings</span></div>
-              </div>
-              <div class="gr-dim-aside"><span class="gr-pill"><span class="dot"></span> Open</span></div>
-            </div>
-          </div>
-              <div class="gr-modal-foot" style="margin-top:14px;"><span style="flex:1;"></span><span class="nbk-btn">Cancel</span><span class="nbk-btn nbk-btn-primary">Publish</span></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="gr-oq" style="background:#fbfbfa; margin-top:18px;">
-      <h3 style="margin-bottom:4px;">How the three states are decided</h3>
-      <p class="gr-oq-sub">Each dimension has a countable set of <i>places a rule can be set</i>. The state is how many of them are.</p>
-      <div class="gr-tblwrap">
-      <table class="gr-tbl">
-        <thead><tr><th>Dimension</th><th>Places a rule can be set</th><th>Bounded</th><th>Partly</th></tr></thead>
-        <tbody>
-          <tr><td>Reach</td><td>One per channel the agent has</td><td class="muted">Every channel restricts who can reach it</td><td class="muted">Some do, some don't</td></tr>
-          <tr><td>Action</td><td>One per tool, for its write and delete group</td><td class="muted">No destructive tool runs without asking</td><td class="muted">Some tools do, some don't</td></tr>
-          <tr><td>Cost</td><td>Monthly budget, cost cap per session</td><td class="muted">Both set</td><td class="muted">One of the two</td></tr>
-          <tr><td>Output</td><td>The content policy &mdash; one switch</td><td class="muted">On</td><td class="muted"><i>Never. One place can't be half-set.</i></td></tr>
-        </tbody>
-      </table>
-      </div>
-    </div>
-
-    <p class="gr-note"><b>So <i>Partly</i> means: more than one place, and only some of them set.</b> That's the whole definition, and it's checkable &mdash; Reach is Partly because one of two channels is open, Cost because one of two limits is missing. <i>Open</i> is none of them, <i>Bounded</i> is all of them. The test that it's a real rule rather than a feeling: <b>Output can never be Partly</b>, because it's a single switch. If a dimension with one control ever showed <i>Partly</i>, the definition would be broken.</p>
-
-    <p class="gr-note"><b>The count goes in the quiet line, not on the badge.</b> <i>1 of 2 channels</i> sits where the row already says where the rule lives, so anyone who wants to check the pill can. Putting it <i>on</i> the pill would turn the summary into a score out of ten and imply the target is always all of them &mdash; an agent with one channel deliberately open to a public Telegram bot isn't 50% finished. Same number, different claim, depending on where it sits.</p>
-
-    <p class="gr-note"><b>Every pill has to be traceable to a phrase in its own row.</b>
-
-    <p class="gr-note"><b>Three states, no red:</b> <i>Bounded</i>, <i>Partly</i>, <i>Open</i>. An agent with no output rule may be entirely fine, so a gap can't look like a failure &mdash; but it still has to be visible enough to notice before production. Open is grey and quiet; it doesn't demand to be fixed.</p>
-
-    <p class="gr-note"><b>And the footer line came out.</b> It repeated the Reach row three inches below it. The pattern it was borrowed from &mdash; Plane's publish dialog, which states the access outcome next to the buttons &mdash; works there because nothing else in that modal says it. Here the whole modal is that sentence.</p>
-
-    <h2 class="lrt-section-title" style="margin-top:34px;">Step 1, option B &mdash; By the path a run takes</h2>
-    <p class="lrt-section-sub">The same rules, ordered the way a run moves through them: something reaches the agent, it acts, it sends. Makes the Output gap obvious because it's the end of a line you can follow, not the fifth item in a list &mdash; which is how the gap got spotted, even though it then turned out to be two gaps with homes of their own.</p>
-
-    <div class="nbk">
-      <div class="nbk-frame">
-        <div class="gr-stage">
-          <div class="gr-stage-top"><span>Personal / <b>Agents Funnel Metrics Sync</b></span><span style="flex:1;"></span><span class="pub"><span class="dot"></span> Published</span></div>
-          <div class="gr-stage-body">Agent config</div>
-          <div class="gr-backdrop">
-            <div class="gr-modal" style="max-width:560px !important; width:100%;">
-              <div class="gr-modal-head" style="margin-bottom:4px;"><span class="gr-modal-title">Publish agent</span><span class="gr-modal-x">&times;</span></div>
-              <div style="font-size:12.5px; color:#55595e; margin-bottom:12px;">Here's what this agent is allowed to do once it's live.</div>
-
-          <div class="nbk-box" style="margin-top:18px;">
-            <div class="nbk-field-label">What's bounded<span class="nbk-field-sub">Follow a run from the moment something reaches this agent to the moment it answers.</span></div>
-
-            <div class="gr-flow">
-              <div class="gr-flow-stage">
-                <div class="gr-flow-stage-name"><span class="gr-pill is-partly" style="padding:2px 7px;"><span class="dot"></span></span> Reaches it</div>
-                <div class="gr-flow-rule">#metrics</div>
-                <div class="gr-flow-none">Telegram open to anyone</div>
-                <span class="gr-flow-add">Triggers</span>
-              </div>
-              <div class="gr-flow-stage">
-                <div class="gr-flow-stage-name"><span class="gr-pill is-bounded" style="padding:2px 7px;"><span class="dot"></span></span> Acts</div>
-                <div class="gr-flow-rule">6 tools allowed</div>
-                <div class="gr-flow-rule">Nothing destructive unasked</div>
-                <span class="gr-flow-add">Skills</span>
-              </div>
-              <div class="gr-flow-stage">
-                <div class="gr-flow-stage-name"><span class="gr-pill is-partly" style="padding:2px 7px;"><span class="dot"></span></span> Spends</div>
-                <div class="gr-flow-rule">$10 per session</div>
-                <div class="gr-flow-none">No monthly budget</div>
-                <span class="gr-flow-add">Settings</span>
-              </div>
-                            <div class="gr-flow-stage is-open">
-                <div class="gr-flow-stage-name"><span class="gr-pill is-partly" style="padding:2px 7px;"><span class="dot"></span></span> Sends</div>
-                <div class="gr-flow-rule">#metrics only</div>
-                <div class="gr-flow-none">Nothing checks content</div>
-                <span class="gr-flow-add">Triggers</span>
+                <div class="gr-dim-state"><span class="gr-open-mark">Nothing checks what it sends.</span></div>
+                <div class="gr-dim-where">Set in <span class="gr-dim-link">Settings</span></div>
               </div>
             </div>
           </div>
@@ -527,7 +450,11 @@
       </div>
     </div>
 
-    <p class="gr-note"><b>Trade-off between the two.</b> A is easier to extend &mdash; a new dimension is a new row, and it survives the rules living in five different places. B teaches the model better and makes the end-of-line gap land, but it implies an order that isn't quite true: cost applies at every stage, not between acting and remembering. B is also harder to grow, since a sixth stage means re-cutting the row.</p>
+    <p class="gr-note"><b>The grade had to go, and this is why.</b> I had three states &mdash; <i>Bounded</i>, <i>Partly</i>, <i>Open</i> &mdash; and a countable definition behind them: how many of the places a rule can be set actually are. It was checkable, and it was still wrong. Counting implies a target. <i>1 of 2 channels</i> reads as <i>you're missing one</i>, when leaving a Telegram bot public may be exactly what the agent is for. A summary that grades turns every deliberate choice into an outstanding task.</p>
+
+    <p class="gr-note"><b>One device instead: a highlight marks what's unbounded.</b> Each row states the facts, and anything with nothing bounding it is highlighted inside the sentence. Bold was the first attempt and it doesn't work here &mdash; the typeface has a single weight, so bold rendered as nothing at all. It's scannable &mdash; the bold is the scan &mdash; it names the specific thing rather than a score, and it makes no claim about whether you should do something. An agent where every gap is deliberate reads as a row of plain statements with a few highlighted phrases, which is accurate: those things <i>are</i> open, you just meant them.</p>
+
+    <p class="gr-note"><b>What this gives up.</b> You can no longer tell at a glance whether a gap has been considered. An agent nobody has thought about and an agent whose every gap is deliberate look identical here. The fix, if we need one, is to let a builder mark a gap as intended &mdash; the way a linter takes a suppression &mdash; so the summary distinguishes <i>unbounded</i> from <i>unbounded and unreviewed</i>. That's a mechanism with state behind it, so it isn't worth building until we've seen whether the plain version is enough.</p>
 
     <p class="gr-note"><b>Publish answers when, not where.</b> Showing this before you publish catches the one moment a builder is receptive to it. But it's a modal you dismiss, and the question comes back a week later when you're wondering why the agent didn't post something. So it needs a second, permanent entry point &mdash; an icon on the agent, a line in the trace, somewhere in Build &mdash; and that's undesigned. Putting it in Build was the first instinct and it clutters a page that's already full.</p>
 
