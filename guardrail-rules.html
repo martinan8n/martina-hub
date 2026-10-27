@@ -513,7 +513,7 @@
                   <div style="display:flex; align-items:center; gap:10px; padding-bottom:9px;">
                     <div style="flex:1;">
                       <div style="font-size:13px; color:#1a1c1e;">Anyone in the workspace</div>
-                      <div style="font-size:11.5px; color:#9298a0;">On by default. Turn it off to pick who.</div>
+                      <div style="font-size:11.5px; color:#9298a0;">Turn off to choose channels, people or user groups.</div>
                     </div>
                     <span class="nbk-toggle" onclick="this.classList.toggle('is-on')"><span class="nbk-toggle-knob"></span></span>
                   </div>
@@ -650,16 +650,16 @@
             </div>
 
             <div style="font-size:13.5px; font-weight:700; color:#1a1c1e; margin:18px 0 3px;">Guardrail <span class="gr-tag is-new">new</span></div>
-            <div style="font-size:12px; color:#9298a0; margin-bottom:6px;">Permissions decide whether a tool runs. A guardrail looks at what passes through it &mdash; and is built once and reused, not configured here.</div>
+            <div style="font-size:12px; color:#9298a0; margin-bottom:6px;">Check what this tool sends and receives.</div>
 
             <div class="gr-rule-row">
-              <div class="gr-rule-main"><div class="gr-rule-name">Applied guardrail</div><div class="gr-rule-sub">One object, shared across tools. Nine data-table tools take the same one.</div></div>
+              <div class="gr-rule-main"><div class="gr-rule-name">Applied guardrail</div><div class="gr-rule-sub">Guardrails are shared. Changing one affects every tool using it.</div></div>
               <span class="gr-ddwrap">
                 <span class="gr-rule-ctl nbk-select-input gr-click" onclick="grOpen('gr-guardrail-picker')">None applied <span class="chev">&#9662;</span></span>
                 <div class="gr-dd" id="gr-guardrail-picker">
                   <div class="gr-dd-item">PII redaction <span class="n">on 9 tools</span></div>
                   <div class="gr-dd-item">Finance data check <span class="n">on 2 tools</span></div>
-                  <div class="gr-dd-note">Picking one doesn't copy it &mdash; editing it later changes every tool using it.</div>
+                  <div class="gr-dd-note">Shared. Editing a guardrail changes every tool using it.</div>
                   <div class="gr-dd-sep"></div>
                   <div class="gr-dd-item">+ Create guardrail</div>
                 </div>
@@ -728,7 +728,7 @@
             <div style="display:flex; align-items:center; gap:10px; padding-bottom:9px;">
               <div style="flex:1;">
                 <div style="font-size:13px; color:#1a1c1e;">All tools</div>
-                <div style="font-size:11.5px; color:#9298a0;">On by default, and covers tools added later. Turn it off to pick.</div>
+                <div style="font-size:11.5px; color:#9298a0;">Includes tools added later. Turn off to choose specific tools.</div>
               </div>
               <span class="nbk-toggle is-on" onclick="this.classList.toggle('is-on')"><span class="nbk-toggle-knob"></span></span>
             </div>
@@ -991,7 +991,7 @@
             <div class="gr-modal-head"><span class="gr-modal-title">Memory</span><span class="gr-modal-x">&times;</span></div>
 
             <div style="font-size:13.5px; font-weight:700; color:#1a1c1e; margin:16px 0 2px;">Guidance <span class="gr-tag is-today">today</span></div>
-            <div style="font-size:12px; color:#9298a0; margin-bottom:10px;">Steering, not a rule. The agent reads this and tries.</div>
+            <div style="font-size:12px; color:#9298a0; margin-bottom:10px;">The agent reads this and tries to follow it.</div>
             <div style="font-size:12px; color:#55595e; margin-bottom:5px;">Worth remembering</div>
             <div class="gr-chips" style="margin-bottom:12px;">
               <span class="gr-chip">Preferred report format <span class="x">&times;</span></span>
@@ -1122,10 +1122,10 @@
           </div>
 
           <div class="nbk-box">
-            <div class="nbk-field-label">Access and approvals <span class="gr-tag is-new">new</span><span class="nbk-field-sub">Who can use this agent, and who it asks when it needs permission.</span></div>
-            <div class="gr-rule-row"><div class="gr-rule-main"><div class="gr-rule-name">Everyone else</div><div class="gr-rule-sub">Anyone who didn't start the run. Whoever did can always follow up &mdash; that isn't configurable.</div></div><span class="gr-rule-ctl gr-seg"><span class="is-on">Allow</span><span>Block</span></span></div>
-            <div class="gr-rule-row"><div class="gr-rule-main"><div class="gr-rule-name">Ask for approval in</div><div class="gr-rule-sub">Used when nobody started the run &mdash; scheduled runs, and anything triggered by another system.</div></div><span class="gr-rule-ctl" style="display:flex; gap:6px;"><span class="nbk-select-input">Slack <span class="chev">&#9662;</span></span><span class="nbk-select-input">#finance-ops <span class="chev">&#9662;</span></span></span></div>
-            <div class="gr-rule-row"><div class="gr-rule-main"><div class="gr-rule-name">If nobody answers</div></div><span class="gr-rule-ctl nbk-select-input">Stop after 1 day <span class="chev">&#9662;</span></span></div>
+            <div class="nbk-field-label">Access and approvals <span class="gr-tag is-new">new</span><span class="nbk-field-sub">Set who can use this agent and where it asks for approval</span></div>
+            <div class="gr-rule-row"><div class="gr-rule-main"><div class="gr-rule-name">Everyone else</div><div class="gr-rule-sub">Whether people other than the one who started a run can talk to this agent.</div></div><span class="gr-rule-ctl gr-seg"><span class="is-on">Allow</span><span>Block</span></span></div>
+            <div class="gr-rule-row"><div class="gr-rule-main"><div class="gr-rule-name">Ask for approval in</div><div class="gr-rule-sub">Where to send approval requests for scheduled runs and runs started by another system.</div></div><span class="gr-rule-ctl" style="display:flex; gap:6px;"><span class="nbk-select-input">Slack <span class="chev">&#9662;</span></span><span class="nbk-select-input">#finance-ops <span class="chev">&#9662;</span></span></span></div>
+            <div class="gr-rule-row"><div class="gr-rule-main"><div class="gr-rule-name">If nobody answers</div><div class="gr-rule-sub">What to do when an approval request goes unanswered.</div></div><span class="gr-rule-ctl nbk-select-input">Stop after 1 day <span class="chev">&#9662;</span></span></div>
           </div>
 
           <div class="nbk-box">
