@@ -229,16 +229,19 @@
   .bld-card .sub { font-size: 12.5px; color: #9298a0; margin: 2px 0 12px; }
   .bld-add { font-size: 13px; color: #9298a0; padding: 7px 0; cursor: pointer; }
 
+  .gr-tbl { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  .gr-tbl th { text-align: left; font-weight: 400; font-size: 11.5px; color: #9298a0; padding: 0 12px 7px 0; border-bottom: 1px solid var(--line-soft,#d4d7da); }
+  .gr-tbl td { padding: 9px 12px 9px 0; border-bottom: 1px solid var(--line-soft,#d4d7da); color: #1a1c1e; vertical-align: top; }
+  .gr-tbl tr:last-child td { border-bottom: 0; }
+  .gr-tbl .muted { color: #55595e; }
+  .gr-tblwrap { overflow-x: auto; margin-top: 10px; }
+
   /* the panel at the top of Build */
   .na-panel { border-radius: 10px; padding: 14px 16px; margin-bottom: 14px; border: 1px solid #cfc6f7; background: #f5f2fe; }
-  .na-panel.is-alert { border-color: #e3c489; background: #fdf7ec; }
   .na-panel-head { display: flex; align-items: center; gap: 9px; }
   .na-panel-head .t { font-size: 13.5px; font-weight: 600; color: #5b46c9; }
-  .na-panel.is-alert .na-panel-head .t { color: #8a5a11; }
   .na-panel-head .n { margin-left: auto; font-size: 12px; color: #7a6bbf; }
-  .na-panel.is-alert .na-panel-head .n { color: #a07a35; }
   .na-panel-head .x { color: #9b92c7; cursor: pointer; font-size: 15px; }
-  .na-panel.is-alert .na-panel-head .x { color: #b89a63; }
   .na-tasks { margin-top: 10px; }
   .na-task { display: flex; align-items: flex-start; gap: 9px; padding: 6px 0; font-size: 13px; color: #1a1c1e; }
   .na-task .mark { width: 15px; height: 15px; flex: none; margin-top: 1px; border-radius: 50%; border: 1.5px solid #c3b9ef; background: #fff; display: inline-flex; align-items: center; justify-content: center; }
@@ -247,9 +250,8 @@
   .na-task.is-done .nm { color: #8b82b8; text-decoration: line-through; }
   .na-task .sub { font-size: 11.5px; color: #9298a0; margin-top: 2px; }
   .na-task .go { margin-left: auto; font-size: 12px; color: #5b46c9; white-space: nowrap; }
-  .na-panel.is-alert .na-task .go { color: #8a5a11; }
-  .na-panel.is-alert .na-task .mark { border: 0; background: none; color: #b4781a; }
-  .na-panel.is-alert .na-task .mark svg { width: 15px; height: 15px; }
+  .na-panel.is-alert .na-task .mark { border: 0; background: none; display: inline-flex; align-items: center; justify-content: center; }
+  .na-panel.is-alert .na-task .mark::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: #6b4ef0; }
 
   .gr-oq { border: 1px dashed var(--line, #a7abb0); border-radius: 10px; padding: 18px 20px; margin-top: 10px; background: #fffdf7; }
   .gr-oq h3 { margin: 0 0 4px; font-size: 14px; }
@@ -406,8 +408,8 @@
               <span class="gr-dim-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12h16"/><path d="m14 6 6 6-6 6"/></svg></span>
               <div class="gr-dim-body">
                 <div class="gr-dim-name">Reach</div>
-                <div class="gr-dim-state">Anyone in <b>#metrics</b> can message it. Schedule runs Mondays 9:00.</div>
-                <div class="gr-dim-where">Set in <span class="gr-dim-link">Triggers</span></div>
+                <div class="gr-dim-state">#metrics is restricted to <b>4 people</b>. <b>Telegram is open to any user.</b></div>
+                <div class="gr-dim-where">1 of 2 channels &middot; set in <span class="gr-dim-link">Triggers</span></div>
               </div>
               <div class="gr-dim-aside"><span class="gr-pill is-partly"><span class="dot"></span> Partly</span></div>
             </div>
@@ -416,8 +418,8 @@
               <span class="gr-dim-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></span>
               <div class="gr-dim-body">
                 <div class="gr-dim-name">Action</div>
-                <div class="gr-dim-state"><b>6 tools</b> allowed, 2 ask before running. No sub-agents.</div>
-                <div class="gr-dim-where">Set per tool in <span class="gr-dim-link">Skills</span></div>
+                <div class="gr-dim-state">6 tools allowed. Nothing destructive runs without asking.</div>
+                <div class="gr-dim-where">6 of 6 tools &middot; set per tool in <span class="gr-dim-link">Capabilities</span></div>
               </div>
               <div class="gr-dim-aside"><span class="gr-pill is-bounded"><span class="dot"></span> Bounded</span></div>
             </div>
@@ -426,8 +428,8 @@
               <span class="gr-dim-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
               <div class="gr-dim-body">
                 <div class="gr-dim-name">Cost &amp; rate</div>
-                <div class="gr-dim-state"><b>$10</b> per session. No per-tool ceiling.</div>
-                <div class="gr-dim-where">Session cap in <span class="gr-dim-link">Settings</span> &middot; rate limits inherited from <span class="gr-dim-link">Personal</span></div>
+                <div class="gr-dim-state">$10 per session. <b>No monthly budget.</b></div>
+                <div class="gr-dim-where">1 of 2 limits &middot; set in <span class="gr-dim-link">Settings</span></div>
               </div>
               <div class="gr-dim-aside"><span class="gr-pill is-partly"><span class="dot"></span> Partly</span></div>
             </div>
@@ -437,7 +439,7 @@
               <div class="gr-dim-body">
                 <div class="gr-dim-name">Output</div>
                 <div class="gr-dim-state"><b>Nothing checks what it sends.</b></div>
-                <div class="gr-dim-where">Destinations per channel in <span class="gr-dim-link">Triggers</span> &middot; content in <span class="gr-dim-link">Settings</span></div>
+                <div class="gr-dim-where">Content policy is off &middot; set in <span class="gr-dim-link">Settings</span></div>
               </div>
               <div class="gr-dim-aside"><span class="gr-pill"><span class="dot"></span> Open</span></div>
             </div>
@@ -449,7 +451,27 @@
       </div>
     </div>
 
-    <p class="gr-note"><b>Every pill has to be traceable to a phrase in its own row.</b> <i>Partly</i> was the weakest thing on this screen: Reach said &ldquo;anyone in #metrics can message it, schedule runs Mondays 9:00&rdquo; and then graded itself <i>Partly</i>, with nothing on the row explaining which half was missing. A grade you can't check is worse than no grade, because it looks like information. So the rule is now: anything not <i>Bounded</i> states the unbounded part in bold, and the pill is just the shorthand for the sentence you can already read.</p>
+    <div class="gr-oq" style="background:#fbfbfa; margin-top:18px;">
+      <h3 style="margin-bottom:4px;">How the three states are decided</h3>
+      <p class="gr-oq-sub">Each dimension has a countable set of <i>places a rule can be set</i>. The state is how many of them are.</p>
+      <div class="gr-tblwrap">
+      <table class="gr-tbl">
+        <thead><tr><th>Dimension</th><th>Places a rule can be set</th><th>Bounded</th><th>Partly</th></tr></thead>
+        <tbody>
+          <tr><td>Reach</td><td>One per channel the agent has</td><td class="muted">Every channel restricts who can reach it</td><td class="muted">Some do, some don't</td></tr>
+          <tr><td>Action</td><td>One per tool, for its write and delete group</td><td class="muted">No destructive tool runs without asking</td><td class="muted">Some tools do, some don't</td></tr>
+          <tr><td>Cost</td><td>Monthly budget, cost cap per session</td><td class="muted">Both set</td><td class="muted">One of the two</td></tr>
+          <tr><td>Output</td><td>The content policy &mdash; one switch</td><td class="muted">On</td><td class="muted"><i>Never. One place can't be half-set.</i></td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+
+    <p class="gr-note"><b>So <i>Partly</i> means: more than one place, and only some of them set.</b> That's the whole definition, and it's checkable &mdash; Reach is Partly because one of two channels is open, Cost because one of two limits is missing. <i>Open</i> is none of them, <i>Bounded</i> is all of them. The test that it's a real rule rather than a feeling: <b>Output can never be Partly</b>, because it's a single switch. If a dimension with one control ever showed <i>Partly</i>, the definition would be broken.</p>
+
+    <p class="gr-note"><b>The count goes in the quiet line, not on the badge.</b> <i>1 of 2 channels</i> sits where the row already says where the rule lives, so anyone who wants to check the pill can. Putting it <i>on</i> the pill would turn the summary into a score out of ten and imply the target is always all of them &mdash; an agent with one channel deliberately open to a public Telegram bot isn't 50% finished. Same number, different claim, depending on where it sits.</p>
+
+    <p class="gr-note"><b>Every pill has to be traceable to a phrase in its own row.</b>
 
     <p class="gr-note"><b>Three states, no red:</b> <i>Bounded</i>, <i>Partly</i>, <i>Open</i>. An agent with no output rule may be entirely fine, so a gap can't look like a failure &mdash; but it still has to be visible enough to notice before production. Open is grey and quiet; it doesn't demand to be fixed.</p>
 
@@ -475,13 +497,13 @@
               <div class="gr-flow-stage">
                 <div class="gr-flow-stage-name"><span class="gr-pill is-partly" style="padding:2px 7px;"><span class="dot"></span></span> Reaches it</div>
                 <div class="gr-flow-rule">#metrics</div>
-                <div class="gr-flow-rule">Mondays 9:00</div>
+                <div class="gr-flow-none">Telegram open to anyone</div>
                 <span class="gr-flow-add">Triggers</span>
               </div>
               <div class="gr-flow-stage">
                 <div class="gr-flow-stage-name"><span class="gr-pill is-bounded" style="padding:2px 7px;"><span class="dot"></span></span> Acts</div>
                 <div class="gr-flow-rule">6 tools allowed</div>
-                <div class="gr-flow-rule">2 ask first</div>
+                <div class="gr-flow-rule">Nothing destructive unasked</div>
                 <span class="gr-flow-add">Skills</span>
               </div>
               <div class="gr-flow-stage">
@@ -594,7 +616,7 @@
     <p class="gr-note"><b>What it costs.</b> Vertical space at the top of a tab that is already long, which is why it collapses to nothing once the last task is done and carries a dismiss from the start. A banner that outlives its usefulness is the fastest way to teach people to ignore that region of the screen.</p>
 
     <h2 class="lrt-section-title" style="margin-top:34px;">Needs attention, the same shape <span class="gr-tag is-new">new</span></h2>
-    <p class="lrt-section-sub">Once setup is done the panel goes. It comes back, in amber, when something is wrong &mdash; same position, same anatomy, one row per thing with the action on the right.</p>
+    <p class="lrt-section-sub">Once setup is done the panel goes. It comes back, in the same violet, when something is wrong &mdash; same position, same anatomy, one row per thing with the action on the right.</p>
 
     <div class="nbk">
       <div class="nbk-frame">
@@ -605,10 +627,10 @@
           </div>
           <div class="ag-tabs"><span class="ag-tab is-active">Build</span></div>
           <div class="na-panel is-alert">
-            <div class="na-panel-head"><span style="color:#b4781a; display:inline-flex; width:17px; height:17px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg></span><span class="t">Needs attention</span><span class="n">2</span><span class="x">&times;</span></div>
+            <div class="na-panel-head"><span class="t">Needs attention</span><span class="n">2</span><span class="x">&times;</span></div>
             <div class="na-tasks">
-              <div class="na-task"><span class="mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg></span><div><span class="nm">Notion credential expired</span><div class="sub">6 tools stopped working.</div></div><span class="go">Reconnect &rarr;</span></div>
-              <div class="na-task"><span class="mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg></span><div><span class="nm">92% of monthly budget used</span><div class="sub">$184 of $200. Runs stop when it's reached.</div></div><span class="go">Raise cap &rarr;</span></div>
+              <div class="na-task"><span class="mark"></span><div><span class="nm">Notion credential expired</span><div class="sub">6 tools stopped working.</div></div><span class="go">Reconnect &rarr;</span></div>
+              <div class="na-task"><span class="mark"></span><div><span class="nm">92% of monthly budget used</span><div class="sub">$184 of $200. Runs stop when it's reached.</div></div><span class="go">Raise cap &rarr;</span></div>
             </div>
           </div>
 
@@ -632,7 +654,7 @@
       </div>
     </div>
 
-    <p class="gr-note"><b>One panel, two reasons to appear, and they never overlap.</b> Setup is finite and one-way: every task is a door that closes behind you, which is why a progress wheel works. Attention is recurring &mdash; a credential expires, a budget fills &mdash; and would make that same wheel run backwards. Reusing the position and the anatomy but changing the colour and the icon means a builder learns one place to look, and the state tells them which kind of problem they have before they read a word.</p>
+    <p class="gr-note"><b>One panel, two reasons to appear, and they never overlap.</b> Setup is finite and one-way: every task is a door that closes behind you, which is why a progress wheel works. Attention is recurring &mdash; a credential expires, a budget fills &mdash; and would make that same wheel run backwards. Reusing the position, the colour and the anatomy means a builder learns one place to look; the heading and the rows say which kind of problem it is.</p>
 
     <p class="gr-note"><b>Every row has to be actionable from Build.</b> An expired credential, a budget nearly spent, unpublished changes, a tool failing every run &mdash; all fixable from here, so all earn the space. A single failed execution doesn't; that belongs in Sessions. Put run-level noise in this panel and it turns into a notification feed, which is how this pattern usually dies.</p>
 
