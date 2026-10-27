@@ -229,6 +229,9 @@
 
   .gr-info { display: inline-flex; color: #9298a0; cursor: help; }
   .gr-info svg { width: 13px; height: 13px; }
+
+  /* a switch you can read but not move */
+  .nbk-toggle.is-locked { opacity: 0.55; cursor: not-allowed; pointer-events: none; }
 </style>
 </head>
 <body>
@@ -944,7 +947,7 @@
                 <div class="gr-rule-sub">PII is checked before every tool call, memory write and reply. You can't turn this off for this agent.</div>
                 <div class="gr-dim-where" style="margin-top:4px;">Instance settings &rarr;</div>
               </div>
-              <span class="gr-rule-ctl" style="font-size:13px; color:#55595e;">On</span>
+              <span class="nbk-toggle is-on is-locked"><span class="nbk-toggle-knob"></span></span>
               <span class="gr-chevr">&#8250;</span>
             </div>
           </div>
