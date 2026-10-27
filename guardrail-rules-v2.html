@@ -674,15 +674,9 @@
               <div class="gr-rule-row"><div class="gr-rule-main"><div class="gr-rule-name">When the limit is hit</div></div><span class="gr-rule-ctl nbk-select-input">Wait and retry <span class="chev">&#9662;</span></span></div>
             </div>
 
-            <div style="display:flex; align-items:center; gap:5px; font-size:13.5px; font-weight:700; color:#1a1c1e; margin:18px 0 5px;">Which tools can use this guardrail?<span class="gr-info" title="All tools means every tool this agent has, including tools added later."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 16v-5M12 8h.01"/></svg></span></div>
-            <div style="display:flex; align-items:center; gap:10px; padding-bottom:9px;">
-              <div style="flex:1;">
-                <div style="font-size:13px; color:#1a1c1e;">All tools</div>
-                <div style="font-size:11.5px; color:#9298a0;">Apply the guardrail to all tools, or select the tools.</div>
-              </div>
-              <span class="nbk-toggle is-on" onclick="this.classList.toggle('is-on')"><span class="nbk-toggle-knob"></span></span>
-            </div>
-            <div style="padding-left:12px; border-left:2px solid var(--line-soft,#d4d7da);">
+            <div style="display:flex; align-items:center; gap:5px; font-size:13.5px; font-weight:700; color:#1a1c1e; margin:18px 0 5px;">Which tools can use this guardrail?<span class="gr-info" title="All tools covers every tool this agent has, including tools added later. Select tools fixes the list to the ones you pick."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 16v-5M12 8h.01"/></svg></span></div>
+            <div class="gr-segctl"><span class="is-on" onclick="grTools(this,false)">All tools</span><span onclick="grTools(this,true)">Select tools</span></div>
+            <div id="gr-tools-field" style="display:none; margin-top:10px;">
               <div class="gr-chipfield"><span class="gr-chip">Notion <span class="x">&times;</span></span><span class="gr-chip">Hex <span class="x">&times;</span></span><span class="ph">Search tools</span></div>
             </div>
 
@@ -702,7 +696,9 @@
 
     <p class="gr-note"><b>Why <i>wait and retry</i> can ship as the default.</b> It's the only one of the three that can't lose you anything: hitting a rate limit and backing off changes how long a run takes and nothing else, where skipping the call silently drops work and stopping the run throws away everything done so far. A default is safe to set when the worst case is slowness.</p>
 
-    <p class="gr-note"><b>All tools is the default, and it's the same shape as the Slack access block in section 1.</b> A guardrail you went to the trouble of creating is usually meant to apply, so making you list the tools is work that produces the answer you already had. The deciding case is the one a list gets wrong silently: a tool added next month is covered by <i>all</i> and missed by an enumeration nobody remembers to update. Narrowing stays one toggle away for the guardrail that really is about one slow API.</p>
+    <p class="gr-note"><b>Two options rather than a toggle, because they aren't the same kind of answer.</b> A toggle makes <i>all tools</i> look like the on state of a setting whose off state is nothing; in fact both options are real choices and the second one needs a list. Showing the field only when <i>Select tools</i> is active also stops the common misread: a populated tag field sitting under an enabled <i>All tools</i> toggle looks like it's narrowing the scope when it isn't doing anything.</p>
+
+    <p class="gr-note"><b>All tools stays the default.</b> A guardrail you went to the trouble of creating is usually meant to apply, so making you list the tools is work that produces the answer you already had. The deciding case is the one a list gets wrong silently: a tool added next month is covered by <i>all</i> and missed by an enumeration nobody remembers to update.</p>
 
     <p class="gr-note"><b>Two entry points, and they want opposite flows.</b> From a tool you attach one guardrail to one tool, which is the natural move while you're setting that tool up. But the moment you have nine data-table tools, you want the other direction: make the guardrail, then tick the tools it covers &mdash; which is why <i>Applies to</i> is in the modal rather than only on the tool. Both exist above. The list itself isn't a new invention &mdash; it goes beside Skills in Settings &rarr; Context, drawn in the next section.</p>
 
@@ -1106,6 +1102,13 @@
   function grOpen(id){ var el = document.getElementById(id); if(!el) return; el.classList.toggle('is-open'); }
   function grClose(id){ var el = document.getElementById(id); if(el) el.classList.remove('is-open'); }
   function grCollapse(head){ head.classList.toggle('is-open'); var b = head.nextElementSibling; if(b) b.classList.toggle('is-open'); }
+  function grTools(el, select){
+    var seg = el.parentElement;
+    [].forEach.call(seg.children, function(c){ c.classList.remove('is-on'); });
+    el.classList.add('is-on');
+    var f = document.getElementById('gr-tools-field');
+    if (f) f.style.display = select ? 'block' : 'none';
+  }
 </script>
 <script src="js/hub.js"></script>
 </body></html>
