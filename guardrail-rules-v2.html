@@ -230,6 +230,20 @@
   .gr-info { display: inline-flex; color: #9298a0; cursor: help; }
   .gr-info svg { width: 13px; height: 13px; }
 
+  /* Build cards as they really are: stacked plain add-rows */
+  .bld-card { border: 1px solid var(--line-soft,#d4d7da); border-radius: 10px; background: #fff; padding: 16px 18px; margin-bottom: 14px; }
+  .bld-card h4 { margin: 0; font-size: 14px; font-weight: 600; color: #1a1c1e; }
+  .bld-card .sub { font-size: 12.5px; color: #9298a0; margin: 2px 0 12px; }
+  .bld-add { font-size: 13px; color: #9298a0; padding: 7px 0; cursor: pointer; }
+  .bld-add:hover { color: #55595e; }
+  .bld-head { display: flex; align-items: flex-start; gap: 10px; }
+  .bld-flask { width: 28px; height: 28px; border: 1px solid var(--line-soft,#d4d7da); border-radius: 7px; display: flex; align-items: center; justify-content: center; color: #9298a0; flex: none; }
+  .bld-flask svg { width: 14px; height: 14px; }
+  .bld-divider { border-top: 1px solid var(--line-soft,#d4d7da); margin: 12px -18px 0; padding: 12px 18px 0; display: flex; align-items: center; gap: 12px; }
+  .bld-item { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #1a1c1e; padding: 7px 0; }
+  .bld-item .ic { width: 18px; height: 18px; border-radius: 5px; background: #eceeef; flex: none; }
+  .bld-item .meta { margin-left: auto; font-size: 11.5px; color: #9298a0; }
+
   /* a switch you can read but not move */
   .nbk-toggle.is-locked { opacity: 0.55; cursor: not-allowed; pointer-events: none; }
 </style>
@@ -418,7 +432,7 @@
 
     <p class="gr-note"><b>We looked at doing this centrally instead, and dropped it.</b> A single card in Settings listing who the agent can talk to reads well until you try to fill it: every identity in it belongs to one channel, so the control has to reach into Slack, Telegram and the rest to populate itself, and you'd still be configuring Slack &mdash; just somewhere further from Slack. The deciding argument was the builder's: you set this while you're in the channel's head, not while reading a list. <span class="who">Michael: &ldquo;then I would probably get rid of the central aspect.&rdquo;</span></p>
 
-    <p class="gr-note"><b>What that leaves without a home.</b> One rule genuinely isn't channel-specific: whether anyone <i>other than</i> the person who started the run can talk to the agent. That's true wherever it's used, so it can't live in a channel &mdash; it goes in Settings as a single Allow / Block row, drawn in section 5. Everything else here stays with the channel that owns the identities.</p>
+    <p class="gr-note"><b>What that leaves without a home.</b> One rule genuinely isn't channel-specific: whether anyone <i>other than</i> the person who started the run can talk to the agent. That one isn't ours &mdash; it's access, Michael is building it, and it's listed under <i>What isn't a guardrail</i> below. Everything on this screen stays with the channel that owns the identities.</p>
 
     <!-- ---------- ACTION ---------- -->
     <h2 class="lrt-section-title" style="margin-top:34px;">2 &mdash; Tools &nbsp;<span style="font-size:12.5px; font-weight:400; color:var(--hub-muted);">permissions here, checks in a guardrail you reuse</span></h2>
@@ -427,86 +441,79 @@
     <div class="nbk">
       <div class="nbk-frame">
         <div class="nbk-main">
-          <div class="nbk-box">
-            <div class="nbk-field-label">Capabilities <span class="gr-tag is-today">today</span><span class="nbk-field-sub">What this agent can do and how it does it</span></div>
-            <div class="gr-chiprow">
-              <span class="gr-chiprow-label">Tools <span class="gr-count">3</span></span>
-              <span class="gr-toolchip"><span class="ic"></span> Hex</span>
-              <span class="gr-toolchip"><span class="ic"></span> Notion <span class="chev">&#9662;</span></span>
-              <span class="gr-toolchip"><span class="ic"></span> Slack <span class="chev">&#9662;</span></span>
-              <span class="gr-addchip">+ Add tool</span>
+          <div class="bld-card">
+            <h4>Skills</h4>
+            <div class="sub">How this agent handles specific tasks</div>
+            <div class="bld-add">Add skill</div>
+          </div>
+
+          <div class="bld-card">
+            <div class="bld-head">
+              <div style="flex:1;">
+                <h4>Triggers</h4>
+                <div class="sub">Where and when this agent runs</div>
+              </div>
+              <span class="bld-flask"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v7.5a2 2 0 0 1-.2.9L4.7 20.6a1 1 0 0 0 .9 1.4h12.8a1 1 0 0 0 .9-1.4l-5.1-10.2a2 2 0 0 1-.2-.9V2"/><path d="M8.5 2h7"/><path d="M7 16h10"/></svg></span>
             </div>
-            <div class="gr-chiprow">
-              <span class="gr-chiprow-label">Skills <span class="gr-count">0</span></span>
-              <span class="gr-addchip">+ Add skill</span>
+            <div class="bld-add">Add channel</div>
+            <div class="bld-add">Add schedule</div>
+          </div>
+
+          <div class="bld-card" style="margin-bottom:0;">
+            <h4>Capabilities</h4>
+            <div class="sub">What this agent can do and how it does it</div>
+            <div class="bld-add">Add tool</div>
+            <div class="bld-add">Add workflow</div>
+            <div class="bld-add">Add sub-agent</div>
+            <div class="bld-divider">
+              <div style="flex:1;">
+                <div style="font-size:13px; color:#1a1c1e;">Web search</div>
+                <div style="font-size:12px; color:#9298a0;">Let the model search the web when it needs up-to-date information.</div>
+              </div>
+              <span class="nbk-select-input" style="font-size:12.5px;">Off <span class="chev">&#9662;</span></span>
             </div>
           </div>
         </div>
       </div>
     </div>
 
+    <p class="gr-note"><b>I had this wrong and it changes the answer below.</b> I'd drawn Skills as a row inside Capabilities. It isn't &mdash; <b>Skills is its own card</b>, above Triggers, with nothing in it but a title, a line of description and <i>Add skill</i>. Capabilities is tools, workflows and sub-agents, plus Web search on a divider.</p>
+
     <h3 class="lrt-section-title" style="font-size:15px; margin-top:26px;">And where the list shows in Build <span class="gr-tag is-new">new</span></h3>
-    <p class="lrt-section-sub">Guardrails attach per tool, so the tool pane already shows which one is on which. This is the other thing Skills has: a roster in Build, so you can see the set and add one without going through a tool. Two places it could sit.</p>
+    <p class="lrt-section-sub">Guardrails attach per tool, so the tool pane already shows which one is on which. This is the other half Skills has: a roster in Build, to see the set and add one without going through a tool. Your note was <i>treat as Skills</i> &mdash; and now that Skills turns out to be its own card, that answers it: <b>its own card too</b>, in the same shape.</p>
 
     <div class="nbk">
       <div class="nbk-frame">
         <div class="nbk-main">
-          <div class="lrt-screen-desc" style="margin:0 0 8px;"><b>A &mdash; a third row inside Capabilities.</b> Treated exactly like Skills.</div>
-          <div class="nbk-box">
-            <div class="nbk-field-label">Capabilities <span class="gr-tag is-today">today</span><span class="nbk-field-sub">What this agent can do and how it does it</span></div>
-            <div class="gr-chiprow">
-              <span class="gr-chiprow-label">Tools <span class="gr-count">3</span></span>
-              <span class="gr-toolchip"><span class="ic"></span> Hex</span>
-              <span class="gr-toolchip"><span class="ic"></span> Notion <span class="chev">&#9662;</span></span>
-              <span class="gr-toolchip"><span class="ic"></span> Slack <span class="chev">&#9662;</span></span>
-              <span class="gr-addchip">+ Add tool</span>
-            </div>
-            <div class="gr-chiprow">
-              <span class="gr-chiprow-label">Skills <span class="gr-count">0</span></span>
-              <span class="gr-addchip">+ Add skill</span>
-            </div>
-            <div class="gr-chiprow"><span class="gr-chiprow-label">Guardrails <span class="gr-count">2</span></span>
-              <span class="gr-toolchip">Finance data check</span>
-              <span class="gr-toolchip">Prompt injection check</span>
-              <span class="gr-addchip">+ Add guardrail</span></div>
+          <div class="bld-card" style="opacity:0.45;">
+            <h4>Capabilities</h4>
+            <div class="sub">What this agent can do and how it does it</div>
+            <div class="bld-add">Add tool &middot; Add workflow &middot; Add sub-agent</div>
           </div>
 
-          <div class="lrt-screen-desc" style="margin:24px 0 8px;"><b>B &mdash; its own card, after Capabilities and before Memory.</b> Same chip format, so it still reads as a sibling.</div>
-          <div class="nbk-box">
-            <div class="nbk-field-label">Capabilities <span class="gr-tag is-today">today</span><span class="nbk-field-sub">What this agent can do and how it does it</span></div>
-            <div class="gr-chiprow">
-              <span class="gr-chiprow-label">Tools <span class="gr-count">3</span></span>
-              <span class="gr-toolchip"><span class="ic"></span> Hex</span>
-              <span class="gr-toolchip"><span class="ic"></span> Notion <span class="chev">&#9662;</span></span>
-              <span class="gr-toolchip"><span class="ic"></span> Slack <span class="chev">&#9662;</span></span>
-              <span class="gr-addchip">+ Add tool</span>
-            </div>
-            <div class="gr-chiprow">
-              <span class="gr-chiprow-label">Skills <span class="gr-count">0</span></span>
-              <span class="gr-addchip">+ Add skill</span>
-            </div>
+          <div class="bld-card" style="border-color:#d8a657;">
+            <h4>Guardrails</h4>
+            <div class="sub">What this agent must not do</div>
+            <div class="bld-item"><span class="ic"></span> Finance data check <span class="meta">Notion &middot; input</span></div>
+            <div class="bld-item"><span class="ic"></span> Prompt injection check <span class="meta">4 tools &middot; output</span></div>
+            <div class="bld-add">Add guardrail</div>
           </div>
-          <div class="nbk-box">
-            <div class="nbk-field-label">Guardrails <span class="gr-tag is-new">new</span><span class="nbk-field-sub">What this agent must not do</span></div>
-            <div class="gr-chiprow"><span class="gr-chiprow-label">Guardrails <span class="gr-count">2</span></span>
-              <span class="gr-toolchip">Finance data check</span>
-              <span class="gr-toolchip">Prompt injection check</span>
-              <span class="gr-addchip">+ Add guardrail</span></div>
-          </div>
-          <div class="nbk-box" style="opacity:0.5;">
-            <div class="nbk-field-label">Memory <span class="gr-tag is-today">today</span></div>
+
+          <div class="bld-card" style="opacity:0.45; margin-bottom:0;">
+            <h4>Memory</h4>
+            <div class="sub">What this agent remembers</div>
           </div>
         </div>
       </div>
     </div>
 
-    <p class="gr-note"><b>I'd go with B, on one word in the card's own subtitle.</b> Capabilities says <i>&ldquo;what this agent can do and how it does it&rdquo;</i>, and a guardrail is the opposite &mdash; it's what the agent must <i>not</i> do. Filing a restriction under capabilities makes the card's own description untrue, and it buries the thing an auditor scans for underneath two rows about what's enabled. B keeps the chip format, so it still looks like a sibling of Tools and Skills rather than a new species; it just isn't filed inside a card that means the opposite.</p>
+    <p class="gr-note"><b>Why not a row inside Capabilities, which was the other option.</b> That card says <i>&ldquo;what this agent can do and how it does it&rdquo;</i>, and a guardrail is the opposite &mdash; what it must not do. Filing a restriction there makes the card's own description untrue, and buries the thing an auditor scans for under three rows about what's enabled. Skills already proves a sibling card is the pattern for this, so it costs nothing to follow.</p>
 
-    <p class="gr-note"><b>The order also tells the story.</b> Capabilities, then Guardrails, then Memory reads as what it can do &rarr; what bounds it &rarr; what it keeps, which is the order a run moves in and the order someone reviewing an agent asks about. As a third chiprow it's an afterthought under Skills, which is a row that is usually empty.</p>
+    <p class="gr-note"><b>The order carries the argument.</b> Capabilities, then Guardrails, then Memory reads as what it can do &rarr; what bounds it &rarr; what it keeps &mdash; the order a run moves in, and the order someone reviewing an agent asks about.</p>
 
-    <p class="gr-note"><b>The case for A, which is real.</b> It costs nothing to build, needs no new card, and guardrails attach to tools &mdash; so keeping them in the same box as tools puts the two things that relate next to each other. If Build is already crowded enough that a fourth card is the thing people complain about, A is the pragmatic answer and the subtitle gets reworded.</p>
+    <p class="gr-note"><b>One thing a roster has that the tool pane doesn't.</b> Each row says where it's attached &mdash; <i>Notion &middot; input</i>, <i>4 tools &middot; output</i>. From inside a tool you only ever see that tool's two slots, so a guardrail applied to nine tools looks identical to one applied to one. The roster is the only place the blast radius is visible, which is also what makes editing safe to offer from here.</p>
 
-    <p class="gr-note"><b>Tools and Skills are different things.</b> A skill is a markdown instruction package &mdash; <i>&ldquo;how this agent handles specific tasks&rdquo;</i>. Guardrails attach to tools. Worth keeping straight, because the doc uses &ldquo;Skills&rdquo; for the allowed-tools list.</p>
+    <p class="gr-note"><b>Tools and Skills are different things.</b> A skill is a markdown instruction package &mdash; <i>&ldquo;how this agent handles specific tasks&rdquo;</i>. Guardrails attach to tools, not skills. Worth keeping straight, because the doc uses &ldquo;Skills&rdquo; for the allowed-tools list.</p>
 
     <h3 class="lrt-section-title" style="font-size:15px; margin-top:26px;">Adding one &mdash; the real modal</h3>
     <p class="lrt-section-sub">Browse, then drill in. Not a stepper.</p>
