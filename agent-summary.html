@@ -197,14 +197,37 @@
   .na-row { display: flex; align-items: flex-start; gap: 9px; padding: 8px 9px; border-radius: 7px; font-size: 13px; color: #1a1c1e; }
   .na-row:hover { background: #f4f5f6; }
   .na-row .mark { width: 15px; height: 15px; flex: none; margin-top: 1px; border-radius: 50%; border: 1.5px solid #d4d7da; display: inline-flex; align-items: center; justify-content: center; }
-  .na-row.is-done .mark { border-color: #46a758; background: #46a758; }
-  .na-row.is-done .mark::after { content: ""; width: 6px; height: 3px; border-left: 1.5px solid #fff; border-bottom: 1.5px solid #fff; transform: rotate(-45deg) translate(1px,-1px); }
+  .na-row.is-done .mark { border-color: #d4d7da; background: #eceeef; }
+  .na-row.is-done .mark::after { content: ""; width: 6px; height: 3px; border-left: 1.5px solid #9298a0; border-bottom: 1.5px solid #9298a0; transform: rotate(-45deg) translate(1px,-1px); }
   .na-row.is-done .nm { color: #9298a0; text-decoration: line-through; }
   .na-row.is-alert .mark { border: 0; }
   .na-row .sub { font-size: 11.5px; color: #9298a0; margin-top: 2px; line-height: 1.45; }
   .na-row .req { font-size: 10.5px; color: #9298a0; border: 1px solid var(--line-soft,#d4d7da); border-radius: 4px; padding: 0 4px; margin-left: 5px; }
   .na-sep { height: 1px; background: var(--line-soft,#d4d7da); margin: 6px 4px; }
   .na-grouped { font-size: 12px; color: #9298a0; padding: 7px 9px; display: flex; align-items: center; gap: 6px; }
+
+  /* the trigger as it really is: tinted violet pill */
+  .na-trigger.is-live { background: #efecfd; border-color: #cfc6f7; color: #5b46c9; }
+  .na-trigger.is-live .na-wheel .track { stroke: #cfc6f7; }
+  .na-trigger.is-live .na-wheel .val { stroke: #6b4ef0; }
+
+  /* the agent page, for context */
+  .ag-top { display: flex; align-items: center; gap: 12px; padding: 2px 0 14px; }
+  .ag-avatar { width: 34px; height: 34px; border-radius: 10px; background: linear-gradient(135deg,#6db7e8,#a78bd6,#e89ab0); flex: none; }
+  .ag-title { font-size: 20px; font-weight: 600; color: #1a1c1e; }
+  .ag-tabs { display: flex; gap: 18px; border-bottom: 1px solid var(--line-soft,#d4d7da); margin-bottom: 16px; }
+  .ag-tab { font-size: 13px; color: #9298a0; padding: 0 0 9px; }
+  .ag-tab.is-active { color: #1a1c1e; font-weight: 600; box-shadow: inset 0 -2px 0 #1a1c1e; }
+  .ag-req { color: #c2452f; }
+  .ag-banner { display: flex; gap: 9px; align-items: flex-start; border: 1px solid var(--line-soft,#d4d7da); border-radius: 8px; padding: 9px 11px; font-size: 12.5px; color: #55595e; margin-top: 9px; }
+  .ag-banner svg { width: 14px; height: 14px; color: #9298a0; flex: none; margin-top: 1px; }
+  .ag-field { border: 1px solid var(--line-soft,#d4d7da); border-radius: 8px; padding: 9px 12px; font-size: 13px; color: #1a1c1e; display: flex; align-items: center; gap: 9px; }
+  .ag-textarea { border: 1px solid var(--line-soft,#d4d7da); border-radius: 8px; padding: 11px 12px; font-size: 13px; color: #9298a0; min-height: 62px; }
+
+  .bld-card { border: 1px solid var(--line-soft,#d4d7da); border-radius: 10px; background: #fff; padding: 16px 18px; margin-bottom: 14px; }
+  .bld-card h4 { margin: 0; font-size: 14px; font-weight: 600; color: #1a1c1e; }
+  .bld-card .sub { font-size: 12.5px; color: #9298a0; margin: 2px 0 12px; }
+  .bld-add { font-size: 13px; color: #9298a0; padding: 7px 0; cursor: pointer; }
 
   .gr-oq { border: 1px dashed var(--line, #a7abb0); border-radius: 10px; padding: 18px 20px; margin-top: 10px; background: #fffdf7; }
   .gr-oq h3 { margin: 0 0 4px; font-size: 14px; }
@@ -391,20 +414,24 @@
               <span class="gr-dim-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12h16"/><path d="m18 6 6 6-6 6" transform="translate(-4)"/></svg></span>
               <div class="gr-dim-body">
                 <div class="gr-dim-name">Output</div>
-                <div class="gr-dim-state">Replies in #metrics only. Content isn't checked.</div>
+                <div class="gr-dim-state"><b>Nothing checks what it sends.</b></div>
                 <div class="gr-dim-where">Destinations per channel in <span class="gr-dim-link">Triggers</span> &middot; content in <span class="gr-dim-link">Settings</span></div>
               </div>
               <div class="gr-dim-aside"><span class="gr-pill"><span class="dot"></span> Open</span></div>
             </div>
           </div>
-              <div class="gr-modal-foot" style="margin-top:14px;"><span class="gr-foot-note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></svg> Anyone in #metrics can message this agent</span><span style="flex:1;"></span><span class="nbk-btn">Cancel</span><span class="nbk-btn nbk-btn-primary">Publish</span></div>
+              <div class="gr-modal-foot" style="margin-top:14px;"><span style="flex:1;"></span><span class="nbk-btn">Cancel</span><span class="nbk-btn nbk-btn-primary">Publish</span></div>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <p class="gr-note"><b>Why the states read this way.</b> Three states, no red: <i>Bounded</i>, <i>Partly</i>, <i>Open</i>. An agent with no output rule may be entirely fine, so a gap can't look like a failure &mdash; but it still has to be visible enough to notice before production. Open is grey and quiet; it doesn't demand to be fixed.</p>
+    <p class="gr-note"><b>Every pill has to be traceable to a phrase in its own row.</b> <i>Partly</i> was the weakest thing on this screen: Reach said &ldquo;anyone in #metrics can message it, schedule runs Mondays 9:00&rdquo; and then graded itself <i>Partly</i>, with nothing on the row explaining which half was missing. A grade you can't check is worse than no grade, because it looks like information. So the rule is now: anything not <i>Bounded</i> states the unbounded part in bold, and the pill is just the shorthand for the sentence you can already read.</p>
+
+    <p class="gr-note"><b>Three states, no red:</b> <i>Bounded</i>, <i>Partly</i>, <i>Open</i>. An agent with no output rule may be entirely fine, so a gap can't look like a failure &mdash; but it still has to be visible enough to notice before production. Open is grey and quiet; it doesn't demand to be fixed.</p>
+
+    <p class="gr-note"><b>And the footer line came out.</b> It repeated the Reach row three inches below it. The pattern it was borrowed from &mdash; Plane's publish dialog, which states the access outcome next to the buttons &mdash; works there because nothing else in that modal says it. Here the whole modal is that sentence.</p>
 
     <h2 class="lrt-section-title" style="margin-top:34px;">Step 1, option B &mdash; By the path a run takes</h2>
     <p class="lrt-section-sub">The same rules, ordered the way a run moves through them: something reaches the agent, it acts, it sends. Makes the Output gap obvious because it's the end of a line you can follow, not the fifth item in a list &mdash; which is how the gap got spotted, even though it then turned out to be two gaps with homes of their own.</p>
@@ -425,7 +452,7 @@
             <div class="gr-flow">
               <div class="gr-flow-stage">
                 <div class="gr-flow-stage-name"><span class="gr-pill is-partly" style="padding:2px 7px;"><span class="dot"></span></span> Reaches it</div>
-                <div class="gr-flow-rule">Anyone in #metrics</div>
+                <div class="gr-flow-rule">#metrics</div>
                 <div class="gr-flow-rule">Mondays 9:00</div>
                 <span class="gr-flow-add">Triggers</span>
               </div>
@@ -438,18 +465,18 @@
               <div class="gr-flow-stage">
                 <div class="gr-flow-stage-name"><span class="gr-pill is-partly" style="padding:2px 7px;"><span class="dot"></span></span> Spends</div>
                 <div class="gr-flow-rule">$10 per session</div>
-                <div class="gr-flow-none">No per-tool ceiling</div>
+                <div class="gr-flow-none">No monthly budget</div>
                 <span class="gr-flow-add">Settings</span>
               </div>
                             <div class="gr-flow-stage is-open">
                 <div class="gr-flow-stage-name"><span class="gr-pill is-partly" style="padding:2px 7px;"><span class="dot"></span></span> Sends</div>
                 <div class="gr-flow-rule">#metrics only</div>
-                <div class="gr-flow-none">Content unchecked</div>
+                <div class="gr-flow-none">Nothing checks content</div>
                 <span class="gr-flow-add">Triggers</span>
               </div>
             </div>
           </div>
-              <div class="gr-modal-foot" style="margin-top:14px;"><span class="gr-foot-note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></svg> Anyone in #metrics can message this agent</span><span style="flex:1;"></span><span class="nbk-btn">Cancel</span><span class="nbk-btn nbk-btn-primary">Publish</span></div>
+              <div class="gr-modal-foot" style="margin-top:14px;"><span style="flex:1;"></span><span class="nbk-btn">Cancel</span><span class="nbk-btn nbk-btn-primary">Publish</span></div>
             </div>
           </div>
         </div>
@@ -501,36 +528,49 @@
     </div>
 
     <h2 class="lrt-section-title">What ships today <span class="gr-tag is-today">today</span></h2>
-    <p class="lrt-section-sub">Six tasks in a fixed order, each either <i>todo</i> or <i>complete</i>. Two are required to publish. <i>Test agent</i> only appears once the agent can run, <i>Publish agent</i> once it has been tested, and <i>Add channels</i> is written but switched off behind a TODO.</p>
+    <p class="lrt-section-sub">Top right of the Build tab. The trigger is a tinted violet pill with a progress wheel, labelled <i>Finish setup</i> &mdash; the label doesn't count down. The popover has no header: outstanding tasks first, completed ones under them struck through.</p>
 
     <div class="nbk">
       <div class="nbk-frame">
-        <div class="nbk-main" style="padding-top:26px; padding-bottom:26px;">
-          <div style="display:flex; gap:26px; align-items:flex-start; flex-wrap:wrap; justify-content:center;">
-            <div>
-              <div class="lrt-screen-desc" style="margin:0 0 8px;"><b>Mid-build.</b></div>
-              <span class="na-trigger"><svg class="na-wheel" viewBox="0 0 20 20" fill="none" stroke-width="2"><circle class="track" cx="10" cy="10" r="8"/><circle class="val" cx="10" cy="10" r="8" pathLength="100" stroke-dasharray="100" stroke-dashoffset="60" transform="rotate(-90 10 10)" stroke-linecap="round"/></svg>3 remaining</span>
-            </div>
-            <div>
-              <div class="lrt-screen-desc" style="margin:0 0 8px;"><b>Everything done.</b></div>
-              <span class="na-trigger is-done"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg></span>Done!</span>
-            </div>
+        <div class="nbk-main">
+          <div class="ag-top">
+            <span class="ag-avatar"></span>
+            <span class="ag-title">Untitled</span>
+            <span style="flex:1;"></span>
+            <span class="na-trigger is-live"><svg class="na-wheel" viewBox="0 0 20 20" fill="none" stroke-width="2"><circle class="track" cx="10" cy="10" r="8"/><circle class="val" cx="10" cy="10" r="8" pathLength="100" stroke-dasharray="100" stroke-dashoffset="34" transform="rotate(-90 10 10)" stroke-linecap="round"/></svg>Finish setup</span>
           </div>
+          <div class="ag-tabs"><span class="ag-tab is-active">Build</span></div>
 
-          <div style="margin-top:26px; display:flex; justify-content:center;">
-            <div class="na-pop">
-              <div class="na-pop-head"><span class="t">Finish setup</span><span style="flex:1;"></span><span>3 remaining</span></div>
+          <div style="position:relative;">
+            <div class="na-pop" style="position:absolute; right:0; top:-6px; z-index:5;">
+              <div class="na-row"><span class="mark"></span><div><span class="nm">Add tools</span></div></div>
               <div class="na-row is-done"><span class="mark"></span><div><span class="nm">Choose a model</span></div></div>
               <div class="na-row is-done"><span class="mark"></span><div><span class="nm">Add instructions</span></div></div>
-              <div class="na-row is-done"><span class="mark"></span><div><span class="nm">Add tools</span></div></div>
-              <div class="na-row"><span class="mark"></span><div><span class="nm">Test agent</span></div></div>
-              <div class="na-row"><span class="mark"></span><div><span class="nm">Add channels</span><div class="sub">Add a channel to let this agent respond to events from a chat platform.</div></div></div>
-              <div class="na-row"><span class="mark"></span><div><span class="nm">Publish agent</span></div></div>
+            </div>
+
+            <div class="bld-card">
+              <h4>Model <span class="ag-req">*</span></h4>
+              <div class="sub">What model this agent uses</div>
+              <div class="ag-field"><span style="width:16px;height:16px;border-radius:50%;background:#eceeef;display:inline-block;"></span> GPT-5.6 Terra <span style="color:#9298a0;">Gateway credits</span></div>
+              <div class="ag-banner"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 16v-5M12 8h.01"/></svg><span><b>Default model selected</b> A sensible default has been chosen for you. You can change it anytime.</span></div>
+              <div style="border-top:1px solid var(--line-soft,#d4d7da); margin:14px -18px 0; padding:14px 18px 0;">
+                <h4>Instructions <span class="ag-req">*</span></h4>
+                <div class="sub">What this agent should do</div>
+                <div class="ag-textarea">Summarize new tickets in the Customer Support Slack channel.</div>
+              </div>
+            </div>
+
+            <div class="bld-card" style="margin-bottom:0;">
+              <h4>Skills</h4>
+              <div class="sub">How this agent handles specific tasks</div>
+              <div class="bld-add">Add skill</div>
             </div>
           </div>
         </div>
       </div>
     </div>
+
+    <p class="gr-note"><b>Two things I'd drawn wrong.</b> The label is always <i>Finish setup</i> &mdash; it doesn't become &ldquo;3 remaining&rdquo;, so the only thing carrying progress is the wheel. And the popover has no title or count: it's a bare list, outstanding first, done ones struck through underneath. Both matter for the next part, because they're the space a third state has to fit into.</p>
 
     <p class="gr-note"><b>The wheel only counts up, and that's the limitation.</b> Every task here is a one-way door: you choose a model, it goes green, it never comes back. That's why a percentage works. The moment the same control has to carry a credential that expired or a budget that ran out, the wheel would have to go <i>backwards</i>, and <i>Done!</i> becomes a claim the product can't keep.</p>
 
