@@ -1,0 +1,1104 @@
+<!doctype html><html><head>
+<meta charset="utf8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Guardrails v2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Patrick+Hand&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles/hub.css">
+<link rel="stylesheet" href="styles/notebook-ui.css">
+<style>
+  /* Everything the notebook kit ships is already scoped under .nbk, so nothing here
+     leaks into the hub chrome. These are only the few page-specific additions. */
+  .nbk-frame { border: 1px solid var(--line-soft, #d4d7da); border-radius: 10px; overflow: hidden; background: #fff; }
+  /* .nbk-main centres its children at their natural width; these screens want a real column. */
+  .nbk-frame .nbk-main { padding: 22px 26px 30px; align-items: stretch; }
+  .nbk-frame .nbk-main > * { width: 100%; max-width: 860px; margin-inline: auto; }
+
+  .gr-dim-row { display: flex; align-items: flex-start; gap: 14px; padding: 13px 0; border-top: 1px solid var(--line-soft, #d4d7da); }
+  .gr-dim-row:first-of-type { border-top: 0; }
+  .gr-dim-icon { width: 26px; height: 26px; flex: none; display: flex; align-items: center; justify-content: center; border-radius: 7px; background: #eceeef; color: #55595e; }
+  .gr-dim-body { flex: 1; min-width: 0; }
+  .gr-dim-name { font-size: 15px; color: #1a1c1e; }
+  .gr-dim-state { font-size: 13.5px; color: #55595e; margin-top: 1px; }
+  .gr-dim-where { font-size: 12.5px; color: #9298a0; margin-top: 3px; }
+  .gr-dim-where a, .gr-dim-link { color: #55595e; text-decoration: underline; text-underline-offset: 2px; cursor: pointer; }
+  .gr-dim-aside { flex: none; display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
+
+  /* Coverage, not health: an unset rule is a legitimate choice, so it must not read as an error. */
+  .gr-pill { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: #1a1c1e; background: #eceeef; border-radius: 999px; padding: 3px 10px; white-space: nowrap; }
+  .gr-pill .dot { width: 7px; height: 7px; border-radius: 999px; flex: none; background: #9298a0; }
+  .gr-pill.is-bounded .dot { background: #46a758; }
+  .gr-pill.is-partly .dot { background: #fd8925; }
+
+  .gr-flow { display: flex; align-items: stretch; gap: 0; margin: 4px 0 2px; }
+  .gr-flow-stage { flex: 1; min-width: 0; border: 1px solid var(--line-soft, #d4d7da); border-right: 0; padding: 12px 13px 14px; background: #fff; }
+  .gr-flow-stage:first-child { border-radius: 10px 0 0 10px; }
+  .gr-flow-stage:last-child { border-right: 1px solid var(--line-soft, #d4d7da); border-radius: 0 10px 10px 0; }
+  .gr-flow-stage.is-open { background: #fafbfb; }
+  .gr-flow-stage-name { font-size: 14px; color: #1a1c1e; display: flex; align-items: center; gap: 7px; }
+  .gr-flow-rule { font-size: 12.5px; color: #55595e; margin-top: 8px; padding-left: 12px; position: relative; line-height: 1.45; }
+  .gr-flow-rule::before { content: ""; position: absolute; left: 0; top: 7px; width: 5px; height: 5px; border-radius: 999px; background: #9298a0; }
+  .gr-flow-none { font-size: 12.5px; color: #9298a0; margin-top: 8px; font-style: italic; }
+  .gr-flow-add { font-size: 12.5px; color: #55595e; margin-top: 9px; text-decoration: underline; text-underline-offset: 2px; cursor: pointer; display: inline-block; }
+
+  .gr-note { font-size: 12.5px; color: var(--hub-muted); line-height: 1.6; margin: 10px 0 0; max-width: 680px; }
+  .gr-note b { color: var(--ink); }
+
+  /* Whether a control exists in the product today or is something the doc is asking for. */
+  .gr-tag { display: inline-flex; align-items: center; font-size: 10.5px; letter-spacing: 0.03em; text-transform: uppercase; border-radius: 4px; padding: 2px 6px; margin-left: 8px; vertical-align: 2px; white-space: nowrap; }
+  .gr-tag.is-today { background: #eceeef; color: #55595e; }
+  .gr-tag.is-new { background: #fff; color: #9b5d10; border: 1px dashed #d8a657; }
+  .gr-tag.is-elsewhere { background: #fff; color: #55595e; border: 1px solid #d4d7da; }
+  /* .nbk-field-label is a flex column, so a tag inside it stretches full width unless pinned. */
+  .nbk-field-label .gr-tag { align-self: flex-start; margin-left: 0; margin-top: 2px; }
+
+  .gr-rule-row { display: flex; align-items: center; gap: 12px; padding: 11px 0; border-top: 1px solid var(--line-soft, #d4d7da); }
+  .gr-rule-row:first-of-type { border-top: 0; }
+  .gr-rule-main { flex: 1; min-width: 0; }
+  .gr-rule-name { font-size: 14.5px; color: #1a1c1e; }
+  .gr-rule-sub { font-size: 12.5px; color: #55595e; margin-top: 2px; line-height: 1.45; }
+  .gr-rule-ctl { flex: none; }
+
+  /* Three-way choice, for content categories (allow / redact / block). */
+  .gr-seg { display: inline-flex; background: #eceeef; border-radius: 999px; padding: 2px; gap: 1px; }
+  .gr-seg span { font-size: 12.5px; color: #55595e; padding: 3px 11px; border-radius: 999px; cursor: pointer; }
+  .gr-seg span.is-on { background: #fff; color: #1a1c1e; box-shadow: 0 1px 2px rgba(0,0,0,0.08); }
+
+  /* legend under a card label, spelling out what each control value does */
+  .gr-legend { display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: 12px; color: #55595e; padding: 8px 0 2px; }
+  .gr-legend b { font-weight: 600; color: #1a1c1e; }
+
+  /* anything that actually opens something in the mockup */
+  .gr-click { cursor: pointer; }
+  .gr-click:hover { color: #1a1c1e; }
+  .gr-chevr.gr-click:hover { color: #1a1c1e; }
+
+  /* panel that opens inline under its row, so it can't fall outside the frame */
+  .gr-inline { display: none; margin: 2px 0 10px; padding: 14px 16px; border: 1.5px solid var(--line-soft,#d4d7da); border-radius: 9px; background: #fbfbfa; }
+  .gr-inline.is-open { display: block; }
+  .gr-inline-head { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: #1a1c1e; margin-bottom: 3px; }
+  .gr-inline-head .x { margin-left: auto; color: #9298a0; cursor: pointer; font-size: 15px; }
+  .gr-inline-sub { font-size: 12px; color: #55595e; margin-bottom: 11px; }
+  .gr-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .gr-chip { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; color: #1a1c1e; background: #fff; border: 1.5px solid var(--line-soft,#d4d7da); border-radius: 999px; padding: 3px 10px; }
+  .gr-chip .x { color: #9298a0; cursor: pointer; }
+  .gr-chip.is-add { border-style: dashed; color: #55595e; cursor: pointer; }
+  .gr-cat { display: flex; align-items: center; gap: 10px; padding: 7px 0; border-top: 1px solid var(--line-soft,#d4d7da); font-size: 13px; color: #1a1c1e; }
+  .gr-cat:first-of-type { border-top: 0; }
+  .gr-cat .bin { margin-left: auto; color: #55595e; cursor: pointer; display: flex; }
+  .gr-cat .bin svg { width: 14px; height: 14px; }
+
+  .gr-chipfield { display: flex; flex-wrap: wrap; align-items: center; gap: 5px; border: 1.5px solid var(--line-soft, #d4d7da); border-radius: 8px; padding: 6px 8px; margin-top: 7px; background: #fff; }
+  .gr-chip { display: inline-flex; align-items: center; gap: 5px; background: #eceeef; border-radius: 6px; padding: 2px 7px; font-size: 12.5px; color: #1a1c1e; }
+  .gr-chip .x { color: #9298a0; cursor: pointer; }
+  .gr-chipfield .ph { font-size: 12.5px; color: #9298a0; }
+
+  .gr-stepper { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; font-size: 13px; color: #9298a0; }
+  .gr-stepper .st { display: inline-flex; align-items: center; gap: 6px; }
+  .gr-stepper .st.is-on { color: #1a1c1e; }
+  .gr-stepper .num { width: 19px; height: 19px; border-radius: 999px; border: 1.5px solid currentColor; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; }
+  .gr-stepper .st.is-on .num { background: #1a1c1e; color: #fff; border-color: #1a1c1e; }
+
+  .gr-radio { display: flex; align-items: flex-start; gap: 9px; padding: 8px 0; }
+  .gr-radio .dot { width: 15px; height: 15px; border-radius: 999px; border: 1.5px solid #9298a0; flex: none; margin-top: 2px; position: relative; }
+  .gr-radio.is-on .dot { border-color: #1a1c1e; }
+  .gr-radio.is-on .dot::after { content: ""; position: absolute; inset: 3px; border-radius: 999px; background: #1a1c1e; }
+  .gr-radio-name { font-size: 14px; color: #1a1c1e; }
+  .gr-radio-sub { font-size: 12.5px; color: #55595e; margin-top: 1px; }
+
+  .gr-warn { display: flex; gap: 8px; align-items: flex-start; background: #fff8ee; border: 1px solid #f0dcc0; border-radius: 8px; padding: 9px 11px; font-size: 12.5px; color: #7a5a24; line-height: 1.5; margin-top: 9px; }
+
+  /* Capabilities chip rows, as the Build tab renders them */
+  .gr-chiprow { display: flex; align-items: center; flex-wrap: wrap; gap: 7px; padding: 10px 0; border-top: 1px solid var(--line-soft, #d4d7da); }
+  .gr-chiprow:first-of-type { border-top: 0; }
+  .gr-chiprow-label { font-size: 14px; color: #1a1c1e; width: 70px; flex: none; }
+  .gr-count { display: inline-flex; align-items: center; justify-content: center; min-width: 17px; height: 17px; padding: 0 4px; border-radius: 999px; background: #eceeef; color: #55595e; font-size: 11.5px; margin-left: 4px; }
+  .gr-toolchip { display: inline-flex; align-items: center; gap: 6px; border: 1.5px solid var(--line-soft, #d4d7da); border-radius: 8px; padding: 4px 9px; font-size: 13px; color: #1a1c1e; background: #fff; }
+  .gr-toolchip .ic { width: 15px; height: 15px; border-radius: 4px; background: #eceeef; flex: none; }
+  .gr-toolchip .chev { color: #9298a0; font-size: 10px; }
+  .gr-addchip { font-size: 13px; color: #55595e; border: 1.5px dashed var(--line-soft, #d4d7da); border-radius: 8px; padding: 4px 9px; cursor: pointer; }
+
+  /* The tools modal */
+  .gr-modal { border: 1.5px solid var(--line-soft, #d4d7da); border-radius: 12px; background: #fff; padding: 16px 18px 10px; box-shadow: 0 8px 24px rgba(0,0,0,0.07); max-width: 560px !important; }
+  .gr-modal-head { display: flex; align-items: center; margin-bottom: 12px; }
+  .gr-modal-title { font-size: 16px; font-weight: 700; color: #1a1c1e; }
+  .gr-modal-x { margin-left: auto; color: #9298a0; font-size: 17px; cursor: pointer; }
+  .gr-search { display: flex; align-items: center; gap: 8px; border: 1.5px solid var(--line-soft, #d4d7da); border-radius: 8px; padding: 7px 10px; font-size: 13px; color: #9298a0; }
+  .gr-toolrow { display: flex; align-items: center; gap: 11px; padding: 11px 0; border-top: 1px solid var(--line-soft, #d4d7da); }
+  .gr-toolrow .ic { width: 28px; height: 28px; border-radius: 7px; background: #eceeef; flex: none; }
+  .gr-toolrow-body { flex: 1; min-width: 0; }
+  .gr-toolrow-name { font-size: 14px; color: #1a1c1e; }
+  .gr-toolrow-desc { font-size: 12.5px; color: #9298a0; margin-top: 1px; }
+  .nbk-btn.is-done { color: #46a758; border-color: #cfe4d3; }
+
+  /* Permission groups, with per-tool override underneath */
+  .gr-permgroup { border: 1.5px solid var(--line-soft, #d4d7da); border-radius: 9px; margin-bottom: 9px; }
+  .gr-permgroup-head { display: flex; align-items: center; gap: 10px; padding: 11px 12px; }
+  .gr-permgroup-chev { color: #9298a0; font-size: 11px; transform: rotate(-90deg); flex: none; }
+  .gr-permgroup-chev.is-open { transform: none; }
+  .gr-permgroup-body { flex: 1; min-width: 0; }
+  .gr-permgroup-name { font-size: 14px; color: #1a1c1e; }
+  .gr-permgroup-sub { font-size: 12.5px; color: #9298a0; margin-top: 1px; }
+  .gr-permchild { display: flex; align-items: center; gap: 10px; padding: 8px 12px 8px 33px; border-top: 1px solid var(--line-soft, #d4d7da); background: #fafbfb; }
+  .gr-permchild-name { flex: 1; font-size: 13px; color: #55595e; }
+
+  .gr-confirm { border: 1.5px solid var(--line-soft, #d4d7da); border-radius: 12px; background: #fff; padding: 18px 20px; box-shadow: 0 8px 24px rgba(0,0,0,0.07); max-width: 420px !important; }
+  .gr-confirm-title { font-size: 15px; font-weight: 700; color: #1a1c1e; margin-bottom: 6px; }
+  .gr-confirm-body { font-size: 13px; color: #55595e; line-height: 1.55; margin: 0 0 16px; }
+  .gr-confirm-actions { display: flex; justify-content: flex-end; gap: 8px; }
+
+  /* Budget rows are buttons that open a modal, not inline controls — the real pattern */
+  .gr-budget-row { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-top: 1px solid var(--line-soft, #d4d7da); cursor: pointer; }
+  .gr-budget-row:hover { background: #fafbfb; }
+  .gr-budget-val { font-size: 13px; color: #1a1c1e; text-align: right; line-height: 1.4; flex: none; }
+  .gr-chevr { color: #9298a0; font-size: 15px; flex: none; }
+  .gr-numfield { border: 1.5px solid var(--line-soft, #d4d7da); border-radius: 7px; padding: 5px 12px; font-size: 13px; color: #1a1c1e; min-width: 62px; text-align: left; display: inline-block; }
+
+  /* Telegram's stepper is vertical, so the recreation has to be too */
+  .gr-vstep { display: flex; align-items: flex-start; gap: 10px; padding: 9px 0; border-top: 1px solid var(--line-soft, #d4d7da); color: #9298a0; }
+  .gr-vstep:first-of-type { border-top: 0; }
+  .gr-vstep .num { width: 20px; height: 20px; flex: none; border-radius: 999px; border: 1.5px solid currentColor; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; margin-top: 1px; }
+  .gr-vstep-name { font-size: 13.5px; }
+  .gr-vstep.is-on, .gr-vstep.is-done { color: #1a1c1e; }
+  .gr-vstep.is-on .num { background: #1a1c1e; color: #fff; border-color: #1a1c1e; }
+  .gr-vstep.is-done .num { border-color: #46a758; color: #46a758; }
+
+  .gr-modal-foot { display: flex; align-items: center; gap: 8px; margin-top: 18px; padding-top: 13px; border-top: 1px solid var(--line-soft, #d4d7da); }
+  .gr-toolpane-head { display: flex; align-items: center; gap: 10px; padding-bottom: 13px; border-bottom: 1px solid var(--line-soft, #d4d7da); }
+
+  /* Open questions read as a separate thing from the design, never as a caption on it. */
+  .gr-oq { border: 1px dashed var(--line, #a7abb0); border-radius: 10px; padding: 18px 20px; margin-top: 10px; background: #fffdf7; }
+  .gr-oq h3 { margin: 0 0 4px; font-size: 14px; }
+  .gr-oq .gr-oq-sub { font-size: 12.5px; color: var(--hub-muted); margin: 0 0 14px; }
+  .gr-oq ol { margin: 0; padding-left: 18px; }
+  .gr-oq li { font-size: 13px; line-height: 1.65; margin-bottom: 11px; }
+  .gr-oq li:last-child { margin-bottom: 0; }
+  .gr-oq .who { color: var(--hub-muted); font-size: 12px; }
+  .gr-note .who { color: var(--hub-muted); font-style: italic; }
+
+  /* guardrails library table, modelled on the real SkillsTable */
+  .gr-tbl { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .gr-tbl th { text-align: left; font-weight: 400; font-size: 11.5px; color: #9298a0; padding: 0 10px 7px 0; border-bottom: 1px solid var(--line-soft,#d4d7da); }
+  .gr-tbl td { padding: 11px 10px 11px 0; border-bottom: 1px solid var(--line-soft,#d4d7da); color: #1a1c1e; vertical-align: top; }
+  .gr-tbl tr:last-child td { border-bottom: 0; }
+  .gr-tbl .sub { font-size: 11.5px; color: #9298a0; margin-top: 2px; }
+  .gr-tbl .muted { color: #55595e; }
+  .gr-tbl .act { color: #9298a0; white-space: nowrap; }
+  .gr-scope { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; color: #1a1c1e; border: 1.5px solid var(--line-soft,#d4d7da); border-radius: 6px; padding: 2px 8px; white-space: nowrap; }
+  .gr-scope svg { width: 12px; height: 12px; flex: none; color: #55595e; }
+  .gr-tblwrap { overflow-x: auto; }
+
+  /* modal title doubling as the name field */
+  .gr-titlefield { display: inline-flex; align-items: center; gap: 7px; border-radius: 6px; padding: 2px 7px; margin-left: -7px; border: 1.5px solid transparent; cursor: text; }
+  .gr-titlefield:hover { border-color: var(--line-soft,#d4d7da); background: #fbfbfa; }
+  .gr-titlefield svg { width: 13px; height: 13px; color: #9298a0; flex: none; }
+  .gr-titlefield.is-empty { color: #9298a0; }
+
+  /* N8nSegmentControl: one exclusive choice, 2-5 options */
+  .gr-segctl { display: inline-flex; background: #eceeef; border-radius: 8px; padding: 3px; gap: 2px; }
+  .gr-segctl span { font-size: 12.5px; color: #55595e; padding: 5px 13px; border-radius: 6px; cursor: pointer; white-space: nowrap; }
+  .gr-segctl span.is-on { background: #fff; color: #1a1c1e; box-shadow: 0 1px 2px rgba(0,0,0,0.08); }
+
+  /* N8nToggleGroup type="multiple": several can be on at once */
+  .gr-tgroup { display: flex; flex-wrap: wrap; gap: 6px; }
+  .gr-tgroup span { font-size: 12.5px; color: #55595e; border: 1.5px solid var(--line-soft,#d4d7da); background: #fff; border-radius: 7px; padding: 5px 11px; cursor: pointer; white-space: nowrap; }
+  .gr-tgroup span.is-on { background: #1a1c1e; border-color: #1a1c1e; color: #fff; }
+  .gr-help { font-size: 12px; color: #9298a0; margin-top: 7px; }
+
+  /* guardrail picker: a real dropdown, Create at the bottom */
+  .gr-ddwrap { position: relative; display: inline-block; }
+  .gr-dd { display: none; position: absolute; top: calc(100% + 5px); right: 0; min-width: 268px; background: #fff; border: 1.5px solid var(--line-soft,#d4d7da); border-radius: 9px; padding: 5px; z-index: 40; box-shadow: 0 6px 18px rgba(0,0,0,0.10); text-align: left; }
+  .gr-dd.is-open { display: block; }
+  .gr-dd-item { display: flex; align-items: baseline; gap: 8px; padding: 7px 9px; border-radius: 6px; font-size: 13px; color: #1a1c1e; cursor: pointer; }
+  .gr-dd-item:hover { background: #f4f5f6; }
+  .gr-dd-item .n { font-size: 11.5px; color: #9298a0; margin-left: auto; white-space: nowrap; }
+  .gr-dd-item.is-on::after { content: "\2713"; color: #55595e; margin-left: 6px; }
+  .gr-dd-note { font-size: 11.5px; color: #9298a0; padding: 4px 9px 7px; line-height: 1.45; }
+  .gr-dd-sep { height: 1px; background: var(--line-soft,#d4d7da); margin: 5px 0; }
+
+  /* collapsed section inside a modal */
+  .gr-collapse-head { display: flex; align-items: center; gap: 8px; padding: 10px 0; margin-top: 8px; border-top: 1px solid var(--line-soft,#d4d7da); cursor: pointer; }
+  .gr-collapse-head .nm { font-size: 13.5px; font-weight: 700; color: #1a1c1e; }
+  .gr-collapse-head .sum { margin-left: auto; font-size: 12px; color: #9298a0; white-space: nowrap; }
+  .gr-collapse-chev { color: #9298a0; font-size: 11px; transition: transform .12s; }
+  .gr-collapse-head.is-open .gr-collapse-chev { transform: rotate(90deg); }
+  .gr-collapse-head.is-open .sum { display: none; }
+  .gr-collapse-body { display: none; }
+  .gr-collapse-body.is-open { display: block; }
+
+  .gr-info { display: inline-flex; color: #9298a0; cursor: help; }
+  .gr-info svg { width: 13px; height: 13px; }
+
+  /* a switch you can read but not move */
+  .nbk-toggle.is-locked { opacity: 0.55; cursor: not-allowed; pointer-events: none; }
+</style>
+</head>
+<body>
+
+<div class="shell">
+
+  <!-- ================= OVERVIEW ================= -->
+  <section data-route="guardrail-rules">
+    <a class="back-link" href="index.html#/home">&larr; Workstreams</a>
+    <div class="hero">
+      <div>
+        <span class="kicker">Workstream &middot; Iterating</span>
+        <h1>Guardrails v2</h1>
+        <p>The working copy. <a href="guardrail-rules.html#/guardrail-rules">Guardrails &mdash; rules &amp; dimensions</a> stays as it was reviewed; changes land here so the reviewed version keeps its link. Same content to start with &mdash; the five dimensions from the <i>Dimensions to guardrail an agent</i> doc, revised after the 22 Oct call. The finished guardrail patterns (cost cap, running states, the trace) live in the <a href="guardrails.html#/guardrails">Guardrails</a> workstream instead.</p>
+      </div>
+    </div>
+
+    <div class="problem-grid">
+      <div class="problem-card">
+        <div class="eyebrow">&#129513; Problem</div>
+        <p>The rules that bound an agent don't live in one place, and shouldn't: rate limits belong at project or instance level, inbound restrictions on the channel, timeouts in Settings, memory rules attached to persistence, tool permissions per tool. Scattered by design &mdash; but that leaves a builder with no way to answer &ldquo;what is this agent actually allowed to do?&rdquo; before putting it in production.</p>
+        <span class="src">Source: Dimensions to guardrail an agent (Notion), plus Sin's comments on it, Oct 4&ndash;6</span>
+      </div>
+      <div class="problem-card">
+        <div class="eyebrow">&#129514; Hypothesis</div>
+        <p>A rule lives wherever the thing it constrains lives: identities in the channel, permissions on the tool, spend in Settings. The exception is <b>content</b> &mdash; nothing about what a message contains can be checked with a form field, so those become a <b>guardrail object</b> you build once and attach wherever it should run. Everything else that looked like it needed a new panel turned out to have a home already.</p>
+        <span class="src">Revised after the review with Michael, Anne and Sin, 22 Oct 2026</span>
+      </div>
+    </div>
+
+    <div class="section-title">Screens</div>
+    <div class="card-grid">
+      <a class="screen-card" href="agent-summary.html#/agent-summary">
+        <div class="thumb">&#8599;</div>
+        <div class="body">
+          <span class="status">Moved</span>
+          <h3>What's bounded &rarr; Agent summary</h3>
+          <p class="desc">Now its own workstream. It stopped being a guardrails screen once it landed at publish time &mdash; it reads every dimension, not just the rules.</p>
+        </div>
+      </a>
+      <a class="screen-card" href="#/gr-config">
+        <div class="thumb">&#9881;&#65039;</div>
+        <div class="body">
+          <span class="status">In progress</span>
+          <h3>Where rules get configured</h3>
+          <p class="desc">Each dimension drawn in the container it ships in. Revised after the 22 Oct review: half of what was proposed is cut, and a guardrail becomes its own reusable object.</p>
+        </div>
+      </a>
+    </div>
+
+    <div class="section-title">Open questions</div>
+    <div class="gr-oq">
+      <h3>Still unanswered after the 22 Oct review</h3>
+      <p class="gr-oq-sub">The review settled most of the structure. These are what's left, and the first three block design rather than engineering.</p>
+      <ol>
+        <li><b>Does the Skills pattern transfer wholesale?</b> Mostly answered rather than open: Skills already ships a reusable object at Settings &rarr; Context with a three-rung scope, a usage count, a read-only state and a deletion rule, and a guardrail wants all four. What needs deciding is whether guardrails share that page as a second tab or get their own, and whether a guardrail may be scoped <i>above</i> the person who has to live with it &mdash; a Global one set by an admin is, in effect, instance policy by another route.</li>
+        <li><b>Is the PII row in Advanced just a guardrail with a shortcut?</b> Both exist on the page and both have the same four hooks. Either the row creates a guardrail behind the scenes, or there are two doors to one room and they'll drift.</li>
+        <li><b>Who owns content policy &mdash; us or the instance?</b> If an admin sets it, this is read-only for the builder. But a single-user account has no admin, and nobody knows whether instance policies exist outside enterprise. Needs the conversation with Jan's team.</li>
+        <li><b>Is <i>never stop</i> really the default</b> when nobody answers an approval request? It contradicts the reasoning used to cap the wait options at a day.</li>
+        <li><b>Does &ldquo;no rule&rdquo; mean unfinished?</b> An agent with no content check may be perfectly fine. If the summary styles every gap as a warning, builders will either chase them all or stop reading it.</li>
+        <li><b>Where does the summary live between publishes?</b> It's shown at publish, but the question it answers comes back later.</li>
+      </ol>
+    </div>
+
+    <div class="gr-oq" style="margin-top:14px; background:#fbfbfa;">
+      <h3>Parked on purpose</h3>
+      <p class="gr-oq-sub">Agreed to be guardrails, agreed to be out of scope for now.</p>
+      <ol>
+        <li><b>Sandbox command execution</b> &mdash; whitelisting what can run, modes, watching for suspicious activity.</li>
+        <li><b>Network egress.</b></li>
+        <li><b>Guardrails on the raw message in and out of the agent</b> &mdash; what the current AI Agent node has. Probably workflow hooks; no home picked.</li>
+        <li><b>Tool response max size</b> &mdash; exists today, not tunable, likely an environment variable rather than UI.</li>
+      </ol>
+    </div>
+
+  </section>
+
+  <!-- ================= WHAT'S BOUNDED ================= -->
+  <!-- ================= WHERE RULES GET CONFIGURED ================= -->
+  <section data-route="gr-config">
+    <a class="back-link" href="#/guardrail-rules">&larr; Guardrails &mdash; rules &amp; dimensions</a>
+    <div class="screen-head">
+      <h1>Where rules get configured</h1>
+      <p>One section per dimension, each control drawn inside the real container it would ship in. Marked <span class="gr-tag is-today">today</span> if it exists in the product now, or <span class="gr-tag is-new">new</span> if it doesn't. <b>Revised after the 22 Oct review with Michael, Anne and Sin</b> &mdash; roughly half of what was here is gone, and the notes say why rather than quietly deleting it.</p>
+    </div>
+
+    <div class="gr-oq" style="margin-bottom:26px;">
+      <h3>What the review changed</h3>
+      <p class="gr-oq-sub">The short version, so the sections below read in the right light.</p>
+      <ol>
+        <li><b>Cut:</b> cost cap per operation, max runs per hour, per-tool spend, the content policy card, and the central &ldquo;who it can message&rdquo; panel.</li>
+        <li><b>New shape:</b> a guardrail is <b>its own reusable object</b> &mdash; built once, applied to many tools &mdash; not a form inside each tool.</li>
+        <li><b>Content checks need a model, not a list.</b> PII detection via a model trained for it; anything else is a workflow hook you write.</li>
+        <li><b>Reach is both:</b> identities go to the channel, and one Allow&nbsp;/&nbsp;Block row stays in Settings. A genuinely global rules engine is P1.</li>
+        <li><b>The summary view is P1</b> and moves to publish time.</li>
+      </ol>
+    </div>
+
+    <h2 class="lrt-section-title">1 &mdash; Reach &nbsp;<span style="font-size:12.5px; font-weight:400; color:var(--hub-muted);">inside the channel modal</span></h2>
+    <p class="lrt-section-sub">Telegram already ships this, as step 2 of a <b>vertical</b> stepper: <i>Add credential</i> &rarr; <i>Set access and restrictions</i> &rarr; <i>Connect Telegram</i>. Every other channel takes a different path &mdash; a credential block and then the channel's own fields, with no access step at all. So the work isn't designing a control, it's giving the other channels the step Telegram has.</p>
+
+    <div class="pv-nav-map">
+      <div style="display:flex; gap:20px; align-items:flex-start; flex-wrap:wrap;">
+
+        <div style="flex:0 0 auto;">
+          <div class="lrt-screen-desc" style="margin:0 0 8px; width:420px;"><b>Telegram today.</b> The one channel with an access step.</div>
+          <div class="nbk">
+            <div class="nbk-frame" style="width:420px;">
+              <div class="nbk-main" style="padding:18px 20px 16px;">
+                <div class="gr-modal-head" style="margin-bottom:14px;"><span class="gr-modal-title">Telegram</span><span class="gr-modal-x">&times;</span></div>
+
+                <div class="gr-vstep is-done"><span class="num">&#10003;</span><div><div class="gr-vstep-name">Add credential</div></div></div>
+                <div class="gr-vstep is-on">
+                  <span class="num">2</span>
+                  <div style="flex:1;">
+                    <div class="gr-vstep-name">Set access and restrictions</div>
+                    <div style="margin-top:10px;">
+                      <div style="font-size:12.5px; color:#55595e; margin-bottom:4px;">Access mode</div>
+                      <div class="gr-radio is-on" style="padding:5px 0;"><span class="dot"></span><div><div class="gr-radio-name">Private</div></div></div>
+                      <div class="gr-radio" style="padding:5px 0;"><span class="dot"></span><div><div class="gr-radio-name">Public</div><div class="gr-radio-sub">Any Telegram user will be able to chat with this agent.</div></div></div>
+                      <div style="font-size:12.5px; color:#55595e; margin:10px 0 0;">Restrict to users</div>
+                      <div class="gr-chipfield">
+                        <span class="gr-chip">@sin <span class="x">&times;</span></span>
+                        <span class="ph">Type a user ID or username and press Space</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="gr-vstep"><span class="num">3</span><div><div class="gr-vstep-name">Connect Telegram</div></div></div>
+
+                <div class="gr-modal-foot"><span class="nbk-btn" style="color:#b54242;">Remove channel</span><span style="flex:1;"></span><span class="nbk-btn nbk-btn-primary">Save</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="flex:0 0 auto;">
+          <div class="lrt-screen-desc" style="margin:0 0 8px; width:420px;"><b>Slack, with the step added.</b> Not a choice between three options &mdash; a list you build from channels, people <i>and</i> user groups at once, because that's how the requests come in. Default is anyone in the workspace; turning that off reveals the pickers.</div>
+          <div class="nbk">
+            <div class="nbk-frame" style="width:420px;">
+              <div class="nbk-main" style="padding:18px 20px 16px;">
+                <div class="gr-modal-head" style="margin-bottom:14px;"><span class="gr-modal-title">Slack</span><span class="gr-modal-x">&times;</span></div>
+
+                <div style="font-size:13px; color:#1a1c1e; margin-bottom:5px;">Slack Credential</div>
+                <div class="gr-rule-ctl nbk-select-input" style="display:flex; width:100%; justify-content:space-between; margin-bottom:16px;">n8n workspace <span class="chev">&#9662;</span></div>
+
+                <div style="border:1.5px dashed #d8a657; border-radius:9px; padding:12px 13px; margin-bottom:16px;">
+                  <div style="font-size:13px; color:#1a1c1e; margin-bottom:8px;">Who can use this <span class="gr-tag is-new">new</span></div>
+                  <div style="display:flex; align-items:center; gap:10px; padding-bottom:9px;">
+                    <div style="flex:1;">
+                      <div style="font-size:13px; color:#1a1c1e;">Anyone in the workspace</div>
+                      <div style="font-size:11.5px; color:#9298a0;">Turn off to choose channels, people or user groups.</div>
+                    </div>
+                    <span class="nbk-toggle" onclick="this.classList.toggle('is-on')"><span class="nbk-toggle-knob"></span></span>
+                  </div>
+                  <div style="padding-left:12px; border-left:2px solid var(--line-soft,#d4d7da);">
+                    <div style="font-size:12px; color:#55595e; margin:2px 0 4px;">Channels</div>
+                    <div class="gr-chipfield" style="margin-bottom:9px;"><span class="gr-chip">#metrics <span class="x">&times;</span></span><span class="ph">Search channels</span></div>
+                    <div style="font-size:12px; color:#55595e; margin:0 0 4px;">People</div>
+                    <div class="gr-chipfield" style="margin-bottom:9px;"><span class="gr-chip">Sin <span class="x">&times;</span></span><span class="ph">Search people</span></div>
+                    <div style="font-size:12px; color:#55595e; margin:0 0 4px;">User groups</div>
+                    <div class="gr-chipfield"><span class="gr-chip">@aia <span class="x">&times;</span></span><span class="ph">Search groups</span></div>
+                  </div>
+                </div>
+
+                <div style="font-size:13px; color:#1a1c1e; margin-bottom:3px;">Agent name</div>
+                <div style="font-size:11.5px; color:#9298a0; margin-bottom:10px;">The name displayed for this agent in Slack</div>
+                <div style="font-size:13px; color:#1a1c1e; margin-bottom:10px;">Description</div>
+                <div style="display:flex; align-items:center; gap:10px;">
+                  <span style="flex:1; font-size:13px; color:#1a1c1e;">Always show my bot as online</span>
+                  <span class="nbk-toggle" onclick="this.classList.toggle('is-on')"><span class="nbk-toggle-knob"></span></span>
+                </div>
+
+                <div class="gr-modal-foot"><span class="nbk-btn" style="color:#b54242;">Remove channel</span><span style="flex:1;"></span><span class="nbk-btn nbk-btn-primary">Save</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <p class="gr-note"><b>Telegram's wording doesn't survive the move.</b> &ldquo;Private&rdquo; there means a list of usernames; Slack has channels, workspaces and groups, so the same two options would be a lie. The shape transfers, the labels don't &mdash; and whoever builds this will have to answer it per channel, which is an argument for doing one channel properly rather than all five shallowly.</p>
+
+    <p class="gr-note"><b>We looked at doing this centrally instead, and dropped it.</b> A single card in Settings listing who the agent can talk to reads well until you try to fill it: every identity in it belongs to one channel, so the control has to reach into Slack, Telegram and the rest to populate itself, and you'd still be configuring Slack &mdash; just somewhere further from Slack. The deciding argument was the builder's: you set this while you're in the channel's head, not while reading a list. <span class="who">Michael: &ldquo;then I would probably get rid of the central aspect.&rdquo;</span></p>
+
+    <p class="gr-note"><b>What that leaves without a home.</b> One rule genuinely isn't channel-specific: whether anyone <i>other than</i> the person who started the run can talk to the agent. That's true wherever it's used, so it can't live in a channel &mdash; it goes in Settings as a single Allow / Block row, drawn in section 5. Everything else here stays with the channel that owns the identities.</p>
+
+    <!-- ---------- ACTION ---------- -->
+    <h2 class="lrt-section-title" style="margin-top:34px;">2 &mdash; Tools &nbsp;<span style="font-size:12.5px; font-weight:400; color:var(--hub-muted);">permissions here, checks in a guardrail you reuse</span></h2>
+    <p class="lrt-section-sub">Permissions already exist and are better than what I'd invented: set <b>per group</b> &mdash; read-only versus write and delete &mdash; with per-tool override, inside the tool's own setup. What's new is everything else. The checks and limits don't live in the tool at all: a <b>guardrail is its own object</b>, built once and applied to as many tools as you like.</p>
+
+    <div class="nbk">
+      <div class="nbk-frame">
+        <div class="nbk-main">
+          <div class="nbk-box">
+            <div class="nbk-field-label">Capabilities <span class="gr-tag is-today">today</span><span class="nbk-field-sub">What this agent can do and how it does it</span></div>
+            <div class="gr-chiprow">
+              <span class="gr-chiprow-label">Tools <span class="gr-count">3</span></span>
+              <span class="gr-toolchip"><span class="ic"></span> Hex</span>
+              <span class="gr-toolchip"><span class="ic"></span> Notion <span class="chev">&#9662;</span></span>
+              <span class="gr-toolchip"><span class="ic"></span> Slack <span class="chev">&#9662;</span></span>
+              <span class="gr-addchip">+ Add tool</span>
+            </div>
+            <div class="gr-chiprow">
+              <span class="gr-chiprow-label">Skills <span class="gr-count">0</span></span>
+              <span class="gr-addchip">+ Add skill</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="lrt-section-title" style="font-size:15px; margin-top:26px;">And where the list shows in Build <span class="gr-tag is-new">new</span></h3>
+    <p class="lrt-section-sub">Guardrails attach per tool, so the tool pane already shows which one is on which. This is the other thing Skills has: a roster in Build, so you can see the set and add one without going through a tool. Two places it could sit.</p>
+
+    <div class="nbk">
+      <div class="nbk-frame">
+        <div class="nbk-main">
+          <div class="lrt-screen-desc" style="margin:0 0 8px;"><b>A &mdash; a third row inside Capabilities.</b> Treated exactly like Skills.</div>
+          <div class="nbk-box">
+            <div class="nbk-field-label">Capabilities <span class="gr-tag is-today">today</span><span class="nbk-field-sub">What this agent can do and how it does it</span></div>
+            <div class="gr-chiprow">
+              <span class="gr-chiprow-label">Tools <span class="gr-count">3</span></span>
+              <span class="gr-toolchip"><span class="ic"></span> Hex</span>
+              <span class="gr-toolchip"><span class="ic"></span> Notion <span class="chev">&#9662;</span></span>
+              <span class="gr-toolchip"><span class="ic"></span> Slack <span class="chev">&#9662;</span></span>
+              <span class="gr-addchip">+ Add tool</span>
+            </div>
+            <div class="gr-chiprow">
+              <span class="gr-chiprow-label">Skills <span class="gr-count">0</span></span>
+              <span class="gr-addchip">+ Add skill</span>
+            </div>
+            <div class="gr-chiprow"><span class="gr-chiprow-label">Guardrails <span class="gr-count">2</span></span>
+              <span class="gr-toolchip">Finance data check</span>
+              <span class="gr-toolchip">Prompt injection check</span>
+              <span class="gr-addchip">+ Add guardrail</span></div>
+          </div>
+
+          <div class="lrt-screen-desc" style="margin:24px 0 8px;"><b>B &mdash; its own card, after Capabilities and before Memory.</b> Same chip format, so it still reads as a sibling.</div>
+          <div class="nbk-box">
+            <div class="nbk-field-label">Capabilities <span class="gr-tag is-today">today</span><span class="nbk-field-sub">What this agent can do and how it does it</span></div>
+            <div class="gr-chiprow">
+              <span class="gr-chiprow-label">Tools <span class="gr-count">3</span></span>
+              <span class="gr-toolchip"><span class="ic"></span> Hex</span>
+              <span class="gr-toolchip"><span class="ic"></span> Notion <span class="chev">&#9662;</span></span>
+              <span class="gr-toolchip"><span class="ic"></span> Slack <span class="chev">&#9662;</span></span>
+              <span class="gr-addchip">+ Add tool</span>
+            </div>
+            <div class="gr-chiprow">
+              <span class="gr-chiprow-label">Skills <span class="gr-count">0</span></span>
+              <span class="gr-addchip">+ Add skill</span>
+            </div>
+          </div>
+          <div class="nbk-box">
+            <div class="nbk-field-label">Guardrails <span class="gr-tag is-new">new</span><span class="nbk-field-sub">What this agent must not do</span></div>
+            <div class="gr-chiprow"><span class="gr-chiprow-label">Guardrails <span class="gr-count">2</span></span>
+              <span class="gr-toolchip">Finance data check</span>
+              <span class="gr-toolchip">Prompt injection check</span>
+              <span class="gr-addchip">+ Add guardrail</span></div>
+          </div>
+          <div class="nbk-box" style="opacity:0.5;">
+            <div class="nbk-field-label">Memory <span class="gr-tag is-today">today</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p class="gr-note"><b>I'd go with B, on one word in the card's own subtitle.</b> Capabilities says <i>&ldquo;what this agent can do and how it does it&rdquo;</i>, and a guardrail is the opposite &mdash; it's what the agent must <i>not</i> do. Filing a restriction under capabilities makes the card's own description untrue, and it buries the thing an auditor scans for underneath two rows about what's enabled. B keeps the chip format, so it still looks like a sibling of Tools and Skills rather than a new species; it just isn't filed inside a card that means the opposite.</p>
+
+    <p class="gr-note"><b>The order also tells the story.</b> Capabilities, then Guardrails, then Memory reads as what it can do &rarr; what bounds it &rarr; what it keeps, which is the order a run moves in and the order someone reviewing an agent asks about. As a third chiprow it's an afterthought under Skills, which is a row that is usually empty.</p>
+
+    <p class="gr-note"><b>The case for A, which is real.</b> It costs nothing to build, needs no new card, and guardrails attach to tools &mdash; so keeping them in the same box as tools puts the two things that relate next to each other. If Build is already crowded enough that a fourth card is the thing people complain about, A is the pragmatic answer and the subtitle gets reworded.</p>
+
+    <p class="gr-note"><b>Tools and Skills are different things.</b> A skill is a markdown instruction package &mdash; <i>&ldquo;how this agent handles specific tasks&rdquo;</i>. Guardrails attach to tools. Worth keeping straight, because the doc uses &ldquo;Skills&rdquo; for the allowed-tools list.</p>
+
+    <h3 class="lrt-section-title" style="font-size:15px; margin-top:26px;">Adding one &mdash; the real modal</h3>
+    <p class="lrt-section-sub">Browse, then drill in. Not a stepper.</p>
+
+    <div class="nbk">
+      <div class="nbk-frame">
+        <div class="nbk-main">
+          <div class="gr-modal">
+            <div class="gr-modal-head"><span class="gr-modal-title">Tools</span><span class="gr-modal-x">&times;</span></div>
+            <div class="gr-search"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg> Search all tools&hellip;</div>
+            <div class="nbk-ref-tabs" style="margin:12px 0 4px;">
+              <span class="nbk-ref-tab is-active">All</span>
+              <span class="nbk-ref-tab">Connectors</span>
+              <span class="nbk-ref-tab">n8n nodes</span>
+              <span class="nbk-ref-tab">Workflows</span>
+            </div>
+            <div class="gr-toolrow">
+              <span class="ic"></span>
+              <div class="gr-toolrow-body"><div class="gr-toolrow-name">Notion</div><div class="gr-toolrow-desc">Read and write pages, databases and blocks</div></div>
+              <span class="nbk-btn">Connect</span>
+            </div>
+            <div class="gr-toolrow">
+              <span class="ic"></span>
+              <div class="gr-toolrow-body"><div class="gr-toolrow-name">Hex</div><div class="gr-toolrow-desc">Run queries and read project outputs</div></div>
+              <span class="nbk-btn is-done">&#10003; Connected</span>
+            </div>
+            <div class="gr-toolrow">
+              <span class="ic"></span>
+              <div class="gr-toolrow-body"><div class="gr-toolrow-name">Slack</div><div class="gr-toolrow-desc">Post messages and read channel history</div></div>
+              <span class="nbk-btn">Set up</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="lrt-section-title" style="font-size:15px; margin-top:26px;">The tool's own pane &mdash; permissions today, guardrail attached <span class="gr-tag is-today">today</span></h3>
+    <p class="lrt-section-sub">A full pane inside the modal: back arrow, tool icon, name, credential picker, close. Then the body &mdash; server details, then <b>Tool permissions</b> with its two groups. Footer carries Remove, Cancel and Save. The guardrail row goes after permissions, and it's a picker, not a form: one line saying which guardrail is attached, with a way to make a new one.</p>
+
+    <div class="nbk">
+      <div class="nbk-frame">
+        <div class="nbk-main">
+          <div class="gr-modal" style="max-width:620px !important; padding-bottom:150px;">
+            <div class="gr-toolpane-head">
+              <span class="gr-chevr" style="transform:rotate(180deg);">&#8250;</span>
+              <span class="ic" style="width:24px; height:24px; border-radius:6px; background:#eceeef; display:inline-block;"></span>
+              <span class="gr-modal-title">Notion</span>
+              <span style="flex:1;"></span>
+              <span class="nbk-select-input" style="font-size:12.5px;">Workspace cred <span class="chev">&#9662;</span></span>
+              <span class="gr-modal-x">&times;</span>
+            </div>
+
+            <div style="font-size:13.5px; font-weight:700; color:#1a1c1e; margin:14px 0 3px;">Official Notion MCP server</div>
+            <div style="font-size:12px; color:#9298a0; margin-bottom:16px;">Published by Notion &middot; Version 1.4.0</div>
+
+            <div style="font-size:13.5px; font-weight:700; color:#1a1c1e; margin-bottom:9px;">Tool permissions</div>
+            <div class="gr-permgroup">
+              <div class="gr-permgroup-head">
+                <span class="gr-permgroup-chev">&#9662;</span>
+                <div class="gr-permgroup-body"><div class="gr-permgroup-name">Read-only tools <span class="gr-count">6</span></div><div class="gr-permgroup-sub">Can look things up</div></div>
+                <span class="nbk-select-input">Allow <span class="chev">&#9662;</span></span>
+              </div>
+            </div>
+            <div class="gr-permgroup is-open">
+              <div class="gr-permgroup-head">
+                <span class="gr-permgroup-chev is-open">&#9662;</span>
+                <div class="gr-permgroup-body"><div class="gr-permgroup-name">Write and delete tools <span class="gr-count">4</span></div><div class="gr-permgroup-sub">Can change or delete things</div></div>
+                <span class="nbk-select-input">Custom <span class="chev">&#9662;</span></span>
+              </div>
+              <div class="gr-permchild"><span class="gr-permchild-name">Create page</span><span class="nbk-select-input">Ask first <span class="chev">&#9662;</span></span></div>
+              <div class="gr-permchild"><span class="gr-permchild-name">Delete block</span><span class="nbk-select-input">Block <span class="chev">&#9662;</span></span></div>
+            </div>
+
+            <div style="font-size:13.5px; font-weight:700; color:#1a1c1e; margin:18px 0 3px;">Guardrail <span class="gr-tag is-new">new</span></div>
+            <div style="font-size:12px; color:#9298a0; margin-bottom:6px;">Check what goes into this tool and what comes back.</div>
+
+            <div class="gr-rule-row">
+              <div class="gr-rule-main"><div class="gr-rule-name">Input</div><div class="gr-rule-sub">Checks what this agent sends to the tool.</div></div>
+              <span class="gr-ddwrap">
+                <span class="gr-rule-ctl nbk-select-input gr-click" onclick="grOpen('gr-gd-in')">Finance data check <span class="chev">&#9662;</span></span>
+                <div class="gr-dd" id="gr-gd-in">
+                  <div class="gr-dd-item">None</div>
+                  <div class="gr-dd-item is-on">Finance data check <span class="n">on 2 tools</span></div>
+                  <div class="gr-dd-item">Prompt injection check <span class="n">on 4 tools</span></div>
+                  <div class="gr-dd-note">Shared. Editing a guardrail changes every tool using it.</div>
+                  <div class="gr-dd-sep"></div>
+                  <div class="gr-dd-item">+ Create guardrail</div>
+                </div>
+              </span>
+            </div>
+            <div class="gr-rule-row">
+              <div class="gr-rule-main"><div class="gr-rule-name">Output</div><div class="gr-rule-sub">Checks what the tool returns, before it re-enters the conversation.</div></div>
+              <span class="gr-ddwrap">
+                <span class="gr-rule-ctl nbk-select-input gr-click" onclick="grOpen('gr-gd-out')">Choose guardrail <span class="chev">&#9662;</span></span>
+                <div class="gr-dd" id="gr-gd-out">
+                  <div class="gr-dd-item is-on">None</div>
+                  <div class="gr-dd-item">Finance data check <span class="n">on 2 tools</span></div>
+                  <div class="gr-dd-item">Prompt injection check <span class="n">on 4 tools</span></div>
+                  <div class="gr-dd-note">Shared. Editing a guardrail changes every tool using it.</div>
+                  <div class="gr-dd-sep"></div>
+                  <div class="gr-dd-item">+ Create guardrail</div>
+                </div>
+              </span>
+            </div>
+
+            <div class="gr-modal-foot"><span class="nbk-btn" style="color:#b54242;">Remove</span><span style="flex:1;"></span><span class="nbk-btn">Cancel</span><span class="nbk-btn nbk-btn-primary">Save</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p class="gr-note"><b>Two different tool panes exist, and they don't agree.</b> This MCP one has the Allow / Ask first / Block dropdowns per group. A plain tool gets a different pane entirely, whose approval control is a single switch &mdash; <i>&ldquo;Require approval: Pause before this tool runs until a human approves it.&rdquo;</i> Same decision, two shapes. The guardrail row has to land in both, and it's worth asking whether the switch should just become the dropdown.</p>
+
+    <h3 class="lrt-section-title" style="font-size:15px; margin-top:26px;">It already defends the dangerous default <span class="gr-tag is-today">today</span></h3>
+    <p class="lrt-section-sub">Setting a whole write group to Allow is challenged &mdash; the doc's &ldquo;never a default-allow&rdquo; requirement, already honoured in one place.</p>
+
+    <div class="nbk">
+      <div class="nbk-frame">
+        <div class="nbk-main" style="padding-top:30px; padding-bottom:30px;">
+          <div class="gr-confirm">
+            <div class="gr-confirm-title">Allow all write and delete tools?</div>
+            <p class="gr-confirm-body">The agent can change or delete Notion content without asking first. This applies to all 4 tools in this group.</p>
+            <div class="gr-confirm-actions">
+              <span class="nbk-btn">Allow anyway</span>
+              <span class="nbk-btn nbk-btn-primary">Keep Ask first</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="lrt-section-title" style="font-size:15px; margin-top:26px;">Creating one <span class="gr-tag is-new">new</span></h3>
+    <p class="lrt-section-sub">The thing that doesn't exist anywhere yet. <b>Guardrails are for tools only right now</b>, so it reads in the order the decision is made: where in the tool call it runs, then how it checks, then the limits. Everything that used to be drawn inside the tool pane &mdash; data checks, timeouts, rate limits &mdash; moved in here, because configuring that per tool means filling the same form nine times and storing nine copies of it. The name is the modal's title, edited in place, so the form opens on the decision rather than on a label.</p>
+
+    <div class="nbk">
+      <div class="nbk-frame">
+        <div class="nbk-main" style="padding-top:26px; padding-bottom:26px;">
+          <div class="gr-modal" style="max-width:520px !important;">
+            <div class="gr-modal-head"><span class="gr-modal-title gr-titlefield">Finance data check <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></span><span class="gr-modal-x">&times;</span></div>
+
+            <div style="font-size:13.5px; font-weight:700; color:#1a1c1e; margin:18px 0 5px;">Where it runs</div>
+            <div class="gr-segctl"><span class="is-on">Before a tool call</span><span>After a tool call</span></div>
+
+            <div style="font-size:13.5px; font-weight:700; color:#1a1c1e; margin:18px 0 5px;">How it checks</div>
+            <div class="gr-segctl"><span class="is-on">A workflow</span><span style="opacity:0.45;">A service</span></div>
+            <div style="margin-top:10px;">
+              <div class="gr-rule-ctl nbk-select-input" style="display:flex; width:100%; justify-content:space-between;">Pick a workflow <span class="chev">&#9662;</span></div>
+            </div>
+
+            <div class="gr-collapse-head" onclick="grCollapse(this)">
+              <span class="gr-collapse-chev">&#9656;</span>
+              <span class="nm">Limits</span>
+              <span class="sum">30s &middot; Provider limit &middot; Wait and retry</span>
+            </div>
+            <div class="gr-collapse-body">
+              <div class="gr-rule-row" style="border-top:0;"><div class="gr-rule-main"><div class="gr-rule-name">Timeout</div><div class="gr-rule-sub">How long a single operation may take.</div></div><span class="gr-rule-ctl nbk-select-input">30s <span class="chev">&#9662;</span></span></div>
+              <div class="gr-rule-row"><div class="gr-rule-main"><div class="gr-rule-name">Calls per minute</div><div class="gr-rule-sub">Follows the provider's own published limit unless you go lower.</div></div><span class="gr-rule-ctl nbk-select-input">Provider limit <span class="chev">&#9662;</span></span></div>
+              <div class="gr-rule-row"><div class="gr-rule-main"><div class="gr-rule-name">When the limit is hit</div></div><span class="gr-rule-ctl nbk-select-input">Wait and retry <span class="chev">&#9662;</span></span></div>
+            </div>
+
+            <div style="display:flex; align-items:center; gap:5px; font-size:13.5px; font-weight:700; color:#1a1c1e; margin:18px 0 5px;">Which tools can use this guardrail?<span class="gr-info" title="All tools means every tool this agent has, including tools added later."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 16v-5M12 8h.01"/></svg></span></div>
+            <div style="display:flex; align-items:center; gap:10px; padding-bottom:9px;">
+              <div style="flex:1;">
+                <div style="font-size:13px; color:#1a1c1e;">All tools</div>
+                <div style="font-size:11.5px; color:#9298a0;">Apply the guardrail to all tools, or select the tools.</div>
+              </div>
+              <span class="nbk-toggle is-on" onclick="this.classList.toggle('is-on')"><span class="nbk-toggle-knob"></span></span>
+            </div>
+            <div style="padding-left:12px; border-left:2px solid var(--line-soft,#d4d7da);">
+              <div class="gr-chipfield"><span class="gr-chip">Notion <span class="x">&times;</span></span><span class="gr-chip">Hex <span class="x">&times;</span></span><span class="ph">Search tools</span></div>
+            </div>
+
+            <div class="gr-modal-foot"><span style="flex:1;"></span><span class="nbk-btn">Cancel</span><span class="nbk-btn nbk-btn-primary">Create</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p class="gr-note"><b>Scoping is out for now, and that has a consequence worth saying.</b> Without <i>where can this be used</i>, a guardrail belongs to the agent you made it in &mdash; so the reuse argument only holds <i>within</i> one agent, which is still the case that hurts most (nine data-table tools, one form). Reuse across agents, and the Global / project / agent ladder that Skills already ships, becomes P1. The library screen below is drawn with that ladder, so it's ahead of this modal until the two are reconciled.</p>
+
+    <p class="gr-note"><b>A guardrail is one check at one point.</b> <i>Where it runs</i> is a single choice: checking what you send to a tool and checking what comes back are different decisions about different payloads, and bundling them into one object makes it vague what you actually switched on. To cover both you attach two, which also reads better in the library &mdash; <i>&ldquo;Finance check, on Notion, after a tool call&rdquo;</i> is a concrete thing, where <i>&ldquo;Finance check, on four hooks&rdquo;</i> is a configuration you'd have to open to understand.</p>
+
+    <p class="gr-note"><b>Which is what separates this from the row in Advanced.</b> They looked like duplicates and they aren't. A guardrail is one attached check; the <i>Sensitive content</i> row in Settings is a standing policy that runs everywhere you tick, which is how Michael described it &mdash; <span class="who">&ldquo;turn on the PII model and a whole bunch of different hooks&rdquo;</span>. So that one keeps multi-select and this one doesn't, and the difference in control is the difference in meaning.</p>
+
+    <p class="gr-note"><b>And <i>what it checks</i> uses the right component for three exclusive options.</b> <b>N8nSegmentControl</b>'s own spec says to prefer it over a select or a radio group when there are two to five options and you switch between them immediately.</p>
+
+    <p class="gr-note"><b>Why <i>wait and retry</i> can ship as the default.</b> It's the only one of the three that can't lose you anything: hitting a rate limit and backing off changes how long a run takes and nothing else, where skipping the call silently drops work and stopping the run throws away everything done so far. A default is safe to set when the worst case is slowness.</p>
+
+    <p class="gr-note"><b>All tools is the default, and it's the same shape as the Slack access block in section 1.</b> A guardrail you went to the trouble of creating is usually meant to apply, so making you list the tools is work that produces the answer you already had. The deciding case is the one a list gets wrong silently: a tool added next month is covered by <i>all</i> and missed by an enumeration nobody remembers to update. Narrowing stays one toggle away for the guardrail that really is about one slow API.</p>
+
+    <p class="gr-note"><b>Two entry points, and they want opposite flows.</b> From a tool you attach one guardrail to one tool, which is the natural move while you're setting that tool up. But the moment you have nine data-table tools, you want the other direction: make the guardrail, then tick the tools it covers &mdash; which is why <i>Applies to</i> is in the modal rather than only on the tool. Both exist above. The list itself isn't a new invention &mdash; it goes beside Skills in Settings &rarr; Context, drawn in the next section.</p>
+
+    <p class="gr-note"><b>What a separate object costs.</b> It stops being a setting and becomes a thing with a lifecycle: it can be shared, orphaned, edited from under a tool that depends on it, and deleted. <span class="who">Michael: &ldquo;when do they stop existing? If they're not in use, does that remove them, or is there somewhere you can actually delete them?&rdquo;</span> Most of that is already answered &mdash; by Skills, which has the same lifecycle and solved it. The next section is that answer. The part it doesn't cover is editing: changing one silently changes every tool using it.</p>
+
+    <!-- ---------- WHERE GUARDRAILS LIVE ---------- -->
+    <h2 class="lrt-section-title" style="margin-top:34px;">Where guardrails live &nbsp;<span style="font-size:12.5px; font-weight:400; color:var(--hub-muted);">Settings &rarr; Context, beside Skills</span></h2>
+    <p class="lrt-section-sub">Not the agent's Settings tab &mdash; this is <b>n8n's own Settings</b>, outside any agent, which is where the Skills hub already lives. I was going to design it and then found the product has already answered it. <b>Skills</b> is the same problem &mdash; a reusable object, made by a builder or imposed by an admin, attached to many agents &mdash; and it ships today at <b>Settings &rarr; Context</b> with a scope, a usage count and a deletion rule. Every question we had about guardrails has an answer there. So this isn't a new screen, it's a second table.</p>
+
+    <div class="nbk">
+      <div class="nbk-frame">
+        <div class="nbk-main">
+          <div style="display:flex; align-items:center; gap:7px; font-size:12px; color:#9298a0; margin-bottom:10px;">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9c.14.63.68 1.1 1.33 1.1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            n8n Settings &rsaquo; Context &nbsp;&middot;&nbsp; instance level, outside any agent
+          </div>
+          <div class="nbk-tabbar">
+            <span class="nbk-tab">Skills</span>
+            <span class="nbk-tab is-active">Guardrails</span>
+          </div>
+          <div style="display:flex; align-items:flex-end; gap:12px; margin:16px auto 4px;">
+            <div style="flex:1;">
+              <div style="font-size:15px; font-weight:700; color:#1a1c1e;">Guardrails <span class="gr-tag is-new">new</span></div>
+              <div style="font-size:12.5px; color:#55595e; margin-top:2px;">Check what agents send, store and reply</div>
+            </div>
+            <span class="nbk-select-input" style="font-size:12.5px;">Filters <span class="chev">&#9662;</span></span>
+            <span class="nbk-btn nbk-btn-primary">Create guardrail</span>
+          </div>
+
+          <div class="gr-tblwrap">
+          <table class="gr-tbl">
+            <thead><tr><th>Guardrail</th><th>Scope</th><th>Agents</th><th>Created by</th><th>Last updated</th><th></th></tr></thead>
+            <tbody>
+              <tr>
+                <td>Prompt injection check<div class="sub">Workflow &middot; output</div></td>
+                <td><span class="gr-scope"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></svg> Global</span></td>
+                <td class="muted">12</td>
+                <td class="muted">Admin</td>
+                <td class="muted">2 days ago</td>
+                <td class="act">You can use but not change this guardrail</td>
+              </tr>
+              <tr>
+                <td>Finance data check<div class="sub">Workflow &middot; input</div></td>
+                <td><span class="gr-scope"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 2 9 5-9 5-9-5 9-5z"/><path d="m3 12 9 5 9-5"/><path d="m3 17 9 5 9-5"/></svg> Analytics</span></td>
+                <td class="muted">3</td>
+                <td class="muted">Martina</td>
+                <td class="muted">1 week ago</td>
+                <td class="act">&hellip;</td>
+              </tr>
+              <tr>
+                <td>Slow API back-off<div class="sub">Timeout 30s &middot; 20 calls/min &middot; wait and retry</div></td>
+                <td><span class="gr-scope"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="8" width="16" height="12" rx="3"/><path d="M12 4v4"/><circle cx="9" cy="14" r="1"/><circle cx="15" cy="14" r="1"/></svg> Metrics sync only</span></td>
+                <td class="muted">1</td>
+                <td class="muted">Martina</td>
+                <td class="muted">1 week ago</td>
+                <td class="act">&hellip;</td>
+              </tr>
+            </tbody>
+          </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p class="gr-note"><b>The scope ladder already exists, and it's three rungs, not one.</b> I'd recommended putting guardrails at project level. That was wrong in shape: Skills doesn't pick a level for you, it asks per object &mdash; <i>Global</i>, a named project, or <i>&ldquo;{agent} only&rdquo;</i> &mdash; and the real tooltip explains it in one line: <i>&ldquo;A global skill can be added to any agent. A project skill can be added to the agents of that project. An agent skill belongs to one agent.&rdquo;</i> A guardrail wants exactly the same three, because the admin's PII policy and the one-off back-off for a slow API are both guardrails and belong at different heights.</p>
+
+    <p class="gr-note"><b>And it answers Michael's lifecycle question without us designing anything.</b> Skills can't be deleted while they're attached: <i>&ldquo;Used by 3 agents. Remove the skill from each agent first.&rdquo;</i> No cascade, no orphans, no silently breaking an agent you can't see. Inherited ones say <i>&ldquo;You can use but not change this skill&rdquo;</i>, which is the same read-only state we drew for the PII row in section 3 &mdash; arrived at twice, independently, which is a good sign it's right. Moving one between scopes even has its own rule: you need delete permission, because moving removes it from where it is.</p>
+
+    <p class="gr-note"><b>Where a guardrail is not like a skill, and it matters.</b> A skill is additive: worst case the agent ignores it and behaves as it would have anyway. A guardrail is subtractive &mdash; if it stops applying, something gets out. So the same table carries more risk: editing a Global guardrail changes 12 agents at once, and the delete rule protects the object without protecting the agents from an edit. Skills doesn't need an impact warning before saving. Guardrails probably do, and that's the one screen this pattern doesn't hand us.</p>
+
+    <h3 class="lrt-section-title" style="font-size:15px; margin-top:26px;">The one screen Skills doesn't hand us <span class="gr-tag is-new">new</span></h3>
+    <p class="lrt-section-sub">Deleting is already protected. Editing isn't, and for a guardrail that's the riskier of the two: deleting is blocked while in use, but saving a change quietly reaches every agent attached. So saving a shared guardrail says who it touches before it does it.</p>
+
+    <div class="nbk">
+      <div class="nbk-frame">
+        <div class="nbk-main" style="padding-top:30px; padding-bottom:30px;">
+          <div class="gr-confirm" style="max-width:420px !important;">
+            <div class="gr-confirm-title">Save changes to PII redaction?</div>
+            <p class="gr-confirm-body">This guardrail runs in <b>12 agents</b> across 3 projects. The change applies to all of them the next time each one runs.</p>
+            <div class="gr-dim-where" style="margin:-4px 0 14px;"><span class="gr-dim-link">See which agents</span></div>
+            <div class="gr-confirm-actions">
+              <span class="nbk-btn">Cancel</span>
+              <span class="nbk-btn nbk-btn-primary">Save</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p class="gr-note"><b>Not styled as a warning, on purpose.</b> Editing a shared guardrail is a normal thing to do &mdash; it's the reason the object exists. The dialog's job is to make the blast radius visible, not to imply a mistake, which is the same reasoning behind the summary view using grey for an unset rule rather than red. If it nags, people will click through it and it will have cost us a step without buying anything. It only appears when the count is above one.</p>
+
+    <!-- ---------- COST ---------- -->
+    <h2 class="lrt-section-title" style="margin-top:34px;">3 &mdash; Cost &nbsp;<span style="font-size:12.5px; font-weight:400; color:var(--hub-muted);">nothing to add</span></h2>
+    <p class="lrt-section-sub">I had two new rows here and both are gone. This is the section where the review cut the most, so what's drawn below is the card exactly as it ships today &mdash; included so the cuts are legible, not because anything changes.</p>
+
+    <p class="gr-note" style="margin-top:0;"><b>The card is unchanged, so it's only drawn once &mdash; in the assembled Settings view at the end.</b></p>
+
+    <p class="gr-note"><b>Cost cap per operation is out.</b> You can't know what a call costs until it has cost it. Pricing it in advance would mean running the model's own tokenizer over the input first, which is itself a cost, and the output price isn't knowable at all. <span class="who">Michael: &ldquo;the only way we can know cost about the model is to send it to the model and then it tells us what it costs.&rdquo;</span> What replaces it isn't in this card: a <b>timeout</b> and a <b>calls-per-minute</b> limit, both in the guardrail object in section 2. Those bound the two things we can actually measure before the fact.</p>
+
+    <p class="gr-note"><b>Max runs per hour is out too.</b> Not because it's hard to build &mdash; because nobody can set it. A run isn't a unit a builder has a feel for: one message, one session, a sub-agent's work? Two people with long sessions look identical to one runaway loop. The budget already bounds the thing anyone actually cares about, in a unit they understand. <span class="who">Michael: &ldquo;I would just remove it. The cost cap is the best measurement.&rdquo;</span></p>
+
+    <p class="gr-note"><b>Which leaves this section with no new control at all</b> &mdash; and that's the useful result. Every cost guardrail worth having either already exists here, or turned out to belong to a tool rather than the agent. The one open thread is per-tool override: we're starting with one global setting, and only splitting it per tool if people ask. <span class="who">Michael: &ldquo;per tool is going to add a lot of configuration that's not going to be used an awful lot.&rdquo;</span></p>
+
+    <h3 class="lrt-section-title" style="font-size:15px; margin-top:26px;">Advanced &mdash; and the one thing that does get added <span class="gr-tag is-today">today</span></h3>
+    <p class="lrt-section-sub">Last card in Settings, and deliberately the quiet corner &mdash; <i>Max iterations</i> even carries a schema note saying not to set it unless asked. That makes it the right home for the PII check: enterprise-shaped, set once, not something most builders touch. It's the only agent-wide addition that survived the review.</p>
+
+    <div class="nbk">
+      <div class="nbk-frame">
+        <div class="nbk-main">
+          <div class="nbk-box">
+            <div class="nbk-field-label">Advanced<span class="nbk-field-sub">Configure memory and tune how this agent runs.</span></div>
+
+            <div class="gr-rule-row">
+              <div class="gr-rule-main"><div class="gr-rule-name">Memory model</div><div class="gr-rule-sub">Choose the model that creates, reviews, and retrieves memories. Uses the agent model by default.</div></div>
+              <span class="gr-rule-ctl nbk-select-input">Agent model <span class="chev">&#9662;</span></span>
+            </div>
+            <div class="gr-rule-row">
+              <div class="gr-rule-main"><div class="gr-rule-name">Reasoning</div><div class="gr-rule-sub">Let the model reason before responding.</div></div>
+              <span class="nbk-toggle is-on" onclick="this.classList.toggle('is-on')"><span class="nbk-toggle-knob"></span></span>
+            </div>
+            <div style="padding-left:16px; border-left:2px solid var(--line-soft,#d4d7da); margin-left:2px;">
+              <div class="gr-rule-row" style="border-top:0;">
+                <div class="gr-rule-main"><div class="gr-rule-name">Reasoning effort</div></div>
+                <span class="gr-rule-ctl nbk-select-input">Medium <span class="chev">&#9662;</span></span>
+              </div>
+            </div>
+            <div class="gr-rule-row">
+              <div class="gr-rule-main"><div class="gr-rule-name">Cache duration</div><div class="gr-rule-sub">Cache repeated parts of the prompt to reduce latency and cost.</div></div>
+              <span class="gr-rule-ctl nbk-select-input">1h <span class="chev">&#9662;</span></span>
+            </div>
+            <div class="gr-rule-row">
+              <div class="gr-rule-main"><div class="gr-rule-name">Tool call concurrency</div><div class="gr-rule-sub">How many tool calls the agent can run in parallel.</div></div>
+              <span class="gr-rule-ctl gr-numfield">5</span>
+            </div>
+            <div class="gr-rule-row">
+              <div class="gr-rule-main"><div class="gr-rule-name">Max iterations</div><div class="gr-rule-sub">Maximum number of agent loop iterations per run (1&ndash;200).</div></div>
+              <span class="gr-rule-ctl gr-numfield">100</span>
+            </div>
+            <div class="gr-rule-row">
+              <div class="gr-rule-main"><div class="gr-rule-name">Sensitive content <span class="gr-tag is-new">new</span></div><div class="gr-rule-sub">Apply a PII model to tool calls, memories and agent responses.</div></div>
+              <span class="nbk-toggle" onclick="this.classList.toggle('is-on')"><span class="nbk-toggle-knob"></span></span>
+              <span class="gr-chevr">&#8250;</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="lrt-section-title" style="font-size:15px; margin-top:26px;">What that chevron opens</h3>
+    <p class="lrt-section-sub">Same shape as Cross-session memory one card up: a switch for whether it runs at all, a chevron for which model. Coverage isn't configurable &mdash; the modal says what it covers.</p>
+
+    <div class="nbk">
+      <div class="nbk-frame">
+        <div class="nbk-main" style="padding-top:26px; padding-bottom:26px;">
+          <div class="gr-modal" style="max-width:480px !important;">
+            <div class="gr-modal-head"><span class="gr-modal-title">Sensitive content</span><span class="gr-modal-x">&times;</span></div>
+            <div style="font-size:12.5px; color:#55595e; margin:4px 0 0;">PII will be applied to tool calls, memories and agent responses.</div>
+
+            <div style="font-size:12.5px; color:#55595e; margin:18px 0 4px;">Model</div>
+            <div class="gr-rule-ctl nbk-select-input" style="display:flex; width:100%; justify-content:space-between;">Pick a PII model <span class="chev">&#9662;</span></div>
+
+            <div class="gr-modal-foot" style="margin-top:20px;"><span style="flex:1;"></span><span class="nbk-btn">Cancel</span><span class="nbk-btn nbk-btn-primary">Save</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p class="gr-note"><b>No hooks to pick, and that's the difference from a guardrail.</b> A guardrail is one check you attach at one point, so it asks where. This is a standing policy &mdash; switching it on means everywhere the agent could leak something, so asking where would only offer people a way to leave a hole in it. The modal states the coverage instead of making you assemble it, which also makes the two impossible to confuse: one has a <i>where</i>, the other doesn't.</p>
+
+    <h3 class="lrt-section-title" style="font-size:15px; margin-top:26px;">And the same row when an admin owns it <span class="gr-tag is-new">new</span></h3>
+    <p class="lrt-section-sub">If the instance has a policy, this stops being the builder's decision. It shouldn't disappear &mdash; a builder who can't see it will assume nothing is checked and design around a guardrail that's already there. So it stays visible and becomes read-only, saying who set it. The row reads differently depending on whether you can do anything about it.</p>
+
+    <div class="nbk">
+      <div class="nbk-frame">
+        <div class="nbk-main">
+          <div class="lrt-screen-desc" style="margin:0 0 8px;"><b>A builder.</b> Can see what's enforced, can't change it, and has nowhere to go.</div>
+          <div class="nbk-box">
+            <div class="nbk-field-label">Advanced <span class="gr-tag is-today">today</span></div>
+            <div class="gr-rule-row" style="opacity:0.5;"><div class="gr-rule-main"><div class="gr-rule-name">Memory model &middot; Reasoning &middot; Cache duration &middot; Tool call concurrency &middot; Max iterations</div></div></div>
+            <div class="gr-rule-row">
+              <div class="gr-rule-main">
+                <div class="gr-rule-name">Sensitive content <span class="gr-tag is-elsewhere">set by your admin</span></div>
+                <div class="gr-rule-sub">PII is applied to tool calls, memories and agent responses. You can't turn this off for this agent.</div>
+              </div>
+              <span class="nbk-toggle is-on is-locked"><span class="nbk-toggle-knob"></span></span>
+              <span class="gr-chevr">&#8250;</span>
+            </div>
+          </div>
+
+          <div class="lrt-screen-desc" style="margin:22px 0 8px;"><b>An admin.</b> Same row, plus the way out to the policy they own.</div>
+          <div class="nbk-box">
+            <div class="nbk-field-label">Advanced <span class="gr-tag is-today">today</span></div>
+            <div class="gr-rule-row" style="opacity:0.5;"><div class="gr-rule-main"><div class="gr-rule-name">Memory model &middot; Reasoning &middot; Cache duration &middot; Tool call concurrency &middot; Max iterations</div></div></div>
+            <div class="gr-rule-row">
+              <div class="gr-rule-main">
+                <div class="gr-rule-name">Sensitive content <span class="gr-tag is-elsewhere">set at instance level</span></div>
+                <div class="gr-rule-sub">PII is applied to tool calls, memories and agent responses. Change it for every agent in this instance.</div>
+                <div class="gr-dim-where" style="margin-top:4px;"><span class="gr-dim-link">Instance settings &rarr;</span></div>
+              </div>
+              <span class="nbk-toggle is-on is-locked"><span class="nbk-toggle-knob"></span></span>
+              <span class="gr-chevr">&#8250;</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p class="gr-note"><b>The link is the half that's admin-only.</b> Sending a builder to a page they can't open is worse than not offering it &mdash; they click, get a permissions wall, and learn the product is lying to them about what they control. The <i>state</i> still shows for everyone, because that's the part they need in order to design around it. So the row splits: everyone sees what's enforced, only the person who can change it gets the way in. The copy changes with it &mdash; <i>&ldquo;you can't turn this off&rdquo;</i> is useless to the admin who can.</p>
+
+    <p class="gr-note"><b>Which raises the question nobody can answer yet.</b> This assumes instance-level guardrail policies exist. They're Jan's team's work and it isn't known whether they reach non-enterprise accounts &mdash; and a single-user account with no admin still needs the editable version. So the row has to ship in two states, and the one it defaults to depends on an answer we don't have. <span class="who">Martina, on the board: &ldquo;Instance level policies &mdash; check with Jan. Is only admin? Display here a read-only so the user is aware.&rdquo;</span></p>
+
+    <p class="gr-note"><b>Why the PII row is a row and not a card.</b> It's one decision with a handful of hooks behind it, and it's for the minority of teams that need it. A card would announce it to everyone. <span class="who">Michael: &ldquo;I would potentially put it under advanced and then give it toggles for the different areas.&rdquo;</span> The thing to resolve is the overlap with section 2 &mdash; a guardrail can already be a PII model with the same four hooks, so either this row creates one of those behind the scenes, or we have two doors to one room.</p>
+
+    <!-- ---------- MEMORY ---------- -->
+    <h2 class="lrt-section-title" style="margin-top:34px;">4 &mdash; Memory &nbsp;<span style="font-size:12.5px; font-weight:400; color:var(--hub-muted);">guidance only</span></h2>
+    <p class="lrt-section-sub">Guidance, behind the chevron beside Cross-session memory. The hard check that could refuse a write is out: it needed a model, which put it the wrong side of the P0 line, and PII is already handled agent-wide in Settings rather than per memory.</p>
+
+    <div class="nbk">
+      <div class="nbk-frame">
+        <div class="nbk-main">
+          <div class="nbk-box">
+            <div class="nbk-field-label">Memory <span class="gr-tag is-today">today</span><span class="nbk-field-sub">Unchanged. Everything new is behind the chevron.</span></div>
+
+            <div class="gr-rule-row">
+              <div class="gr-rule-main"><div class="gr-rule-name">Session memory</div><div class="gr-rule-sub">Remembers the conversation within the current session.</div></div>
+              <span class="gr-rule-ctl" style="font-size:13px; color:#55595e;">Always on</span>
+            </div>
+
+            <div class="gr-rule-row">
+              <div class="gr-rule-main"><div class="gr-rule-name">Cross-session memory</div><div class="gr-rule-sub">Remembers useful details about each user across sessions.</div></div>
+              <span class="nbk-toggle is-on" onclick="this.classList.toggle('is-on')"><span class="nbk-toggle-knob"></span></span>
+              <span class="gr-chevr">&#8250;</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="lrt-section-title" style="font-size:15px; margin-top:26px;">What the chevron opens</h3>
+    <p class="lrt-section-sub">Tags for what to keep and what to leave out. Best-effort by design &mdash; nothing here can refuse a write.</p>
+
+    <div class="nbk">
+      <div class="nbk-frame">
+        <div class="nbk-main" style="padding-top:26px; padding-bottom:26px;">
+          <div class="gr-modal" style="max-width:520px !important;">
+            <div class="gr-modal-head"><span class="gr-modal-title">Memory</span><span class="gr-modal-x">&times;</span></div>
+
+            <div style="font-size:13.5px; font-weight:700; color:#1a1c1e; margin:16px 0 2px;">Guidance <span class="gr-tag is-today">today</span></div>
+            <div style="font-size:12px; color:#9298a0; margin-bottom:10px;">The agent reads this and tries to follow it.</div>
+            <div style="font-size:12px; color:#55595e; margin-bottom:5px;">Worth remembering</div>
+            <div class="gr-chips" style="margin-bottom:12px;">
+              <span class="gr-chip">Preferred report format <span class="x">&times;</span></span>
+              <span class="gr-chip">Which entity they work in <span class="x">&times;</span></span>
+              <span class="gr-chip is-add">+ Add</span>
+            </div>
+            <div style="font-size:12px; color:#55595e; margin-bottom:5px;">Leave out</div>
+            <div class="gr-chips">
+              <span class="gr-chip">One-off figures <span class="x">&times;</span></span>
+              <span class="gr-chip is-add">+ Add</span>
+            </div>
+
+            <div class="gr-modal-foot"><span style="flex:1;"></span><span class="nbk-btn">Cancel</span><span class="nbk-btn nbk-btn-primary">Save</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    <!-- ---------- OUT OF SCOPE ---------- -->
+    <h2 class="lrt-section-title" style="margin-top:34px;">What isn't a guardrail &nbsp;<span style="font-size:12.5px; font-weight:400; color:var(--hub-muted);">cut from this project</span></h2>
+    <p class="lrt-section-sub">Two things I had drawn as guardrails aren't, and Michael is building them. Keeping them on this page would have us designing the same screens twice and disagreeing with ourselves in review.</p>
+
+    <div class="gr-oq" style="background:#fbfbfa;">
+      <h3 style="margin-bottom:8px;">Michael owns these</h3>
+      <ol style="margin:0; padding-left:20px; font-size:13px; line-height:1.65;">
+        <li><b>Who can talk to the agent.</b> Whether anyone other than the person who started a run can reach it. A permission, not a check on what passes through.</li>
+        <li><b>Where it asks for approval.</b> Routing a human-in-the-loop request when a scheduled run has nobody waiting, and what happens if nobody answers. That's the approval mechanism, which guardrails <i>use</i> but don't define.</li>
+      </ol>
+    </div>
+
+    <p class="gr-note"><b>The line that separates them is worth keeping.</b> A guardrail inspects something passing through the agent and can stop it. Access decides who may start a conversation; approval routing decides who gets interrupted when something pauses. All three feel like safety and only one is a guardrail &mdash; which is exactly why they kept drifting onto this page.</p>
+
+    <!-- ---------- SETTINGS, ASSEMBLED ---------- -->
+    <h2 class="lrt-section-title" style="margin-top:34px;">What ends up in Settings</h2>
+    <p class="lrt-section-sub">The whole tab as it actually is, with our additions in place &mdash; the only way to judge whether this is a coherent place or a junk drawer. Everything marked <span class="gr-tag is-today">today</span> ships now, down to the values. Before the review this was four new cards; after it, Settings gains <b>two small cards</b> and <b>one row in Advanced</b>.</p>
+
+    <div class="nbk">
+      <div class="nbk-frame">
+        <div class="nbk-main">
+          <div class="nbk-tabbar">
+            <span class="nbk-tab">Build</span>
+            <span class="nbk-tab">Context</span>
+            <span class="nbk-tab">Sessions</span>
+            <span class="nbk-tab is-active">Settings</span>
+          </div>
+
+          <div class="nbk-box" style="margin-top:16px;">
+            <div class="nbk-field-label">Usage and limits <span class="gr-tag is-today">today</span><span class="nbk-field-sub">The heading is visually hidden in the real product &mdash; the card opens straight on Monthly usage.</span></div>
+            <div style="padding:10px 0 14px;">
+              <div style="display:flex; align-items:center; font-size:13.5px; color:#1a1c1e;"><span>Monthly usage</span><span style="flex:1;"></span><span style="color:#55595e;">42%</span></div>
+              <div style="font-size:12.5px; color:#55595e; margin:3px 0 7px;">$84 of $200 used</div>
+              <div style="height:6px; border-radius:999px; background:#eceeef; overflow:hidden;"><div style="width:42%; height:100%; background:#9298a0;"></div></div>
+            </div>
+            <div class="gr-budget-row">
+              <div class="gr-rule-main"><div class="gr-rule-name">Monthly budget</div><div class="gr-rule-sub">Maximum this agent can spend across all sessions each month.</div></div>
+              <span class="gr-budget-val">$200/month<br><span style="color:#9298a0;">Alert at 80%</span></span>
+              <span class="gr-chevr">&#8250;</span>
+            </div>
+            <div class="gr-budget-row">
+              <div class="gr-rule-main"><div class="gr-rule-name">Cost cap per session</div><div class="gr-rule-sub">Maximum a single session can spend.</div></div>
+              <span class="gr-budget-val">$10</span>
+              <span class="gr-chevr">&#8250;</span>
+            </div>
+          </div>
+
+          <div class="nbk-box">
+            <div class="nbk-field-label">Sub-agents <span class="gr-tag is-today">today</span><span class="nbk-field-sub">Set how many sub-agents can run at once and which models they use</span></div>
+            <div class="gr-rule-row">
+              <div class="gr-rule-main"><div class="gr-rule-name">Max parallel sub-agents</div><div class="gr-rule-sub">How many sub-agents this agent can run at the same time (1&ndash;20).</div></div>
+              <span class="gr-rule-ctl gr-numfield">10</span>
+            </div>
+            <div class="gr-rule-row">
+              <div class="gr-rule-main"><div class="gr-rule-name">Custom model routing</div><div class="gr-rule-sub">Use different models for low, medium, or high difficulty tasks.</div></div>
+              <span class="nbk-toggle is-on" onclick="this.classList.toggle('is-on')"><span class="nbk-toggle-knob"></span></span>
+            </div>
+            <div style="padding-left:16px; border-left:2px solid var(--line-soft,#d4d7da); margin-left:2px;">
+              <div class="gr-rule-row" style="border-top:0;">
+                <div class="gr-rule-main"><div class="gr-rule-name">Low</div><div class="gr-rule-sub">Simple tasks that need little context.</div></div>
+                <span class="gr-rule-ctl nbk-select-input">Claude Haiku <span class="chev">&#9662;</span></span>
+              </div>
+              <div class="gr-rule-row">
+                <div class="gr-rule-main"><div class="gr-rule-name">Medium</div><div class="gr-rule-sub">Tasks that need comparison, planning, or light analysis.</div></div>
+                <span class="gr-rule-ctl nbk-select-input">Claude Sonnet <span class="chev">&#9662;</span></span>
+              </div>
+              <div class="gr-rule-row">
+                <div class="gr-rule-main"><div class="gr-rule-name">High</div><div class="gr-rule-sub">Complex tasks that need deeper reasoning or detailed synthesis.</div></div>
+                <span class="gr-rule-ctl nbk-select-input">Claude Opus <span class="chev">&#9662;</span></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="nbk-box">
+            <div class="nbk-field-label">Advanced <span class="gr-tag is-today">today</span><span class="nbk-field-sub">Configure memory and tune how this agent runs.</span></div>
+            <div class="gr-rule-row">
+              <div class="gr-rule-main"><div class="gr-rule-name">Memory model</div><div class="gr-rule-sub">Choose the model that creates, reviews, and retrieves memories. Uses the agent model by default.</div></div>
+              <span class="gr-rule-ctl nbk-select-input">Claude Sonnet <span class="chev">&#9662;</span></span>
+            </div>
+            <div class="gr-rule-row">
+              <div class="gr-rule-main"><div class="gr-rule-name">Reasoning</div><div class="gr-rule-sub">Let the model reason before responding.</div></div>
+              <span class="nbk-toggle" onclick="this.classList.toggle('is-on')"><span class="nbk-toggle-knob"></span></span>
+            </div>
+            <div class="gr-rule-row">
+              <div class="gr-rule-main"><div class="gr-rule-name">Cache duration</div><div class="gr-rule-sub">Cache repeated parts of the prompt to reduce latency and cost.</div></div>
+              <span class="gr-rule-ctl nbk-select-input">1h <span class="chev">&#9662;</span></span>
+            </div>
+            <div class="gr-rule-row">
+              <div class="gr-rule-main"><div class="gr-rule-name">Tool call concurrency</div><div class="gr-rule-sub">How many tool calls the agent can run in parallel.</div></div>
+              <span class="gr-rule-ctl gr-numfield">5</span>
+            </div>
+            <div class="gr-rule-row">
+              <div class="gr-rule-main"><div class="gr-rule-name">Max iterations</div><div class="gr-rule-sub">Maximum number of agent loop iterations per run (1&ndash;200).</div></div>
+              <span class="gr-rule-ctl gr-numfield">100</span>
+            </div>
+            <div class="gr-rule-row">
+              <div class="gr-rule-main"><div class="gr-rule-name">Sensitive content <span class="gr-tag is-new">new</span></div><div class="gr-rule-sub">Apply a PII model to tool calls, memories and agent responses.</div></div>
+              <span class="nbk-toggle" onclick="this.classList.toggle('is-on')"><span class="nbk-toggle-knob"></span></span>
+              <span class="gr-chevr">&#8250;</span>
+            </div>
+          </div>
+
+          <div class="nbk-box" style="opacity:0.55;">
+            <div class="nbk-field-label">MCP <span class="gr-tag is-today">today</span><span class="nbk-field-sub">Only rendered when the agent has an MCP server. Unchanged.</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p class="gr-note"><b>The two new cards became one, and the merge is the point rather than tidying.</b> <i>Who can talk to it</i> and <i>where it asks for approval</i> look like different subjects &mdash; one is permission, the other is routing &mdash; but they answer the same question: who is on the other end of this agent. Both only matter because a person is involved, and both are the ones nobody else can answer, since a channel doesn't know who started a run and a tool doesn't know who to interrupt. One card of three rows also survives the junk-drawer test that two cards of one and two rows does not.</p>
+
+    <p class="gr-note"><b>Seen whole, the additions are smaller than the tab already is.</b> Sub-agents alone carries five controls and three model pickers; Advanced carries five more. Two new cards of one and two rows, plus one row in Advanced, is not what tipped this tab into being a lot &mdash; it was a lot already. That's an argument for the additions and also a warning: the next one genuinely won't fit, and the honest response then is to group rather than stack.</p>
+
+    <p class="gr-note"><b>The junk-drawer problem solved itself.</b> I'd argued Settings could carry four new cards as long as each one was a property of the agent. That test was too weak &mdash; it would have admitted anything. The review applied a harder one, and it holds better: a rule lives wherever the thing it constrains lives. Identities live in channels. Checks live in a guardrail that can be reused. Only the questions with no other owner are left in Settings: who may talk to the agent at all, who to ask when nobody is there, and which model reads sensitive content. Three rows across three cards, which is a different thing from four cards of controls.</p>
+
+    <p class="gr-note"><b>What the summary view costs now.</b> With rules this distributed, a builder has even less chance of seeing the whole picture: channel modals, a guardrail object, two Settings cards. That's the argument for <a href="agent-summary.html#/agent-summary">Agent summary</a> &mdash; except it's now P1 and moves to publish time, so for the whole of P0 there is no single place to read what an agent is allowed to do. Worth naming as a known gap rather than pretending the distribution is free.</p>
+
+    <p class="gr-note" style="margin-top:22px;"><b>The question the whole page used to hang on is now answered.</b> Sin's doubt on the doc was whether form fields could express any of this: <i>&ldquo;Could this even be possible &mdash; do we want this to be available?&rdquo;</i> The review answered it both ways. Permissions, limits and routing stay as form fields, because they bound things we can actually measure. Anything about <i>content</i> doesn't &mdash; it's a model or a workflow you attach. That split is why the guardrail object exists, and it's the single biggest change on this page.</p>
+
+    <p class="gr-note"><b>Deliberately parked.</b> Sandbox command execution (whitelisting, modes, watching for suspicious activity) and network egress are both guardrails and both big enough to derail this. Guardrails on the raw message in and out of the agent &mdash; what the current AI Agent node has &mdash; are also unplaced; they'd most likely be workflow hooks, but nobody picked a home for them.</p>
+  </section>
+
+</div>
+
+<script>
+  function grOpen(id){ var el = document.getElementById(id); if(!el) return; el.classList.toggle('is-open'); }
+  function grClose(id){ var el = document.getElementById(id); if(el) el.classList.remove('is-open'); }
+  function grCollapse(head){ head.classList.toggle('is-open'); var b = head.nextElementSibling; if(b) b.classList.toggle('is-open'); }
+</script>
+<script src="js/hub.js"></script>
+</body></html>
