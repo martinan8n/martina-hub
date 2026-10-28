@@ -329,7 +329,7 @@
       </div>
       <div class="problem-card">
         <div class="eyebrow">&#129514; Hypothesis</div>
-        <p>A read-only summary, shown <b>when you hit publish</b>, is worth more than a sixth settings panel. Publish is the one moment a builder is receptive to it, and the existing publish modal says nothing useful today. It reads the rules rather than storing any, so adding a dimension later means adding a line, not redesigning a form.</p>
+        <p>A read-only summary, shown <b>when you hit publish</b>, is worth more than a sixth settings panel. It reads what's there rather than storing anything, so adding a dimension later means adding a line, not redesigning a form. The P0 version only reports what we can read &mdash; which connections exist and which have a rule attached &mdash; and makes no claim about whether an unprotected one is dangerous, because for anything that isn't MCP we can't tell.</p>
       </div>
     </div>
 
@@ -360,9 +360,11 @@
       <ol>
         <li><b>Where does it live between publishes?</b> Publish catches the right moment but it's a modal you dismiss, and the question comes back a week later when you're wondering why the agent didn't post something. It needs a second, permanent entry point &mdash; an icon on the agent, a line in the trace, somewhere in Build &mdash; and that's undesigned. <span class="who">Martina, on the call: &ldquo;maybe I want to go back to it later on another day. Where does this live?&rdquo;</span></li>
         <li><b>List or path?</b> A is easier to extend and survives the rules living in five places. B teaches the model better and makes a gap land, because it's the end of a line you can follow. Nobody picked.</li>
+        <li><b>How do we classify read versus write for non-MCP tools?</b> The whole P1 hangs on it. Offline, on our infrastructure, pre-testable &mdash; not in the browser.</li>
+        <li><b>Should the assistant be able to analyse an agent's security on demand?</b> Raised by Michael as worth having even once the engine knows about operations. It's a different product from this screen: a conversation rather than a readout.</li>
         <li><b>Does &ldquo;no rule&rdquo; mean unfinished?</b> An agent with no content check may be perfectly fine. If every gap is styled as a warning, builders either chase them all or stop reading.</li>
         <li><b>Could it be prose instead?</b> <span class="who">Martina, on the call: &ldquo;this can be in this way, or this can be text like a paragraph explaining what the agent does.&rdquo;</span> A sentence a person can check is a different product from a table, and it's the version an LLM could write.</li>
-        <li><b>It assumes the rules exist.</b> Every pill reads a state we haven't built. Shipping this before the permissions it summarises means summarising nothing &mdash; which is why it's <b>P1</b>.</li>
+        <li><b>It reads state we haven't built yet.</b> Guardrails, the content policy and per-channel access all have to exist before there's anything to report.</li>
       </ol>
     </div>
   </section>
@@ -389,14 +391,14 @@
               <div style="font-size:12.5px; color:#55595e; margin-bottom:12px;">Here's what this agent is allowed to do once it's live.</div>
 
           <div class="nbk-box" style="margin-top:18px;">
-            <div class="nbk-field-label">What's bounded<span class="nbk-field-sub">What this agent can do, and where each rule is set. Highlighted means nothing bounds it.</span></div>
+            <div class="nbk-field-label">What's bounded<span class="nbk-field-sub">What this agent is connected to, and where a rule is attached. Highlighted means nothing is configured.</span></div>
 
             <div class="gr-dim-row">
               <span class="gr-dim-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12h16"/><path d="m14 6 6 6-6 6"/></svg></span>
               <div class="gr-dim-body">
                 <div class="gr-dim-name">Reach</div>
-                <div class="gr-dim-state">#metrics is restricted to 4 people. <span class="gr-open-mark">Telegram is open to any user.</span></div>
-                <div class="gr-dim-where">Set in <span class="gr-dim-link">Triggers</span></div>
+                <div class="gr-dim-state">2 channels. #metrics is restricted to 4 people. <span class="gr-open-mark">Telegram is open to any user.</span></div>
+                <div class="gr-dim-where">Set per channel in <span class="gr-dim-link">Triggers</span></div>
               </div>
             </div>
 
@@ -404,7 +406,7 @@
               <span class="gr-dim-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></span>
               <div class="gr-dim-body">
                 <div class="gr-dim-name">Action</div>
-                <div class="gr-dim-state">6 tools allowed. Nothing destructive runs without asking.</div>
+                <div class="gr-dim-state">12 tools. <span class="gr-open-mark">9 run without asking</span>, 3 ask first.</div>
                 <div class="gr-dim-where">Set per tool in <span class="gr-dim-link">Capabilities</span></div>
               </div>
             </div>
@@ -422,7 +424,7 @@
               <span class="gr-dim-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12h16"/><path d="m18 6 6 6-6 6" transform="translate(-4)"/></svg></span>
               <div class="gr-dim-body">
                 <div class="gr-dim-name">Output</div>
-                <div class="gr-dim-state"><span class="gr-open-mark">Nothing checks what it sends.</span></div>
+                <div class="gr-dim-state"><span class="gr-open-mark">No content check on replies.</span></div>
                 <div class="gr-dim-where">Set in <span class="gr-dim-link">Settings</span></div>
               </div>
             </div>
@@ -434,11 +436,23 @@
       </div>
     </div>
 
-    <p class="gr-note"><b>The grade had to go, and this is why.</b> I had three states &mdash; <i>Bounded</i>, <i>Partly</i>, <i>Open</i> &mdash; and a countable definition behind them: how many of the places a rule can be set actually are. It was checkable, and it was still wrong. Counting implies a target. <i>1 of 2 channels</i> reads as <i>you're missing one</i>, when leaving a Telegram bot public may be exactly what the agent is for. A summary that grades turns every deliberate choice into an outstanding task.</p>
+    <p class="gr-note"><b>Revised after the thread on 27&ndash;28 Oct, and the change is bigger than it looks.</b> Every row now states a <i>fact we can read</i> rather than a property we'd be asserting. <i>&ldquo;Nothing destructive runs without asking&rdquo;</i> is gone, because we can't say it. <span class="who">Michael: &ldquo;we really can't make a guarantee like that, we don't actually know 100% what is destructive and what isn't &mdash; could just say what requires approval and what doesn't.&rdquo;</span> So it says <i>9 run without asking, 3 ask first</i>. Same information, no promise attached.</p>
 
-    <p class="gr-note"><b>One device instead: a highlight marks what's unbounded.</b> Each row states the facts, and anything with nothing bounding it is highlighted inside the sentence. Bold was the first attempt and it doesn't work here &mdash; the typeface has a single weight, so bold rendered as nothing at all. It's scannable &mdash; the bold is the scan &mdash; it names the specific thing rather than a score, and it makes no claim about whether you should do something. An agent where every gap is deliberate reads as a row of plain statements with a few highlighted phrases, which is accurate: those things <i>are</i> open, you just meant them.</p>
+    <p class="gr-note"><b>The limit underneath it.</b> We only know read versus write for <b>MCP</b> tools, where the server declares it. A workflow tool or a node tool is opaque &mdash; it may delete a table or read a row and we can't tell which. So a summary that sorted tools into safe and dangerous would be guessing on most of them, and guessing in the direction that makes people relax.</p>
 
-    <p class="gr-note"><b>What this gives up.</b> You can no longer tell at a glance whether a gap has been considered. An agent nobody has thought about and an agent whose every gap is deliberate look identical here. The fix, if we need one, is to let a builder mark a gap as intended &mdash; the way a linter takes a suppression &mdash; so the summary distinguishes <i>unbounded</i> from <i>unbounded and unreviewed</i>. That's a mechanism with state behind it, so it isn't worth building until we've seen whether the plain version is enough.</p>
+    <p class="gr-note"><b>Which is why the highlight means &ldquo;nothing is configured&rdquo;, not &ldquo;this is unsafe&rdquo;.</b> That's the one claim the data supports: we know exactly which connections have a rule attached and which don't. It's also Sin's lite version almost word for word &mdash; <span class="who">&ldquo;here's all the connections the agent has, grouped by reach / action / cost / output, and mark where there's rules attached and where things are not configured.&rdquo;</span> A builder reading it learns what's unprotected, and is left to judge whether that matters, which is the only honest division of labour until we can classify operations.</p>
+
+    <div class="gr-oq" style="background:#fbfbfa;">
+      <h3 style="margin-bottom:8px;">P0 lite, P1 analysed</h3>
+      <p class="gr-oq-sub">Agreed in the thread by Sin and Michael. This screen is the P0.</p>
+      <ol style="margin:0; padding-left:20px; font-size:13px; line-height:1.65;">
+        <li><b>P0 &mdash; what we can read.</b> Connections grouped by dimension, with rules attached or not. No classification, no judgement, nothing we'd have to be right about.</li>
+        <li><b>P1 &mdash; classify the operations.</b> Work out read versus write for non-MCP tools and build a schema, so the summary can flag a write with no rule on it. Sin's framing: do it offline so it's pre-testable and doesn't burn credits on every view.</li>
+        <li><b>Also raised, and parked:</b> letting the assistant analyse the agent's security on demand, and generating this view with generative UI. Michael wants the ask-the-assistant option even after engine&nbsp;v2 adds operation awareness.</li>
+      </ol>
+    </div>
+
+    <p class="gr-note"><b>One caution on the P1 that's worth keeping visible.</b> <i>Offline</i> has to mean our infrastructure, not the user's browser. <span class="who">Michael: WebLLM-style in-browser models are &ldquo;a massive download&rdquo;, most enterprise hardware can't run them, and &ldquo;trusting risk analysis to the smallest least capable models on the market might not be the safest bet&rdquo;.</span> A wrong classification here is worse than none, because it tells someone they're covered when they aren't.</p>
 
     <p class="gr-note"><b>Publish answers when, not where.</b> Showing this before you publish catches the one moment a builder is receptive to it. But it's a modal you dismiss, and the question comes back a week later when you're wondering why the agent didn't post something. So it needs a second, permanent entry point &mdash; an icon on the agent, a line in the trace, somewhere in Build &mdash; and that's undesigned. Putting it in Build was the first instinct and it clutters a page that's already full.</p>
 
