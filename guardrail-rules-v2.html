@@ -779,8 +779,7 @@
             </div>
 
             <div style="font-size:13.5px; font-weight:700; color:#1a1c1e; margin:18px 0 5px;">If it finds something</div>
-            <div class="gr-segctl"><span class="is-on">Block the call</span><span>Redact and continue</span><span style="opacity:0.45;">Ask first</span></div>
-            <div class="gr-help">Ask first needs the approval routing Michael is building. Not in P0.</div>
+            <div class="gr-segctl"><span class="is-on">Block the call</span><span>Redact and continue</span></div>
 
             <div style="font-size:13.5px; font-weight:700; color:#1a1c1e; margin:18px 0 5px;">If it can't run</div>
             <div class="gr-segctl"><span class="is-on">Block the call</span><span>Let it through</span></div>
@@ -993,7 +992,7 @@
 
     <p class="gr-note"><b>Where these three came from, since two are the product's and one is mine.</b> <i>Block the call</i> and <i>Redact and continue</i> are the Guardrails node's two operations &mdash; <i>Check Text for Violations</i>, which has Pass and Fail outputs, and <i>Sanitize Text</i>, <i>&ldquo;redact text to mask personal data, secret keys, URLs&rdquo;</i>. All I did was say what they mean once the guardrail is attached to a tool instead of sitting in a workflow.</p>
 
-    <p class="gr-note"><b><i>Ask first</i> is borrowed, and it's dimmed on purpose.</b> It comes from the agent's permission vocabulary, where <code>require_approval</code> reads as <i>Ask first</i>. The node has no approval concept at all. So offering it here would promise a human pause whose plumbing isn't ours &mdash; who gets asked, where the request goes when a scheduled run has nobody waiting, what happens if nobody answers. That's the work listed under <i>What isn't a guardrail</i>, and it belongs to Michael. Shown but disabled, so the option is on the record without reading as something P0 can deliver.</p>
+    <p class="gr-note"><b>There was a third option and I'd made it up.</b> <i>Ask first</i> came from the agent's permission vocabulary, where <code>require_approval</code> reads that way. The node has no approval concept, so putting it here promised a human pause whose plumbing isn't ours &mdash; who gets asked, where it goes when a scheduled run has nobody waiting, what happens if nobody answers. All of that is under <i>What isn't a guardrail</i> and belongs to Michael. Removed rather than dimmed: an invented option on a mockup gets quoted back as a decision.</p>
 
     <p class="gr-note"><b>A content check needs a second answer, and it was missing.</b> <i>If it finds something</i> covers the check working and catching a problem. It says nothing about the check <i>not working</i> &mdash; the PII model times out, the workflow errors, the provider is down. That happens, and the product has to do something, so <b>If it can't run</b> is now its own section: block the call, or let it through.</p>
 
@@ -1009,7 +1008,7 @@
 
     <p class="gr-note"><b>The types aren't ours to invent &mdash; the Guardrails node already ships them.</b> <i>Keywords, Jailbreak, NSFW, Personal Data (PII), Secret Keys, Topical Alignment, URLs, Custom, Custom Regex</i>, each with its own options: PII takes <i>All</i> or <i>Selected</i> entities, Secret Keys takes a permissiveness, the detection ones take a confidence threshold. Reusing that list means a builder who has used the node recognises every option, and we inherit detectors that already exist rather than describing ones that don't.</p>
 
-    <p class="gr-note"><b>The node also answers what happens when it catches something,</b> and it's two things, not one. Its Operation is <i>Check Text for Violations</i> or <i>Sanitize Text</i> &mdash; validate and fail, or redact and carry on. That's a real choice a builder makes per guardrail, so it gets its own section: <i>Block the call</i> / <i>Redact and continue</i> / <i>Ask first</i>. I had it as a vague <i>If it fires</i> at the bottom of the form; this is the same question asked in the product's own terms.</p>
+    <p class="gr-note"><b>The node also answers what happens when it catches something,</b> and it's two things, not one. Its Operation is <i>Check Text for Violations</i> or <i>Sanitize Text</i> &mdash; validate and fail, or redact and carry on. That's a real choice a builder makes per guardrail, so it gets its own section: <i>Block the call</i> / <i>Redact and continue</i>. I had it as a vague <i>If it fires</i> at the bottom of the form; this is the same question asked in the product's own terms, and only in those terms.</p>
 
     <p class="gr-note"><b>And timeout and rate limit came back out.</b> I'd folded them into <i>What it does</i> last round. The node's taxonomy settles it: every guardrail in it is a <b>content</b> check, and a timeout isn't content. They belong to the tool, which is where <i>When the limit is reached</i> already sits.</p>
 
