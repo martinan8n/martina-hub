@@ -665,7 +665,7 @@
     </div>
 
     <h3 class="lrt-section-title" style="font-size:15px; margin-top:26px;">Creating one <span class="gr-tag is-new">new</span></h3>
-    <p class="lrt-section-sub">The thing that doesn't exist anywhere yet. <b>Guardrails are for tools only right now</b>, so it reads in the order the decision is made: where in the tool call it runs, then how it checks, then the limits. Everything that used to be drawn inside the tool pane &mdash; data checks, timeouts, rate limits &mdash; moved in here, because configuring that per tool means filling the same form nine times and storing nine copies of it. The name is the modal's title, edited in place, so the form opens on the decision rather than on a label.</p>
+    <p class="lrt-section-sub">Half of this exists already: the <b>Guardrails node</b> ships the detectors and the check-or-sanitize decision, and this modal reuses both. What's new is attaching one to a tool rather than dropping a node into a workflow. <b>Guardrails are for tools only right now</b>, so it reads in the order the decision is made: where in the tool call it runs, then how it checks, then the limits. Everything that used to be drawn inside the tool pane &mdash; data checks, timeouts, rate limits &mdash; moved in here, because configuring that per tool means filling the same form nine times and storing nine copies of it. The name is the modal's title, edited in place, so the form opens on the decision rather than on a label.</p>
 
     <div class="nbk">
       <div class="nbk-frame">
@@ -674,10 +674,31 @@
             <div class="gr-modal-head"><span class="gr-modal-title gr-titlefield">Finance data check <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></span><span class="gr-modal-x">&times;</span></div>
 
             <div style="font-size:13.5px; font-weight:700; color:#1a1c1e; margin:18px 0 5px;">What it does</div>
-            <div class="gr-segctl"><span class="is-on">Workflow</span><span>PII</span><span>Timeout</span><span>Rate limit</span></div>
-            <div style="margin-top:10px;">
-              <div class="gr-rule-ctl nbk-select-input" style="display:flex; width:100%; justify-content:space-between;">Pick a workflow <span class="chev">&#9662;</span></div>
+            <span class="gr-ddwrap" style="display:block;">
+              <span class="gr-rule-ctl nbk-select-input gr-click" style="display:flex; width:100%; justify-content:space-between;" onclick="grOpen('gr-type-dd')">Personal Data (PII) <span class="chev">&#9662;</span></span>
+              <div class="gr-dd" id="gr-type-dd" style="left:0; right:auto; min-width:300px;">
+                <div class="gr-dd-item is-on">Personal Data (PII)</div>
+                <div class="gr-dd-item">Jailbreak</div>
+                <div class="gr-dd-item">NSFW</div>
+                <div class="gr-dd-item">Secret Keys</div>
+                <div class="gr-dd-item">Topical Alignment</div>
+                <div class="gr-dd-item">Keywords</div>
+                <div class="gr-dd-item">URLs</div>
+                <div class="gr-dd-item">Custom</div>
+                <div class="gr-dd-item">Custom Regex</div>
+                <div class="gr-dd-sep"></div>
+                <div class="gr-dd-item">A workflow <span class="n">your own logic</span></div>
+              </div>
+            </span>
+            <div class="gr-help">Detects attempts to use personal data content.</div>
+
+            <div style="padding-left:14px; border-left:2px solid var(--line-soft,#d4d7da); margin-top:10px;">
+              <div style="font-size:12.5px; color:#55595e; margin-bottom:5px;">Type</div>
+              <div class="gr-segctl"><span class="is-on">All</span><span>Selected</span></div>
             </div>
+
+            <div style="font-size:13.5px; font-weight:700; color:#1a1c1e; margin:18px 0 5px;">If it finds something</div>
+            <div class="gr-segctl"><span class="is-on">Block the call</span><span>Redact and continue</span><span>Ask first</span></div>
 
             <div style="font-size:13.5px; font-weight:700; color:#1a1c1e; margin:18px 0 5px;">When it runs</div>
             <div class="gr-segctl"><span class="is-on">Before a tool call</span><span>After</span><span>Both</span></div>
@@ -690,9 +711,6 @@
 
             <div style="display:flex; align-items:center; gap:5px; font-size:13.5px; font-weight:700; color:#1a1c1e; margin:18px 0 5px;">Which operations<span class="gr-info" title="Only MCP servers declare whether a tool reads or writes. For workflow and node tools this cannot be narrowed, so the guardrail runs on all of them."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 16v-5M12 8h.01"/></svg></span></div>
             <div class="gr-segctl"><span class="is-on">All</span><span>Write and delete</span><span>Read-only</span></div>
-
-            <div style="font-size:13.5px; font-weight:700; color:#1a1c1e; margin:18px 0 5px;">If it fires</div>
-            <div class="gr-rule-ctl nbk-select-input" style="display:flex; width:100%; justify-content:space-between;">Stop the call and tell the agent <span class="chev">&#9662;</span></div>
 
             <div class="gr-modal-foot"><span style="flex:1;"></span><span class="nbk-btn">Cancel</span><span class="nbk-btn nbk-btn-primary">Create</span></div>
           </div>
@@ -860,7 +878,13 @@
       </div>
     </div>
 
-    <p class="gr-note"><b>Labels: short noun phrases, not questions.</b> <i>What it does</i> &middot; <i>When it runs</i> &middot; <i>Which tools</i> &middot; <i>Which operations</i> &middot; <i>If it fires</i>. Parallel grammar so the modal reads as one sentence being filled in, and short enough that five sections don't feel like a survey. <i>&ldquo;What it needs to check&rdquo;</i> was the alternative for the first one and it breaks on half the options &mdash; a timeout doesn't check anything, it bounds something.</p>
+    <p class="gr-note"><b>The types aren't ours to invent &mdash; the Guardrails node already ships them.</b> <i>Keywords, Jailbreak, NSFW, Personal Data (PII), Secret Keys, Topical Alignment, URLs, Custom, Custom Regex</i>, each with its own options: PII takes <i>All</i> or <i>Selected</i> entities, Secret Keys takes a permissiveness, the detection ones take a confidence threshold. Reusing that list means a builder who has used the node recognises every option, and we inherit detectors that already exist rather than describing ones that don't.</p>
+
+    <p class="gr-note"><b>The node also answers what happens when it catches something,</b> and it's two things, not one. Its Operation is <i>Check Text for Violations</i> or <i>Sanitize Text</i> &mdash; validate and fail, or redact and carry on. That's a real choice a builder makes per guardrail, so it gets its own section: <i>Block the call</i> / <i>Redact and continue</i> / <i>Ask first</i>. I had it as a vague <i>If it fires</i> at the bottom of the form; this is the same question asked in the product's own terms.</p>
+
+    <p class="gr-note"><b>And timeout and rate limit came back out.</b> I'd folded them into <i>What it does</i> last round. The node's taxonomy settles it: every guardrail in it is a <b>content</b> check, and a timeout isn't content. They belong to the tool, which is where <i>When the limit is reached</i> already sits.</p>
+
+    <p class="gr-note"><b>Labels: short noun phrases, not questions.</b> <i>What it does</i> &middot; <i>If it finds something</i> &middot; <i>When it runs</i> &middot; <i>Which tools</i> &middot; <i>Which operations</i>. Parallel grammar so the modal reads as one sentence being filled in, and short enough that five sections don't feel like a survey.</p>
 
     <p class="gr-note"><b><i>Which operations</i> only works for MCP, and the field has to admit it.</b> An MCP server declares whether each tool reads or writes; a workflow tool or a node tool doesn't. So narrowing a guardrail to write-and-delete silently covers nothing on the tools we can't classify. That's in the tooltip now, and it's the same limit Michael raised about the summary &mdash; <span class="who">&ldquo;there's no way to know for sure all write tools have approval, as we don't know what a write tool is for workflows or node tools.&rdquo;</span></p>
 
