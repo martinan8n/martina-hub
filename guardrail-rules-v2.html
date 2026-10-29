@@ -618,7 +618,7 @@
             <div style="font-size:12px; color:#9298a0; margin-bottom:6px;">Check what goes into this tool and what comes back. Guardrails are built once and shared.</div>
 
             <div class="gr-rule-row">
-              <div class="gr-rule-main"><div class="gr-rule-name">Input</div><div class="gr-rule-sub">Runs on what this agent sends to the tool.</div></div>
+              <div class="gr-rule-main"><div class="gr-rule-name">Input</div><div class="gr-rule-sub">Runs on the tool call before it is made.</div></div>
               <span class="gr-rule-ctl gr-gtags">
                 <span class="gr-gtag"><span class="nm">Finance data check</span> <span class="x">&times;</span></span>
                 <span class="gr-gtag"><span class="nm">PII</span> <span class="x">&times;</span></span>
@@ -636,7 +636,7 @@
               </span>
             </div>
             <div class="gr-rule-row">
-              <div class="gr-rule-main"><div class="gr-rule-name">Output</div><div class="gr-rule-sub">Runs on what the tool returns.</div></div>
+              <div class="gr-rule-main"><div class="gr-rule-name">Output</div><div class="gr-rule-sub">Runs on what the tool call returns.</div></div>
               <span class="gr-rule-ctl gr-gtags">
                 <span class="gr-gtag"><span class="nm">Prompt injection check</span> <span class="x">&times;</span></span>
                 <span class="gr-ddwrap">
@@ -681,7 +681,7 @@
             <div style="font-size:12px; color:#9298a0; margin-bottom:6px;">Check what goes into this tool and what comes back. Guardrails are built once and shared.</div>
 
             <div class="gr-rule-row">
-              <div class="gr-rule-main"><div class="gr-rule-name">Input</div><div class="gr-rule-sub">Runs on what this agent sends to the tool.</div></div>
+              <div class="gr-rule-main"><div class="gr-rule-name">Input</div><div class="gr-rule-sub">Runs on the tool call before it is made.</div></div>
               <span class="gr-rule-ctl gr-gtags">
                 <span class="gr-ddwrap">
                   <span class="gr-gadd gr-click" onclick="grOpen('gr-add-in-empty')">+ Add guardrail</span>
@@ -697,7 +697,7 @@
               </span>
             </div>
             <div class="gr-rule-row">
-              <div class="gr-rule-main"><div class="gr-rule-name">Output</div><div class="gr-rule-sub">Runs on what the tool returns.</div></div>
+              <div class="gr-rule-main"><div class="gr-rule-name">Output</div><div class="gr-rule-sub">Runs on what the tool call returns.</div></div>
               <span class="gr-rule-ctl gr-gtags">
                 <span class="gr-gadd">+ Add guardrail</span>
               </span>
@@ -708,6 +708,8 @@
         </div>
       </div>
     </div>
+
+    <p class="gr-note"><b>The two vocabularies turn out not to be the same question.</b> I'd been flagging that the pane says <i>Input</i> and <i>Output</i> while the modal says <i>Before a tool call</i> and <i>After</i>, and assumed one had to win. They're different: the modal says what the guardrail <i>is for</i> &mdash; and <i>On a tool call</i> is a real third answer, a check that makes sense on either side &mdash; while the pane says where it's actually attached on this tool. A guardrail built <i>on a tool call</i> can go in both slots; one built <i>before</i> only fits Input.</p>
 
     <p class="gr-note"><b>One action per slot, not one for the pane.</b> I had <i>Add guardrail</i> and <i>Create guardrail</i> at the bottom, which is wrong twice over: two links for what is really one job, and neither says whether it would attach to Input or Output. Moving a single <i>+ Add guardrail</i> into each row fixes both &mdash; the slot is implied by where you clicked, and creating is just the last item in the picker, where it belongs as the fallback for &ldquo;none of these&rdquo;.</p>
 
@@ -779,8 +781,12 @@
             <div style="font-size:13.5px; font-weight:700; color:#1a1c1e; margin:18px 0 5px;">If it finds something</div>
             <div class="gr-segctl"><span class="is-on">Block the call</span><span>Redact and continue</span><span>Ask first</span></div>
 
+            <div style="font-size:13.5px; font-weight:700; color:#1a1c1e; margin:18px 0 5px;">If it can't run</div>
+            <div class="gr-segctl"><span class="is-on">Block the call</span><span>Let it through</span></div>
+            <div class="gr-help">When the check times out, errors, or the model is unavailable.</div>
+
             <div style="font-size:13.5px; font-weight:700; color:#1a1c1e; margin:18px 0 5px;">When it runs</div>
-            <div class="gr-segctl"><span class="is-on">Before a tool call</span><span>After</span><span>Both</span></div>
+            <div class="gr-segctl"><span class="is-on">Before a tool call</span><span>After</span><span>On a tool call</span></div>
 
             <div style="display:flex; align-items:center; gap:5px; font-size:13.5px; font-weight:700; color:#1a1c1e; margin:18px 0 5px;">Which tools<span class="gr-info" title="All tools covers every tool this agent has, including tools added later. Select tools fixes the list to the ones you pick."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 16v-5M12 8h.01"/></svg></span></div>
             <div class="gr-segctl"><span class="is-on" onclick="grTools(this,false)">All tools</span><span onclick="grTools(this,true)">Select tools</span></div>
@@ -983,6 +989,12 @@
         </div>
       </div>
     </div>
+
+    <p class="gr-note"><b>A content check needs a second answer, and it was missing.</b> <i>If it finds something</i> covers the check working and catching a problem. It says nothing about the check <i>not working</i> &mdash; the PII model times out, the workflow errors, the provider is down. That happens, and the product has to do something, so <b>If it can't run</b> is now its own section: block the call, or let it through.</p>
+
+    <p class="gr-note"><b>It's the fail-closed / fail-open decision, and it belongs to whoever made the guardrail.</b> Blocking is safer and makes an outage look like the agent is broken; letting it through keeps the agent working and silently removes the protection for the duration. Neither is right for everyone, which is exactly why it can't be a hidden default &mdash; a PII guardrail you'd want to fail closed, a topical-alignment one probably not.</p>
+
+    <p class="gr-note"><b>Not quite the same as a limit, though it sits in the same place.</b> For a rate limit, <i>when the limit is hit</i> is the normal path &mdash; it's the thing you configured it to do. For a content check, <i>if it can't run</i> is the failure path. Same slot in the form, different question, so it reads differently rather than borrowing the limit's words.</p>
 
     <p class="gr-note"><b>One section changes, and it's the one you asked about.</b> For a content check it reads <i>If it finds something</i> &mdash; block, redact, ask. For a limit it reads <i>When the limit is hit</i> &mdash; wait and retry, skip, stop. Same slot in the form, same job, different words because redacting a timeout means nothing. <i>When it runs</i> and <i>Which operations</i> drop out for a limit too: a rate limit applies to the call itself, not to what the call carries.</p>
 
