@@ -779,7 +779,8 @@
             </div>
 
             <div style="font-size:13.5px; font-weight:700; color:#1a1c1e; margin:18px 0 5px;">If it finds something</div>
-            <div class="gr-segctl"><span class="is-on">Block the call</span><span>Redact and continue</span><span>Ask first</span></div>
+            <div class="gr-segctl"><span class="is-on">Block the call</span><span>Redact and continue</span><span style="opacity:0.45;">Ask first</span></div>
+            <div class="gr-help">Ask first needs the approval routing Michael is building. Not in P0.</div>
 
             <div style="font-size:13.5px; font-weight:700; color:#1a1c1e; margin:18px 0 5px;">If it can't run</div>
             <div class="gr-segctl"><span class="is-on">Block the call</span><span>Let it through</span></div>
@@ -989,6 +990,10 @@
         </div>
       </div>
     </div>
+
+    <p class="gr-note"><b>Where these three came from, since two are the product's and one is mine.</b> <i>Block the call</i> and <i>Redact and continue</i> are the Guardrails node's two operations &mdash; <i>Check Text for Violations</i>, which has Pass and Fail outputs, and <i>Sanitize Text</i>, <i>&ldquo;redact text to mask personal data, secret keys, URLs&rdquo;</i>. All I did was say what they mean once the guardrail is attached to a tool instead of sitting in a workflow.</p>
+
+    <p class="gr-note"><b><i>Ask first</i> is borrowed, and it's dimmed on purpose.</b> It comes from the agent's permission vocabulary, where <code>require_approval</code> reads as <i>Ask first</i>. The node has no approval concept at all. So offering it here would promise a human pause whose plumbing isn't ours &mdash; who gets asked, where the request goes when a scheduled run has nobody waiting, what happens if nobody answers. That's the work listed under <i>What isn't a guardrail</i>, and it belongs to Michael. Shown but disabled, so the option is on the record without reading as something P0 can deliver.</p>
 
     <p class="gr-note"><b>A content check needs a second answer, and it was missing.</b> <i>If it finds something</i> covers the check working and catching a problem. It says nothing about the check <i>not working</i> &mdash; the PII model times out, the workflow errors, the provider is down. That happens, and the product has to do something, so <b>If it can't run</b> is now its own section: block the call, or let it through.</p>
 
