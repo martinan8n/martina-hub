@@ -255,6 +255,10 @@
   .gr-gtag { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; color: #1a1c1e; background: #f4f5f6; border: 1px solid var(--line-soft,#d4d7da); border-radius: 999px; padding: 3px 10px; white-space: nowrap; }
   .gr-gtag .x { color: #9298a0; cursor: pointer; }
   .gr-gtag.is-none { background: none; border-style: dashed; color: #9298a0; }
+  .gr-gtag .nm { cursor: pointer; }
+  .gr-gtag .nm:hover { text-decoration: underline; }
+  .gr-gadd { font-size: 12.5px; color: #55595e; border: 1.5px dashed var(--line-soft,#d4d7da); border-radius: 999px; padding: 3px 11px; cursor: pointer; white-space: nowrap; }
+  .gr-gadd:hover { border-color: #a79ad6; color: #1a1c1e; }
 </style>
 </head>
 <body>
@@ -616,25 +620,36 @@
             <div class="gr-rule-row">
               <div class="gr-rule-main"><div class="gr-rule-name">Input</div><div class="gr-rule-sub">Runs on what this agent sends to the tool.</div></div>
               <span class="gr-rule-ctl gr-gtags">
-                <span class="gr-gtag">Finance data check <span class="x">&times;</span></span>
-                <span class="gr-gtag">PII <span class="x">&times;</span></span>
+                <span class="gr-gtag"><span class="nm">Finance data check</span> <span class="x">&times;</span></span>
+                <span class="gr-gtag"><span class="nm">PII</span> <span class="x">&times;</span></span>
+                <span class="gr-ddwrap">
+                <span class="gr-gadd gr-click" onclick="grOpen('gr-add-in')">+ Add guardrail</span>
+                <div class="gr-dd" id="gr-add-in">
+                  <div class="gr-dd-item">Finance data check <span class="n">on 2 tools</span></div>
+                  <div class="gr-dd-item">Prompt injection check <span class="n">on 4 tools</span></div>
+                  <div class="gr-dd-item">PII <span class="n">on 9 tools</span></div>
+                  <div class="gr-dd-note">Shared. Editing one changes every tool using it.</div>
+                  <div class="gr-dd-sep"></div>
+                  <div class="gr-dd-item">+ Create guardrail</div>
+                </div>
+              </span>
               </span>
             </div>
             <div class="gr-rule-row">
               <div class="gr-rule-main"><div class="gr-rule-name">Output</div><div class="gr-rule-sub">Runs on what the tool returns.</div></div>
               <span class="gr-rule-ctl gr-gtags">
-                <span class="gr-gtag">Prompt injection check <span class="x">&times;</span></span>
+                <span class="gr-gtag"><span class="nm">Prompt injection check</span> <span class="x">&times;</span></span>
+                <span class="gr-ddwrap">
+                <span class="gr-gadd gr-click" onclick="grOpen('gr-add-out')">+ Add guardrail</span>
+                <div class="gr-dd" id="gr-add-out">
+                  <div class="gr-dd-item">Finance data check <span class="n">on 2 tools</span></div>
+                  <div class="gr-dd-item">Prompt injection check <span class="n">on 4 tools</span></div>
+                  <div class="gr-dd-item">PII <span class="n">on 9 tools</span></div>
+                  <div class="gr-dd-note">Shared. Editing one changes every tool using it.</div>
+                  <div class="gr-dd-sep"></div>
+                  <div class="gr-dd-item">+ Create guardrail</div>
+                </div>
               </span>
-            </div>
-            <div class="gr-rule-row">
-              <div class="gr-rule-main"><div class="gr-rule-name">When the limit is reached</div><div class="gr-rule-sub">If a rate limit or timeout on this tool is hit.</div></div>
-              <span class="gr-rule-ctl nbk-select-input">Wait and retry <span class="chev">&#9662;</span></span>
-            </div>
-            <div class="gr-rule-row">
-              <div class="gr-rule-main"></div>
-              <span class="gr-rule-ctl" style="display:flex; gap:14px;">
-                <span class="gr-dim-link">Add guardrail</span>
-                <span class="gr-dim-link">Create guardrail</span>
               </span>
             </div>
 
@@ -645,6 +660,60 @@
     </div>
 
     <p class="gr-note"><b>Two different tool panes exist, and they don't agree.</b> This MCP one has the Allow / Ask first / Block dropdowns per group. A plain tool gets a different pane entirely, whose approval control is a single switch &mdash; <i>&ldquo;Require approval: Pause before this tool runs until a human approves it.&rdquo;</i> Same decision, two shapes. The guardrail row has to land in both, and it's worth asking whether the switch should just become the dropdown.</p>
+
+    <h3 class="lrt-section-title" style="font-size:15px; margin-top:26px;">Before anything is attached <span class="gr-tag is-new">new</span></h3>
+    <p class="lrt-section-sub">The state most tools will be in. Same two rows, same affordance, nothing else &mdash; so the pane doesn't change shape when the first guardrail arrives.</p>
+
+    <div class="nbk">
+      <div class="nbk-frame">
+        <div class="nbk-main" style="padding-top:26px; padding-bottom:140px;">
+          <div class="gr-modal" style="max-width:620px !important;">
+            <div class="gr-toolpane-head">
+              <span class="gr-chevr" style="transform:rotate(180deg);">&#8250;</span>
+              <span class="ic" style="width:24px; height:24px; border-radius:6px; background:#eceeef; display:inline-block;"></span>
+              <span class="gr-modal-title">Notion</span>
+              <span style="flex:1;"></span>
+              <span class="nbk-select-input" style="font-size:12.5px;">Workspace cred <span class="chev">&#9662;</span></span>
+              <span class="gr-modal-x">&times;</span>
+            </div>
+
+            <div style="font-size:13.5px; font-weight:700; color:#1a1c1e; margin:18px 0 3px;">Guardrail <span class="gr-tag is-new">new</span></div>
+            <div style="font-size:12px; color:#9298a0; margin-bottom:6px;">Check what goes into this tool and what comes back. Guardrails are built once and shared.</div>
+
+            <div class="gr-rule-row">
+              <div class="gr-rule-main"><div class="gr-rule-name">Input</div><div class="gr-rule-sub">Runs on what this agent sends to the tool.</div></div>
+              <span class="gr-rule-ctl gr-gtags">
+                <span class="gr-ddwrap">
+                  <span class="gr-gadd gr-click" onclick="grOpen('gr-add-in-empty')">+ Add guardrail</span>
+                  <div class="gr-dd" id="gr-add-in-empty">
+                    <div class="gr-dd-item">Finance data check <span class="n">on 2 tools</span></div>
+                    <div class="gr-dd-item">Prompt injection check <span class="n">on 4 tools</span></div>
+                    <div class="gr-dd-item">PII <span class="n">on 9 tools</span></div>
+                    <div class="gr-dd-note">Shared. Editing one changes every tool using it.</div>
+                    <div class="gr-dd-sep"></div>
+                    <div class="gr-dd-item">+ Create guardrail</div>
+                  </div>
+                </span>
+              </span>
+            </div>
+            <div class="gr-rule-row">
+              <div class="gr-rule-main"><div class="gr-rule-name">Output</div><div class="gr-rule-sub">Runs on what the tool returns.</div></div>
+              <span class="gr-rule-ctl gr-gtags">
+                <span class="gr-gadd">+ Add guardrail</span>
+              </span>
+            </div>
+
+            <div class="gr-modal-foot"><span class="nbk-btn" style="color:#b54242;">Remove</span><span style="flex:1;"></span><span class="nbk-btn">Cancel</span><span class="nbk-btn nbk-btn-primary">Save</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p class="gr-note"><b>One action per slot, not one for the pane.</b> I had <i>Add guardrail</i> and <i>Create guardrail</i> at the bottom, which is wrong twice over: two links for what is really one job, and neither says whether it would attach to Input or Output. Moving a single <i>+ Add guardrail</i> into each row fixes both &mdash; the slot is implied by where you clicked, and creating is just the last item in the picker, where it belongs as the fallback for &ldquo;none of these&rdquo;.</p>
+
+    <p class="gr-note"><b>Editing lives on the tag.</b> The tag <i>is</i> the guardrail, so clicking its name opens it and the &times; detaches it. That also keeps the two actions honestly different: detaching affects this tool, editing affects every tool using it, which is why a save from there goes through the impact notice drawn further down.</p>
+
+    <p class="gr-note"><b>The empty state is the same pane with the tags missing.</b> No illustration, no explanatory panel that disappears once you use it &mdash; the rows stay put so the pane doesn't reflow the moment you add the first one, and the only thing you can do is the thing you came for.</p>
 
     <h3 class="lrt-section-title" style="font-size:15px; margin-top:26px;">It already defends the dangerous default <span class="gr-tag is-today">today</span></h3>
     <p class="lrt-section-sub">Setting a whole write group to Allow is challenged &mdash; the doc's &ldquo;never a default-allow&rdquo; requirement, already honoured in one place.</p>
@@ -688,13 +757,23 @@
                 <div class="gr-dd-item">Custom Regex</div>
                 <div class="gr-dd-sep"></div>
                 <div class="gr-dd-item">A workflow <span class="n">your own logic</span></div>
+                <div class="gr-dd-sep"></div>
+                <div class="gr-dd-note" style="padding-top:2px;">Not about content</div>
+                <div class="gr-dd-item">Timeout</div>
+                <div class="gr-dd-item">Rate limit</div>
               </div>
             </span>
             <div class="gr-help">Detects attempts to use personal data content.</div>
 
             <div style="padding-left:14px; border-left:2px solid var(--line-soft,#d4d7da); margin-top:10px;">
-              <div style="font-size:12.5px; color:#55595e; margin-bottom:5px;">Type</div>
-              <div class="gr-segctl"><span class="is-on">All</span><span>Selected</span></div>
+              <div style="font-size:12.5px; color:#55595e; margin-bottom:5px;">Which personal data</div>
+              <div class="gr-segctl"><span>Everything it can detect</span><span class="is-on">Only these</span></div>
+              <div class="gr-chipfield" style="margin-top:8px;">
+                <span class="gr-chip">Email <span class="x">&times;</span></span>
+                <span class="gr-chip">Phone number <span class="x">&times;</span></span>
+                <span class="gr-chip">Credit card <span class="x">&times;</span></span>
+                <span class="ph">Add an entity</span>
+              </div>
             </div>
 
             <div style="font-size:13.5px; font-weight:700; color:#1a1c1e; margin:18px 0 5px;">If it finds something</div>
@@ -722,9 +801,7 @@
 
     <p class="gr-note"><b>Tags, not pickers, and more than one per slot.</b> A tool can need two checks on the way in &mdash; redact PII, and refuse anything with finance data in it &mdash; which a single dropdown can't express. Tags also say the right thing about ownership: they're read-only here because the guardrail belongs to the library, not to this tool. You attach and detach from the pane; you edit from the guardrail.</p>
 
-    <p class="gr-note"><b>And <i>when the limit is reached</i> is its own row, not part of a guardrail.</b> It belongs to the tool rather than to any check attached to it: a rate limit is a property of the API behind the tool, and the answer &mdash; wait and retry, skip, stop &mdash; is the same whichever guardrails happen to be attached. Folding it into one of them would mean the behaviour changed depending on which guardrail you detached.</p>
-
-    <p class="gr-note"><b>Two entry points because they're different moments.</b> <i>Add guardrail</i> picks one that exists; <i>Create guardrail</i> opens the modal. Separating them means the common case &mdash; reusing the one you already made &mdash; isn't behind a menu that also offers to make a new one.</p>
+        <p class="gr-note"><b>Two entry points because they're different moments.</b> <i>Add guardrail</i> picks one that exists; <i>Create guardrail</i> opens the modal. Separating them means the common case &mdash; reusing the one you already made &mdash; isn't behind a menu that also offers to make a new one.</p>
 
     <p class="gr-note"><b>A guardrail is one check at one point.</b> <i>Where it runs</i> is a single choice: checking what you send to a tool and checking what comes back are different decisions about different payloads, and bundling them into one object makes it vague what you actually switched on. To cover both you attach two, which also reads better in the library &mdash; <i>&ldquo;Finance check, on Notion, after a tool call&rdquo;</i> is a concrete thing, where <i>&ldquo;Finance check, on four hooks&rdquo;</i> is a configuration you'd have to open to understand.</p>
 
@@ -877,6 +954,41 @@
         </div>
       </div>
     </div>
+
+    <h3 class="lrt-section-title" style="font-size:15px; margin-top:26px;">The same modal, for a limit</h3>
+    <p class="lrt-section-sub">Timeout and rate limit are guardrails too, and the form barely changes &mdash; only the section that says what happens, because &ldquo;redact and continue&rdquo; is meaningless for a limit.</p>
+
+    <div class="nbk">
+      <div class="nbk-frame">
+        <div class="nbk-main" style="padding-top:26px; padding-bottom:26px;">
+          <div class="gr-modal" style="max-width:520px !important;">
+            <div class="gr-modal-head"><span class="gr-modal-title gr-titlefield">Slow API back-off <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></span><span class="gr-modal-x">&times;</span></div>
+
+            <div style="font-size:13.5px; font-weight:700; color:#1a1c1e; margin:18px 0 5px;">What it does</div>
+            <div class="gr-rule-ctl nbk-select-input" style="display:flex; width:100%; justify-content:space-between;">Rate limit <span class="chev">&#9662;</span></div>
+            <div style="padding-left:14px; border-left:2px solid var(--line-soft,#d4d7da); margin-top:10px;">
+              <div style="font-size:12.5px; color:#55595e; margin-bottom:5px;">Calls per minute</div>
+              <div class="gr-rule-ctl nbk-select-input" style="display:flex; width:100%; justify-content:space-between;">Provider limit <span class="chev">&#9662;</span></div>
+            </div>
+
+            <div style="font-size:13.5px; font-weight:700; color:#1a1c1e; margin:18px 0 5px;">When the limit is hit</div>
+            <div class="gr-segctl"><span class="is-on">Wait and retry</span><span>Skip the call</span><span>Stop the run</span></div>
+
+            <div style="font-size:13.5px; font-weight:700; color:#1a1c1e; margin:18px 0 5px;">Which tools</div>
+            <div class="gr-segctl"><span>All tools</span><span class="is-on">Select tools</span></div>
+            <div style="margin-top:10px;"><div class="gr-chipfield"><span class="gr-chip">Notion <span class="x">&times;</span></span><span class="ph">Search tools</span></div></div>
+
+            <div class="gr-modal-foot"><span style="flex:1;"></span><span class="nbk-btn">Cancel</span><span class="nbk-btn nbk-btn-primary">Create</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p class="gr-note"><b>One section changes, and it's the one you asked about.</b> For a content check it reads <i>If it finds something</i> &mdash; block, redact, ask. For a limit it reads <i>When the limit is hit</i> &mdash; wait and retry, skip, stop. Same slot in the form, same job, different words because redacting a timeout means nothing. <i>When it runs</i> and <i>Which operations</i> drop out for a limit too: a rate limit applies to the call itself, not to what the call carries.</p>
+
+    <p class="gr-note"><b>I took these out last round and that was wrong.</b> My argument was that the node's taxonomy is all content, so a timeout isn't a guardrail. But the node is a workflow step you drop into a flow; what we're building is a thing you attach to a tool, and from the tool's point of view a rate limit and a PII check are the same kind of attachment &mdash; something that can interrupt the call. Grouping them under <i>Not about content</i> in the picker keeps the distinction visible without splitting the object in two.</p>
+
+    <p class="gr-note"><b>Which means the tool pane loses a row.</b> <i>When the limit is reached</i> was sitting there as a property of the tool. With limits as guardrails it would be the same decision in two places, so it goes &mdash; a tool with a rate limit now has a rate-limit guardrail attached, and the answer lives in it.</p>
 
     <p class="gr-note"><b>The types aren't ours to invent &mdash; the Guardrails node already ships them.</b> <i>Keywords, Jailbreak, NSFW, Personal Data (PII), Secret Keys, Topical Alignment, URLs, Custom, Custom Regex</i>, each with its own options: PII takes <i>All</i> or <i>Selected</i> entities, Secret Keys takes a permissiveness, the detection ones take a confidence threshold. Reusing that list means a builder who has used the node recognises every option, and we inherit detectors that already exist rather than describing ones that don't.</p>
 

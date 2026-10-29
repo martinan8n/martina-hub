@@ -377,8 +377,8 @@
       <p style="margin-top:10px;"><b>P1, and not in Settings.</b> It gets built after the permissions it summarises. <span class="who">Michael: &ldquo;I think it would be cool to have a place where you can see all the permissions, but I don't think it's a P0.&rdquo;</span> <span class="who">Martina and Anne, on the call: &ldquo;this doesn't belong in the settings. Idea: when you hit Publish.&rdquo;</span></p>
     </div>
 
-    <h2 class="lrt-section-title">Step 1, option A &mdash; By dimension</h2>
-    <p class="lrt-section-sub">The dimensions as a list, each saying what's set in plain language and where it's set. Adding a sixth dimension later is one more row.</p>
+    <h2 class="lrt-section-title">Step 1 &mdash; Review and publish</h2>
+    <p class="lrt-section-sub">Four questions to review before publishing: access, actions, spending, and reply checks.</p>
 
     <div class="nbk">
       <div class="nbk-frame">
@@ -387,49 +387,49 @@
           <div class="gr-stage-body">Agent config</div>
           <div class="gr-backdrop">
             <div class="gr-modal" style="max-width:560px !important; width:100%;">
-              <div class="gr-modal-head" style="margin-bottom:4px;"><span class="gr-modal-title">Publish agent</span><span class="gr-modal-x">&times;</span></div>
-              <div style="font-size:12.5px; color:#55595e; margin-bottom:12px;">Here's what this agent is allowed to do once it's live.</div>
+              <div class="gr-modal-head" style="margin-bottom:4px;"><span class="gr-modal-title">Review and publish</span><span class="gr-modal-x">&times;</span></div>
+              <div style="font-size:12.5px; color:#55595e; margin-bottom:12px;">Review who can use your agent, what it can do, and the limits that apply once it’s live.</div>
 
           <div class="nbk-box" style="margin-top:18px;">
-            <div class="nbk-field-label">What's bounded<span class="nbk-field-sub">What this agent is connected to, and where a rule is attached. Highlighted means nothing is configured.</span></div>
+
 
             <div class="gr-dim-row">
               <span class="gr-dim-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12h16"/><path d="m14 6 6 6-6 6"/></svg></span>
               <div class="gr-dim-body">
-                <div class="gr-dim-name">Reach</div>
-                <div class="gr-dim-state">2 channels. #metrics is restricted to 4 people. <span class="gr-open-mark">Telegram is open to any user.</span></div>
-                <div class="gr-dim-where">Set per channel in <span class="gr-dim-link">Triggers</span></div>
+                <div class="gr-dim-name">Who can use your agent?</div>
+                <div class="gr-dim-state">Available in 2 channels.<br>#metrics: Limited to 4 people<br>Telegram: Anyone can use it</div>
+                <div class="gr-dim-where">Edit access in <span class="gr-dim-link">Triggers</span></div>
               </div>
             </div>
 
             <div class="gr-dim-row">
               <span class="gr-dim-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></span>
               <div class="gr-dim-body">
-                <div class="gr-dim-name">Action</div>
-                <div class="gr-dim-state">12 tools. <span class="gr-open-mark">9 run without asking</span>, 3 ask first.</div>
-                <div class="gr-dim-where">Set per tool in <span class="gr-dim-link">Capabilities</span></div>
+                <div class="gr-dim-name">What actions can your agent take?</div>
+                <div class="gr-dim-state">12 tools enabled.<br>9 can run without approval.<br>3 require approval before running.</div>
+                <div class="gr-dim-where">Review tools in <span class="gr-dim-link">Capabilities</span></div>
               </div>
             </div>
 
             <div class="gr-dim-row">
               <span class="gr-dim-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
               <div class="gr-dim-body">
-                <div class="gr-dim-name">Cost &amp; rate</div>
-                <div class="gr-dim-state">$10 per session. <span class="gr-open-mark">No monthly budget.</span></div>
-                <div class="gr-dim-where">Set in <span class="gr-dim-link">Settings</span></div>
+                <div class="gr-dim-name">How much can your agent spend?</div>
+                <div class="gr-dim-state">$10 per session.<br>No monthly spending limit set.</div>
+                <div class="gr-dim-where">Edit spending limits in <span class="gr-dim-link">Settings</span></div>
               </div>
             </div>
 
             <div class="gr-dim-row">
               <span class="gr-dim-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12h16"/><path d="m18 6 6 6-6 6" transform="translate(-4)"/></svg></span>
               <div class="gr-dim-body">
-                <div class="gr-dim-name">Output</div>
-                <div class="gr-dim-state"><span class="gr-open-mark">No content check on replies.</span></div>
-                <div class="gr-dim-where">Set in <span class="gr-dim-link">Settings</span></div>
+                <div class="gr-dim-name">Are your agent’s replies checked?</div>
+                <div class="gr-dim-state">No content checks configured for replies.</div>
+                <div class="gr-dim-where">Edit reply checks in <span class="gr-dim-link">Settings</span></div>
               </div>
             </div>
           </div>
-              <div class="gr-modal-foot" style="margin-top:14px;"><span style="flex:1;"></span><span class="nbk-btn">Cancel</span><span class="nbk-btn nbk-btn-primary">Publish</span></div>
+              <div class="gr-modal-foot" style="margin-top:14px;"><span style="flex:1;"></span><span class="nbk-btn">Cancel</span><span class="nbk-btn nbk-btn-primary">Publish agent</span></div>
             </div>
           </div>
         </div>
@@ -440,7 +440,7 @@
 
     <p class="gr-note"><b>The limit underneath it.</b> We only know read versus write for <b>MCP</b> tools, where the server declares it. A workflow tool or a node tool is opaque &mdash; it may delete a table or read a row and we can't tell which. So a summary that sorted tools into safe and dangerous would be guessing on most of them, and guessing in the direction that makes people relax.</p>
 
-    <p class="gr-note"><b>Which is why the highlight means &ldquo;nothing is configured&rdquo;, not &ldquo;this is unsafe&rdquo;.</b> That's the one claim the data supports: we know exactly which connections have a rule attached and which don't. It's also Sin's lite version almost word for word &mdash; <span class="who">&ldquo;here's all the connections the agent has, grouped by reach / action / cost / output, and mark where there's rules attached and where things are not configured.&rdquo;</span> A builder reading it learns what's unprotected, and is left to judge whether that matters, which is the only honest division of labour until we can classify operations.</p>
+    <p class="gr-note"><b>Explicit states, without warning highlights.</b> Public access and tools that run without approval may be intentional. Each row states the current configuration in plain language; a missing limit or content check is reported directly, without implying that it is unsafe.</p>
 
     <div class="gr-oq" style="background:#fbfbfa;">
       <h3 style="margin-bottom:8px;">P0 lite, P1 analysed</h3>
