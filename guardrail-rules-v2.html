@@ -618,7 +618,7 @@
             <div style="font-size:12px; color:#9298a0; margin-bottom:6px;">Check what goes into this tool and what comes back. Guardrails are built once and shared.</div>
 
             <div class="gr-rule-row">
-              <div class="gr-rule-main"><div class="gr-rule-name">Before the call</div><div class="gr-rule-sub">Checks what the agent is about to send.</div></div>
+              <div class="gr-rule-main"><div class="gr-rule-name">Input</div><div class="gr-rule-sub">Runs before the call is made.</div></div>
               <span class="gr-rule-ctl gr-gtags">
                 <span class="gr-gtag"><span class="nm">Finance data check</span> <span class="x">&times;</span></span>
                 <span class="gr-gtag"><span class="nm">PII</span> <span class="x">&times;</span></span>
@@ -637,7 +637,7 @@
               </span>
             </div>
             <div class="gr-rule-row">
-              <div class="gr-rule-main"><div class="gr-rule-name">After the call</div><div class="gr-rule-sub">Checks what the tool returned.</div></div>
+              <div class="gr-rule-main"><div class="gr-rule-name">Output</div><div class="gr-rule-sub">Runs after the call returns.</div></div>
               <span class="gr-rule-ctl gr-gtags">
                 <span class="gr-gtag"><span class="nm">Prompt injection check</span> <span class="x">&times;</span></span>
                 <span class="gr-ddwrap">
@@ -686,7 +686,7 @@
             <div style="font-size:12px; color:#9298a0; margin-bottom:6px;">Check what goes into this tool and what comes back. Guardrails are built once and shared.</div>
 
             <div class="gr-rule-row">
-              <div class="gr-rule-main"><div class="gr-rule-name">Before the call</div><div class="gr-rule-sub">Checks what the agent is about to send.</div></div>
+              <div class="gr-rule-main"><div class="gr-rule-name">Input</div><div class="gr-rule-sub">Runs before the call is made.</div></div>
               <span class="gr-rule-ctl gr-gtags">
                 <span class="gr-ddwrap">
                   <span class="gr-gadd gr-click" onclick="grOpen('gr-add-in-empty')">+ Add guardrail</span>
@@ -702,7 +702,7 @@
               </span>
             </div>
             <div class="gr-rule-row">
-              <div class="gr-rule-main"><div class="gr-rule-name">After the call</div><div class="gr-rule-sub">Checks what the tool returned.</div></div>
+              <div class="gr-rule-main"><div class="gr-rule-name">Output</div><div class="gr-rule-sub">Runs after the call returns.</div></div>
               <span class="gr-rule-ctl gr-gtags">
                 <span class="gr-gadd">+ Add guardrail</span>
               </span>
@@ -714,9 +714,9 @@
       </div>
     </div>
 
-    <p class="gr-note"><b>The slots take the modal's words, and that's the whole reason.</b> They were <i>Input</i> and <i>Output</i>, while a guardrail's <i>When it runs</i> says <i>Before a tool call</i> / <i>After</i> / <i>On a tool call</i>. Two vocabularies for one concept means a builder attaching a guardrail has to translate: is a <i>before</i> guardrail an <i>input</i> one? Now the slot says <b>Before the call</b> and the guardrail says <i>before a tool call</i>, so which one fits where needs no thought. A guardrail built <i>on a tool call</i> is the one that can sit in both.</p>
+    <p class="gr-note"><b>The slots are Input and Output, and the sub-line carries the moment.</b> I'd renamed them to <i>Before the call</i> / <i>After the call</i> to match the guardrail's own <i>When it runs</i>, on the theory that two vocabularies make a builder translate. That theory was weak &mdash; the picker only offers guardrails that fit the slot, so the product does the translating, not the person.</p>
 
-    <p class="gr-note"><b>Input and Output were shorter and they were also ambiguous.</b> Input to what? The pane has the agent, the tool, a credential and a server in it, and three of those have inputs. Naming the moment instead of the payload costs two words and removes the question.</p>
+    <p class="gr-note"><b>And the rename broke on the second example.</b> With a rate limit attached, <i>Before the call &mdash; checks what the agent is about to send</i> was simply false: a limit doesn't look at the payload at all. Once limits became guardrails, the slot stopped meaning &ldquo;what gets inspected&rdquo; and started meaning &ldquo;what runs at this point&rdquo;. So the label names the side &mdash; <b>Input</b>, <b>Output</b> &mdash; and the line underneath names the moment without promising an inspection: <i>runs before the call is made</i>.</p>
 
     <p class="gr-note"><b>One action per slot, not one for the pane.</b> I had <i>Add guardrail</i> and <i>Create guardrail</i> at the bottom, which is wrong twice over: two links for what is really one job, and neither says whether it would attach to Input or Output. Moving a single <i>+ Add guardrail</i> into each row fixes both &mdash; the slot is implied by where you clicked, and creating is just the last item in the picker, where it belongs as the fallback for &ldquo;none of these&rdquo;.</p>
 
