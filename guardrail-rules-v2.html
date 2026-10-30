@@ -652,6 +652,10 @@
               </span>
               </span>
             </div>
+            <div class="gr-rule-row">
+              <div class="gr-rule-main"><div class="gr-rule-name">When the limit is hit</div><div class="gr-rule-sub">If this tool's rate limit or timeout is reached.</div></div>
+              <span class="gr-rule-ctl nbk-select-input">Wait and retry <span class="chev">&#9662;</span></span>
+            </div>
 
             <div class="gr-modal-foot"><span class="nbk-btn" style="color:#b54242;">Remove</span><span style="flex:1;"></span><span class="nbk-btn">Cancel</span><span class="nbk-btn nbk-btn-primary">Save</span></div>
           </div>
@@ -701,6 +705,10 @@
               <span class="gr-rule-ctl gr-gtags">
                 <span class="gr-gadd">+ Add guardrail</span>
               </span>
+            </div>
+            <div class="gr-rule-row">
+              <div class="gr-rule-main"><div class="gr-rule-name">When the limit is hit</div><div class="gr-rule-sub">If this tool's rate limit or timeout is reached.</div></div>
+              <span class="gr-rule-ctl nbk-select-input">Wait and retry <span class="chev">&#9662;</span></span>
             </div>
 
             <div class="gr-modal-foot"><span class="nbk-btn" style="color:#b54242;">Remove</span><span style="flex:1;"></span><span class="nbk-btn">Cancel</span><span class="nbk-btn nbk-btn-primary">Save</span></div>
@@ -781,9 +789,9 @@
             <div style="font-size:13.5px; font-weight:700; color:#1a1c1e; margin:18px 0 5px;">If it finds something</div>
             <div class="gr-segctl"><span class="is-on">Block the call</span><span>Redact and continue</span></div>
 
-            <div style="font-size:13.5px; font-weight:700; color:#1a1c1e; margin:18px 0 5px;">If it can't run</div>
-            <div class="gr-segctl"><span class="is-on">Block the call</span><span>Let it through</span></div>
-            <div class="gr-help">When the check times out, errors, or the model is unavailable.</div>
+            <div style="font-size:13.5px; font-weight:700; color:#1a1c1e; margin:18px 0 5px;">If the check doesn't answer</div>
+            <div class="gr-segctl"><span class="is-on">Wait and retry</span><span>Let the call through</span><span>Block the call</span></div>
+            <div class="gr-help">It errored, timed out, hit a rate limit, or the model is down.</div>
 
             <div style="font-size:13.5px; font-weight:700; color:#1a1c1e; margin:18px 0 5px;">When it runs</div>
             <div class="gr-segctl"><span class="is-on">Before a tool call</span><span>After</span><span>On a tool call</span></div>
@@ -990,17 +998,15 @@
       </div>
     </div>
 
+    <p class="gr-note"><b>Two questions, not three.</b> A guardrail can end up in three places: it catches something, it errors, or it gets rate limited. I had a section for each, and the last two are the same question wearing different clothes &mdash; the check didn't give an answer, so what do we do with the call? Nobody configuring this distinguishes a timeout from a 429. So <i>If it can't run</i> and <i>When the limit is hit</i> collapse into <b>If the check doesn't answer</b>, with the causes listed underneath rather than split across two controls.</p>
+
+    <p class="gr-note"><b>What that one section is actually deciding is fail-closed or fail-open.</b> Blocking is safer and makes a provider outage look like the agent is broken; letting the call through keeps the agent working and silently removes the protection while it's down. Neither is right for everyone &mdash; you'd fail closed on PII and probably not on topical alignment &mdash; which is why it can't be a hidden default.</p>
+
     <p class="gr-note"><b>Where these three came from, since two are the product's and one is mine.</b> <i>Block the call</i> and <i>Redact and continue</i> are the Guardrails node's two operations &mdash; <i>Check Text for Violations</i>, which has Pass and Fail outputs, and <i>Sanitize Text</i>, <i>&ldquo;redact text to mask personal data, secret keys, URLs&rdquo;</i>. All I did was say what they mean once the guardrail is attached to a tool instead of sitting in a workflow.</p>
 
     <p class="gr-note"><b>There was a third option and I'd made it up.</b> <i>Ask first</i> came from the agent's permission vocabulary, where <code>require_approval</code> reads that way. The node has no approval concept, so putting it here promised a human pause whose plumbing isn't ours &mdash; who gets asked, where it goes when a scheduled run has nobody waiting, what happens if nobody answers. All of that is under <i>What isn't a guardrail</i> and belongs to Michael. Removed rather than dimmed: an invented option on a mockup gets quoted back as a decision.</p>
 
-    <p class="gr-note"><b>A content check needs a second answer, and it was missing.</b> <i>If it finds something</i> covers the check working and catching a problem. It says nothing about the check <i>not working</i> &mdash; the PII model times out, the workflow errors, the provider is down. That happens, and the product has to do something, so <b>If it can't run</b> is now its own section: block the call, or let it through.</p>
-
-    <p class="gr-note"><b>It's the fail-closed / fail-open decision, and it belongs to whoever made the guardrail.</b> Blocking is safer and makes an outage look like the agent is broken; letting it through keeps the agent working and silently removes the protection for the duration. Neither is right for everyone, which is exactly why it can't be a hidden default &mdash; a PII guardrail you'd want to fail closed, a topical-alignment one probably not.</p>
-
-    <p class="gr-note"><b>Not quite the same as a limit, though it sits in the same place.</b> For a rate limit, <i>when the limit is hit</i> is the normal path &mdash; it's the thing you configured it to do. For a content check, <i>if it can't run</i> is the failure path. Same slot in the form, different question, so it reads differently rather than borrowing the limit's words.</p>
-
-    <p class="gr-note"><b>One section changes, and it's the one you asked about.</b> For a content check it reads <i>If it finds something</i> &mdash; block, redact, ask. For a limit it reads <i>When the limit is hit</i> &mdash; wait and retry, skip, stop. Same slot in the form, same job, different words because redacting a timeout means nothing. <i>When it runs</i> and <i>Which operations</i> drop out for a limit too: a rate limit applies to the call itself, not to what the call carries.</p>
+                    <p class="gr-note"><b>One section changes, and it's the one you asked about.</b> For a content check it reads <i>If it finds something</i> &mdash; block, redact, ask. For a limit it reads <i>When the limit is hit</i> &mdash; wait and retry, skip, stop. Same slot in the form, same job, different words because redacting a timeout means nothing. <i>When it runs</i> and <i>Which operations</i> drop out for a limit too: a rate limit applies to the call itself, not to what the call carries.</p>
 
     <p class="gr-note"><b>I took these out last round and that was wrong.</b> My argument was that the node's taxonomy is all content, so a timeout isn't a guardrail. But the node is a workflow step you drop into a flow; what we're building is a thing you attach to a tool, and from the tool's point of view a rate limit and a PII check are the same kind of attachment &mdash; something that can interrupt the call. Grouping them under <i>Not about content</i> in the picker keeps the distinction visible without splitting the object in two.</p>
 
