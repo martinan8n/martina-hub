@@ -118,6 +118,13 @@
   .gr-toolchip .ic { width: 15px; height: 15px; border-radius: 4px; background: #eceeef; flex: none; }
   .gr-toolchip .chev { color: #9298a0; font-size: 10px; }
   .gr-addchip { font-size: 13px; color: #55595e; border: 1.5px dashed var(--line-soft, #d4d7da); border-radius: 8px; padding: 4px 9px; cursor: pointer; }
+  .gr-toolchip.is-inherited { background: #fbfbfa; color: #55595e; }
+  .gr-toolchip.is-inherited svg { width: 12px; height: 12px; color: #9298a0; flex: none; }
+  .gr-toolchip .x { color: #9298a0; cursor: pointer; }
+  .gr-sugchip { display: inline-flex; align-items: center; gap: 6px; border: 1.5px dashed #a79ad6; border-radius: 8px; padding: 4px 9px; font-size: 13px; color: #5b46c9; background: #faf9ff; cursor: pointer; }
+  .gr-sugchip:hover { background: #f1eefc; }
+  .gr-sugrow { display: flex; align-items: center; flex-wrap: wrap; gap: 7px; padding: 9px 0 0; }
+  .gr-suglabel { font-size: 12px; color: #9298a0; width: 100%; margin-bottom: 1px; }
 
   /* The tools modal */
   .gr-modal { border: 1.5px solid var(--line-soft, #d4d7da); border-radius: 12px; background: #fff; padding: 16px 18px 10px; box-shadow: 0 8px 24px rgba(0,0,0,0.07); max-width: 560px !important; }
@@ -507,7 +514,17 @@
           <div class="bld-card" style="border-color:#d8a657;">
             <h4>Guardrails</h4>
             <div class="sub">What this agent must not do</div>
-            <div class="bld-add">Add guardrail</div>
+            <div class="gr-chiprow" style="border-top:0; padding-top:4px;">
+              <span class="gr-toolchip is-inherited"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></svg> PII redaction</span>
+              <span class="gr-toolchip is-inherited"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></svg> Secret keys</span>
+              <span class="gr-toolchip">Finance data check <span class="x">&times;</span></span>
+              <span class="gr-addchip">+ Add guardrail</span>
+            </div>
+            <div class="gr-sugrow">
+              <span class="gr-suglabel">Suggested, because this agent writes to Slack and reads Notion</span>
+              <span class="gr-sugchip">+ Prompt injection check</span>
+              <span class="gr-sugchip">+ URLs</span>
+            </div>
           </div>
 
           <div class="bld-card" style="opacity:0.45; margin-bottom:0;">
@@ -518,21 +535,11 @@
       </div>
     </div>
 
-    <p class="lrt-section-sub" style="margin-top:20px;">And with two added. Same plain rows, same grey <i>Add</i> beneath them &mdash; the only thing a guardrail row carries that a tool row doesn't is where it's attached, because that's the one fact you can't get from anywhere else in Build.</p>
+    <p class="gr-note"><b>Two guardrails are already there before anyone does anything.</b> <i>PII redaction</i> and <i>Secret keys</i> are Global &mdash; set once at instance level and inherited by every agent. They show with a globe and no &times;, because a builder can see what they inherit but can't drop it. Drawing them as ordinary chips with the locally-added one beside them is deliberate: what matters to the person reading the card is what's protecting this agent, not who decided it. The globe answers who, quietly, for anyone who asks.</p>
 
-    <div class="nbk">
-      <div class="nbk-frame">
-        <div class="nbk-main">
-          <div class="bld-card" style="border-color:#d8a657; margin-bottom:0;">
-            <h4>Guardrails</h4>
-            <div class="sub">What this agent must not do</div>
-            <div class="bld-row">Finance data check <span class="at">Notion &middot; input</span></div>
-            <div class="bld-row">Prompt injection check <span class="at">4 tools &middot; output</span></div>
-            <div class="bld-add">Add guardrail</div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <p class="gr-note"><b>The suggestions are the part that might actually get used.</b> An empty Guardrails card asks a builder to know what could go wrong, which is a lot to ask of someone whose agent works fine in testing. Suggesting from what the agent already has &mdash; it posts to Slack, so check what it sends; it reads Notion, so check what comes back &mdash; turns the blank card into two decisions with an obvious answer. One click adds; the chip becomes a normal one.</p>
+
+    <p class="gr-note"><b>They say why they're suggested, and that's the part to get right.</b> <i>Suggested, because this agent writes to Slack and reads Notion</i> is checkable &mdash; a builder can agree or disagree with the premise. Without it they're a product opinion with no argument, which is how suggestions get ignored. It also keeps us honest: if we can't write the reason in one line, the suggestion probably isn't good enough to make.</p>
 
     <p class="gr-note"><b>Why not a row inside Capabilities, which was the other option.</b> That card says <i>&ldquo;what this agent can do and how it does it&rdquo;</i>, and a guardrail is the opposite &mdash; what it must not do. Filing a restriction there makes the card's own description untrue, and buries the thing an auditor scans for under three rows about what's enabled. Skills already proves a sibling card is the pattern for this, so it costs nothing to follow.</p>
 
