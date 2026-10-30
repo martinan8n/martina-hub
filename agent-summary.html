@@ -5,7 +5,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Patrick+Hand&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles/n8n-tokens.css?v=4">
+<link rel="stylesheet" href="styles/n8n-tokens.css?v=5">
 <link rel="stylesheet" href="styles/hub.css">
 <link rel="stylesheet" href="styles/notebook-ui.css">
 <style>
@@ -440,12 +440,18 @@
   .hifi-task .sub { font-size: var(--font-size--2xs); color: var(--text-color--subtler); margin-top: 1px; }
   .hifi-sum-row { display: flex; align-items: center; gap: var(--spacing--sm); padding: var(--spacing--sm) 0; border-top: 1px solid var(--border-color--subtle); }
   .hifi-sum-row:first-of-type { border-top: 0; }
-  .hifi-sum-label { display: flex; align-items: center; gap: var(--spacing--2xs); font-size: var(--font-size--sm); color: var(--text-color); flex: none; width: 196px; }
+  .hifi-sum-label { display: flex; align-items: center; gap: var(--spacing--2xs); font-size: var(--font-size--sm); color: var(--text-color); flex: none; width: 212px; }
   .hifi-sum-label svg { width: 15px; height: 15px; color: var(--text-color--subtler); flex: none; }
   .hifi-sum-value { flex: 1; min-width: 0; font-size: var(--font-size--sm); color: var(--text-color--subtle); }
+  .hifi-sum-edit { white-space: nowrap; }
   .hifi-sum-edit { border: 0; background: none; font-size: var(--font-size--sm); color: var(--text-color--subtle); text-decoration: underline; text-underline-offset: 2px; cursor: pointer; flex: none; font-family: inherit; }
   .hifi-sum-edit:hover { color: var(--text-color); }
   .hifi-count { border: 0; background: none; padding: 0; font-family: inherit; font-size: var(--font-size--sm); color: var(--text-color--subtle); text-decoration: underline dotted; text-underline-offset: 2px; cursor: pointer; }
+  .hifi-issue { display: flex; align-items: flex-start; gap: var(--spacing--xs); padding: var(--spacing--2xs) 0; }
+  .hifi-issue .st { width: 16px; height: 16px; flex: none; margin-top: 3px; color: var(--color--purple-500); }
+  .hifi-issue-copy { flex: 1; min-width: 0; }
+  .hifi-ghost { border: 0; background: none; font-family: inherit; font-size: var(--font-size--2xs); color: var(--color--purple-500); cursor: pointer; flex: none; padding: 2px var(--spacing--2xs); border-radius: var(--radius--3xs); margin-top: 1px; }
+  .hifi-ghost:hover { background: var(--color--purple-50); }
 </style>
 </head>
 <body data-default-route="agent-summary">
@@ -761,7 +767,7 @@
               <button type="button" class="hifi-sum-edit">Edit</button>
             </div>
 
-            <div style="display:flex; justify-content:flex-end; gap:var(--spacing--2xs); margin-top:var(--spacing--lg);">
+            <div style="display:flex; justify-content:flex-end; gap:var(--spacing--2xs); margin:var(--spacing--md) calc(var(--spacing--lg) * -1) 0; padding:var(--spacing--sm) var(--spacing--lg) 0; border-top:1px solid var(--border-color);">
               <button class="n8n-button n8n-button--secondary n8n-button--size-medium">Cancel</button>
               <button class="n8n-button n8n-button--primary n8n-button--size-medium">Publish agent</button>
             </div>
@@ -817,8 +823,14 @@
         <div class="hifi-body">
           <div class="hifi-panel">
             <div class="hifi-panel-title">Needs attention</div>
-            <div class="hifi-task"><span class="mk"></span><div><span class="nm">Notion disconnected</span><div class="sub">Your connection expired. 6 tools can&rsquo;t run.</div></div></div>
-            <div class="hifi-task"><span class="mk"></span><div><span class="nm">Monthly budget almost reached</span><div class="sub">$184 of $200 used. Runs stop at the limit.</div></div></div>
+            <div class="hifi-issue"><svg class="st" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="m3 3 18 18M10 13a5 5 0 0 1 0-7l2-2a5 5 0 0 1 7 7l-1 1M14 11a5 5 0 0 1 0 7l-2 2a5 5 0 0 1-7-7l1-1"/></svg>
+              <div class="hifi-issue-copy"><div style="font-size:var(--font-size--sm);">Notion disconnected</div><div class="sub">Your connection expired. 6 tools can&rsquo;t run.</div></div>
+              <button type="button" class="hifi-ghost">Reconnect</button>
+            </div>
+            <div class="hifi-issue"><svg class="st" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M12 3 2 21h20L12 3Z" stroke-linejoin="round"/><path d="M12 9v5m0 3v1"/></svg>
+              <div class="hifi-issue-copy"><div style="font-size:var(--font-size--sm);">Monthly budget almost reached</div><div class="sub">$184 of $200 used. Runs stop at the limit.</div></div>
+              <button type="button" class="hifi-ghost">Review budget</button>
+            </div>
           </div>
           <div class="hifi-card" style="margin-bottom:0;">
             <div class="hifi-field-label">Model</div>
