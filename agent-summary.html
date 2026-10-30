@@ -438,6 +438,14 @@
   .hifi-task.is-done .mk::after { content: ""; position: absolute; left: 4px; top: 5px; width: 6px; height: 3px; border-left: 1.5px solid var(--text-color--subtler); border-bottom: 1.5px solid var(--text-color--subtler); transform: rotate(-45deg); }
   .hifi-task.is-done .nm { color: var(--text-color--subtler); text-decoration: line-through; }
   .hifi-task .sub { font-size: var(--font-size--2xs); color: var(--text-color--subtler); margin-top: 1px; }
+  .hifi-sum-row { display: flex; align-items: center; gap: var(--spacing--sm); padding: var(--spacing--sm) 0; border-top: 1px solid var(--border-color--subtle); }
+  .hifi-sum-row:first-of-type { border-top: 0; }
+  .hifi-sum-label { display: flex; align-items: center; gap: var(--spacing--2xs); font-size: var(--font-size--sm); color: var(--text-color); flex: none; width: 196px; }
+  .hifi-sum-label svg { width: 15px; height: 15px; color: var(--text-color--subtler); flex: none; }
+  .hifi-sum-value { flex: 1; min-width: 0; font-size: var(--font-size--sm); color: var(--text-color--subtle); }
+  .hifi-sum-edit { border: 0; background: none; font-size: var(--font-size--sm); color: var(--text-color--subtle); text-decoration: underline; text-underline-offset: 2px; cursor: pointer; flex: none; font-family: inherit; }
+  .hifi-sum-edit:hover { color: var(--text-color); }
+  .hifi-count { border: 0; background: none; padding: 0; font-family: inherit; font-size: var(--font-size--sm); color: var(--text-color--subtle); text-decoration: underline dotted; text-underline-offset: 2px; cursor: pointer; }
 </style>
 </head>
 <body data-default-route="agent-summary">
@@ -718,72 +726,55 @@
   <section data-route="agent-summary-hifi">
     <a class="back-link" href="#/agent-summary">&larr; Agent summary</a>
     <div class="screen-head">
-      <h1>Publish summary &mdash; hi-fi</h1>
-      <p>The P0 version in real n8n components and tokens. Every row reports something we can read today; the highlight marks what nothing is configured on, and makes no claim about whether that's dangerous.</p>
+      <h1>Review and publish &mdash; hi-fi</h1>
+      <p>Step 1 of the publish flow in real n8n components. Four questions, each with what's set now and a way to change it without leaving the modal reading.</p>
     </div>
 
     <div class="hifi">
-      <div class="hifi-shell" style="min-height:780px; position:relative;">
-        <div class="hifi-topbar">
-          <span class="hifi-crumb">Personal / <b>Agents Funnel Metrics Sync</b></span>
-        </div>
-        <div class="hifi-body" style="max-width:760px; min-height:520px;"></div>
+      <div class="hifi-shell" style="min-height:560px; position:relative;">
+        <div class="hifi-topbar"><span class="hifi-crumb">Personal / <b>Agents Funnel Metrics Sync</b></span></div>
+        <div class="hifi-body" style="max-width:760px; min-height:460px;"></div>
 
         <div class="hifi-modal-backdrop">
-          <div class="hifi-modal" style="width:520px;">
-            <div class="hifi-modal-head"><span class="hifi-modal-title">Publish agent</span></div>
-            <p style="margin:0 0 var(--spacing--sm); font-size:var(--font-size--sm); color:var(--text-color--subtle);">Here's what this agent is allowed to do once it's live.</p>
+          <div class="hifi-modal" style="width:580px;">
+            <div class="hifi-modal-head"><span class="hifi-modal-title">Review and publish</span></div>
+            <p style="margin:0 0 var(--spacing--sm); font-size:var(--font-size--sm); color:var(--text-color--subtle);">Review who can use your agent, what it can do, and the limits that apply once it&rsquo;s live.</p>
 
-            <div class="hifi-card" style="margin-bottom:var(--spacing--md);">
-              <div class="hifi-field-label" style="margin-bottom:2px;">What's bounded</div>
-              <p style="margin:0 0 var(--spacing--sm); font-size:var(--font-size--2xs); color:var(--text-color--subtler);">Highlighted means nothing is configured.</p>
-            <div class="hifi-dim-row">
-              <span class="hifi-dim-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12h16"/><path d="m14 6 6 6-6 6"/></svg></span>
-              <div class="hifi-row-label">
-                <div class="hifi-row-title">Reach</div>
-                <div class="hifi-row-desc">2 channels. #metrics is restricted to 4 people. <span class="hifi-open-mark">Telegram is open to any user.</span></div>
-                <div class="hifi-dim-where">Set per channel in Triggers</div>
-              </div>
+            <div class="hifi-sum-row">
+              <span class="hifi-sum-label"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"/><path d="M3 21v-2a6 6 0 0 1 12 0v2M16 5a3 3 0 0 1 0 6m2 4a5 5 0 0 1 3 4v2"/></svg><span>Where it can interact</span></span>
+              <span class="hifi-sum-value">#metrics: 4 people &middot; Telegram: Anyone</span>
+              <button type="button" class="hifi-sum-edit">Edit</button>
             </div>
-            <div class="hifi-dim-row">
-              <span class="hifi-dim-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></span>
-              <div class="hifi-row-label">
-                <div class="hifi-row-title">Action</div>
-                <div class="hifi-row-desc">12 tools. <span class="hifi-open-mark">9 run without asking</span>, 3 ask first.</div>
-                <div class="hifi-dim-where">Set per tool in Capabilities</div>
-              </div>
+            <div class="hifi-sum-row">
+              <span class="hifi-sum-label"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94z"/></svg><span>What it can do</span></span>
+              <span class="hifi-sum-value"><button type="button" class="hifi-count">9 without approval</button> &middot; <button type="button" class="hifi-count">3 require approval</button></span>
+              <button type="button" class="hifi-sum-edit">Review</button>
             </div>
-            <div class="hifi-dim-row">
-              <span class="hifi-dim-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
-              <div class="hifi-row-label">
-                <div class="hifi-row-title">Cost</div>
-                <div class="hifi-row-desc">$10 per session. <span class="hifi-open-mark">No monthly budget.</span></div>
-                <div class="hifi-dim-where">Set in Settings</div>
-              </div>
+            <div class="hifi-sum-row">
+              <span class="hifi-sum-label"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="15" rx="2"/><path d="M3 8V5a2 2 0 0 1 2-2h13v3M21 12h-6v4h6"/></svg><span>How much it can spend</span></span>
+              <span class="hifi-sum-value">$10/session &middot; No monthly limit</span>
+              <button type="button" class="hifi-sum-edit">Edit</button>
             </div>
-            <div class="hifi-dim-row">
-              <span class="hifi-dim-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12h16"/><path d="m14 6 6 6-6 6"/></svg></span>
-              <div class="hifi-row-label">
-                <div class="hifi-row-title">Output</div>
-                <div class="hifi-row-desc"><span class="hifi-open-mark">No content check on replies.</span></div>
-                <div class="hifi-dim-where">Set in Settings</div>
-              </div>
-            </div>
+            <div class="hifi-sum-row">
+              <span class="hifi-sum-label"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11v5a3 3 0 0 1-3 3H8l-5 3V6a3 3 0 0 1 3-3h9M12 8l3 3 6-7"/></svg><span>How its replies are checked</span></span>
+              <span class="hifi-sum-value">No content checks configured</span>
+              <button type="button" class="hifi-sum-edit">Edit</button>
             </div>
 
-            <div style="display:flex; justify-content:flex-end; gap:var(--spacing--2xs);">
+            <div style="display:flex; justify-content:flex-end; gap:var(--spacing--2xs); margin-top:var(--spacing--lg);">
               <button class="n8n-button n8n-button--secondary n8n-button--size-medium">Cancel</button>
-              <button class="n8n-button n8n-button--primary n8n-button--size-medium">Publish</button>
+              <button class="n8n-button n8n-button--primary n8n-button--size-medium">Publish agent</button>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <p class="gr-note"><b>Nothing here is a judgement.</b> Each row counts what exists and marks what isn't configured. The one thing the hi-fi adds over the wireframe is weight: in real type the highlight is quieter than it was hand-drawn, which is right &mdash; it has to be noticeable without reading as a failure.</p>
+    <p class="gr-note"><b>The row anatomy is doing three jobs at once and it holds.</b> A question on the left, the current answer in the middle, and the way to change it on the right. At real density that reads as a checklist rather than a report &mdash; you scan the middle column, and the only row you stop on is the one whose answer you didn't expect.</p>
+
+    <p class="gr-note"><b>The counts are their own control.</b> <i>9 without approval</i> is underlined dotted rather than plain text because it opens the list &mdash; so you can check the claim without leaving the modal, which is what keeps the publish journey intact. <i>Edit</i> and <i>Review</i> are the ones that take you somewhere.</p>
   </section>
 
-  <!-- ================= NEEDS ATTENTION, HI-FI ================= -->
   <section data-route="needs-attention-hifi">
     <a class="back-link" href="#/agent-summary">&larr; Agent summary</a>
     <div class="screen-head">
@@ -806,6 +797,10 @@
             <div class="hifi-field-label">Model <span style="color:#c2452f;">*</span></div>
             <p style="margin:0 0 var(--spacing--xs); font-size:var(--font-size--2xs); color:var(--text-color--subtler);">What model this agent uses</p>
             <div style="border:1px solid var(--border-color); border-radius:var(--radius--xs); padding:var(--spacing--2xs) var(--spacing--xs); font-size:var(--font-size--sm);">GPT-5.6 Terra <span style="color:var(--text-color--subtler);">Gateway credits</span></div>
+            <div class="hifi-section-divider"></div>
+            <div class="hifi-field-label">Instructions <span style="color:#c2452f;">*</span></div>
+            <p style="margin:0 0 var(--spacing--xs); font-size:var(--font-size--2xs); color:var(--text-color--subtler);">What this agent should do</p>
+            <div style="border:1px solid var(--border-color); border-radius:var(--radius--xs); padding:var(--spacing--xs); font-size:var(--font-size--sm); color:var(--text-color--subtler); min-height:46px;">Summarize new tickets in the Customer Support Slack channel.</div>
           </div>
 
           <div class="hifi-card" style="margin-bottom:0;">
@@ -822,8 +817,8 @@
         <div class="hifi-body">
           <div class="hifi-panel">
             <div class="hifi-panel-title">Needs attention</div>
-            <div class="hifi-task"><span class="mk"></span><div><span class="nm">Reconnect Notion</span><div class="sub">The credential expired. 6 tools stopped working.</div></div></div>
-            <div class="hifi-task"><span class="mk"></span><div><span class="nm">Raise the monthly budget</span><div class="sub">$184 of $200 used. Runs stop when it's reached.</div></div></div>
+            <div class="hifi-task"><span class="mk"></span><div><span class="nm">Notion disconnected</span><div class="sub">Your connection expired. 6 tools can&rsquo;t run.</div></div></div>
+            <div class="hifi-task"><span class="mk"></span><div><span class="nm">Monthly budget almost reached</span><div class="sub">$184 of $200 used. Runs stop at the limit.</div></div></div>
           </div>
           <div class="hifi-card" style="margin-bottom:0;">
             <div class="hifi-field-label">Model</div>
@@ -832,6 +827,8 @@
         </div>
       </div>
     </div>
+
+    <p class="gr-note"><b>The copy is stated, not imperative, and that's the version that survived.</b> <i>Notion disconnected</i> rather than <i>Reconnect Notion</i>. I'd argued for the imperative so both panels read as a to-do list; stating the fact turns out to be better here, because the row has to be true before you know what to do about it &mdash; and &ldquo;monthly budget almost reached&rdquo; is information you might act on in three different ways.</p>
 
     <p class="gr-note"><b>The violet does more work at this fidelity.</b> Hand-drawn, the panel read as a box with a tint. In real type and spacing it reads as the assistant speaking &mdash; accurate for setup tasks and for problems it spotted, and the reason the same container can carry both without changing colour.</p>
   </section>
