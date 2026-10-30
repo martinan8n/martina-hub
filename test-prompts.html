@@ -1,7 +1,7 @@
 <!doctype html><html><head>
 <meta charset="utf8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Starter prompts</title>
+<title>Test scenarios</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Patrick+Hand&display=swap" rel="stylesheet">
@@ -336,7 +336,7 @@
     <div class="hero">
       <div>
         <span class="kicker">Workstream &middot; New</span>
-        <h1>Starter prompts</h1>
+        <h1>Test scenarios</h1>
         <p>Opening the Test panel on a new agent gives you an empty chat and a cursor. The hardest part of testing an agent is the first message &mdash; you wrote the instructions, so you already know what it does, and that's exactly why nothing comes to mind. This offers to write a few.</p>
       </div>
     </div>
@@ -360,7 +360,7 @@
         <div class="body">
           <span class="status">In progress</span>
           <h3>The Test panel, three states</h3>
-          <p class="desc">The offer, the wait, and the prompts. Grounded in the vocabulary the product already uses for practice runs.</p>
+          <p class="desc">The offer, the wait, and the scenarios. Grounded in the vocabulary the product already uses for practice runs.</p>
         </div>
       </a>
     </div>
@@ -370,16 +370,16 @@
       <h3>Before this can go further</h3>
       <ol>
         <li><b>Offer, or just write them?</b> Drawn as an offer, so the panel stays quiet for someone who already knows what to type. The argument the other way is that a button between you and the examples is one more thing to click when the whole point is removing friction.</li>
-        <li><b>What happens to a prompt once used?</b> It could vanish, grey out, or stay. If they stay, the second message is as easy as the first; if they vanish, the panel empties out and you're back where you started.</li>
-        <li><b>Does this overlap with evals?</b> <i>Generate test cases</i> already writes examples from the instructions, and the preview flow already runs one and saves it as a check. This is the same generator with a different purpose &mdash; try it once, versus keep it as a test. Worth deciding whether trying a starter prompt should offer to save it as a check.</li>
+        <li><b>What happens to a scenario once used?</b> It could vanish, grey out, or stay. If they stay, the second message is as easy as the first; if they vanish, the panel empties out and you're back where you started.</li>
+        <li><b>Does this overlap with evals?</b> <i>Generate test cases</i> already writes examples from the instructions, and the preview flow already runs one and saves it as a check. This is the same generator with a different purpose &mdash; try it once, versus keep it as a test. Worth deciding whether running a scenario should offer to save it as a check.</li>
         <li><b>Agents with no instructions yet.</b> The generator has nothing to read. Either the offer doesn't appear, or it reads the tools instead, which gives much vaguer examples.</li>
-        <li><b>Who writes them &mdash; and what does that cost?</b> A model call on opening a panel, for every agent, whether or not anyone uses the examples. Offering rather than auto-generating also solves that.</li>
+        <li><b>Who writes them &mdash; and what does that cost?</b> A model call on opening a panel, for every agent, whether or not anyone uses the scenarios. Offering rather than auto-generating also solves that.</li>
       </ol>
     </div>
   </section>
 
   <section data-route="starter-prompts-screen">
-    <a class="back-link" href="#/starter-prompts">&larr; Starter prompts</a>
+    <a class="back-link" href="#/starter-prompts">&larr; Test scenarios</a>
     <div class="screen-head">
       <h1>The Test panel, three states</h1>
       <p>The panel docked beside Build. Same agent as elsewhere &mdash; its instructions read <i>&ldquo;Summarize new tickets in the Customer Support Slack channel&rdquo;</i>, and every example below is written from that sentence.</p>
@@ -395,8 +395,8 @@
               <div class="tp-msg">
                 <span class="tp-ava"></span>
                 <div>
-                  <div class="tp-bubble">I can try this agent with a few example messages, written from its instructions. Want me to?</div>
-                  <div style="margin-top:10px;"><span class="nbk-btn nbk-btn-primary" style="display:inline-flex; align-items:center; gap:7px;"><svg class="tp-ai" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M19.9658 14.0171C19.9679 14.3549 19.8654 14.6851 19.6722 14.9622C19.479 15.2393 19.2046 15.4497 18.8869 15.5645L13.5109 17.5451L11.5303 22.9211C11.4137 23.2376 11.2028 23.5107 10.9261 23.7037C10.6494 23.8966 10.3202 24 9.9829 24C9.64559 24 9.3164 23.8966 9.0397 23.7037C8.76301 23.5107 8.55212 23.2376 8.43549 22.9211L6.45487 17.5451L1.07888 15.5645C0.762384 15.4479 0.489262 15.237 0.296347 14.9603C0.103431 14.6836 0 14.3544 0 14.0171C0 13.6798 0.103431 13.3506 0.296347 13.0739C0.489262 12.7972 0.762384 12.5863 1.07888 12.4697L6.45487 10.4891L8.43549 5.11309C8.55212 4.79659 8.76301 4.52347 9.0397 4.33055C9.3164 4.13764 9.64559 4.0342 9.9829 4.0342C10.3202 4.0342 10.6494 4.13764 10.9261 4.33055C11.2028 4.52347 11.4137 4.79659 11.5303 5.11309L13.5109 10.4891L18.8869 12.4697C19.2046 12.5845 19.479 12.7949 19.6722 13.072C19.8654 13.3491 19.9679 13.6793 19.9658 14.0171ZM14.1056 4.12268H15.7546V5.77175C15.7546 5.99043 15.8415 6.20015 15.9961 6.35478C16.1508 6.50941 16.3605 6.59628 16.5792 6.59628C16.7979 6.59628 17.0076 6.50941 17.1622 6.35478C17.3168 6.20015 17.4037 5.99043 17.4037 5.77175V4.12268H19.0528C19.2715 4.12268 19.4812 4.03581 19.6358 3.88118C19.7905 3.72655 19.8773 3.51682 19.8773 3.29814C19.8773 3.07946 19.7905 2.86974 19.6358 2.71511C19.4812 2.56048 19.2715 2.47361 19.0528 2.47361H17.4037V0.824535C17.4037 0.605855 17.3168 0.396131 17.1622 0.241501C17.0076 0.0868704 16.7979 0 16.5792 0C16.3605 0 16.1508 0.0868704 15.9961 0.241501C15.8415 0.396131 15.7546 0.605855 15.7546 0.824535V2.47361H14.1056C13.8869 2.47361 13.6772 2.56048 13.5225 2.71511C13.3679 2.86974 13.281 3.07946 13.281 3.29814C13.281 3.51682 13.3679 3.72655 13.5225 3.88118C13.6772 4.03581 13.8869 4.12268 14.1056 4.12268ZM23.1755 7.42082H22.3509V6.59628C22.3509 6.3776 22.2641 6.16788 22.1094 6.01325C21.9548 5.85862 21.7451 5.77175 21.5264 5.77175C21.3077 5.77175 21.098 5.85862 20.9434 6.01325C20.7887 6.16788 20.7019 6.3776 20.7019 6.59628V7.42082H19.8773C19.6586 7.42082 19.4489 7.50769 19.2943 7.66232C19.1397 7.81695 19.0528 8.02667 19.0528 8.24535C19.0528 8.46404 19.1397 8.67376 19.2943 8.82839C19.4489 8.98302 19.6586 9.06989 19.8773 9.06989H20.7019V9.89443C20.7019 10.1131 20.7887 10.3228 20.9434 10.4775C21.098 10.6321 21.3077 10.719 21.5264 10.719C21.7451 10.719 21.9548 10.6321 22.1094 10.4775C22.2641 10.3228 22.3509 10.1131 22.3509 9.89443V9.06989H23.1755C23.3941 9.06989 23.6039 8.98302 23.7585 8.82839C23.9131 8.67376 24 8.46404 24 8.24535C24 8.02667 23.9131 7.81695 23.7585 7.66232C23.6039 7.50769 23.3941 7.42082 23.1755 7.42082Z" fill="url(#aiGrad)"/><defs><linearGradient id="aiGrad" x1="0" y1="0" x2="28.8" y2="9.8" gradientUnits="userSpaceOnUse"><stop stop-color="#8b5cf6"/><stop offset="0.495" stop-color="#d946a8"/><stop offset="1" stop-color="#f0883e"/></linearGradient></defs></svg>Write examples</span></div>
+                  <div class="tp-bubble">I can write a few test scenarios from this agent's instructions. Want me to?</div>
+                  <div style="margin-top:10px;"><span class="nbk-btn nbk-btn-primary" style="display:inline-flex; align-items:center; gap:7px;"><svg class="tp-ai" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M19.9658 14.0171C19.9679 14.3549 19.8654 14.6851 19.6722 14.9622C19.479 15.2393 19.2046 15.4497 18.8869 15.5645L13.5109 17.5451L11.5303 22.9211C11.4137 23.2376 11.2028 23.5107 10.9261 23.7037C10.6494 23.8966 10.3202 24 9.9829 24C9.64559 24 9.3164 23.8966 9.0397 23.7037C8.76301 23.5107 8.55212 23.2376 8.43549 22.9211L6.45487 17.5451L1.07888 15.5645C0.762384 15.4479 0.489262 15.237 0.296347 14.9603C0.103431 14.6836 0 14.3544 0 14.0171C0 13.6798 0.103431 13.3506 0.296347 13.0739C0.489262 12.7972 0.762384 12.5863 1.07888 12.4697L6.45487 10.4891L8.43549 5.11309C8.55212 4.79659 8.76301 4.52347 9.0397 4.33055C9.3164 4.13764 9.64559 4.0342 9.9829 4.0342C10.3202 4.0342 10.6494 4.13764 10.9261 4.33055C11.2028 4.52347 11.4137 4.79659 11.5303 5.11309L13.5109 10.4891L18.8869 12.4697C19.2046 12.5845 19.479 12.7949 19.6722 13.072C19.8654 13.3491 19.9679 13.6793 19.9658 14.0171ZM14.1056 4.12268H15.7546V5.77175C15.7546 5.99043 15.8415 6.20015 15.9961 6.35478C16.1508 6.50941 16.3605 6.59628 16.5792 6.59628C16.7979 6.59628 17.0076 6.50941 17.1622 6.35478C17.3168 6.20015 17.4037 5.99043 17.4037 5.77175V4.12268H19.0528C19.2715 4.12268 19.4812 4.03581 19.6358 3.88118C19.7905 3.72655 19.8773 3.51682 19.8773 3.29814C19.8773 3.07946 19.7905 2.86974 19.6358 2.71511C19.4812 2.56048 19.2715 2.47361 19.0528 2.47361H17.4037V0.824535C17.4037 0.605855 17.3168 0.396131 17.1622 0.241501C17.0076 0.0868704 16.7979 0 16.5792 0C16.3605 0 16.1508 0.0868704 15.9961 0.241501C15.8415 0.396131 15.7546 0.605855 15.7546 0.824535V2.47361H14.1056C13.8869 2.47361 13.6772 2.56048 13.5225 2.71511C13.3679 2.86974 13.281 3.07946 13.281 3.29814C13.281 3.51682 13.3679 3.72655 13.5225 3.88118C13.6772 4.03581 13.8869 4.12268 14.1056 4.12268ZM23.1755 7.42082H22.3509V6.59628C22.3509 6.3776 22.2641 6.16788 22.1094 6.01325C21.9548 5.85862 21.7451 5.77175 21.5264 5.77175C21.3077 5.77175 21.098 5.85862 20.9434 6.01325C20.7887 6.16788 20.7019 6.3776 20.7019 6.59628V7.42082H19.8773C19.6586 7.42082 19.4489 7.50769 19.2943 7.66232C19.1397 7.81695 19.0528 8.02667 19.0528 8.24535C19.0528 8.46404 19.1397 8.67376 19.2943 8.82839C19.4489 8.98302 19.6586 9.06989 19.8773 9.06989H20.7019V9.89443C20.7019 10.1131 20.7887 10.3228 20.9434 10.4775C21.098 10.6321 21.3077 10.719 21.5264 10.719C21.7451 10.719 21.9548 10.6321 22.1094 10.4775C22.2641 10.3228 22.3509 10.1131 22.3509 9.89443V9.06989H23.1755C23.3941 9.06989 23.6039 8.98302 23.7585 8.82839C23.9131 8.67376 24 8.46404 24 8.24535C24 8.02667 23.9131 7.81695 23.7585 7.66232C23.6039 7.50769 23.3941 7.42082 23.1755 7.42082Z" fill="url(#aiGrad)"/><defs><linearGradient id="aiGrad" x1="0" y1="0" x2="28.8" y2="9.8" gradientUnits="userSpaceOnUse"><stop stop-color="#8b5cf6"/><stop offset="0.495" stop-color="#d946a8"/><stop offset="1" stop-color="#f0883e"/></linearGradient></defs></svg>Write test scenarios</span></div>
                   <div class="tp-note">Practice run. Nothing is sent, saved or changed.</div>
                 </div>
               </div>
@@ -404,6 +404,8 @@
             <div class="tp-foot"><div class="tp-composer">Message Metrics Sync&hellip;</div></div>
           </div>
     </div></div></div>
+
+    <p class="gr-note"><b>Test scenarios, not examples, and the word does work.</b> <i>Examples</i> describes the format &mdash; here are some messages. <i>Test scenarios</i> describes the job: each one is a case you're running the agent against, which is why a bad answer is information rather than a disappointment. It also matches the vocabulary already next door, where evals calls its generated cases <i>test cases</i>. Plain <i>scenarios</i> would have overpromised &mdash; that implies a situation with context, and these are single messages &mdash; but <i>test scenario</i> is a case, which is exactly what they are.</p>
 
     <p class="gr-note"><b>The button carries the assistant's own mark.</b> Not a generic sparkle &mdash; the real <code>AssistantIcon</code>, the four-pointed burst with its violet-to-orange gradient, which is the same mark used on the Ask Assistant button and avatar. It matters more than decoration here: it's the thing that says a model is about to write this, which sets the expectation that the examples are generated rather than canned, and that they'll differ per agent.</p>
 
@@ -419,12 +421,12 @@
               <div class="tp-msg">
                 <span class="tp-ava"></span>
                 <div>
-                  <div class="tp-bubble">I can try this agent with a few example messages, written from its instructions. Want me to?</div>
+                  <div class="tp-bubble">I can write a few test scenarios from this agent's instructions. Want me to?</div>
                 </div>
               </div>
               <div class="tp-msg">
                 <span class="tp-ava"></span>
-                <div class="tp-dim"><span class="tp-spin"></span> &nbsp;Reading the instructions and writing examples&hellip;</div>
+                <div class="tp-dim"><span class="tp-spin"></span> &nbsp;Reading the instructions and writing scenarios&hellip;</div>
               </div>
             </div>
             <div class="tp-foot"><div class="tp-composer">Message Metrics Sync&hellip;</div></div>
@@ -433,7 +435,7 @@
 
     <p class="gr-note"><b>The wait says what it's reading.</b> <i>Reading the instructions and writing examples</i> rather than a bare spinner, because it sets up why the examples are relevant when they arrive &mdash; and because a builder who sees it and gets poor examples knows immediately that the instructions are the thing to fix.</p>
 
-    <h2 class="lrt-section-title" style="margin-top:34px;">3 &mdash; The prompts</h2>
+    <h2 class="lrt-section-title" style="margin-top:34px;">3 &mdash; The scenarios</h2>
     <p class="lrt-section-sub">Four, each a message someone would actually send this agent. Clicking one sends it. Below them, a way to get different ones and a reminder that the composer still works.</p>
 
     <div class="nbk"><div class="nbk-frame"><div class="nbk-main" style="padding-top:26px; padding-bottom:26px;">
@@ -443,16 +445,15 @@
               <div class="tp-msg">
                 <span class="tp-ava"></span>
                 <div>
-                  <div class="tp-bubble">Four messages this agent should handle. Pick one to try it, or write your own.</div>
+                  <div class="tp-bubble">Select a scenario to test the agent against, or write your own below.</div>
                   <div class="tp-prompts" style="margin-top:11px;">
                     <div class="tp-prompt">Summarise the tickets that came in this morning</div>
                     <div class="tp-prompt">What are people complaining about most this week?</div>
                     <div class="tp-prompt">Post today's ticket summary to #customer-support</div>
                     <div class="tp-prompt">Which tickets has nobody replied to yet?</div>
                   </div>
-                  <div style="margin-top:10px; display:flex; gap:14px; align-items:center;">
-                    <span class="tp-more">Write different ones</span>
-                    <span class="tp-dim">or type your own below</span>
+                  <div style="margin-top:10px;">
+                    <span class="tp-more">Write different scenarios</span>
                   </div>
                   <div class="tp-note">Practice run. Nothing is sent, saved or changed.</div>
                 </div>
