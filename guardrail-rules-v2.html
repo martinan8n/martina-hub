@@ -775,7 +775,7 @@
             </span>
             <div class="gr-help">Detects attempts to use personal data content.</div>
 
-            <div style="padding-left:14px; border-left:2px solid var(--line-soft,#d4d7da); margin-top:10px;">
+            <div style="padding-left:14px; border-left:2px solid #a79ad6; margin-top:10px;">
               <div style="font-size:12.5px; color:#55595e; margin-bottom:5px;">Which personal data</div>
               <div class="gr-segctl"><span>Everything it can detect</span><span class="is-on">Only these</span></div>
               <div class="gr-chipfield" style="margin-top:8px;">
@@ -784,14 +784,14 @@
                 <span class="gr-chip">Credit card <span class="x">&times;</span></span>
                 <span class="ph">Add an entity</span>
               </div>
+
+              <div style="font-size:12.5px; color:#55595e; margin:16px 0 5px;">If it finds something</div>
+              <div class="gr-segctl"><span class="is-on">Block the call</span><span>Redact and continue</span></div>
+
+              <div style="font-size:12.5px; color:#55595e; margin:16px 0 5px;">If the check doesn't answer</div>
+              <div class="gr-segctl"><span class="is-on">Wait and retry</span><span>Let the call through</span><span>Block the call</span></div>
+              <div class="gr-help">It errored, timed out, hit a rate limit, or the model is down.</div>
             </div>
-
-            <div style="font-size:13.5px; font-weight:700; color:#1a1c1e; margin:18px 0 5px;">If it finds something</div>
-            <div class="gr-segctl"><span class="is-on">Block the call</span><span>Redact and continue</span></div>
-
-            <div style="font-size:13.5px; font-weight:700; color:#1a1c1e; margin:18px 0 5px;">If the check doesn't answer</div>
-            <div class="gr-segctl"><span class="is-on">Wait and retry</span><span>Let the call through</span><span>Block the call</span></div>
-            <div class="gr-help">It errored, timed out, hit a rate limit, or the model is down.</div>
 
             <div style="font-size:13.5px; font-weight:700; color:#1a1c1e; margin:18px 0 5px;">When it runs</div>
             <div class="gr-segctl"><span class="is-on">Before a tool call</span><span>After</span><span>On a tool call</span></div>
@@ -980,13 +980,13 @@
 
             <div style="font-size:13.5px; font-weight:700; color:#1a1c1e; margin:18px 0 5px;">What it does</div>
             <div class="gr-rule-ctl nbk-select-input" style="display:flex; width:100%; justify-content:space-between;">Rate limit <span class="chev">&#9662;</span></div>
-            <div style="padding-left:14px; border-left:2px solid var(--line-soft,#d4d7da); margin-top:10px;">
+            <div style="padding-left:14px; border-left:2px solid #a79ad6; margin-top:10px;">
               <div style="font-size:12.5px; color:#55595e; margin-bottom:5px;">Calls per minute</div>
               <div class="gr-rule-ctl nbk-select-input" style="display:flex; width:100%; justify-content:space-between;">Provider limit <span class="chev">&#9662;</span></div>
-            </div>
 
-            <div style="font-size:13.5px; font-weight:700; color:#1a1c1e; margin:18px 0 5px;">When the limit is hit</div>
-            <div class="gr-segctl"><span class="is-on">Wait and retry</span><span>Skip the call</span><span>Stop the run</span></div>
+              <div style="font-size:12.5px; color:#55595e; margin:16px 0 5px;">When the limit is hit</div>
+              <div class="gr-segctl"><span class="is-on">Wait and retry</span><span>Skip the call</span><span>Stop the run</span></div>
+            </div>
 
             <div style="font-size:13.5px; font-weight:700; color:#1a1c1e; margin:18px 0 5px;">Which tools</div>
             <div class="gr-segctl"><span>All tools</span><span class="is-on">Select tools</span></div>
@@ -997,6 +997,10 @@
         </div>
       </div>
     </div>
+
+    <p class="gr-note"><b>Everything that depends on the type is now inside a rule, everything that doesn't sits outside it.</b> Picking <i>Personal Data (PII)</i> changes three things &mdash; which entities, what happens on a catch, what happens when the check fails &mdash; and they were drawn at the same level as <i>Which tools</i>, which doesn't change at all. The indent says which sections would be replaced if you switched the type to Rate limit, and which would stay exactly as you left them.</p>
+
+    <p class="gr-note"><b>Same question, two controls, and the rule is the container.</b> <i>When the limit is hit</i> is a segmented row inside the create modal and a dropdown in the tool pane. That isn't an inconsistency: in the modal it's a full-width section where you're deciding, and seeing all three options at once is the point. In the pane it's a right-aligned control in a row where you're reviewing, next to permissions and credentials that are all dropdowns &mdash; a segmented control there would be the only one of its kind and would crowd the row. Segment where there's room and a decision, dropdown where there's a row and a glance.</p>
 
     <p class="gr-note"><b>Two questions, not three.</b> A guardrail can end up in three places: it catches something, it errors, or it gets rate limited. I had a section for each, and the last two are the same question wearing different clothes &mdash; the check didn't give an answer, so what do we do with the call? Nobody configuring this distinguishes a timeout from a 429. So <i>If it can't run</i> and <i>When the limit is hit</i> collapse into <b>If the check doesn't answer</b>, with the causes listed underneath rather than split across two controls.</p>
 
