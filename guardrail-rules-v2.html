@@ -577,7 +577,7 @@
       </div>
     </div>
 
-    <h3 class="lrt-section-title" style="font-size:15px; margin-top:26px;">Example A &mdash; a content check &nbsp;<span style="font-size:12.5px; font-weight:400; color:var(--hub-muted);">PII, in the tool pane and in the modal</span></h3>
+    <h3 class="lrt-section-title" style="font-size:15px; margin-top:26px;">The tool's own pane &mdash; permissions today, guardrails attached <span class="gr-tag is-today">today</span></h3>
     <p class="lrt-section-sub">A full pane inside the modal: back arrow, tool icon, name, credential picker, close. Then the body &mdash; server details, then <b>Tool permissions</b> with its two groups. Footer carries Remove, Cancel and Save. The guardrail row goes after permissions, and it's a picker, not a form: one line saying which guardrail is attached, with a way to make a new one.</p>
 
     <div class="nbk">
@@ -622,6 +622,7 @@
               <span class="gr-rule-ctl gr-gtags">
                 <span class="gr-gtag"><span class="nm">Finance data check</span> <span class="x">&times;</span></span>
                 <span class="gr-gtag"><span class="nm">PII</span> <span class="x">&times;</span></span>
+                <span class="gr-gtag"><span class="nm">Slow API back-off</span> <span class="x">&times;</span></span>
                 <span class="gr-ddwrap">
                 <span class="gr-gadd gr-click" onclick="grOpen('gr-add-in')">+ Add guardrail</span>
                 <div class="gr-dd" id="gr-add-in">
@@ -651,6 +652,10 @@
                 </div>
               </span>
               </span>
+            </div>
+            <div class="gr-rule-row">
+              <div class="gr-rule-main"><div class="gr-rule-name">When the limit is hit</div><div class="gr-rule-sub">From <i>Slow API back-off</i>. Only here because a limit guardrail is attached.</div></div>
+              <span class="gr-rule-ctl nbk-select-input">Wait and retry <span class="chev">&#9662;</span></span>
             </div>
 
             <div class="gr-modal-foot"><span class="nbk-btn" style="color:#b54242;">Remove</span><span style="flex:1;"></span><span class="nbk-btn">Cancel</span><span class="nbk-btn nbk-btn-primary">Save</span></div>
@@ -737,7 +742,7 @@
       </div>
     </div>
 
-    <h4 style="font-size:13.5px; margin:24px 0 2px; color:#1a1c1e;">&hellip;and the guardrail behind one of those tags</h4>
+    <h3 class="lrt-section-title" style="font-size:15px; margin-top:26px;">Behind a tag, example one &mdash; a content check <span class="gr-tag is-new">new</span></h3>
     <p class="lrt-section-sub">Half of this exists already: the <b>Guardrails node</b> ships the detectors and the check-or-sanitize decision, and this modal reuses both. What's new is attaching one to a tool rather than dropping a node into a workflow. <b>Guardrails are for tools only right now</b>, so it reads in the order the decision is made: where in the tool call it runs, then how it checks, then the limits. Everything that used to be drawn inside the tool pane &mdash; data checks, timeouts, rate limits &mdash; moved in here, because configuring that per tool means filling the same form nine times and storing nine copies of it. The name is the modal's title, edited in place, so the form opens on the decision rather than on a label.</p>
 
     <div class="nbk">
@@ -801,6 +806,77 @@
         </div>
       </div>
     </div>
+
+    <h3 class="lrt-section-title" style="font-size:15px; margin-top:26px;">Behind a tag, example two &mdash; a limit <span class="gr-tag is-new">new</span></h3>
+    <p class="lrt-section-sub">The form barely changes &mdash; only the section that says what happens, because &ldquo;redact and continue&rdquo; is meaningless for a limit.</p>
+
+    <div class="nbk">
+      <div class="nbk-frame">
+        <div class="nbk-main" style="padding-top:26px; padding-bottom:26px;">
+          <div class="gr-modal" style="max-width:520px !important;">
+            <div class="gr-modal-head"><span class="gr-modal-title gr-titlefield">Slow API back-off <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></span><span class="gr-modal-x">&times;</span></div>
+
+            <div style="font-size:13.5px; font-weight:700; color:#1a1c1e; margin:18px 0 5px;">What it does</div>
+            <div class="gr-rule-ctl nbk-select-input" style="display:flex; width:100%; justify-content:space-between;">Rate limit <span class="chev">&#9662;</span></div>
+            <div style="padding-left:14px; border-left:2px solid #a79ad6; margin-top:10px;">
+              <div style="font-size:12.5px; color:#55595e; margin-bottom:5px;">Calls per minute</div>
+              <div class="gr-rule-ctl nbk-select-input" style="display:flex; width:100%; justify-content:space-between;">Provider limit <span class="chev">&#9662;</span></div>
+
+              <div style="font-size:12.5px; color:#55595e; margin:16px 0 5px;">When the limit is hit</div>
+              <div class="gr-segctl"><span class="is-on">Wait and retry</span><span>Skip the call</span><span>Stop the run</span></div>
+            </div>
+
+            <div style="font-size:13.5px; font-weight:700; color:#1a1c1e; margin:18px 0 5px;">When it runs</div>
+            <div class="gr-segctl"><span class="is-on">Before a tool call</span><span>After</span><span>On a tool call</span></div>
+
+            <div style="display:flex; align-items:center; gap:5px; font-size:13.5px; font-weight:700; color:#1a1c1e; margin:18px 0 5px;">Which tools<span class="gr-info" title="All tools covers every tool this agent has, including tools added later. Select tools fixes the list to the ones you pick."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 16v-5M12 8h.01"/></svg></span></div>
+            <div class="gr-segctl"><span>All tools</span><span class="is-on">Select tools</span></div>
+            <div style="margin-top:10px;"><div class="gr-chipfield"><span class="gr-chip">Hex <span class="x">&times;</span></span><span class="ph">Search tools</span></div></div>
+
+            <div style="display:flex; align-items:center; gap:5px; font-size:13.5px; font-weight:700; color:#1a1c1e; margin:18px 0 5px;">Which operations<span class="gr-info" title="Only MCP servers declare whether a tool reads or writes. For workflow and node tools this cannot be narrowed, so the guardrail runs on all of them."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 16v-5M12 8h.01"/></svg></span></div>
+            <div class="gr-segctl"><span class="is-on">All</span><span>Write and delete</span><span>Read-only</span></div>
+
+            <div class="gr-modal-foot"><span style="flex:1;"></span><span class="nbk-btn">Cancel</span><span class="nbk-btn nbk-btn-primary">Create</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p class="gr-note"><b>One pane, three guardrails, and the limit row is a consequence.</b> I'd drawn a second pane for the limit example &mdash; the whole thing again, header and permissions and both slots, to show one extra row. That's the duplication we cut from Settings, and it also made the two look like different screens. This tool has a content check, a PII redaction and a rate limit attached at once, which is the ordinary case, and <i>When the limit is hit</i> appears because one of the tags is a limit. Detach <i>Slow API back-off</i> and the row goes with it.</p>
+
+    <p class="gr-note"><b>And the PII modal loses the failure section.</b> I'd added <i>If the check doesn't answer</i> for the case where the model is down &mdash; fail closed or fail open. It's a real decision and it wasn't the node's, it was mine, and it made a content check look like it had a limit. Out, for the same reason <i>Ask first</i> went. It should come back as an engineering question about what the runtime does when a check errors, not as a control invented on a mockup.</p>
+
+    <p class="gr-note"><b>Everything that depends on the type is now inside a rule, everything that doesn't sits outside it.</b> Picking <i>Personal Data (PII)</i> changes three things &mdash; which entities, what happens on a catch, what happens when the check fails &mdash; and they were drawn at the same level as <i>Which tools</i>, which doesn't change at all. The indent says which sections would be replaced if you switched the type to Rate limit, and which would stay exactly as you left them.</p>
+
+    <p class="gr-note"><b>Same question, two controls, and the rule is the container.</b> <i>When the limit is hit</i> is a segmented row inside the create modal and a dropdown in the tool pane. That isn't an inconsistency: in the modal it's a full-width section where you're deciding, and seeing all three options at once is the point. In the pane it's a right-aligned control in a row where you're reviewing, next to permissions and credentials that are all dropdowns &mdash; a segmented control there would be the only one of its kind and would crowd the row. Segment where there's room and a decision, dropdown where there's a row and a glance.</p>
+
+            <p class="gr-note"><b>Where these three came from, since two are the product's and one is mine.</b> <i>Block the call</i> and <i>Redact and continue</i> are the Guardrails node's two operations &mdash; <i>Check Text for Violations</i>, which has Pass and Fail outputs, and <i>Sanitize Text</i>, <i>&ldquo;redact text to mask personal data, secret keys, URLs&rdquo;</i>. All I did was say what they mean once the guardrail is attached to a tool instead of sitting in a workflow.</p>
+
+    <p class="gr-note"><b>There was a third option and I'd made it up.</b> <i>Ask first</i> came from the agent's permission vocabulary, where <code>require_approval</code> reads that way. The node has no approval concept, so putting it here promised a human pause whose plumbing isn't ours &mdash; who gets asked, where it goes when a scheduled run has nobody waiting, what happens if nobody answers. All of that is under <i>What isn't a guardrail</i> and belongs to Michael. Removed rather than dimmed: an invented option on a mockup gets quoted back as a decision.</p>
+
+                    <p class="gr-note"><b>The form is the same every time; only the indented block changes.</b> Four sections are always there &mdash; <i>What it does</i>, <i>When it runs</i>, <i>Which tools</i>, <i>Which operations</i> &mdash; and everything that depends on the type sits indented under the first. A PII guardrail gets entities and <i>If it finds something</i>; a rate limit gets calls per minute and <i>When the limit is hit</i>. Switching the type swaps that block and leaves the rest of your answers alone, which is the point of drawing the two side by side.</p>
+
+    <p class="gr-note"><b>I'd written that <i>When it runs</i> and <i>Which operations</i> drop out for a limit. They don't.</b> Rate-limiting only the write operations of a tool is a reasonable thing to want, and a limit still has to be checked at a moment &mdash; before the call, in practice. Dropping them would have made the form change shape by type, which is exactly what makes a form feel unpredictable.</p>
+
+    <p class="gr-note"><b>I took these out last round and that was wrong.</b> My argument was that the node's taxonomy is all content, so a timeout isn't a guardrail. But the node is a workflow step you drop into a flow; what we're building is a thing you attach to a tool, and from the tool's point of view a rate limit and a PII check are the same kind of attachment &mdash; something that can interrupt the call. Grouping them under <i>Not about content</i> in the picker keeps the distinction visible without splitting the object in two.</p>
+
+    <p class="gr-note"><b>Which means the tool pane loses a row.</b> <i>When the limit is reached</i> was sitting there as a property of the tool. With limits as guardrails it would be the same decision in two places, so it goes &mdash; a tool with a rate limit now has a rate-limit guardrail attached, and the answer lives in it.</p>
+
+    <p class="gr-note"><b>The types aren't ours to invent &mdash; the Guardrails node already ships them.</b> <i>Keywords, Jailbreak, NSFW, Personal Data (PII), Secret Keys, Topical Alignment, URLs, Custom, Custom Regex</i>, each with its own options: PII takes <i>All</i> or <i>Selected</i> entities, Secret Keys takes a permissiveness, the detection ones take a confidence threshold. Reusing that list means a builder who has used the node recognises every option, and we inherit detectors that already exist rather than describing ones that don't.</p>
+
+    <p class="gr-note"><b>The node also answers what happens when it catches something,</b> and it's two things, not one. Its Operation is <i>Check Text for Violations</i> or <i>Sanitize Text</i> &mdash; validate and fail, or redact and carry on. That's a real choice a builder makes per guardrail, so it gets its own section: <i>Block the call</i> / <i>Redact and continue</i>. I had it as a vague <i>If it fires</i> at the bottom of the form; this is the same question asked in the product's own terms, and only in those terms.</p>
+
+    <p class="gr-note"><b>And timeout and rate limit came back out.</b> I'd folded them into <i>What it does</i> last round. The node's taxonomy settles it: every guardrail in it is a <b>content</b> check, and a timeout isn't content. They belong to the tool, which is where <i>When the limit is reached</i> already sits.</p>
+
+    <p class="gr-note"><b>Labels: short noun phrases, not questions.</b> <i>What it does</i> &middot; <i>If it finds something</i> &middot; <i>When it runs</i> &middot; <i>Which tools</i> &middot; <i>Which operations</i>. Parallel grammar so the modal reads as one sentence being filled in, and short enough that five sections don't feel like a survey.</p>
+
+    <p class="gr-note"><b><i>Which operations</i> only works for MCP, and the field has to admit it.</b> An MCP server declares whether each tool reads or writes; a workflow tool or a node tool doesn't. So narrowing a guardrail to write-and-delete silently covers nothing on the tools we can't classify. That's in the tooltip now, and it's the same limit Michael raised about the summary &mdash; <span class="who">&ldquo;there's no way to know for sure all write tools have approval, as we don't know what a write tool is for workflows or node tools.&rdquo;</span></p>
+
+    <p class="gr-note"><b>One dropdown on the row, and the modal disappears.</b> It only ever held a single field, which is not worth a screen. More to the point, this is already how the card works: <i>Memory model</i> and <i>Cache duration</i> are both pickers sitting on their own row, so the new control is the same shape as its neighbours instead of the one thing in Advanced that opens something.</p>
+
+    <p class="gr-note"><b>And the switch goes with it.</b> A separate on/off plus a model picker is two controls answering one question, with a nonsense state available &mdash; on, with no model. The picker carries both: <i>Off</i> is a value in the list. Reading the row left to right now gives you the whole answer without opening anything.</p>
+
+    <p class="gr-note"><b>No hooks to pick, and that's the difference from a guardrail.</b> A guardrail is one check you attach at one point, so it asks where. This is a standing policy &mdash; switching it on means everywhere the agent could leak something, so asking where would only offer people a way to leave a hole in it. The row states the coverage instead of making you assemble it, which also makes the two impossible to confuse: one has a <i>where</i>, the other doesn't.</p>
 
     <p class="gr-note"><b>Scoping is out for now, and that has a consequence worth saying.</b> Without <i>where can this be used</i>, a guardrail belongs to the agent you made it in &mdash; so the reuse argument only holds <i>within</i> one agent, which is still the case that hurts most (nine data-table tools, one form). Reuse across agents, and the Global / project / agent ladder that Skills already ships, becomes P1. The library screen below is drawn with that ladder, so it's ahead of this modal until the two are reconciled.</p>
 
@@ -959,120 +1035,6 @@
         </div>
       </div>
     </div>
-
-    <h3 class="lrt-section-title" style="font-size:15px; margin-top:26px;">Example B &mdash; a limit &nbsp;<span style="font-size:12.5px; font-weight:400; color:var(--hub-muted);">the same two surfaces, and one row appears</span></h3>
-    <p class="lrt-section-sub">A tool whose API is slow and rate limited. The pane gains a row the PII example doesn't have, because now there is a limit to hit.</p>
-
-    <div class="nbk">
-      <div class="nbk-frame">
-        <div class="nbk-main" style="padding-top:26px; padding-bottom:120px;">
-          <div class="gr-modal" style="max-width:620px !important;">
-            <div class="gr-toolpane-head">
-              <span class="gr-chevr" style="transform:rotate(180deg);">&#8250;</span>
-              <span class="ic" style="width:24px; height:24px; border-radius:6px; background:#eceeef; display:inline-block;"></span>
-              <span class="gr-modal-title">Hex</span>
-              <span style="flex:1;"></span>
-              <span class="nbk-select-input" style="font-size:12.5px;">Hex API cred <span class="chev">&#9662;</span></span>
-              <span class="gr-modal-x">&times;</span>
-            </div>
-
-            <div style="font-size:13.5px; font-weight:700; color:#1a1c1e; margin:18px 0 3px;">Guardrail <span class="gr-tag is-new">new</span></div>
-            <div style="font-size:12px; color:#9298a0; margin-bottom:6px;">Check what goes into this tool and what comes back. Guardrails are built once and shared.</div>
-
-            <div class="gr-rule-row">
-              <div class="gr-rule-main"><div class="gr-rule-name">Before the call</div><div class="gr-rule-sub">Checks what the agent is about to send.</div></div>
-              <span class="gr-rule-ctl gr-gtags">
-                <span class="gr-gtag"><span class="nm">Slow API back-off</span> <span class="x">&times;</span></span>
-                <span class="gr-gadd">+ Add guardrail</span>
-              </span>
-            </div>
-            <div class="gr-rule-row">
-              <div class="gr-rule-main"><div class="gr-rule-name">After the call</div><div class="gr-rule-sub">Checks what the tool returned.</div></div>
-              <span class="gr-rule-ctl gr-gtags">
-                <span class="gr-gadd">+ Add guardrail</span>
-              </span>
-            </div>
-            <div class="gr-rule-row">
-              <div class="gr-rule-main"><div class="gr-rule-name">When the limit is hit</div><div class="gr-rule-sub">From <i>Slow API back-off</i>. Shown because a limit is attached.</div></div>
-              <span class="gr-rule-ctl nbk-select-input">Wait and retry <span class="chev">&#9662;</span></span>
-            </div>
-
-            <div class="gr-modal-foot"><span class="nbk-btn" style="color:#b54242;">Remove</span><span style="flex:1;"></span><span class="nbk-btn">Cancel</span><span class="nbk-btn nbk-btn-primary">Save</span></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <h4 style="font-size:13.5px; margin:24px 0 2px; color:#1a1c1e;">&hellip;and the guardrail behind that tag</h4>
-    <p class="lrt-section-sub">The form barely changes &mdash; only the section that says what happens, because &ldquo;redact and continue&rdquo; is meaningless for a limit.</p>
-
-    <div class="nbk">
-      <div class="nbk-frame">
-        <div class="nbk-main" style="padding-top:26px; padding-bottom:26px;">
-          <div class="gr-modal" style="max-width:520px !important;">
-            <div class="gr-modal-head"><span class="gr-modal-title gr-titlefield">Slow API back-off <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></span><span class="gr-modal-x">&times;</span></div>
-
-            <div style="font-size:13.5px; font-weight:700; color:#1a1c1e; margin:18px 0 5px;">What it does</div>
-            <div class="gr-rule-ctl nbk-select-input" style="display:flex; width:100%; justify-content:space-between;">Rate limit <span class="chev">&#9662;</span></div>
-            <div style="padding-left:14px; border-left:2px solid #a79ad6; margin-top:10px;">
-              <div style="font-size:12.5px; color:#55595e; margin-bottom:5px;">Calls per minute</div>
-              <div class="gr-rule-ctl nbk-select-input" style="display:flex; width:100%; justify-content:space-between;">Provider limit <span class="chev">&#9662;</span></div>
-
-              <div style="font-size:12.5px; color:#55595e; margin:16px 0 5px;">When the limit is hit</div>
-              <div class="gr-segctl"><span class="is-on">Wait and retry</span><span>Skip the call</span><span>Stop the run</span></div>
-            </div>
-
-            <div style="font-size:13.5px; font-weight:700; color:#1a1c1e; margin:18px 0 5px;">When it runs</div>
-            <div class="gr-segctl"><span class="is-on">Before a tool call</span><span>After</span><span>On a tool call</span></div>
-
-            <div style="display:flex; align-items:center; gap:5px; font-size:13.5px; font-weight:700; color:#1a1c1e; margin:18px 0 5px;">Which tools<span class="gr-info" title="All tools covers every tool this agent has, including tools added later. Select tools fixes the list to the ones you pick."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 16v-5M12 8h.01"/></svg></span></div>
-            <div class="gr-segctl"><span>All tools</span><span class="is-on">Select tools</span></div>
-            <div style="margin-top:10px;"><div class="gr-chipfield"><span class="gr-chip">Hex <span class="x">&times;</span></span><span class="ph">Search tools</span></div></div>
-
-            <div style="display:flex; align-items:center; gap:5px; font-size:13.5px; font-weight:700; color:#1a1c1e; margin:18px 0 5px;">Which operations<span class="gr-info" title="Only MCP servers declare whether a tool reads or writes. For workflow and node tools this cannot be narrowed, so the guardrail runs on all of them."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 16v-5M12 8h.01"/></svg></span></div>
-            <div class="gr-segctl"><span class="is-on">All</span><span>Write and delete</span><span>Read-only</span></div>
-
-            <div class="gr-modal-foot"><span style="flex:1;"></span><span class="nbk-btn">Cancel</span><span class="nbk-btn nbk-btn-primary">Create</span></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <p class="gr-note"><b>Two examples, each shown in both places, because that's the only way the difference is visible.</b> A PII guardrail and a rate-limit guardrail use the same form and the same pane, and they differ in exactly one section each. Drawing only one of them hides that, and drawing them in only one surface hides the knock-on: <b>the pane gains a <i>When the limit is hit</i> row in example B and doesn't have it in A</b>, because the row is a property of the attached guardrail, not of the tool. No limit attached, nothing to configure.</p>
-
-    <p class="gr-note"><b>And the PII modal loses the failure section.</b> I'd added <i>If the check doesn't answer</i> for the case where the model is down &mdash; fail closed or fail open. It's a real decision and it wasn't the node's, it was mine, and it made a content check look like it had a limit. Out, for the same reason <i>Ask first</i> went. It should come back as an engineering question about what the runtime does when a check errors, not as a control invented on a mockup.</p>
-
-    <p class="gr-note"><b>Everything that depends on the type is now inside a rule, everything that doesn't sits outside it.</b> Picking <i>Personal Data (PII)</i> changes three things &mdash; which entities, what happens on a catch, what happens when the check fails &mdash; and they were drawn at the same level as <i>Which tools</i>, which doesn't change at all. The indent says which sections would be replaced if you switched the type to Rate limit, and which would stay exactly as you left them.</p>
-
-    <p class="gr-note"><b>Same question, two controls, and the rule is the container.</b> <i>When the limit is hit</i> is a segmented row inside the create modal and a dropdown in the tool pane. That isn't an inconsistency: in the modal it's a full-width section where you're deciding, and seeing all three options at once is the point. In the pane it's a right-aligned control in a row where you're reviewing, next to permissions and credentials that are all dropdowns &mdash; a segmented control there would be the only one of its kind and would crowd the row. Segment where there's room and a decision, dropdown where there's a row and a glance.</p>
-
-            <p class="gr-note"><b>Where these three came from, since two are the product's and one is mine.</b> <i>Block the call</i> and <i>Redact and continue</i> are the Guardrails node's two operations &mdash; <i>Check Text for Violations</i>, which has Pass and Fail outputs, and <i>Sanitize Text</i>, <i>&ldquo;redact text to mask personal data, secret keys, URLs&rdquo;</i>. All I did was say what they mean once the guardrail is attached to a tool instead of sitting in a workflow.</p>
-
-    <p class="gr-note"><b>There was a third option and I'd made it up.</b> <i>Ask first</i> came from the agent's permission vocabulary, where <code>require_approval</code> reads that way. The node has no approval concept, so putting it here promised a human pause whose plumbing isn't ours &mdash; who gets asked, where it goes when a scheduled run has nobody waiting, what happens if nobody answers. All of that is under <i>What isn't a guardrail</i> and belongs to Michael. Removed rather than dimmed: an invented option on a mockup gets quoted back as a decision.</p>
-
-                    <p class="gr-note"><b>The form is the same every time; only the indented block changes.</b> Four sections are always there &mdash; <i>What it does</i>, <i>When it runs</i>, <i>Which tools</i>, <i>Which operations</i> &mdash; and everything that depends on the type sits indented under the first. A PII guardrail gets entities and <i>If it finds something</i>; a rate limit gets calls per minute and <i>When the limit is hit</i>. Switching the type swaps that block and leaves the rest of your answers alone, which is the point of drawing the two side by side.</p>
-
-    <p class="gr-note"><b>I'd written that <i>When it runs</i> and <i>Which operations</i> drop out for a limit. They don't.</b> Rate-limiting only the write operations of a tool is a reasonable thing to want, and a limit still has to be checked at a moment &mdash; before the call, in practice. Dropping them would have made the form change shape by type, which is exactly what makes a form feel unpredictable.</p>
-
-    <p class="gr-note"><b>I took these out last round and that was wrong.</b> My argument was that the node's taxonomy is all content, so a timeout isn't a guardrail. But the node is a workflow step you drop into a flow; what we're building is a thing you attach to a tool, and from the tool's point of view a rate limit and a PII check are the same kind of attachment &mdash; something that can interrupt the call. Grouping them under <i>Not about content</i> in the picker keeps the distinction visible without splitting the object in two.</p>
-
-    <p class="gr-note"><b>Which means the tool pane loses a row.</b> <i>When the limit is reached</i> was sitting there as a property of the tool. With limits as guardrails it would be the same decision in two places, so it goes &mdash; a tool with a rate limit now has a rate-limit guardrail attached, and the answer lives in it.</p>
-
-    <p class="gr-note"><b>The types aren't ours to invent &mdash; the Guardrails node already ships them.</b> <i>Keywords, Jailbreak, NSFW, Personal Data (PII), Secret Keys, Topical Alignment, URLs, Custom, Custom Regex</i>, each with its own options: PII takes <i>All</i> or <i>Selected</i> entities, Secret Keys takes a permissiveness, the detection ones take a confidence threshold. Reusing that list means a builder who has used the node recognises every option, and we inherit detectors that already exist rather than describing ones that don't.</p>
-
-    <p class="gr-note"><b>The node also answers what happens when it catches something,</b> and it's two things, not one. Its Operation is <i>Check Text for Violations</i> or <i>Sanitize Text</i> &mdash; validate and fail, or redact and carry on. That's a real choice a builder makes per guardrail, so it gets its own section: <i>Block the call</i> / <i>Redact and continue</i>. I had it as a vague <i>If it fires</i> at the bottom of the form; this is the same question asked in the product's own terms, and only in those terms.</p>
-
-    <p class="gr-note"><b>And timeout and rate limit came back out.</b> I'd folded them into <i>What it does</i> last round. The node's taxonomy settles it: every guardrail in it is a <b>content</b> check, and a timeout isn't content. They belong to the tool, which is where <i>When the limit is reached</i> already sits.</p>
-
-    <p class="gr-note"><b>Labels: short noun phrases, not questions.</b> <i>What it does</i> &middot; <i>If it finds something</i> &middot; <i>When it runs</i> &middot; <i>Which tools</i> &middot; <i>Which operations</i>. Parallel grammar so the modal reads as one sentence being filled in, and short enough that five sections don't feel like a survey.</p>
-
-    <p class="gr-note"><b><i>Which operations</i> only works for MCP, and the field has to admit it.</b> An MCP server declares whether each tool reads or writes; a workflow tool or a node tool doesn't. So narrowing a guardrail to write-and-delete silently covers nothing on the tools we can't classify. That's in the tooltip now, and it's the same limit Michael raised about the summary &mdash; <span class="who">&ldquo;there's no way to know for sure all write tools have approval, as we don't know what a write tool is for workflows or node tools.&rdquo;</span></p>
-
-    <p class="gr-note"><b>One dropdown on the row, and the modal disappears.</b> It only ever held a single field, which is not worth a screen. More to the point, this is already how the card works: <i>Memory model</i> and <i>Cache duration</i> are both pickers sitting on their own row, so the new control is the same shape as its neighbours instead of the one thing in Advanced that opens something.</p>
-
-    <p class="gr-note"><b>And the switch goes with it.</b> A separate on/off plus a model picker is two controls answering one question, with a nonsense state available &mdash; on, with no model. The picker carries both: <i>Off</i> is a value in the list. Reading the row left to right now gives you the whole answer without opening anything.</p>
-
-    <p class="gr-note"><b>No hooks to pick, and that's the difference from a guardrail.</b> A guardrail is one check you attach at one point, so it asks where. This is a standing policy &mdash; switching it on means everywhere the agent could leak something, so asking where would only offer people a way to leave a hole in it. The row states the coverage instead of making you assemble it, which also makes the two impossible to confuse: one has a <i>where</i>, the other doesn't.</p>
 
     <h3 class="lrt-section-title" style="font-size:15px; margin-top:26px;">And the same row when an admin owns it <span class="gr-tag is-new">new</span></h3>
     <p class="lrt-section-sub">If the instance has a policy, this stops being the builder's decision. It shouldn't disappear &mdash; a builder who can't see it will assume nothing is checked and design around a guardrail that's already there. So the picker stays, shows the model the admin chose, and is disabled. The row reads differently depending on whether you can do anything about it.</p>
