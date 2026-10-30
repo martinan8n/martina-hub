@@ -5,6 +5,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Patrick+Hand&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles/n8n-tokens.css?v=4">
 <link rel="stylesheet" href="styles/hub.css">
 <link rel="stylesheet" href="styles/notebook-ui.css">
 <style>
@@ -353,6 +354,90 @@
   .gr-tool-placeholder { margin: 14px 0; padding: 12px; background: #f5f5f6; border-radius: 5px; color: #666a70; font-size: 14px; line-height: 1.4; }
   .gr-pop-manage { display: block; width: 100%; text-align: left; padding: 10px 0 0; border: 0; border-top: 1px solid #ddd; background: transparent; font: inherit; font-size: 14px; color: #777a80; cursor: not-allowed; }
   @media(max-width:600px) { .gr-summary-row { grid-template-columns: minmax(0,1fr) auto; } }
+
+  /* ---- Hi-fi, real n8n tokens. Everything scoped under .hifi so it can't leak
+     into the notebook sections on this page. ---- */
+  /* Hi-fi Memory screen — real n8n tokens, same pattern as guardrails.html's hifi section. */
+  .hifi { font-family: var(--font-family); color: var(--text-color); }
+  .hifi-shell { border: 1px solid var(--border-color); border-radius: var(--radius--md); background: var(--background--subtle); overflow: hidden; min-height: 860px; }
+  .hifi-topbar { display: flex; align-items: center; gap: var(--spacing--xs); padding: var(--spacing--sm) var(--spacing--md); border-bottom: 1px solid var(--border-color); background: var(--background--surface); }
+  .hifi-crumb { font-size: var(--font-size--sm); color: var(--text-color); }
+  .hifi-crumb b { font-weight: var(--font-weight--medium); }
+  .hifi-body { padding: var(--spacing--md) var(--spacing--xl) var(--spacing--xl); max-width: 640px; background: var(--background--subtle); }
+  .hifi-card { border: 1px solid var(--border-color); border-radius: var(--radius--xs); background: var(--background--surface); box-shadow: 0 1px 2px rgba(0,0,0,0.04); padding: var(--spacing--md) var(--spacing--sm); margin-bottom: var(--spacing--sm); }
+  .hifi-section-divider { border-top: 1px solid var(--border-color--subtle); margin: var(--spacing--md) calc(-1 * var(--spacing--sm)); }
+  .hifi-field-label { font-size: var(--font-size--sm); font-weight: var(--font-weight--medium); margin-bottom: var(--spacing--xs); }
+  .hifi-row-title { font-size: var(--font-size--sm); font-weight: var(--font-weight--medium); }
+  .hifi-row-desc { font-size: var(--font-size--2xs); color: var(--text-color--subtler); margin: 2px 0 0; max-width: 360px; }
+  .hifi-row-value { text-align: right; flex: none; font-size: var(--font-size--sm); font-weight: var(--font-weight--medium); color: var(--text-color--subtle); }
+  .hifi-chev { flex: none; color: var(--text-color--subtler); margin-top: 3px; }
+  .hifi-toggle-row { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--spacing--xs); padding: var(--spacing--sm) 0; }
+  .hifi-toggle { cursor: pointer; flex: none; width: 34px; height: 20px; border-radius: var(--radius--full); background: var(--color--neutral-200); border: 1px solid var(--color--neutral-250); position: relative; transition: background 120ms ease; margin-top: 2px; }
+  .hifi-toggle.is-on { background: var(--color--green-500); border-color: var(--color--green-500); }
+  .hifi-toggle-knob { position: absolute; top: 1px; left: 1px; width: 16px; height: 16px; border-radius: 50%; background: var(--color--neutral-white); transition: left 120ms ease; }
+  .hifi-toggle.is-on .hifi-toggle-knob { left: 15px; }
+  .hifi-settings-row { display: flex; align-items: flex-start; gap: var(--spacing--sm); padding: var(--spacing--sm) 0; cursor: pointer; }
+  .hifi-row-label { flex: 1; min-width: 0; }
+  /* Modals (manage list + sample view) */
+  .hifi-modal-backdrop { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.3); border-radius: inherit; z-index: 5; }
+  .hifi-modal { width: 460px; max-height: 760px; overflow-y: auto; background: var(--background--surface); border-radius: var(--radius--lg); box-shadow: 0 0 0 0.5px var(--border-color), 0 8px 8px rgba(0,0,0,0.04), 0 32px 32px rgba(0,0,0,0.04), 0 64px 64px rgba(0,0,0,0.06); padding: var(--spacing--lg); }
+  .hifi-modal-head { display: flex; align-items: center; padding: 0 var(--spacing--lg) var(--spacing--sm); margin: 0 calc(var(--spacing--lg) * -1) var(--spacing--sm); border-bottom: 1px solid var(--border-color); }
+  .hifi-modal-title { font-size: var(--font-size--lg); font-weight: var(--font-weight--medium); }
+  .hifi-modal-close { cursor: pointer; color: var(--text-color--subtler); font-size: 17px; margin-left: auto; }
+  .hifi-modal-hint { font-size: var(--font-size--2xs); color: var(--text-color--subtler); margin: 0 0 var(--spacing--sm); }
+  .hifi-modal-actions { display: flex; justify-content: space-between; align-items: center; padding-top: var(--spacing--sm); margin-top: var(--spacing--xs); border-top: 1px solid var(--border-color); }
+  .mk-empty-card { border: 1px dashed var(--border-color); border-radius: var(--radius--md); padding: var(--spacing--xl) var(--spacing--md); text-align: center; background: var(--background--surface); }
+  .mk-empty-icon { color: var(--text-color--subtler); margin-bottom: var(--spacing--sm); }
+  .mk-empty-title { font-size: var(--font-size--lg); font-weight: var(--font-weight--medium); margin-bottom: var(--spacing--2xs); }
+  .mk-empty-desc { font-size: var(--font-size--sm); color: var(--text-color--subtler); max-width: 360px; margin: 0 auto var(--spacing--md); }
+  .mk-advanced-header { display: flex; align-items: center; justify-content: space-between; cursor: pointer; padding: var(--spacing--sm) 0; font-size: var(--font-size--sm); font-weight: var(--font-weight--medium); }
+  .mk-advanced-chevron { transition: transform 120ms ease; color: var(--text-color--subtler); }
+  .mk-advanced-chevron.is-open { transform: rotate(180deg); }
+  /* Settled Build/Context page: cards span the same width as the tab bar, per the real product */
+  .mk-pane { max-width: none; padding: 0 var(--spacing--lg) var(--spacing--xl); }
+  .mk-pane .hifi-card { padding: var(--spacing--md); margin-bottom: var(--spacing--md); }
+  .mk-filter-select { appearance: none; -webkit-appearance: none; -moz-appearance: none; height: 32px; padding: 0 30px 0 12px; border: 1px solid var(--border-color); border-radius: var(--radius--2xs); background: var(--background--surface) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23999999' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 10px center/14px; font-family: inherit; font-size: var(--font-size--sm); color: var(--text-color); cursor: pointer; outline: none; }
+  .mk-filter-icon-btn { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; flex: none; border: 1px solid var(--border-color); border-radius: var(--radius--2xs); background: var(--background--surface); color: var(--text-color--subtler); cursor: pointer; }
+  .mk-filter-icon-btn:hover, .mk-filter-icon-btn.is-active { background: var(--color--neutral-125); color: var(--text-color); }
+  .mk-filter-popover { position: absolute; top: calc(100% + 6px); right: 0; width: 220px; background: var(--background--surface); border: 1px solid var(--border-color); border-radius: var(--radius--md); box-shadow: 0 8px 24px rgba(0,0,0,0.1); padding: var(--spacing--sm); z-index: 20; }
+  .mk-filter-popover .mk-filter-select { width: 100%; }
+  .mk-back-row { display: flex; align-items: center; gap: 8px; cursor: pointer; padding-bottom: var(--spacing--md); font-size: var(--font-size--sm); font-weight: var(--font-weight--medium); color: var(--text-color); }
+  /* Real "View all" pattern (N8nChatAgentSection.vue) */
+  .mk-view-all { display: inline-flex; align-items: center; gap: 2px; font-size: var(--font-size--sm); font-weight: var(--font-weight--medium); color: var(--text-color--subtle); text-decoration: none; cursor: pointer; }
+  .mk-view-all:hover { color: var(--color--primary); }
+  /* Trace example (static) */
+  .trace-icon { width: 22px; height: 22px; border-radius: 6px; display: flex; align-items: center; justify-content: center; flex: none; }
+  .trace-icon--skill { background: var(--color--orange-100); color: var(--color--orange-600); }
+  .trace-icon--tool { background: var(--color--green-100); color: var(--color--green-800); }
+  .trace-icon--memory { background: var(--color--yellow-100); color: var(--color--yellow-800); }
+  .trace-step-row { display: flex; align-items: center; gap: 8px; padding: 6px 0; }
+  .trace-step-row .trace-label { font-size: var(--font-size--sm); color: var(--text-color); }
+  .trace-step-row .trace-time { margin-left: auto; font-size: var(--font-size--2xs); color: var(--text-color--subtler); }
+  .trace-expand-body { margin: 2px 0 4px 10px; padding: 4px 0 4px var(--spacing--sm); border-left: 1px solid var(--border-color--subtle); }
+  .trace-expand-label { font-size: var(--font-size--2xs); color: var(--text-color--subtler); margin: 6px 0 4px; }
+  .trace-expand-label:first-child { margin-top: 0; }
+  .trace-expand-box { border: 1px solid var(--border-color); border-radius: var(--radius--2xs); padding: 8px 10px; font-family: "CommitMono", monospace; font-size: var(--font-size--sm); background: var(--background--surface); white-space: pre-wrap; }
+  .trace-msg-card { border: 1px solid var(--border-color); border-radius: var(--radius--xs); background: var(--background--surface); margin-bottom: var(--spacing--xs); overflow: hidden; }
+  .trace-msg-head { display: flex; align-items: center; gap: 8px; padding: var(--spacing--xs) var(--spacing--sm); border-bottom: 1px solid var(--border-color--subtle); }
+  .trace-msg-head b { font-size: var(--font-size--sm); font-weight: var(--font-weight--medium); }
+  .trace-msg-head .trace-time { margin-left: auto; }
+  .trace-msg-body { padding: var(--spacing--sm); font-size: var(--font-size--sm); line-height: 1.6; }
+  .trace-msg-body p { margin: 0 0 8px; }
+  .trace-msg-body ul { margin: 0 0 10px; padding-left: 18px; }
+  .hifi-open-mark { background: #fdf1d8; border-radius: var(--radius--3xs, 3px); padding: 0 3px; }
+  .hifi-dim-row { display: flex; align-items: flex-start; gap: var(--spacing--sm); padding: var(--spacing--sm) 0; border-top: 1px solid var(--border-color--subtle); }
+  .hifi-dim-row:first-of-type { border-top: 0; }
+  .hifi-dim-ic { width: 24px; height: 24px; border-radius: var(--radius--xs); background: var(--background--subtle); display: flex; align-items: center; justify-content: center; flex: none; color: var(--text-color--subtle); }
+  .hifi-dim-ic svg { width: 13px; height: 13px; }
+  .hifi-dim-where { font-size: var(--font-size--2xs); color: var(--text-color--subtler); margin-top: 2px; }
+  .hifi-panel { border-radius: var(--radius--md); background: var(--color--purple-50); padding: var(--spacing--sm) var(--spacing--md); margin-bottom: var(--spacing--sm); }
+  .hifi-panel-title { font-size: var(--font-size--sm); font-weight: var(--font-weight--medium); color: var(--color--purple-500); margin-bottom: var(--spacing--2xs); }
+  .hifi-task { display: flex; align-items: flex-start; gap: var(--spacing--xs); padding: var(--spacing--2xs) 0; font-size: var(--font-size--sm); cursor: pointer; }
+  .hifi-task .mk { width: 16px; height: 16px; flex: none; margin-top: 2px; border-radius: 50%; border: 1.5px solid color-mix(in oklch, var(--color--purple-500) 45%, white); }
+  .hifi-task.is-done .mk { border-color: var(--border-color); background: var(--background--subtle); position: relative; }
+  .hifi-task.is-done .mk::after { content: ""; position: absolute; left: 4px; top: 5px; width: 6px; height: 3px; border-left: 1.5px solid var(--text-color--subtler); border-bottom: 1.5px solid var(--text-color--subtler); transform: rotate(-45deg); }
+  .hifi-task.is-done .nm { color: var(--text-color--subtler); text-decoration: line-through; }
+  .hifi-task .sub { font-size: var(--font-size--2xs); color: var(--text-color--subtler); margin-top: 1px; }
 </style>
 </head>
 <body data-default-route="agent-summary">
@@ -390,6 +475,22 @@
           <span class="status">In progress</span>
           <h3>Agent summary</h3>
           <p class="desc">Two takes on the same content: the five dimensions as a list, and the path a run takes through them. Both read-only, both inside the publish modal.</p>
+        </div>
+      </a>
+      <a class="screen-card" href="#/agent-summary-hifi">
+        <div class="thumb">&#9635;</div>
+        <div class="body">
+          <span class="status">Hi-fi</span>
+          <h3>Publish summary &mdash; hi-fi</h3>
+          <p class="desc">The P0 summary in real n8n components, reporting only what we can read.</p>
+        </div>
+      </a>
+      <a class="screen-card" href="#/needs-attention-hifi">
+        <div class="thumb">&#9635;</div>
+        <div class="body">
+          <span class="status">Hi-fi</span>
+          <h3>Needs attention &mdash; hi-fi</h3>
+          <p class="desc">The Build panel in real components, in both its states.</p>
         </div>
       </a>
       <a class="screen-card" href="#/needs-attention">
@@ -612,6 +713,130 @@
       </ol>
     </div>
   </section>
+
+  <!-- ================= AGENT SUMMARY, HI-FI ================= -->
+  <section data-route="agent-summary-hifi">
+    <a class="back-link" href="#/agent-summary">&larr; Agent summary</a>
+    <div class="screen-head">
+      <h1>Publish summary &mdash; hi-fi</h1>
+      <p>The P0 version in real n8n components and tokens. Every row reports something we can read today; the highlight marks what nothing is configured on, and makes no claim about whether that's dangerous.</p>
+    </div>
+
+    <div class="hifi">
+      <div class="hifi-shell" style="min-height:780px; position:relative;">
+        <div class="hifi-topbar">
+          <span class="hifi-crumb">Personal / <b>Agents Funnel Metrics Sync</b></span>
+        </div>
+        <div class="hifi-body" style="max-width:760px; min-height:520px;"></div>
+
+        <div class="hifi-modal-backdrop">
+          <div class="hifi-modal" style="width:520px;">
+            <div class="hifi-modal-head"><span class="hifi-modal-title">Publish agent</span></div>
+            <p style="margin:0 0 var(--spacing--sm); font-size:var(--font-size--sm); color:var(--text-color--subtle);">Here's what this agent is allowed to do once it's live.</p>
+
+            <div class="hifi-card" style="margin-bottom:var(--spacing--md);">
+              <div class="hifi-field-label" style="margin-bottom:2px;">What's bounded</div>
+              <p style="margin:0 0 var(--spacing--sm); font-size:var(--font-size--2xs); color:var(--text-color--subtler);">Highlighted means nothing is configured.</p>
+            <div class="hifi-dim-row">
+              <span class="hifi-dim-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12h16"/><path d="m14 6 6 6-6 6"/></svg></span>
+              <div class="hifi-row-label">
+                <div class="hifi-row-title">Reach</div>
+                <div class="hifi-row-desc">2 channels. #metrics is restricted to 4 people. <span class="hifi-open-mark">Telegram is open to any user.</span></div>
+                <div class="hifi-dim-where">Set per channel in Triggers</div>
+              </div>
+            </div>
+            <div class="hifi-dim-row">
+              <span class="hifi-dim-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></span>
+              <div class="hifi-row-label">
+                <div class="hifi-row-title">Action</div>
+                <div class="hifi-row-desc">12 tools. <span class="hifi-open-mark">9 run without asking</span>, 3 ask first.</div>
+                <div class="hifi-dim-where">Set per tool in Capabilities</div>
+              </div>
+            </div>
+            <div class="hifi-dim-row">
+              <span class="hifi-dim-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+              <div class="hifi-row-label">
+                <div class="hifi-row-title">Cost</div>
+                <div class="hifi-row-desc">$10 per session. <span class="hifi-open-mark">No monthly budget.</span></div>
+                <div class="hifi-dim-where">Set in Settings</div>
+              </div>
+            </div>
+            <div class="hifi-dim-row">
+              <span class="hifi-dim-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12h16"/><path d="m14 6 6 6-6 6"/></svg></span>
+              <div class="hifi-row-label">
+                <div class="hifi-row-title">Output</div>
+                <div class="hifi-row-desc"><span class="hifi-open-mark">No content check on replies.</span></div>
+                <div class="hifi-dim-where">Set in Settings</div>
+              </div>
+            </div>
+            </div>
+
+            <div style="display:flex; justify-content:flex-end; gap:var(--spacing--2xs);">
+              <button class="n8n-button n8n-button--secondary n8n-button--size-medium">Cancel</button>
+              <button class="n8n-button n8n-button--primary n8n-button--size-medium">Publish</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p class="gr-note"><b>Nothing here is a judgement.</b> Each row counts what exists and marks what isn't configured. The one thing the hi-fi adds over the wireframe is weight: in real type the highlight is quieter than it was hand-drawn, which is right &mdash; it has to be noticeable without reading as a failure.</p>
+  </section>
+
+  <!-- ================= NEEDS ATTENTION, HI-FI ================= -->
+  <section data-route="needs-attention-hifi">
+    <a class="back-link" href="#/agent-summary">&larr; Agent summary</a>
+    <div class="screen-head">
+      <h1>Needs attention &mdash; hi-fi</h1>
+      <p>The panel at the top of Build, in real components. Two states: finishing setup, and something wrong. Same position, same anatomy, same violet.</p>
+    </div>
+
+    <div class="hifi">
+      <div class="hifi-shell" style="min-height:auto;">
+        <div class="hifi-topbar"><span class="hifi-crumb">Personal / <b>Untitled</b></span></div>
+        <div class="hifi-body">
+          <div class="hifi-panel">
+            <div class="hifi-panel-title">Finish setup</div>
+            <div class="hifi-task"><span class="mk"></span><div><span class="nm">Add tools</span></div></div>
+            <div class="hifi-task is-done"><span class="mk"></span><div><span class="nm">Choose a model</span></div></div>
+            <div class="hifi-task is-done"><span class="mk"></span><div><span class="nm">Add instructions</span></div></div>
+          </div>
+
+          <div class="hifi-card">
+            <div class="hifi-field-label">Model <span style="color:#c2452f;">*</span></div>
+            <p style="margin:0 0 var(--spacing--xs); font-size:var(--font-size--2xs); color:var(--text-color--subtler);">What model this agent uses</p>
+            <div style="border:1px solid var(--border-color); border-radius:var(--radius--xs); padding:var(--spacing--2xs) var(--spacing--xs); font-size:var(--font-size--sm);">GPT-5.6 Terra <span style="color:var(--text-color--subtler);">Gateway credits</span></div>
+          </div>
+
+          <div class="hifi-card" style="margin-bottom:0;">
+            <div class="hifi-field-label">Skills</div>
+            <p style="margin:0; font-size:var(--font-size--2xs); color:var(--text-color--subtler);">How this agent handles specific tasks</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hifi" style="margin-top:22px;">
+      <div class="hifi-shell" style="min-height:auto;">
+        <div class="hifi-topbar"><span class="hifi-crumb">Personal / <b>Agents Funnel Metrics Sync</b></span></div>
+        <div class="hifi-body">
+          <div class="hifi-panel">
+            <div class="hifi-panel-title">Needs attention</div>
+            <div class="hifi-task"><span class="mk"></span><div><span class="nm">Reconnect Notion</span><div class="sub">The credential expired. 6 tools stopped working.</div></div></div>
+            <div class="hifi-task"><span class="mk"></span><div><span class="nm">Raise the monthly budget</span><div class="sub">$184 of $200 used. Runs stop when it's reached.</div></div></div>
+          </div>
+          <div class="hifi-card" style="margin-bottom:0;">
+            <div class="hifi-field-label">Model</div>
+            <p style="margin:0; font-size:var(--font-size--2xs); color:var(--text-color--subtler);">What model this agent uses</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p class="gr-note"><b>The violet does more work at this fidelity.</b> Hand-drawn, the panel read as a box with a tint. In real type and spacing it reads as the assistant speaking &mdash; accurate for setup tasks and for problems it spotted, and the reason the same container can carry both without changing colour.</p>
+  </section>
+
+
 
 </div>
 
