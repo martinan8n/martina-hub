@@ -5,7 +5,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Patrick+Hand&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles/n8n-tokens.css?v=5">
+<link rel="stylesheet" href="styles/n8n-tokens.css?v=10">
 <link rel="stylesheet" href="styles/hub.css">
 <style>
   /* carried over from the wireframe page, since these live in its local block */
@@ -23,8 +23,13 @@
   .hifi-crumb { font-size: var(--font-size--sm); color: var(--text-color); }
   .hifi-crumb b { font-weight: var(--font-weight--medium); }
   .hifi-body { padding: var(--spacing--md) var(--spacing--xl) var(--spacing--xl); max-width: 640px; background: var(--background--subtle); }
-  .hifi-card { border: 1px solid var(--border-color); border-radius: var(--radius--xs); background: var(--background--surface); box-shadow: 0 1px 2px rgba(0,0,0,0.04); padding: var(--spacing--md) var(--spacing--sm); margin-bottom: var(--spacing--sm); }
-  .hifi-section-divider { border-top: 1px solid var(--border-color--subtle); margin: var(--spacing--md) calc(-1 * var(--spacing--sm)); }
+  /* AgentPanel.vue — padding sm, padding-block md, radius --radius, shadow--xs, gap sm */
+  .hifi-card { display: flex; flex-direction: column; gap: var(--spacing--sm); border: var(--border); border-radius: var(--radius); background: var(--background--surface); box-shadow: var(--shadow--xs); padding: var(--spacing--sm); padding-block: var(--spacing--md); margin-bottom: var(--spacing--sm); }
+  /* AgentPanelHeader.vue — title is step-sm bold, description is size-medium (also 14px) text-light */
+  .hifi-panel-head { display: flex; flex-direction: column; gap: var(--spacing--4xs); max-width: 80%; }
+  .hifi-panel-title { margin: 0; font-size: var(--font-size--sm); font-weight: var(--font-weight--medium); line-height: var(--line-height--lg); }
+  .hifi-panel-desc { margin: 0; font-size: var(--font-size--sm); font-weight: var(--font-weight--regular); line-height: var(--line-height--lg); color: var(--text-color--subtler); text-wrap: balance; }
+  .hifi-section-divider { height: 1px; background: var(--border-color--subtle); margin-inline: calc(var(--spacing--sm) * -1); }
   .hifi-field-label { font-size: var(--font-size--sm); font-weight: var(--font-weight--medium); margin-bottom: var(--spacing--xs); }
   .hifi-row-title { font-size: var(--font-size--sm); font-weight: var(--font-weight--medium); }
   .hifi-row-desc { font-size: var(--font-size--2xs); color: var(--text-color--subtler); margin: 2px 0 0; max-width: 360px; }
@@ -38,13 +43,25 @@
   .hifi-settings-row { display: flex; align-items: flex-start; gap: var(--spacing--sm); padding: var(--spacing--sm) 0; cursor: pointer; }
   .hifi-row-label { flex: 1; min-width: 0; }
   /* Modals (manage list + sample view) */
-  .hifi-modal-backdrop { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.3); border-radius: inherit; z-index: 5; }
-  .hifi-modal { width: 460px; max-height: 760px; overflow-y: auto; background: var(--background--surface); border-radius: var(--radius--lg); box-shadow: 0 0 0 0.5px var(--border-color), 0 8px 8px rgba(0,0,0,0.04), 0 32px 32px rgba(0,0,0,0.04), 0 64px 64px rgba(0,0,0,0.06); padding: var(--spacing--lg); }
-  .hifi-modal-head { display: flex; align-items: center; padding: 0 var(--spacing--lg) var(--spacing--sm); margin: 0 calc(var(--spacing--lg) * -1) var(--spacing--sm); border-bottom: 1px solid var(--border-color); }
-  .hifi-modal-title { font-size: var(--font-size--lg); font-weight: var(--font-weight--medium); }
-  .hifi-modal-close { cursor: pointer; color: var(--text-color--subtler); font-size: 17px; margin-left: auto; }
+  /* N8nDialog — Overlay, Content, Header, Title, Body, Footer, verbatim */
+  .hifi-modal-backdrop { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: oklch(0% 0 0 / 0.3); backdrop-filter: blur(8px); border-radius: inherit; z-index: 5; }
+  .hifi-modal {
+    /* region padding = --spacing--md + the 2px focus ring the dialog reserves */
+    --dlg-pad: calc(var(--spacing--md) + 2px);
+    --dlg-close: var(--spacing--lg);
+    position: relative; display: flex; flex-direction: column; width: 480px;
+    background: var(--background--surface); border-radius: var(--radius--lg);
+    outline: 1px solid var(--border-color);
+    box-shadow: 0 8px 8px oklch(0% 0 0 / 0.1), 0 32px 32px oklch(0% 0 0 / 0.1), 0 64px 64px oklch(0% 0 0 / 0.06);
+  }
+  .hifi-modal-head { display: flex; flex-direction: column; flex-shrink: 0; gap: var(--spacing--2xs); padding: var(--dlg-pad); padding-inline-end: calc(var(--dlg-pad) + var(--dlg-close) + var(--spacing--xs)); }
+  .hifi-modal-title { margin: 0; font-size: var(--font-size--lg); font-weight: var(--font-weight--medium); line-height: var(--line-height--xl); color: var(--color--neutral-900); }
+  .hifi-modal-close { position: absolute; z-index: 1; inset-inline-end: var(--dlg-pad); top: calc(var(--dlg-pad) + (var(--font-size--lg) * var(--line-height--xl) - var(--dlg-close)) / 2); display: inline-flex; align-items: center; justify-content: center; width: var(--dlg-close); height: var(--dlg-close); color: var(--text-color); cursor: pointer; }
+  .hifi-modal-close svg { width: 18px; height: 18px; }
+  .hifi-modal-body { flex: 1 1 auto; min-height: 0; overflow: auto; padding-inline: var(--dlg-pad); padding-block: 2px var(--dlg-pad); }
+  .hifi-modal:has(.hifi-modal-actions) .hifi-modal-body { padding-block-end: 2px; margin-block-end: -2px; }
+  .hifi-modal-actions { display: flex; flex-shrink: 0; align-items: center; justify-content: flex-end; gap: var(--spacing--2xs); padding: var(--dlg-pad); border-top: 1px solid var(--border-color--subtle); }
   .hifi-modal-hint { font-size: var(--font-size--2xs); color: var(--text-color--subtler); margin: 0 0 var(--spacing--sm); }
-  .hifi-modal-actions { display: flex; justify-content: space-between; align-items: center; padding-top: var(--spacing--sm); margin-top: var(--spacing--xs); border-top: 1px solid var(--border-color); }
   .mk-empty-card { border: 1px dashed var(--border-color); border-radius: var(--radius--md); padding: var(--spacing--xl) var(--spacing--md); text-align: center; background: var(--background--surface); }
   .mk-empty-icon { color: var(--text-color--subtler); margin-bottom: var(--spacing--sm); }
   .mk-empty-title { font-size: var(--font-size--lg); font-weight: var(--font-weight--medium); margin-bottom: var(--spacing--2xs); }
@@ -83,26 +100,47 @@
   .trace-msg-body { padding: var(--spacing--sm); font-size: var(--font-size--sm); line-height: 1.6; }
   .trace-msg-body p { margin: 0 0 8px; }
   .trace-msg-body ul { margin: 0 0 10px; padding-left: 18px; }
-  .hifi-gtag { display: inline-flex; align-items: center; gap: var(--spacing--4xs, 4px); border: 1px solid var(--border-color); border-radius: var(--radius--full); padding: 2px var(--spacing--2xs); font-size: var(--font-size--2xs); background: var(--background--surface); white-space: nowrap; }
+  /* AgentChipButton.vue — height md, padding xs, gap 2xs, border, radius full, shadow xs, sm/medium text */
+  .hifi-gtag { display: inline-flex; align-items: center; gap: var(--spacing--2xs); height: var(--height--md); padding: var(--spacing--xs); border: var(--border); border-radius: var(--radius--full); background: var(--background--surface); box-shadow: var(--shadow--xs); font-size: var(--font-size--sm); font-weight: var(--font-weight--medium); color: var(--text-color); white-space: nowrap; cursor: pointer; }
+  .hifi-gtag svg { width: 16px; height: 16px; flex: none; color: var(--text-color--subtler); }
   .hifi-gtag .x { color: var(--text-color--subtler); cursor: pointer; }
-  .hifi-gadd { display: inline-flex; align-items: center; border: 1px dashed var(--border-color); border-radius: var(--radius--full); padding: 2px var(--spacing--2xs); font-size: var(--font-size--2xs); color: var(--text-color--subtle); cursor: pointer; white-space: nowrap; }
+  /* ghost add button, as used inside a card row */
+  .hifi-gadd { display: inline-flex; align-items: center; height: var(--height--md); margin-left: calc(-1 * var(--spacing--xs)); padding: 0 var(--spacing--xs); border: 0; border-radius: var(--radius--full); background: none; font-size: var(--font-size--sm); font-weight: var(--font-weight--medium); color: var(--text-color--subtler); cursor: pointer; white-space: nowrap; }
+  .hifi-gadd:hover { color: var(--text-color); }
   .hifi-gtags { display: flex; flex-wrap: wrap; gap: var(--spacing--3xs); justify-content: flex-end; }
-  .hifi-seg { display: inline-flex; background: var(--background--subtle); border: 1px solid var(--border-color); border-radius: var(--radius--sm); padding: 2px; gap: 2px; }
-  .hifi-seg span { font-size: var(--font-size--2xs); color: var(--text-color--subtle); padding: 3px 10px; border-radius: var(--radius--3xs); cursor: pointer; white-space: nowrap; }
-  .hifi-seg span.is-on { background: var(--background--surface); color: var(--text-color); box-shadow: 0 1px 2px rgba(0,0,0,0.06); }
-  .hifi-select { display: flex; align-items: center; justify-content: space-between; border: 1px solid var(--border-color); border-radius: var(--radius--xs); padding: var(--spacing--2xs) var(--spacing--xs); font-size: var(--font-size--sm); background: var(--background--surface); cursor: pointer; }
-  .hifi-sub-block { padding-left: var(--spacing--sm); border-left: 2px solid var(--color--purple-500); margin-top: var(--spacing--2xs); }
+  /* N8nSegmentControl, size "default": 32px track, no border, 2px padding, foreground track, white thumb */
+  .hifi-seg { display: inline-flex; align-self: flex-start; align-items: stretch; height: var(--height--md); line-height: 1; background: var(--color--foreground); border: 0; border-radius: var(--radius--2xs); padding: var(--spacing--5xs); gap: var(--spacing--5xs); }
+  .hifi-seg span { display: inline-flex; align-items: center; justify-content: center; flex: 1; padding: 0 var(--spacing--xs); border-radius: var(--radius--3xs); font-size: var(--font-size--2xs); font-weight: var(--font-weight--medium); line-height: 1; color: var(--text-color--subtle); cursor: pointer; white-space: nowrap; }
+  .hifi-seg span.is-on { background: var(--color--foreground--tint-2); color: var(--text-color); }
+  /* N8nSelect, size "large": 36px, radius xs, 14px */
+  .hifi-select { display: flex; align-items: center; justify-content: space-between; height: var(--height--lg); border: var(--border); border-radius: var(--radius--xs); padding: 0 var(--spacing--xs); font-size: var(--font-size--sm); background: var(--background--surface); cursor: pointer; }
+  /* AgentWebSearchSection .subSettings — the DS pattern for settings nested under a choice */
+  .hifi-sub-block { display: flex; flex-direction: column; gap: var(--spacing--xs); padding: var(--spacing--xs); border: var(--border); border-radius: var(--radius); margin-top: var(--spacing--2xs); }
   .hifi-grp-label { font-size: var(--font-size--2xs); color: var(--text-color--subtler); margin: var(--spacing--sm) 0 var(--spacing--3xs); }
+  .hifi-sub-block > .hifi-grp-label { margin: 0 0 calc(-1 * var(--spacing--3xs)); }
   .hifi-gtag.is-inherited { background: var(--background--subtle); color: var(--text-color--subtle); }
   .hifi-gtag.is-inherited svg { width: 11px; height: 11px; color: var(--text-color--subtler); flex: none; }
-  .hifi-sugchip { display: inline-flex; align-items: center; border: 1px dashed var(--color--purple-500); border-radius: var(--radius--full); padding: 2px var(--spacing--2xs); font-size: var(--font-size--2xs); color: var(--color--purple-500); background: var(--color--purple-50); cursor: pointer; white-space: nowrap; }
+  /* AgentChipButton variant="suggestion" — neutral at rest, brand tint only on hover */
+  .hifi-sugchip { display: inline-flex; align-items: center; gap: var(--spacing--4xs); height: auto; padding: var(--spacing--3xs) var(--spacing--xs); border: var(--border); border-radius: var(--radius--full); background: var(--background--surface); box-shadow: var(--shadow--xs); font-size: var(--font-size--2xs); font-weight: var(--font-weight--regular); line-height: var(--line-height--sm); color: var(--text-color--subtle); cursor: pointer; white-space: nowrap; transition: border-color .15s ease, background-color .15s ease, color .15s ease, transform .15s ease; }
+  .hifi-sugchip:hover { color: color-mix(in srgb, var(--background--brand) 68%, var(--text-color)); border-color: color-mix(in srgb, var(--background--brand) 28%, var(--border-color--subtle)); background: color-mix(in srgb, var(--background--brand) 12%, var(--background--hover)); transform: translateY(-1px); }
   .hifi-sug-label { font-size: var(--font-size--3xs); color: var(--text-color--subtler); margin: var(--spacing--xs) 0 var(--spacing--3xs); }
-  .hifi-bld-add { font-size: var(--font-size--sm); color: var(--text-color--subtler); padding: var(--spacing--2xs) 0; cursor: pointer; }
+  /* AgentChipRow, as implemented: chips then a plus; empty is a ghost button with the label */
+  .hifi-chiprow { display: flex; align-items: center; flex-wrap: wrap; gap: var(--spacing--3xs); min-width: 0; }
+  .hifi-addicon { display: inline-flex; align-items: center; justify-content: center; width: var(--height--md); height: var(--height--md); border: 0; background: none; border-radius: var(--radius--full); color: var(--text-color--subtler); cursor: pointer; }
+  .hifi-addicon:hover { color: var(--text-color); }
+  .hifi-addicon svg { width: 16px; height: 16px; }
+  /* empty state: a ghost button, pulled left by --spacing--xs so its label sits on the card's text edge */
+  .hifi-addempty { display: inline-flex; align-self: flex-start; align-items: center; height: var(--height--md); padding: 0 var(--spacing--xs); margin-left: calc(-1 * var(--spacing--xs)); margin-top: calc(-1 * var(--spacing--4xs)); border: 0; border-radius: var(--radius--full); background: none; font-family: inherit; font-size: var(--font-size--sm); font-weight: var(--font-weight--medium); line-height: 1; color: var(--text-color--subtler); cursor: pointer; }
+  .hifi-addempty:hover { color: var(--text-color); }
 
-  /* ---- lifted from the real Access policies modal ---- */
-  .hifi-btn-dark { display: inline-flex; align-items: center; justify-content: center; height: var(--height--lg); padding: 0 var(--spacing--md); border: 0; border-radius: var(--radius--full); background: var(--color--neutral-900); color: var(--color--neutral-white); font-family: inherit; font-size: var(--font-size--sm); font-weight: var(--font-weight--medium); cursor: pointer; }
-  .hifi-btn-dark:hover { background: var(--color--neutral-800); }
-  .hifi-btn-plain { display: inline-flex; align-items: center; height: var(--height--lg); padding: 0 var(--spacing--sm); border: 0; background: none; font-family: inherit; font-size: var(--font-size--sm); color: var(--text-color--subtle); cursor: pointer; }
+  /* ---- N8nButton: every variant is a pill, medium = 32px / 12px / 14px / 500 ---- */
+  .hifi-btn { display: inline-flex; align-items: center; justify-content: center; gap: var(--spacing--3xs); height: var(--height--md); padding: 0 var(--spacing--xs); border: 0; border-radius: var(--radius--full); background: none; font-family: inherit; font-size: var(--font-size--sm); font-weight: var(--font-weight--medium); line-height: 1; color: var(--text-color); cursor: pointer; }
+  .hifi-btn svg { width: 16px; height: 16px; flex: none; }
+  .hifi-btn--solid { background: var(--color--primary); color: var(--text-color--inverse); box-shadow: inset 0 0 0 1px var(--color--primary); }
+  .hifi-btn--outline { background: var(--background--surface); box-shadow: inset 0 0 0 1px var(--border-color), var(--shadow--xs); }
+  .hifi-btn--ghost { background: none; color: var(--text-color--subtle); }
+  /* legacy aliases used elsewhere on this page */
+  .hifi-btn-dark { display: inline-flex; align-items: center; justify-content: center; height: var(--height--md); padding: 0 var(--spacing--xs); border: 0; border-radius: var(--radius--full); background: var(--color--primary); color: var(--text-color--inverse); box-shadow: inset 0 0 0 1px var(--color--primary); font-family: inherit; font-size: var(--font-size--sm); font-weight: var(--font-weight--medium); cursor: pointer; }
   .hifi-status { display: inline-flex; align-items: center; gap: var(--spacing--3xs); font-size: var(--font-size--sm); color: var(--text-color); cursor: pointer; flex: none; }
   .hifi-status .tick { width: 16px; height: 16px; border-radius: 50%; background: var(--color--green-500, #19a05a); color: #fff; display: inline-flex; align-items: center; justify-content: center; flex: none; }
   .hifi-status .tick svg { width: 10px; height: 10px; }
@@ -116,9 +154,6 @@
   .hifi-group-row .nm { font-size: var(--font-size--sm); color: var(--text-color); }
   .hifi-group-row .sb { font-size: var(--font-size--2xs); color: var(--text-color--subtler); margin-top: 1px; }
   .hifi-group-row .sp { flex: 1; min-width: 0; }
-  .hifi-modal-tabs { display: flex; gap: var(--spacing--md); border-bottom: 1px solid var(--border-color); margin: var(--spacing--md) 0 var(--spacing--sm); }
-  .hifi-modal-tab { display: inline-flex; align-items: center; gap: var(--spacing--3xs); padding-bottom: var(--spacing--xs); font-size: var(--font-size--sm); color: var(--text-color--subtle); cursor: pointer; }
-  .hifi-modal-tab.is-active { color: var(--text-color); box-shadow: inset 0 -2px 0 var(--color--neutral-900); }
 </style>
 </head>
 <body data-default-route="gr-hifi-home">
@@ -161,134 +196,154 @@
     <div class="hifi">
       <div class="hifi-shell" style="min-height:auto;">
         <div class="hifi-topbar"><span class="hifi-crumb">Personal / <b>Agents Funnel Metrics Sync</b></span></div>
-        <div class="hifi-body" style="max-width:640px;">
-          <div class="hifi-card" style="opacity:0.5;">
-            <div class="hifi-field-label">Capabilities</div>
-            <p style="margin:0; font-size:var(--font-size--2xs); color:var(--text-color--subtler);">What this agent can do and how it does it</p>
-            <div class="hifi-bld-add">Add tool &middot; Add workflow &middot; Add sub-agent</div>
+        <div class="hifi-body" style="max-width:660px;">
+
+          <div class="hifi-card">
+            <div class="hifi-panel-head">
+              <h3 class="hifi-panel-title">Skills</h3>
+              <p class="hifi-panel-desc">How this agent handles specific tasks</p>
+            </div>
+            <button class="hifi-addempty">Add skill</button>
           </div>
 
           <div class="hifi-card">
-            <div class="hifi-field-label" style="margin-bottom:2px;">Guardrails</div>
-            <p style="margin:0 0 var(--spacing--xs); font-size:var(--font-size--2xs); color:var(--text-color--subtler);">What this agent must not do</p>
-            <div class="hifi-gtags" style="justify-content:flex-start;">
+            <div style="display:flex; align-items:flex-start; gap:var(--spacing--xs);">
+              <div class="hifi-panel-head" style="flex:1;">
+                <h3 class="hifi-panel-title">Triggers</h3>
+                <p class="hifi-panel-desc">Where and when this agent runs</p>
+              </div>
+              <button class="hifi-btn hifi-btn--outline" aria-label="Test agent" style="width:var(--height--md); padding:0;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v7.5a2 2 0 0 1-.2.9L4.7 20.6a1 1 0 0 0 .9 1.4h12.8a1 1 0 0 0 .9-1.4l-5.1-10.2a2 2 0 0 1-.2-.9V2"/><path d="M8.5 2h7"/><path d="M7 16h10"/></svg></button>
+            </div>
+            <button class="hifi-addempty">Add channel</button>
+            <button class="hifi-addempty">Add schedule</button>
+          </div>
+
+          <div class="hifi-card">
+            <div class="hifi-panel-head">
+              <h3 class="hifi-panel-title">Capabilities</h3>
+              <p class="hifi-panel-desc">What this agent can do and how it does it</p>
+            </div>
+            <button class="hifi-addempty">Add tool</button>
+            <button class="hifi-addempty">Add workflow</button>
+            <button class="hifi-addempty">Add sub-agent</button>
+            <div class="hifi-section-divider"></div>
+            <div style="display:flex; align-items:center; gap:var(--spacing--sm); min-height:var(--spacing--xl);">
+              <div style="flex:1 1 0; display:flex; flex-direction:column; gap:var(--spacing--5xs);">
+                <span style="font-size:var(--font-size--sm); font-weight:var(--font-weight--medium); line-height:var(--line-height--lg);">Web search</span>
+                <span style="font-size:var(--font-size--sm); line-height:var(--line-height--lg); color:var(--text-color--subtler);">Let the model search the web when it needs up-to-date information.</span>
+              </div>
+              <button class="hifi-btn hifi-btn--outline">Off <svg viewBox="0 0 24 24" fill="none" stroke="var(--text-color--subtler)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;"><path d="m6 9 6 6 6-6"/></svg></button>
+            </div>
+          </div>
+
+          <div class="hifi-card">
+            <div class="hifi-panel-head">
+              <h3 class="hifi-panel-title">Guardrails</h3>
+              <p class="hifi-panel-desc">What this agent must not do</p>
+            </div>
+            <button class="hifi-addempty">Add guardrail</button>
+          </div>
+
+          <div class="hifi-card" style="margin-bottom:0;">
+            <div class="hifi-panel-head">
+              <h3 class="hifi-panel-title">Memory</h3>
+              <p class="hifi-panel-desc">What this agent remembers</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="hifi" style="margin-top:18px;">
+      <div class="hifi-shell" style="min-height:auto;">
+        <div class="hifi-body" style="max-width:660px; padding-top:var(--spacing--md);">
+          <div class="hifi-card" style="margin-bottom:0;">
+            <div class="hifi-panel-head">
+              <h3 class="hifi-panel-title">Guardrails</h3>
+              <p class="hifi-panel-desc">What this agent must not do</p>
+            </div>
+            <div class="hifi-chiprow">
               <span class="hifi-gtag is-inherited"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></svg> PII redaction</span>
               <span class="hifi-gtag is-inherited"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></svg> Secret keys</span>
               <span class="hifi-gtag">Finance data check <span class="x">&times;</span></span>
-              <span class="hifi-gadd">+ Add guardrail</span>
+              <button class="hifi-addicon" aria-label="Add guardrail"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
             </div>
-            <div class="hifi-sug-label">Suggested, because this agent writes to Slack and reads Notion</div>
-            <div class="hifi-gtags" style="justify-content:flex-start;">
-              <span class="hifi-sugchip">+ Prompt injection check</span>
-              <span class="hifi-sugchip">+ URLs</span>
+            <div>
+              <div class="hifi-sug-label" style="margin-top:0;">Suggested, because this agent writes to Slack and reads Notion</div>
+              <div class="hifi-gtags" style="justify-content:flex-start;">
+                <span class="hifi-sugchip">+ Prompt injection check</span>
+                <span class="hifi-sugchip">+ URLs</span>
+              </div>
             </div>
-          </div>
-
-          <div class="hifi-card" style="opacity:0.5; margin-bottom:0;">
-            <div class="hifi-field-label">Memory</div>
-            <p style="margin:0; font-size:var(--font-size--2xs); color:var(--text-color--subtler);">What this agent remembers</p>
           </div>
         </div>
       </div>
     </div>
 
-    <p class="gr-note"><b>The inherited two carry a globe and no &times;.</b> At this size they sit as ordinary chips beside the one you added, which is right &mdash; what matters when reading the card is what protects this agent, not who decided it. The globe answers who, quietly.</p>
-
-    <p class="gr-note"><b>The suggestions had to stay visibly different.</b> Dashed and violet, so they read as offers rather than as things already applied &mdash; the failure mode of a one-click suggestion is someone thinking it's on when it isn't.</p>
-
-    <h2 class="lrt-section-title">The tool pane</h2>
+    <h2 class="lrt-section-title">On a tool</h2>
 
     <div class="hifi">
-      <div class="hifi-shell" style="min-height:auto;">
-        <div class="hifi-topbar">
-          <span style="width:20px; height:20px; border-radius:var(--radius--xs); background:var(--background--subtle); flex:none;"></span>
-          <span class="hifi-crumb"><b>Notion</b></span>
-          <span style="flex:1;"></span>
-          <span style="font-size:var(--font-size--2xs); color:var(--text-color--subtle);">Workspace cred</span>
-        </div>
-        <div class="hifi-body" style="max-width:700px;">
-
-          <div class="hifi-group-label">Tool permissions</div>
-          <div class="hifi-group-card">
-            <div class="hifi-group-row">
-              <div class="sp"><div class="nm">Read-only tools</div><div class="sb">Can look things up</div></div>
-              <span class="hifi-badge">6</span>
-              <span class="hifi-status"><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5"><path d="M20 6 9 17l-5-5"/></svg></span>Allow <span class="chev">&#9662;</span></span>
+      <div class="hifi-shell" style="min-height:980px; position:relative;">
+        <div class="hifi-topbar"><span class="hifi-crumb">Personal / <b>Agents Funnel Metrics Sync</b></span></div>
+        <div class="hifi-body" style="max-width:760px; min-height:900px;"></div>
+        <div class="hifi-modal-backdrop">
+          <div class="hifi-modal" style="width:564px;">
+            <div class="hifi-modal-head"><h2 class="hifi-modal-title">Notion</h2></div>
+            <span class="hifi-modal-close" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></span>
+            <div class="hifi-modal-body">
+            <div class="hifi-group-label" style="margin-top:0;">Tool</div>
+            <div class="hifi-group-card">
+              <div class="hifi-group-row">
+                <span style="width:28px; height:28px; border:1px solid var(--border-color); border-radius:var(--radius--xs); background:var(--background--subtle); flex:none;"></span>
+                <div class="sp"><div class="nm">Notion</div><div class="sb">Official Notion MCP server</div></div>
+                <span class="hifi-status">Workspace cred <span class="chev">&#9662;</span></span>
+              </div>
             </div>
-            <div class="hifi-group-row">
-              <div class="sp"><div class="nm">Write and delete tools</div><div class="sb">Can change or delete things</div></div>
-              <span class="hifi-badge">4</span>
-              <span class="hifi-status is-off"><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5"><path d="M20 6 9 17l-5-5"/></svg></span>Custom <span class="chev">&#9662;</span></span>
+
+            <div class="hifi-group-label">Tool permissions</div>
+            <div class="hifi-group-card">
+              <div class="hifi-group-row"><div class="sp"><div class="nm">Read-only tools</div><div class="sb">Can look things up</div></div><span class="hifi-badge">6</span><span class="hifi-status">Allow <span class="chev">&#9662;</span></span></div>
+              <div class="hifi-group-row"><div class="sp"><div class="nm">Write and delete tools</div><div class="sb">Can change or delete things</div></div><span class="hifi-badge">4</span><span class="hifi-status">Custom <span class="chev">&#9662;</span></span></div>
             </div>
-          </div>
 
-          <div class="hifi-group-label" style="margin-top:var(--spacing--lg);">Guardrails <span class="hifi-badge" style="margin-left:4px;">4</span></div>
-          <p style="margin:0 0 var(--spacing--2xs); font-size:var(--font-size--2xs); color:var(--text-color--subtler);">Check what goes into this tool and what comes back. Guardrails are built once and shared.</p>
+            <div class="hifi-group-label">Guardrails</div>
 
-          <div style="font-size:var(--font-size--2xs); color:var(--text-color--subtler); margin:var(--spacing--sm) 0 var(--spacing--3xs);">Input &mdash; runs before the call is made</div>
-          <div class="hifi-group-card">
-            <div class="hifi-group-row"><div class="sp"><div class="nm">Finance data check</div><div class="sb">Workflow</div></div><span class="hifi-status"><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5"><path d="M20 6 9 17l-5-5"/></svg></span>Block the call <span class="chev">&#9662;</span></span></div>
-            <div class="hifi-group-row"><div class="sp"><div class="nm">PII</div><div class="sb">Personal Data (PII) &middot; 3 entities</div></div><span class="hifi-status"><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5"><path d="M20 6 9 17l-5-5"/></svg></span>Redact and continue <span class="chev">&#9662;</span></span></div>
-            <div class="hifi-group-row"><div class="sp"><div class="nm">Slow API back-off</div><div class="sb">Rate limit &middot; provider limit</div></div><span class="hifi-status"><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5"><path d="M20 6 9 17l-5-5"/></svg></span>Wait and retry <span class="chev">&#9662;</span></span></div>
-            <div class="hifi-group-row"><span class="hifi-gadd">+ Add guardrail</span></div>
-          </div>
+            <div class="hifi-group-label">Input &mdash; runs before the call is made</div>
+            <div class="hifi-group-card">
+              <div class="hifi-group-row"><div class="sp"><div class="nm">Finance data check</div><div class="sb">Workflow</div></div><span class="hifi-status"><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5"><path d="M20 6 9 17l-5-5"/></svg></span>Block the call <span class="chev">&#9662;</span></span></div>
+              <div class="hifi-group-row"><div class="sp"><div class="nm">PII</div><div class="sb">Personal Data (PII) &middot; 3 entities</div></div><span class="hifi-status"><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5"><path d="M20 6 9 17l-5-5"/></svg></span>Redact and continue <span class="chev">&#9662;</span></span></div>
+              <div class="hifi-group-row"><div class="sp"><div class="nm">Slow API back-off</div><div class="sb">Rate limit &middot; provider limit</div></div><span class="hifi-status"><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5"><path d="M20 6 9 17l-5-5"/></svg></span>Wait and retry <span class="chev">&#9662;</span></span></div>
+              <div class="hifi-group-row"><button class="hifi-gadd">Add guardrail</button></div>
+            </div>
 
-          <div style="font-size:var(--font-size--2xs); color:var(--text-color--subtler); margin:var(--spacing--md) 0 var(--spacing--3xs);">Output &mdash; runs after the call returns</div>
-          <div class="hifi-group-card">
-            <div class="hifi-group-row"><div class="sp"><div class="nm">Prompt injection check</div><div class="sb">Workflow</div></div><span class="hifi-status"><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5"><path d="M20 6 9 17l-5-5"/></svg></span>Block the call <span class="chev">&#9662;</span></span></div>
-            <div class="hifi-group-row"><span class="hifi-gadd">+ Add guardrail</span></div>
-          </div>
-
-          <div style="display:flex; align-items:center; gap:var(--spacing--2xs); margin-top:var(--spacing--lg);">
-            <button class="hifi-btn-plain" style="color:var(--color--danger,#c2452f);">Remove</button>
-            <span style="flex:1;"></span>
-            <button class="hifi-btn-plain">Cancel</button>
-            <button class="hifi-btn-dark">Save</button>
+            <div class="hifi-group-label">Output &mdash; runs after the call returns</div>
+            <div class="hifi-group-card">
+              <div class="hifi-group-row"><div class="sp"><div class="nm">Prompt injection check</div><div class="sb">Workflow</div></div><span class="hifi-status"><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5"><path d="M20 6 9 17l-5-5"/></svg></span>Block the call <span class="chev">&#9662;</span></span></div>
+              <div class="hifi-group-row"><button class="hifi-gadd">Add guardrail</button></div>
+            </div>
+            </div>
+            <div class="hifi-modal-actions">
+              <button class="hifi-btn hifi-btn--solid">Done</button>
+            </div>
           </div>
         </div>
       </div>
     </div>
-
-    <p class="gr-note"><b>Rebuilt on the Access policies modal, which is the closest thing that ships.</b> Its anatomy is a grouped card of rows, each with a name, a line of detail and a state on the right that opens a menu &mdash; <i>&#10003; Allowed &#9662;</i>. That's a better fit than the tags I had: a tag can only say a guardrail is attached, where a row says what it will <i>do</i> when it fires, which is the thing you came to check.</p>
-
-    <p class="gr-note"><b>It also puts the two halves of this pane in the same language.</b> Tool permissions and guardrails are now the same component with different contents, so the pane reads as one list of decisions about this tool rather than a settings block followed by a tag field.</p>
-
-    <p class="gr-note"><b>The primary button is dark, not pink.</b> That's what the real modal does &mdash; <i>Done</i> is a black pill &mdash; and it matches <code>--color--primary: neutral-900</code> in the new tokens. Worth confirming, because <code>--button--color--background--primary</code> still resolves to pink-500, so the DS currently says two different things.</p>
-
-    <h3 class="lrt-section-title" style="font-size:15px; margin-top:26px;">Before anything is attached</h3>
-
-    <div class="hifi">
-      <div class="hifi-shell" style="min-height:auto;">
-        <div class="hifi-topbar">
-          <span style="width:20px; height:20px; border-radius:var(--radius--xs); background:var(--background--subtle); flex:none;"></span>
-          <span class="hifi-crumb"><b>Notion</b></span>
-          <span style="flex:1;"></span>
-          <span style="font-size:var(--font-size--2xs); color:var(--text-color--subtle);">Workspace cred</span>
-        </div>
-        <div class="hifi-body" style="max-width:700px;">
-          <div class="hifi-group-label">Guardrails</div>
-          <p style="margin:0 0 var(--spacing--xs); font-size:var(--font-size--2xs); color:var(--text-color--subtler);">Check what goes into this tool and what comes back. Guardrails are built once and shared.</p>
-          <div style="font-size:var(--font-size--2xs); color:var(--text-color--subtler); margin:var(--spacing--sm) 0 var(--spacing--3xs);">Input &mdash; runs before the call is made</div>
-          <div class="hifi-group-card"><div class="hifi-group-row"><span class="hifi-gadd">+ Add guardrail</span></div></div>
-          <div style="font-size:var(--font-size--2xs); color:var(--text-color--subtler); margin:var(--spacing--md) 0 var(--spacing--3xs);">Output &mdash; runs after the call returns</div>
-          <div class="hifi-group-card"><div class="hifi-group-row"><span class="hifi-gadd">+ Add guardrail</span></div></div>
-        </div>
-      </div>
-    </div>
-
-    <p class="gr-note"><b>Empty keeps the two cards rather than collapsing to one line.</b> They say there are two moments before you've used either, which is the thing a builder doesn't know yet &mdash; and the pane doesn't change shape when the first guardrail lands.</p>
 
     <h2 class="lrt-section-title" style="margin-top:34px;">Making one</h2>
     <h3 class="lrt-section-title" style="font-size:15px; margin-top:18px;">A content check</h3>
 
     <div class="hifi">
-      <div class="hifi-shell" style="min-height:720px; position:relative;">
+      <div class="hifi-shell" style="min-height:980px; position:relative;">
         <div class="hifi-topbar"><span class="hifi-crumb">Personal / <b>Agents Funnel Metrics Sync</b></span></div>
-        <div class="hifi-body" style="max-width:760px; min-height:640px;"></div>
+        <div class="hifi-body" style="max-width:760px; min-height:900px;"></div>
 
         <div class="hifi-modal-backdrop">
           <div class="hifi-modal" style="width:480px;">
-            <div class="hifi-modal-head"><span class="hifi-modal-title">Finance data check</span></div>
+            <div class="hifi-modal-head"><h2 class="hifi-modal-title">Finance data check</h2></div>
+            <span class="hifi-modal-close" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></span>
+            <div class="hifi-modal-body">
 
             <div class="hifi-grp-label" style="margin-top:0;">What it does</div>
             <div class="hifi-select">Personal Data (PII) <span style="color:var(--text-color--subtler);">&#9662;</span></div>
@@ -303,7 +358,7 @@
               </div>
 
               <div class="hifi-grp-label">If it finds something</div>
-              <div class="hifi-seg"><span class="is-on">Block the call</span><span>Redact and continue</span></div>
+              <div class="hifi-select">Block the call <span style="color:var(--text-color--subtler);">&#9662;</span></div>
             </div>
 
             <div class="hifi-grp-label">When it runs</div>
@@ -315,26 +370,28 @@
             <div class="hifi-grp-label">Which operations</div>
             <div class="hifi-seg"><span class="is-on">All</span><span>Write and delete</span><span>Read-only</span></div>
 
-            <div style="display:flex; justify-content:flex-end; gap:var(--spacing--2xs); margin:var(--spacing--md) calc(var(--spacing--lg) * -1) 0; padding:var(--spacing--sm) var(--spacing--lg) 0; border-top:1px solid var(--border-color);">
-              <button class="hifi-btn-plain">Cancel</button>
-              <button class="hifi-btn-dark">Create</button>
+            </div>
+            <div class="hifi-modal-actions">
+              <button class="hifi-btn hifi-btn--outline">Cancel</button>
+              <button class="hifi-btn hifi-btn--solid">Create</button>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <p class="gr-note"><b>The violet rule survives the translation, and it has to.</b> It's the only thing saying which three sections would be replaced if you changed the type and which four would keep your answers. In the hand-drawn version the indent alone nearly carried it; at this density, with every label the same weight, the rule is doing the work on its own.</p>
-  
+
     <h3 class="lrt-section-title" style="font-size:15px; margin-top:26px;">A limit</h3>
 
     <div class="hifi">
-      <div class="hifi-shell" style="min-height:560px; position:relative;">
+      <div class="hifi-shell" style="min-height:760px; position:relative;">
         <div class="hifi-topbar"><span class="hifi-crumb">Personal / <b>Agents Funnel Metrics Sync</b></span></div>
-        <div class="hifi-body" style="max-width:760px; min-height:480px;"></div>
+        <div class="hifi-body" style="max-width:760px; min-height:680px;"></div>
         <div class="hifi-modal-backdrop">
           <div class="hifi-modal" style="width:480px;">
-            <div class="hifi-modal-head"><span class="hifi-modal-title">Slow API back-off</span></div>
+            <div class="hifi-modal-head"><h2 class="hifi-modal-title">Slow API back-off</h2></div>
+            <span class="hifi-modal-close" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></span>
+            <div class="hifi-modal-body">
 
             <div class="hifi-grp-label" style="margin-top:0;">What it does</div>
             <div class="hifi-select">Rate limit <span style="color:var(--text-color--subtler);">&#9662;</span></div>
@@ -343,7 +400,7 @@
               <div class="hifi-grp-label" style="margin-top:var(--spacing--2xs);">Calls per minute</div>
               <div class="hifi-select">Provider limit <span style="color:var(--text-color--subtler);">&#9662;</span></div>
               <div class="hifi-grp-label">When the limit is hit</div>
-              <div class="hifi-seg"><span class="is-on">Wait and retry</span><span>Skip the call</span><span>Stop the run</span></div>
+              <div class="hifi-select">Wait and retry <span style="color:var(--text-color--subtler);">&#9662;</span></div>
             </div>
 
             <div class="hifi-grp-label">When it runs</div>
@@ -356,16 +413,15 @@
             <div class="hifi-grp-label">Which operations</div>
             <div class="hifi-seg"><span class="is-on">All</span><span>Write and delete</span><span>Read-only</span></div>
 
-            <div style="display:flex; justify-content:flex-end; gap:var(--spacing--2xs); margin:var(--spacing--md) calc(var(--spacing--lg) * -1) 0; padding:var(--spacing--sm) var(--spacing--lg) 0; border-top:1px solid var(--border-color);">
-              <button class="hifi-btn-plain">Cancel</button>
-              <button class="hifi-btn-dark">Create</button>
+            </div>
+            <div class="hifi-modal-actions">
+              <button class="hifi-btn hifi-btn--outline">Cancel</button>
+              <button class="hifi-btn hifi-btn--solid">Create</button>
             </div>
           </div>
         </div>
       </div>
     </div>
-
-    <p class="gr-note"><b>Same form, one block different.</b> Only what hangs off the violet rule changes with the type &mdash; calls per minute and <i>when the limit is hit</i> instead of entities and <i>if it finds something</i>. The four sections below keep whatever you'd already answered.</p>
 
   </section>
 
