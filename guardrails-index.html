@@ -1,0 +1,108 @@
+<!doctype html><html><head>
+<meta charset="utf8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Guardrails</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Patrick+Hand&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles/hub.css">
+<style>
+  .when { display:block; font-size:11px; letter-spacing:.04em; text-transform:uppercase;
+          color:var(--hub-muted); margin-top:10px; }
+</style>
+</head>
+<body data-default-route="guardrails-home">
+
+<div class="shell">
+
+  <section data-route="guardrails-home">
+    <a class="back-link" href="index.html#/home">&larr; Workstreams</a>
+    <div class="hero">
+      <div>
+        <span class="kicker">Workstream</span>
+        <h1>Guardrails</h1>
+        <p>Where the rules that bound an agent get configured. Everything on this workstream, newest first &mdash; the top card is the live one, the rest are the trail that got us there.</p>
+      </div>
+    </div>
+
+    <div class="section-title">Current</div>
+    <div class="card-grid">
+      <a class="screen-card" href="guardrails-comparison.html">
+        <div class="thumb">&#9635;</div>
+        <div class="body">
+          <span class="status">In progress</span>
+          <h3>Guardrails &mdash; current design</h3>
+          <p class="desc">The five surfaces in real n8n components on the new design system: the content check and rate limit editors, the tool pane, Build, and guardrails attached. Tags fields, settings rows, DS segment controls.</p>
+          <span class="when">9 Nov &middot; today</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="section-title">Earlier</div>
+    <div class="card-grid">
+      <a class="screen-card" href="guardrails-hifi-chatgpt.html">
+        <div class="thumb">&#9671;</div>
+        <div class="body">
+          <span class="status">Exploration</span>
+          <h3>Hi-fi on the upstream DS</h3>
+          <p class="desc">Same screens rebuilt against the upstream n8n design system pinned at commit <code>b43750c4</code> &mdash; the Geist type stack rather than Inter. This is where the current design's tokens came from.</p>
+          <span class="when">9 Nov</span>
+        </div>
+      </a>
+
+      <a class="screen-card" href="guardrails-hifi.html#/gr-hifi-home">
+        <div class="thumb">&#9635;</div>
+        <div class="body">
+          <span class="status">Hi-fi</span>
+          <h3>Guardrails hi-fi</h3>
+          <p class="desc">First hi-fi pass: the settled structure built from the real component source &mdash; AgentPanel, AgentChipRow, AgentChipButton, N8nDialog, N8nSegmentControl &mdash; on the new pink brand.</p>
+          <span class="when">9 Nov</span>
+        </div>
+      </a>
+
+      <a class="screen-card" href="guardrails-v4.html#/guardrail-rules">
+        <div class="thumb">&#129521;</div>
+        <div class="body">
+          <span class="status">Wireframe</span>
+          <h3>Guardrails v4</h3>
+          <p class="desc">Only what survived the 22 Oct review: a check you build once and attach to a tool. Three surfaces &mdash; Build, the tool pane, the create modal. The pruned set the hi-fi was built from.</p>
+          <span class="when">9 Nov</span>
+        </div>
+      </a>
+
+      <a class="screen-card" href="guardrail-rules-v2.html#/gr-config">
+        <div class="thumb">&#129521;</div>
+        <div class="body">
+          <span class="status">History</span>
+          <h3>Rules &amp; dimensions v2</h3>
+          <p class="desc">The working copy where the five dimensions got argued down to one: a rule lives wherever the thing it constrains lives. Kept whole, including the screens that didn't make it.</p>
+          <span class="when">30 Oct</span>
+        </div>
+      </a>
+
+      <a class="screen-card" href="guardrails.html#/guardrails">
+        <div class="thumb">&#128274;</div>
+        <div class="body">
+          <span class="status">History</span>
+          <h3>Usage &amp; limits</h3>
+          <p class="desc">Usage/limits settings, nav-level Running &amp; Awaiting states, and the Cost cap gate &mdash; settled patterns collected from Goal-based tasks, where they also still live.</p>
+          <span class="when">30 Oct</span>
+        </div>
+      </a>
+
+      <a class="screen-card" href="guardrail-rules.html#/guardrail-rules">
+        <div class="thumb">&#129521;</div>
+        <div class="body">
+          <span class="status">History</span>
+          <h3>Rules &amp; dimensions</h3>
+          <p class="desc">The original five-dimension exploration from the Notion doc: where a builder attaches a rule, and how they see what they've actually bounded. Frozen after the 22 Oct review.</p>
+          <span class="when">27 Oct</span>
+        </div>
+      </a>
+    </div>
+  </section>
+
+</div>
+
+<script src="js/hub.js"></script>
+</body></html>
