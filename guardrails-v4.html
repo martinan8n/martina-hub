@@ -605,24 +605,6 @@
 
     <p class="gr-note"><b>The empty state is the same pane with the tags missing.</b> No illustration, no explanatory panel that disappears once you use it &mdash; the rows stay put so the pane doesn't reflow the moment you add the first one, and the only thing you can do is the thing you came for.</p>
 
-    <h3 class="lrt-section-title" style="font-size:15px; margin-top:26px;">It already defends the dangerous default <span class="gr-tag is-today">today</span></h3>
-    <p class="lrt-section-sub">Setting a whole write group to Allow is challenged &mdash; the doc's &ldquo;never a default-allow&rdquo; requirement, already honoured in one place.</p>
-
-    <div class="nbk">
-      <div class="nbk-frame">
-        <div class="nbk-main" style="padding-top:30px; padding-bottom:30px;">
-          <div class="gr-confirm">
-            <div class="gr-confirm-title">Allow all write and delete tools?</div>
-            <p class="gr-confirm-body">The agent can change or delete Notion content without asking first. This applies to all 4 tools in this group.</p>
-            <div class="gr-confirm-actions">
-              <span class="nbk-btn">Allow anyway</span>
-              <span class="nbk-btn nbk-btn-primary">Keep Ask first</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
     <h2 class="lrt-section-title" style="margin-top:34px;">Making one <span class="gr-tag is-new">new</span></h2>
     <h3 class="lrt-section-title" style="font-size:15px; margin-top:18px;">A content check</h3>
     <p class="lrt-section-sub">Half of this exists already: the <b>Guardrails node</b> ships the detectors and the check-or-sanitize decision, and this modal reuses both. What's new is attaching one to a tool rather than dropping a node into a workflow. <b>Guardrails are for tools only right now</b>, so it reads in the order the decision is made: where in the tool call it runs, then how it checks, then the limits. Everything that used to be drawn inside the tool pane &mdash; data checks, timeouts, rate limits &mdash; moved in here, because configuring that per tool means filling the same form nine times and storing nine copies of it. The name is the modal's title, edited in place, so the form opens on the decision rather than on a label.</p>
