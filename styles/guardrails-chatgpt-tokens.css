@@ -1126,3 +1126,12 @@
 --animation--duration--snappy:var(--duration--snappy);
 --animation--easing:var(--easing--ease-out);
 }
+
+
+/* _tokens.legacy.scss — referenced throughout the file above but never defined here,
+   which left the select tag's close button, --icon--color and the info callout blank. */
+:root {
+  --color--text--shade-1: var(--text-color);
+  --color--text: var(--text-color--subtle);
+  --color--text--tint-1: var(--text-color--subtler);
+}
