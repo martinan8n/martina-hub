@@ -1,0 +1,341 @@
+<!doctype html><html><head>
+<meta charset="utf8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Guardrails hi-fi — ChatGPT</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Patrick+Hand&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles/guardrails-chatgpt-tokens.css?v=1">
+<link rel="stylesheet" href="styles/hub.css">
+<style>
+  /* carried over from the wireframe page, since these live in its local block */
+  .gr-note { font-size: 12.5px; color: var(--hub-muted); line-height: 1.6; margin: 10px 0 0; max-width: 680px; }
+  .gr-note b { color: var(--ink); }
+  .gr-note .who { color: var(--hub-muted); font-style: italic; }
+  .lrt-section-sub { font-size: 13px; color: var(--hub-muted); line-height: 1.6; margin: 4px 0 14px; max-width: 760px; }
+
+  /* ---- Hi-fi, real n8n tokens. Scoped under .hifi so it can't leak into the
+     notebook sections above. ---- */
+  /* Hi-fi Memory screen — real n8n tokens, same pattern as guardrails.html's hifi section. */
+  .hifi { font-family: var(--font-family); color: var(--text-color); }
+  .hifi-shell { border: 1px solid var(--border-color); border-radius: var(--radius--md); background: var(--background--subtle); overflow: hidden; min-height: 860px; }
+  .hifi-topbar { display: flex; align-items: center; gap: var(--spacing--xs); padding: var(--spacing--sm) var(--spacing--md); border-bottom: 1px solid var(--border-color); background: var(--background--surface); }
+  .hifi-crumb { font-size: var(--font-size--sm); color: var(--text-color); }
+  .hifi-crumb b { font-weight: var(--font-weight--medium); }
+  .hifi-body { padding: var(--spacing--md) var(--spacing--xl) var(--spacing--xl); max-width: 640px; background: var(--background--subtle); }
+  /* AgentPanel.vue — padding sm, padding-block md, radius --radius, shadow--xs, gap sm */
+  .hifi-card { display: flex; flex-direction: column; gap: var(--spacing--sm); border: var(--border); border-radius: var(--radius); background: var(--background--surface); box-shadow: var(--shadow--xs); padding: var(--spacing--sm); padding-block: var(--spacing--md); margin-bottom: var(--spacing--sm); }
+  /* AgentPanelHeader.vue — title is step-sm bold, description is size-medium (also 14px) text-light */
+  .hifi-panel-head { display: flex; flex-direction: column; gap: var(--spacing--4xs); max-width: 80%; }
+  .hifi-panel-title { margin: 0; font-size: var(--font-size--sm); font-weight: var(--font-weight--medium); line-height: var(--line-height--lg); }
+  .hifi-panel-desc { margin: 0; font-size: var(--font-size--sm); font-weight: var(--font-weight--regular); line-height: var(--line-height--lg); color: var(--text-color--subtler); text-wrap: balance; }
+  .hifi-section-divider { height: 1px; background: var(--border-color--subtle); margin-inline: calc(var(--spacing--sm) * -1); }
+  .hifi-field-label { font-size: var(--font-size--sm); font-weight: var(--font-weight--medium); margin-bottom: var(--spacing--xs); }
+  .hifi-row-title { font-size: var(--font-size--sm); font-weight: var(--font-weight--medium); }
+  .hifi-row-desc { font-size: var(--font-size--2xs); color: var(--text-color--subtler); margin: 2px 0 0; max-width: 360px; }
+  .hifi-row-value { text-align: right; flex: none; font-size: var(--font-size--sm); font-weight: var(--font-weight--medium); color: var(--text-color--subtle); }
+  .hifi-chev { flex: none; color: var(--text-color--subtler); margin-top: 3px; }
+  .hifi-toggle-row { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--spacing--xs); padding: var(--spacing--sm) 0; }
+  .hifi-toggle { cursor: pointer; flex: none; width: 34px; height: 20px; border-radius: var(--radius--full); background: var(--color--neutral-200); border: 1px solid var(--color--neutral-250); position: relative; transition: background 120ms ease; margin-top: 2px; }
+  .hifi-toggle.is-on { background: var(--color--green-500); border-color: var(--color--green-500); }
+  .hifi-toggle-knob { position: absolute; top: 1px; left: 1px; width: 16px; height: 16px; border-radius: 50%; background: var(--color--neutral-white); transition: left 120ms ease; }
+  .hifi-toggle.is-on .hifi-toggle-knob { left: 15px; }
+  .hifi-settings-row { display: flex; align-items: flex-start; gap: var(--spacing--sm); padding: var(--spacing--sm) 0; cursor: pointer; }
+  .hifi-row-label { flex: 1; min-width: 0; }
+  /* Modals (manage list + sample view) */
+  /* N8nDialog — Overlay, Content, Header, Title, Body, Footer, verbatim */
+  .hifi-modal-backdrop { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: oklch(0% 0 0 / 0.3); backdrop-filter: blur(8px); border-radius: inherit; z-index: 5; }
+  .hifi-modal {
+    /* region padding = --spacing--md + the 2px focus ring the dialog reserves */
+    --dlg-pad: calc(var(--spacing--md) + 2px);
+    --dlg-close: var(--spacing--lg);
+    position: relative; display: flex; flex-direction: column; width: 480px; max-height: 760px;
+    background: var(--background--surface); border-radius: var(--radius--lg);
+    outline: 1px solid var(--border-color);
+    box-shadow: 0 8px 8px oklch(0% 0 0 / 0.1), 0 32px 32px oklch(0% 0 0 / 0.1), 0 64px 64px oklch(0% 0 0 / 0.06);
+  }
+  .hifi-modal-head { display: flex; flex-direction: column; flex-shrink: 0; gap: var(--spacing--2xs); padding: var(--dlg-pad); padding-inline-end: calc(var(--dlg-pad) + var(--dlg-close) + var(--spacing--xs)); }
+  .hifi-modal-title { margin: 0; font-size: var(--font-size--lg); font-weight: var(--font-weight--medium); line-height: var(--line-height--xl); color: var(--color--neutral-900); }
+  .hifi-modal-close { position: absolute; z-index: 1; inset-inline-end: var(--dlg-pad); top: calc(var(--dlg-pad) + (var(--font-size--lg) * var(--line-height--xl) - var(--dlg-close)) / 2); display: inline-flex; align-items: center; justify-content: center; width: var(--dlg-close); height: var(--dlg-close); color: var(--text-color); cursor: pointer; }
+  .hifi-modal-close svg { width: 18px; height: 18px; }
+  .hifi-modal-body { flex: 1 1 auto; min-height: 0; overflow: auto; padding-inline: var(--dlg-pad); padding-block: 2px var(--dlg-pad); }
+  .hifi-modal:has(.hifi-modal-actions) .hifi-modal-body { padding-block-end: 2px; margin-block-end: -2px; }
+  .hifi-modal-actions { display: flex; flex-shrink: 0; align-items: center; justify-content: flex-end; gap: var(--spacing--2xs); padding: var(--dlg-pad); border-top: 1px solid var(--border-color--subtle); }
+  .hifi-modal-hint { font-size: var(--font-size--2xs); color: var(--text-color--subtler); margin: 0 0 var(--spacing--sm); }
+  .mk-empty-card { border: 1px dashed var(--border-color); border-radius: var(--radius--md); padding: var(--spacing--xl) var(--spacing--md); text-align: center; background: var(--background--surface); }
+  .mk-empty-icon { color: var(--text-color--subtler); margin-bottom: var(--spacing--sm); }
+  .mk-empty-title { font-size: var(--font-size--lg); font-weight: var(--font-weight--medium); margin-bottom: var(--spacing--2xs); }
+  .mk-empty-desc { font-size: var(--font-size--sm); color: var(--text-color--subtler); max-width: 360px; margin: 0 auto var(--spacing--md); }
+  .mk-advanced-header { display: flex; align-items: center; justify-content: space-between; cursor: pointer; padding: var(--spacing--sm) 0; font-size: var(--font-size--sm); font-weight: var(--font-weight--medium); }
+  .mk-advanced-chevron { transition: transform 120ms ease; color: var(--text-color--subtler); }
+  .mk-advanced-chevron.is-open { transform: rotate(180deg); }
+  /* Settled Build/Context page: cards span the same width as the tab bar, per the real product */
+  .mk-pane { max-width: none; padding: 0 var(--spacing--lg) var(--spacing--xl); }
+  .mk-pane .hifi-card { padding: var(--spacing--md); margin-bottom: var(--spacing--md); }
+  .mk-filter-select { appearance: none; -webkit-appearance: none; -moz-appearance: none; height: 32px; padding: 0 30px 0 12px; border: 1px solid var(--border-color); border-radius: var(--radius--2xs); background: var(--background--surface) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23999999' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 10px center/14px; font-family: inherit; font-size: var(--font-size--sm); color: var(--text-color); cursor: pointer; outline: none; }
+  .mk-filter-icon-btn { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; flex: none; border: 1px solid var(--border-color); border-radius: var(--radius--2xs); background: var(--background--surface); color: var(--text-color--subtler); cursor: pointer; }
+  .mk-filter-icon-btn:hover, .mk-filter-icon-btn.is-active { background: var(--color--neutral-125); color: var(--text-color); }
+  .mk-filter-popover { position: absolute; top: calc(100% + 6px); right: 0; width: 220px; background: var(--background--surface); border: 1px solid var(--border-color); border-radius: var(--radius--md); box-shadow: 0 8px 24px rgba(0,0,0,0.1); padding: var(--spacing--sm); z-index: 20; }
+  .mk-filter-popover .mk-filter-select { width: 100%; }
+  .mk-back-row { display: flex; align-items: center; gap: 8px; cursor: pointer; padding-bottom: var(--spacing--md); font-size: var(--font-size--sm); font-weight: var(--font-weight--medium); color: var(--text-color); }
+  /* Real "View all" pattern (N8nChatAgentSection.vue) */
+  .mk-view-all { display: inline-flex; align-items: center; gap: 2px; font-size: var(--font-size--sm); font-weight: var(--font-weight--medium); color: var(--text-color--subtle); text-decoration: none; cursor: pointer; }
+  .mk-view-all:hover { color: var(--color--primary); }
+  /* Trace example (static) */
+  .trace-icon { width: 22px; height: 22px; border-radius: 6px; display: flex; align-items: center; justify-content: center; flex: none; }
+  .trace-icon--skill { background: var(--color--orange-100); color: var(--color--orange-600); }
+  .trace-icon--tool { background: var(--color--green-100); color: var(--color--green-800); }
+  .trace-icon--memory { background: var(--color--yellow-100); color: var(--color--yellow-800); }
+  .trace-step-row { display: flex; align-items: center; gap: 8px; padding: 6px 0; }
+  .trace-step-row .trace-label { font-size: var(--font-size--sm); color: var(--text-color); }
+  .trace-step-row .trace-time { margin-left: auto; font-size: var(--font-size--2xs); color: var(--text-color--subtler); }
+  .trace-expand-body { margin: 2px 0 4px 10px; padding: 4px 0 4px var(--spacing--sm); border-left: 1px solid var(--border-color--subtle); }
+  .trace-expand-label { font-size: var(--font-size--2xs); color: var(--text-color--subtler); margin: 6px 0 4px; }
+  .trace-expand-label:first-child { margin-top: 0; }
+  .trace-expand-box { border: 1px solid var(--border-color); border-radius: var(--radius--2xs); padding: 8px 10px; font-family: "CommitMono", monospace; font-size: var(--font-size--sm); background: var(--background--surface); white-space: pre-wrap; }
+  .trace-msg-card { border: 1px solid var(--border-color); border-radius: var(--radius--xs); background: var(--background--surface); margin-bottom: var(--spacing--xs); overflow: hidden; }
+  .trace-msg-head { display: flex; align-items: center; gap: 8px; padding: var(--spacing--xs) var(--spacing--sm); border-bottom: 1px solid var(--border-color--subtle); }
+  .trace-msg-head b { font-size: var(--font-size--sm); font-weight: var(--font-weight--medium); }
+  .trace-msg-head .trace-time { margin-left: auto; }
+  .trace-msg-body { padding: var(--spacing--sm); font-size: var(--font-size--sm); line-height: 1.6; }
+  .trace-msg-body p { margin: 0 0 8px; }
+  .trace-msg-body ul { margin: 0 0 10px; padding-left: 18px; }
+  /* AgentChipButton.vue — height md, padding xs, gap 2xs, border, radius full, shadow xs, sm/medium text */
+  .hifi-gtag { display: inline-flex; align-items: center; gap: var(--spacing--2xs); height: var(--height--md); padding: var(--spacing--xs); border: var(--border); border-radius: var(--radius--full); background: var(--background--surface); box-shadow: var(--shadow--xs); font-size: var(--font-size--sm); font-weight: var(--font-weight--medium); color: var(--text-color); white-space: nowrap; cursor: pointer; }
+  .hifi-gtag svg { width: 16px; height: 16px; flex: none; color: var(--text-color--subtler); }
+  .hifi-gtag .x { color: var(--text-color--subtler); cursor: pointer; }
+  /* ghost add button, as used inside a card row */
+  .hifi-gadd { display: inline-flex; align-items: center; height: var(--height--md); margin-left: calc(-1 * var(--spacing--xs)); padding: 0 var(--spacing--xs); border: 0; border-radius: var(--radius--full); background: none; font-size: var(--font-size--sm); font-weight: var(--font-weight--medium); color: var(--text-color--subtler); cursor: pointer; white-space: nowrap; }
+  .hifi-gadd:hover { color: var(--text-color); }
+  .hifi-gtags { display: flex; flex-wrap: wrap; gap: var(--spacing--3xs); justify-content: flex-end; }
+  /* N8nSegmentControl, size "default": 32px track, no border, 2px padding, foreground track, white thumb */
+  .hifi-seg { display: inline-flex; align-items: stretch; height: var(--height--md); line-height: 1; background: var(--color--foreground); border: 0; border-radius: var(--radius--2xs); padding: var(--spacing--5xs); gap: var(--spacing--5xs); }
+  .hifi-seg span { display: inline-flex; align-items: center; justify-content: center; flex: 1; padding: 0 var(--spacing--xs); border-radius: var(--radius--3xs); font-size: var(--font-size--2xs); font-weight: var(--font-weight--medium); line-height: 1; color: var(--text-color--subtle); cursor: pointer; white-space: nowrap; }
+  .hifi-seg span.is-on { background: var(--color--foreground--tint-2); color: var(--text-color); }
+  /* N8nSelect, size "large": 36px, radius xs, 14px */
+  .hifi-select { display: flex; align-items: center; justify-content: space-between; height: var(--height--lg); border: var(--border); border-radius: var(--radius--xs); padding: 0 var(--spacing--xs); font-size: var(--font-size--sm); background: var(--background--surface); cursor: pointer; }
+  .hifi-sub-block { padding-left: var(--spacing--sm); border-left: 2px solid var(--color--purple-500); margin-top: var(--spacing--2xs); }
+  .hifi-grp-label { font-size: var(--font-size--2xs); color: var(--text-color--subtler); margin: var(--spacing--sm) 0 var(--spacing--3xs); }
+  .hifi-gtag.is-inherited { background: var(--background--subtle); color: var(--text-color--subtle); }
+  .hifi-gtag.is-inherited svg { width: 11px; height: 11px; color: var(--text-color--subtler); flex: none; }
+  /* AgentChipButton variant="suggestion" — neutral at rest, brand tint only on hover */
+  .hifi-sugchip { display: inline-flex; align-items: center; gap: var(--spacing--4xs); height: auto; padding: var(--spacing--3xs) var(--spacing--xs); border: var(--border); border-radius: var(--radius--full); background: var(--background--surface); box-shadow: var(--shadow--xs); font-size: var(--font-size--2xs); font-weight: var(--font-weight--regular); line-height: var(--line-height--sm); color: var(--text-color--subtle); cursor: pointer; white-space: nowrap; transition: border-color .15s ease, background-color .15s ease, color .15s ease, transform .15s ease; }
+  .hifi-sugchip:hover { color: color-mix(in srgb, var(--background--brand) 68%, var(--text-color)); border-color: color-mix(in srgb, var(--background--brand) 28%, var(--border-color--subtle)); background: color-mix(in srgb, var(--background--brand) 12%, var(--background--hover)); transform: translateY(-1px); }
+  .hifi-sug-label { font-size: var(--font-size--3xs); color: var(--text-color--subtler); margin: var(--spacing--xs) 0 var(--spacing--3xs); }
+  /* AgentChipRow, as implemented: chips then a plus; empty is a ghost button with the label */
+  .hifi-chiprow { display: flex; align-items: center; flex-wrap: wrap; gap: var(--spacing--3xs); min-width: 0; }
+  .hifi-addicon { display: inline-flex; align-items: center; justify-content: center; width: var(--height--md); height: var(--height--md); border: 0; background: none; border-radius: var(--radius--full); color: var(--text-color--subtler); cursor: pointer; }
+  .hifi-addicon:hover { color: var(--text-color); }
+  .hifi-addicon svg { width: 16px; height: 16px; }
+  /* empty state: a ghost button, pulled left by --spacing--xs so its label sits on the card's text edge */
+  .hifi-addempty { display: inline-flex; align-self: flex-start; align-items: center; height: var(--height--md); padding: 0 var(--spacing--xs); margin-left: calc(-1 * var(--spacing--xs)); margin-top: calc(-1 * var(--spacing--4xs)); border: 0; border-radius: var(--radius--full); background: none; font-family: inherit; font-size: var(--font-size--sm); font-weight: var(--font-weight--medium); line-height: 1; color: var(--text-color--subtler); cursor: pointer; }
+  .hifi-addempty:hover { color: var(--text-color); }
+
+  /* ---- N8nButton: every variant is a pill, medium = 32px / 12px / 14px / 500 ---- */
+  .hifi-btn { display: inline-flex; align-items: center; justify-content: center; gap: var(--spacing--3xs); height: var(--height--md); padding: 0 var(--spacing--xs); border: 0; border-radius: var(--radius--full); background: none; font-family: inherit; font-size: var(--font-size--sm); font-weight: var(--font-weight--medium); line-height: 1; color: var(--text-color); cursor: pointer; }
+  .hifi-btn svg { width: 16px; height: 16px; flex: none; }
+  .hifi-btn--solid { background: var(--color--primary); color: var(--text-color--inverse); box-shadow: inset 0 0 0 1px var(--color--primary); }
+  .hifi-btn--outline { background: var(--background--surface); box-shadow: inset 0 0 0 1px var(--border-color), var(--shadow--xs); }
+  .hifi-btn--ghost { background: none; color: var(--text-color--subtle); }
+  /* legacy aliases used elsewhere on this page */
+  .hifi-btn-dark { display: inline-flex; align-items: center; justify-content: center; height: var(--height--md); padding: 0 var(--spacing--xs); border: 0; border-radius: var(--radius--full); background: var(--color--primary); color: var(--text-color--inverse); box-shadow: inset 0 0 0 1px var(--color--primary); font-family: inherit; font-size: var(--font-size--sm); font-weight: var(--font-weight--medium); cursor: pointer; }
+  .hifi-status { display: inline-flex; align-items: center; gap: var(--spacing--3xs); font-size: var(--font-size--sm); color: var(--text-color); cursor: pointer; flex: none; }
+  .hifi-status .tick { width: 16px; height: 16px; border-radius: 50%; background: var(--color--green-500, #19a05a); color: #fff; display: inline-flex; align-items: center; justify-content: center; flex: none; }
+  .hifi-status .tick svg { width: 10px; height: 10px; }
+  .hifi-status .chev { color: var(--text-color--subtler); font-size: 10px; }
+  .hifi-status.is-off .tick { background: var(--color--neutral-300); }
+  .hifi-badge { display: inline-flex; align-items: center; justify-content: center; min-width: 22px; height: 20px; padding: 0 6px; border: 1px solid var(--border-color); border-radius: var(--radius--xs); font-size: var(--font-size--2xs); color: var(--text-color--subtle); }
+  .hifi-group-label { font-size: var(--font-size--2xs); color: var(--text-color--subtler); margin: var(--spacing--sm) 0 var(--spacing--3xs); }
+  .hifi-group-card { border: 1px solid var(--border-color); border-radius: var(--radius--sm); background: var(--background--surface); }
+  .hifi-group-row { display: flex; align-items: center; gap: var(--spacing--sm); padding: var(--spacing--sm) var(--spacing--md); border-top: 1px solid var(--border-color--subtle); }
+  .hifi-group-row:first-child { border-top: 0; }
+  .hifi-group-row .nm { font-size: var(--font-size--sm); color: var(--text-color); }
+  .hifi-group-row .sb { font-size: var(--font-size--2xs); color: var(--text-color--subtler); margin-top: 1px; }
+  .hifi-group-row .sp { flex: 1; min-width: 0; }
+
+.hifi {font-feature-settings:'ss01' 1;}
+.hifi .hifi-panel-head {max-width:100%;}
+.hifi button,.hifi select,.hifi input,.hifi textarea {font-family:inherit;}
+.hifi :is(button,select,input,textarea):focus-visible {outline:2px solid var(--color--primary);outline-offset:2px;}
+.hifi select,.hifi input[type=number],.hifi textarea {border:var(--border);border-radius:var(--radius);background:var(--background--surface);color:var(--text-color);font-size:var(--font-size--sm);padding:var(--spacing--2xs) var(--spacing--xs);width:100%;}
+.hifi select {min-height:var(--height--md);cursor:pointer;}
+.hifi .action-select {width:auto;max-width:235px;background:transparent;border-color:transparent;}
+.hifi .action-select:hover {background:var(--background--hover);border-color:var(--border-color);}
+.hifi .scope {display:inline-block;font-size:var(--font-size--3xs);color:var(--text-color--subtle);border:var(--border);border-radius:var(--radius--full);padding:2px 7px;margin-top:6px;}
+.hifi .helper {font-size:var(--font-size--2xs);color:var(--text-color--subtler);line-height:1.5;margin:6px 0 0;}
+.hifi .field {margin:0 0 var(--spacing--sm);}
+.hifi .field>label,.hifi legend {display:block;font-size:var(--font-size--2xs);font-weight:var(--font-weight--regular);color:var(--text-color--subtler);margin-bottom:var(--spacing--3xs);}
+.hifi fieldset {border:0;padding:0;margin:0 0 var(--spacing--sm);}
+.hifi .choices {display:flex;flex-wrap:wrap;gap:var(--spacing--xs);font-size:var(--font-size--sm);}
+.hifi .choices label {display:flex;align-items:center;gap:6px;cursor:pointer;}
+.hifi input[type=radio],.hifi input[type=checkbox] {accent-color:var(--color--primary);}
+.hifi .summary {padding:var(--spacing--xs);border-radius:var(--radius);background:var(--background--subtle);font-size:var(--font-size--sm);line-height:1.55;margin-top:var(--spacing--sm);}
+.hifi .hifi-modal {max-height:none;width:min(580px,calc(100% - 32px));}
+.hifi .hifi-modal-body {overflow:visible;}
+.hifi .hifi-modal-actions {border:0;}
+.hifi .stage {padding:32px 16px;display:flex;justify-content:center;background:oklch(0% 0 0 / .3);}
+.hifi .hifi-group-row {flex-wrap:wrap;}
+.hifi .hifi-btn--outline:hover,.hifi .hifi-btn--ghost:hover {background:var(--background--hover);}
+.hifi .hifi-btn-dark:hover {background:var(--color--neutral-800);}
+.hifi .link-btn {padding:0;border:0;background:none;color:var(--text-color);text-decoration:underline;font-size:var(--font-size--2xs);cursor:pointer;}
+.hifi .test-box {padding:var(--spacing--sm);border:var(--border);border-radius:var(--radius);margin-top:var(--spacing--sm);}
+.hifi .test-box textarea {resize:vertical;min-height:80px;}
+.hifi [hidden] {display:none!important;}
+.hifi .test-result {white-space:pre-wrap;font-size:var(--font-size--sm);line-height:1.5;margin-top:12px;}
+.hifi .saved {font-size:var(--font-size--2xs);margin-right:auto;align-self:center;color:var(--text-color--subtle);}
+@media(max-width:600px){.hifi .hifi-body{padding:16px}.hifi .action-select{max-width:100%;width:100%}.hifi .hifi-group-row .sp{min-width:180px}.hifi .hifi-modal-head,.hifi .hifi-modal-body,.hifi .hifi-modal-actions{padding:16px}.hifi .stage{padding:24px 8px}}
+
+.hifi-seg button {border:0;background:transparent;font:inherit;font-size:var(--font-size--2xs);color:var(--text-color--subtle);padding:4px 10px;border-radius:var(--radius--3xs);cursor:pointer;white-space:nowrap;}
+.hifi-seg button[aria-pressed="true"] {background:var(--background--surface);color:var(--text-color);box-shadow:0 1px 2px rgba(0,0,0,.06);}
+.hifi-seg button:focus-visible {outline:2px solid var(--color--purple-500);outline-offset:2px;}
+.hifi .hifi-sub-block {margin-bottom:var(--spacing--sm);}
+</style>
+</head>
+<body data-default-route="gr-hifi-home">
+
+<div class="shell">
+
+  <section data-route="gr-hifi-home">
+    <a class="back-link" href="index.html#/home">&larr; Workstreams</a>
+    <div class="hero">
+      <div>
+        <span class="kicker">Workstream &middot; Hi-fi</span>
+        <h1>Guardrails hi-fi — ChatGPT</h1>
+        <p>Tool permissions, guardrail configuration, and testing. <a href="guardrails-hifi.html?v=6#/gr-hifi">Open the original version</a>.</p>
+      </div>
+    </div>
+
+    <div class="section-title">Screens</div>
+    <div class="card-grid">
+      <a class="screen-card" href="#/gr-hifi">
+        <div class="thumb">&#9635;</div>
+        <div class="body">
+          <span class="status">In progress</span>
+          <h3>Tool pane &amp; create guardrail</h3>
+          <p class="desc">A tool with guardrails attached, and the modal that makes one.</p>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- ================= GUARDRAILS, HI-FI ================= -->
+  <section data-route="gr-hifi">
+    <a class="back-link" href="#/gr-hifi-home">&larr; Guardrails hi-fi</a>
+    <div class="screen-head">
+      <h1>Guardrails hi-fi — ChatGPT</h1>
+      <p>Configure tool permissions, add checks and limits, and preview their effect.</p>
+    </div>
+
+    <h2 class="lrt-section-title">Where guardrails show in Build</h2>
+
+    <div class="hifi">
+      <div class="hifi-shell" style="min-height:auto;">
+        <div class="hifi-topbar"><span class="hifi-crumb">Personal / <b>Agents Funnel Metrics Sync</b></span></div>
+        <div class="hifi-body" style="max-width:660px;">
+
+          <div class="hifi-card">
+            <div class="hifi-panel-head">
+              <h3 class="hifi-panel-title">Skills</h3>
+              <p class="hifi-panel-desc">How this agent handles specific tasks</p>
+            </div>
+            <button class="hifi-addempty">Add skill</button>
+          </div>
+
+          <div class="hifi-card">
+            <div style="display:flex; align-items:flex-start; gap:var(--spacing--xs);">
+              <div class="hifi-panel-head" style="flex:1;">
+                <h3 class="hifi-panel-title">Triggers</h3>
+                <p class="hifi-panel-desc">Where and when this agent runs</p>
+              </div>
+              <button class="hifi-btn hifi-btn--outline" aria-label="Test agent" style="width:var(--height--md); padding:0;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v7.5a2 2 0 0 1-.2.9L4.7 20.6a1 1 0 0 0 .9 1.4h12.8a1 1 0 0 0 .9-1.4l-5.1-10.2a2 2 0 0 1-.2-.9V2"/><path d="M8.5 2h7"/><path d="M7 16h10"/></svg></button>
+            </div>
+            <button class="hifi-addempty">Add channel</button>
+            <button class="hifi-addempty">Add schedule</button>
+          </div>
+
+          <div class="hifi-card">
+            <div class="hifi-panel-head">
+              <h3 class="hifi-panel-title">Capabilities</h3>
+              <p class="hifi-panel-desc">What this agent can do and how it does it</p>
+            </div>
+            <button class="hifi-addempty">Add tool</button>
+            <button class="hifi-addempty">Add workflow</button>
+            <button class="hifi-addempty">Add sub-agent</button>
+            <div class="hifi-section-divider"></div>
+            <div style="display:flex; align-items:center; gap:var(--spacing--sm); min-height:var(--spacing--xl);">
+              <div style="flex:1 1 0; display:flex; flex-direction:column; gap:var(--spacing--5xs);">
+                <span style="font-size:var(--font-size--sm); font-weight:var(--font-weight--medium); line-height:var(--line-height--lg);">Web search</span>
+                <span style="font-size:var(--font-size--sm); line-height:var(--line-height--lg); color:var(--text-color--subtler);">Let the model search the web when it needs up-to-date information.</span>
+              </div>
+              <button class="hifi-btn hifi-btn--outline">Off <svg viewBox="0 0 24 24" fill="none" stroke="var(--text-color--subtler)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;"><path d="m6 9 6 6 6-6"/></svg></button>
+            </div>
+          </div>
+
+          <div class="hifi-card">
+            <div class="hifi-panel-head">
+              <h3 class="hifi-panel-title">Guardrails</h3>
+              <p class="hifi-panel-desc">Checks and limits on this agent’s actions and data</p>
+            </div>
+            <button class="hifi-addempty">Add guardrail</button>
+          </div>
+
+          <div class="hifi-card" style="margin-bottom:0;">
+            <div class="hifi-panel-head">
+              <h3 class="hifi-panel-title">Memory</h3>
+              <p class="hifi-panel-desc">What this agent remembers</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="hifi" style="margin-top:18px;">
+      <div class="hifi-shell" style="min-height:auto;">
+        <div class="hifi-body" style="max-width:660px; padding-top:var(--spacing--md);">
+          <div class="hifi-card" style="margin-bottom:0;">
+            <div class="hifi-panel-head">
+              <h3 class="hifi-panel-title">Guardrails</h3>
+              <p class="hifi-panel-desc">Checks and limits on this agent’s actions and data</p>
+            </div>
+            <div class="hifi-chiprow">
+              <span class="hifi-gtag is-inherited"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></svg> PII redaction · Agent-wide</span>
+              <span class="hifi-gtag is-inherited"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></svg> Secret keys · Agent-wide</span>
+              <span class="hifi-gtag">Finance data check · Notion</span>
+              <button class="hifi-addicon" aria-label="Add guardrail"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+            </div>
+            <div>
+              <div class="hifi-sug-label" style="margin-top:0;">Suggested, because this agent writes to Slack and reads Notion</div>
+              <div class="hifi-gtags" style="justify-content:flex-start;">
+                <span class="hifi-sugchip">+ Prompt injection check</span>
+                <span class="hifi-sugchip">+ URLs</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+<h2 class="lrt-section-title" style="margin-top:32px">On a tool</h2><div class="hifi"><div class="hifi-shell" style="min-height:0"><div class="hifi-topbar"><span class="hifi-crumb">Personal / <b>Agents Funnel Metrics Sync</b></span></div><div class="stage"><div class="hifi-modal" style="width:min(640px,calc(100% - 16px))"><div class="hifi-modal-head"><h2 class="hifi-modal-title">Notion</h2></div><div class="hifi-modal-body"><div class="hifi-group-label" style="margin-top:0">Tool permissions</div><div class="hifi-group-card"><div class="hifi-group-row"><div class="sp"><div class="nm">Read-only tools</div><div class="sb">6 tools · Can look things up</div></div><select aria-label="Read-only tool permissions" class="action-select"><option>Allow</option><option>Require approval</option><option>Block</option></select></div><div class="hifi-group-row"><div class="sp"><div class="nm">Write and delete tools</div><div class="sb">4 tools · Can change or delete data</div></div><button class="hifi-btn hifi-btn--ghost" id="permission-toggle" aria-expanded="false">2 allowed · 2 ask ▾</button></div><div id="permission-detail" hidden><div class="hifi-group-row"><span class="sp">Create page</span><select aria-label="Create page permission" class="action-select"><option>Allow</option><option>Require approval</option><option>Block</option></select></div><div class="hifi-group-row"><span class="sp">Update page</span><select aria-label="Update page permission" class="action-select"><option>Allow</option><option>Require approval</option><option>Block</option></select></div><div class="hifi-group-row"><span class="sp">Delete page</span><select aria-label="Delete page permission" class="action-select"><option>Require approval</option><option>Allow</option><option>Block</option></select></div><div class="hifi-group-row"><span class="sp">Move page</span><select aria-label="Move page permission" class="action-select"><option>Require approval</option><option>Allow</option><option>Block</option></select></div></div></div><div class="hifi-group-label">Input · Before the call</div><div class="hifi-group-card"><div class="hifi-group-row"><div class="sp"><div class="nm">Finance data check</div><div class="sb">Personal data (PII) · Email, phone, credit card</div><div class="sb">Write and delete operations</div></div><select aria-label="Finance data check response" id="finance-response" class="action-select"><option>Block execution</option><option>Redact and continue</option></select></div><div class="hifi-group-row"><div class="sp"><div class="nm">PII redaction</div><div class="sb">Personal data (PII) · 3 entities</div><span class="scope">Agent-wide</span> <button class="link-btn" id="edit-inherited">Edit at agent level</button></div><select aria-label="PII redaction response" id="inherited-pii" class="action-select"><option>Redact and continue</option></select></div><div class="hifi-group-row"><div class="sp"><div class="nm">Slow API back-off</div><div class="sb">Rate limit · 30 calls / minute</div></div><select aria-label="Slow API back-off response" id="limit-response" class="action-select"><option>Wait for capacity</option><option>Stop the run</option></select></div></div><div class="hifi-group-label">Output · After the call</div><div class="hifi-group-card"><div class="hifi-group-row"><div class="sp"><div class="nm">Prompt injection check</div><div class="sb">Workflow</div></div><select aria-label="Prompt injection check response" id="output-response" class="action-select"><option>Block result</option><option>Stop the run</option></select></div></div><p class="helper">Blocked results are not passed to the agent. Actions already completed by the tool are not undone.</p><button class="hifi-btn hifi-btn--ghost" id="add-tool-rule" style="margin-top:12px">+ Add guardrail</button></div></div></div></div></div><h2 class="lrt-section-title" id="content-heading" style="margin-top:32px">A content check</h2><div class="hifi"><div class="hifi-shell" style="min-height:0"><div class="hifi-topbar"><span class="hifi-crumb">Personal / <b>Agents Funnel Metrics Sync</b></span></div><div class="stage"><div class="hifi-modal" style="width:min(580px,calc(100% - 16px))"><div class="hifi-modal-head"><h2 class="hifi-modal-title" id="editor-title">Finance data check</h2></div><div class="hifi-modal-body"><form id="content-form"><div class="field"><label for="check-type">What it does</label><select id="check-type"><option>Personal data (PII)</option></select></div>
+<div class="hifi-sub-block"><fieldset><legend>Which personal data</legend><div class="choices"><label><input type="checkbox" name="entity" value="email" checked>Email</label><label><input type="checkbox" name="entity" value="phone" checked>Phone number</label><label><input type="checkbox" name="entity" value="card" checked>Credit card</label></div></fieldset>
+<div class="field"><label for="reaction">If it finds something</label><select id="reaction"><option value="block">Block execution</option><option value="redact">Redact and continue</option></select><p class="helper" id="reaction-help">The tool will not execute if selected personal data is detected.</p></div>
+</div><div class="field"><label>When it runs</label><select hidden id="timing"><option value="before" selected>Before a tool call</option><option value="after">After a tool call</option></select><div class="hifi-seg" role="group" aria-label="When it runs" data-select="timing"><button type="button" data-value="before" aria-pressed="true">Before a tool call</button><button type="button" data-value="after" aria-pressed="false">After a tool call</button></div></div><div class="field"><label>Which tools</label><select hidden id="scope"><option value="all">All tools</option><option value="notion" selected>Select tools</option></select><div class="hifi-seg" role="group" aria-label="Which tools" data-select="scope"><button type="button" data-value="all" aria-pressed="false">All tools</button><button type="button" data-value="notion" aria-pressed="true">Select tools</button></div></div><div id="content-tools" class="field"><select id="content-tool" aria-label="Selected tool"><option>Notion</option><option>Slack</option><option>Hex</option></select></div><div class="field"><label>Which operations</label><select hidden id="operations"><option value="all">All</option><option value="write" selected>Write and delete</option><option value="read">Read-only</option></select><div class="hifi-seg" role="group" aria-label="Which operations" data-select="operations"><button type="button" data-value="all" aria-pressed="false">All</button><button type="button" data-value="write" aria-pressed="true">Write and delete</button><button type="button" data-value="read" aria-pressed="false">Read-only</button></div></div><div class="summary" id="rule-summary" aria-live="polite"></div>
+<div class="test-box"><button type="button" class="hifi-btn hifi-btn--outline" id="show-test" aria-expanded="false">Test guardrail</button><div id="test-panel" hidden><p class="helper">Illustrative preview using sample data. No tools run; this is not a production PII detector.</p><label class="hifi-grp-label" for="test-input">Sample data</label><textarea id="test-input">Send the report to alex@example.com.</textarea><button type="button" class="hifi-btn hifi-btn--outline" id="run-test" style="margin-top:8px">Run sample test</button><div class="test-result" id="test-result" role="status"></div></div></div></form></div><div class="hifi-modal-actions"><span class="saved" id="content-saved" role="status"></span><button class="hifi-btn hifi-btn--ghost" id="reset-content">Cancel</button><button class="hifi-btn-dark" id="save-content">Create</button></div></div></div></div></div><h2 class="lrt-section-title" style="margin-top:32px">A limit</h2><div class="hifi"><div class="hifi-shell" style="min-height:0"><div class="hifi-topbar"><span class="hifi-crumb">Personal / <b>Agents Funnel Metrics Sync</b></span></div><div class="stage"><div class="hifi-modal" style="width:min(580px,calc(100% - 16px))"><div class="hifi-modal-head"><h2 class="hifi-modal-title">Slow API back-off</h2></div><div class="hifi-modal-body"><form id="limit-form"><div class="field"><label for="limit-type">What it does</label><select id="limit-type"><option>Rate limit</option></select></div><div class="hifi-sub-block"><div class="field"><label for="call-limit">Maximum calls per minute</label><input id="call-limit" type="number" min="1" max="10000" value="30"><p class="helper">Provider limits still apply.</p></div><div class="field"><label for="limit-action">When the limit is reached</label><select id="limit-action"><option value="wait">Wait for capacity</option><option value="stop">Stop the run</option></select></div><div class="field" id="wait-field"><label for="max-wait">Maximum wait (seconds)</label><input type="number" id="max-wait" min="1" max="3600" value="60"><p class="helper">If capacity is still unavailable, stop the run. Completed calls are not retried.</p></div></div><div class="field"><label>When it runs</label><div class="hifi-seg"><button type="button" aria-pressed="true">Before a tool call</button></div></div><div class="field"><label>Which tools</label><select hidden id="limit-scope"><option value="all">All tools</option><option value="notion" selected>Select tools</option></select><div class="hifi-seg" role="group" aria-label="Which tools" data-select="limit-scope"><button type="button" data-value="all" aria-pressed="false">All tools</button><button type="button" data-value="notion" aria-pressed="true">Select tools</button></div></div><div id="limit-tools" class="field"><select id="limit-tool" aria-label="Selected tool"><option>Notion</option><option>Slack</option><option>Hex</option></select></div><div class="field"><label>Which operations</label><select hidden id="limit-operations"><option value="all" selected>All</option><option value="write">Write and delete</option><option value="read">Read-only</option></select><div class="hifi-seg" role="group" aria-label="Which operations" data-select="limit-operations"><button type="button" data-value="all" aria-pressed="true">All</button><button type="button" data-value="write" aria-pressed="false">Write and delete</button><button type="button" data-value="read" aria-pressed="false">Read-only</button></div></div><div class="summary" id="limit-summary" aria-live="polite"></div></form></div><div class="hifi-modal-actions"><span class="saved" id="limit-saved" role="status"></span><button class="hifi-btn hifi-btn--ghost" id="cancel-limit">Cancel</button><button class="hifi-btn-dark" id="save-limit">Create</button></div></div></div></div></div></section></div><script>
+const $=id=>document.getElementById(id);
+function syncSegments(){document.querySelectorAll('[data-select]').forEach(group=>group.querySelectorAll('button').forEach(button=>button.setAttribute('aria-pressed',button.dataset.value===$(group.dataset.select).value)));}
+document.querySelectorAll('[data-select] button').forEach(button=>button.onclick=()=>{const select=$(button.parentElement.dataset.select);select.value=button.dataset.value;select.dispatchEvent(new Event('change',{bubbles:true}));});
+
+function route(){const name=(location.hash||'#/gr-hifi').slice(2);document.querySelectorAll('[data-route]').forEach(el=>el.classList.toggle('is-active',el.dataset.route===name));}window.addEventListener('hashchange',route);route();
+function sync(){syncSegments();$('content-tools').hidden=$('scope').value==='all';const after=$('timing').value==='after',redact=$('reaction').value==='redact';$('reaction').options[0].text=after?'Block result':'Block execution';$('reaction-help').textContent=after?'Checked after the tool has run. Completed actions are not undone.':redact?'Detected data is removed from the inputs before the tool executes.':'The tool will not execute if selected personal data is detected.';const entities=[...document.querySelectorAll('[name=entity]:checked')].map(e=>({email:'email addresses',phone:'phone numbers',card:'credit-card numbers'}[e.value]));$('save-content').disabled=!entities.length;$('rule-summary').textContent=(after?'After':'Before')+' '+($('scope').value==='all'?'any tool’s':$('content-tool').value+'’s')+' '+({write:'write or delete operations',all:'operations',read:'read-only operations'}[$('operations').value])+', check '+(after?'returned data':'tool inputs')+' for '+(entities.join(', ')||'no selected data types')+'. '+(redact?'Redact detected data and continue.':after?'Block detected results from reaching the agent.':'Block execution if detected.');$('test-result').textContent='';$('content-saved').textContent='';}
+$('content-form').addEventListener('change',sync);sync();
+$('show-test').onclick=()=>{const open=$('test-panel').hidden;$('test-panel').hidden=!open;$('show-test').setAttribute('aria-expanded',open);};
+$('run-test').onclick=()=>{let text=$('test-input').value;let found=[];const patterns={email:/[\w.+-]+@[\w.-]+\.[a-z]{2,}/gi,phone:/\b\d{3}[- .]\d{3}[- .]\d{4}\b/g,card:/\b(?:\d[ -]?){15}\d\b/g};document.querySelectorAll('[name=entity]:checked').forEach(el=>{text=text.replace(patterns[el.value],()=>{found.push(el.value);return '[REDACTED]';});});$('test-result').textContent=!found.length?'Sample result: no matches in this illustrative check.':('Detected: '+[...new Set(found)].join(', ')+'.\n'+($('reaction').value==='redact'?'Redacted sample:\n'+text:$('timing').value==='after'?'Result blocked from reaching the agent.':'Execution blocked before the tool runs.'));};
+$('save-content').onclick=()=>{$('content-saved').textContent='Guardrail created in this preview';};
+$('reset-content').onclick=()=>{$('editor-title').textContent='Finance data check';$('content-form').reset();sync();};
+$('edit-inherited').onclick=()=>{$('editor-title').textContent='PII redaction';$('timing').value='before';$('operations').value='all';$('scope').value='all';$('reaction').value='redact';sync();$('content-heading').scrollIntoView({behavior:'smooth'});};
+$('add-tool-rule').onclick=()=>$('content-heading').scrollIntoView({behavior:'smooth'});
+$('permission-toggle').onclick=()=>{const open=$('permission-detail').hidden;$('permission-detail').hidden=!open;$('permission-toggle').setAttribute('aria-expanded',open);};
+$('permission-detail').onchange=()=>{let vals=[...$('permission-detail').querySelectorAll('select')].map(e=>e.value);$('permission-toggle').textContent=vals.filter(v=>v==='Allow').length+' allowed · '+vals.filter(v=>v==='Require approval').length+' ask · '+vals.filter(v=>v==='Block').length+' blocked ▾';};
+function limitSync(){syncSegments();$('limit-tools').hidden=$('limit-scope').value==='all';const wait=$('limit-action').value==='wait';$('wait-field').hidden=!wait;$('limit-summary').textContent='Before '+($('limit-scope').value==='all'?'all tools': $('limit-tool').value)+' · '+({all:'all operations',write:'write and delete operations',read:'read-only operations'}[$('limit-operations').value])+', enforce '+$('call-limit').value+' calls per minute. '+(wait?'Wait up to '+$('max-wait').value+' seconds for capacity, then stop if still unavailable.':'Stop the run when the limit is reached.');$('limit-saved').textContent='';}
+$('limit-form').oninput=limitSync;$('limit-form').onchange=limitSync;$('cancel-limit').onclick=()=>{$('limit-form').reset();limitSync();};limitSync();$('save-limit').onclick=()=>{if($('limit-form').reportValidity())$('limit-saved').textContent='Limit created in this preview';};
+</script></body></html>
