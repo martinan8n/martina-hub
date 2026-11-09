@@ -339,7 +339,7 @@
   background: var(--background--surface); border:var(--border); border-radius: var(--radius--lg);
   box-shadow: var(--shadow--sm); overflow:hidden; }
 .tpf-head { display:flex; align-items:center; gap: var(--spacing--2xs);
-  padding: var(--spacing--xs) var(--spacing--sm); border-bottom:1px solid var(--border-color--subtle); }
+  padding: var(--spacing--xs) var(--spacing--sm); }
 .tpf-head .t { font-size: var(--font-size--sm); font-weight: var(--font-weight--medium); }
 .tpf-head svg { width:16px; height:16px; color: var(--text-color--subtler); }
 .tpf-icon { display:inline-flex; align-items:center; justify-content:center;
@@ -348,7 +348,7 @@
 .tpf-icon:hover { background: var(--background--hover); color: var(--text-color); }
 .tpf-body { display:flex; flex-direction:column; gap: var(--spacing--sm);
   padding: var(--spacing--sm); min-height: 300px; }
-.tpf-foot { padding: var(--spacing--sm); border-top:1px solid var(--border-color--subtle); }
+.tpf-foot { padding: var(--spacing--sm); }
 .tpf-composer { display:flex; align-items:center; height: var(--height--lg); padding: 0 var(--spacing--xs);
   border: var(--border); border-radius: var(--radius); background: var(--background--surface);
   font-size: var(--font-size--sm); color: var(--text-color--subtler); }
@@ -376,10 +376,14 @@
 .tpf-btn--ghost:hover { background: var(--background--hover); color: var(--text-color); }
 
 /* AgentEvalTryRow — a scenario is a row, label above the message, both ellipsised */
-.tpf-rows { display:flex; flex-direction:column; }
+/* the list is a bounded set of choices, not loose text — and the box turns the row
+   padding into deliberate inset instead of 8px of accidental misalignment */
+.tpf-rows { display:flex; flex-direction:column; border: var(--border);
+  border-radius: var(--radius); background: var(--background--surface); overflow:hidden; }
 .tpf-row { display:flex; align-items:flex-start; gap: var(--spacing--xs); width:100%;
-  padding: var(--spacing--2xs) var(--spacing--2xs); border:0; background:none; border-radius: var(--radius);
+  padding: var(--spacing--2xs) var(--spacing--xs); border:0; background:none; border-radius:0;
   font-family:inherit; text-align:left; cursor:pointer; }
+.tpf-row + .tpf-row { border-top: 1px solid var(--border-color--subtle); }
 .tpf-row:hover { background: var(--background--hover); }
 
 .tpf-row .col { flex:1; min-width:0; display:flex; flex-direction:column; gap: var(--spacing--5xs); }
@@ -396,9 +400,13 @@
   font-family:inherit; font-size: var(--font-size--sm); color: var(--text-color); cursor:pointer; }
 .tpf-toggle:hover { background: var(--background--hover); }
 .tpf-toggle svg { width:14px; height:14px; color: var(--text-color--subtler); }
-.tpf-row--more { border-top:1px solid var(--border-color--subtle); border-radius:0; margin-top: var(--spacing--3xs); padding-top: var(--spacing--xs); }
-.tpf-row--more svg { flex:none; width:14px; height:14px; margin-top:3px; color: var(--text-color--subtle); }
-.tpf-row--more .inp { color: var(--text-color); }
+.tpf-more-btn { display:inline-flex; align-self:flex-start; align-items:center; gap: var(--spacing--3xs);
+  height: var(--height--sm); margin-left: calc(-1 * var(--spacing--xs)); padding: 0 var(--spacing--xs);
+  border:0; border-radius: var(--radius--full); background:none; font-family:inherit;
+  font-size: var(--font-size--sm); font-weight: var(--font-weight--medium); line-height:1;
+  color: var(--text-color--subtle); cursor:pointer; }
+.tpf-more-btn:hover { background: var(--background--hover); color: var(--text-color); }
+.tpf-more-btn svg { width:14px; height:14px; flex:none; }
 
 /* practice-run note */
 .tpf-note { display:flex; gap: var(--spacing--3xs); align-items:flex-start;
@@ -562,7 +570,7 @@
     <h2 class="lrt-section-title" style="margin-top:34px;">2 &mdash; Writing them</h2>
     <div class="tpf"><div class="tpf-stage"><div class="tpf-panel"><div class="tpf-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v7.5a2 2 0 0 1-.2.9L4.7 20.6a1 1 0 0 0 .9 1.4h12.8a1 1 0 0 0 .9-1.4l-5.1-10.2a2 2 0 0 1-.2-.9V2"/><path d="M8.5 2h7"/><path d="M7 16h10"/></svg><span class="t">Test agent</span><span style="flex:1"></span><button class="tpf-icon" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div><div class="tpf-body"><div class="tpf-msg"><div class="tpf-turn"><div class="tpf-say">I can write a few test scenarios from this agent&rsquo;s instructions. Want me to?</div></div></div><div class="tpf-msg"><div class="tpf-turn"><div class="tpf-dim"><span class="tpf-spin"></span>Reading the instructions and writing scenarios&hellip;</div></div></div></div><div class="tpf-foot"><div class="tpf-composer">Test Metrics Sync&hellip;</div></div></div></div></div>
     <h2 class="lrt-section-title" style="margin-top:34px;">3 &mdash; The scenarios</h2>
-    <div class="tpf"><div class="tpf-stage"><div class="tpf-panel"><div class="tpf-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v7.5a2 2 0 0 1-.2.9L4.7 20.6a1 1 0 0 0 .9 1.4h12.8a1 1 0 0 0 .9-1.4l-5.1-10.2a2 2 0 0 1-.2-.9V2"/><path d="M8.5 2h7"/><path d="M7 16h10"/></svg><span class="t">Test agent</span><span style="flex:1"></span><button class="tpf-icon" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div><div class="tpf-body"><div class="tpf-msg"><div class="tpf-turn"><div class="tpf-say">Select a scenario to test the agent against, or write your own below.</div><div class="tpf-rows"><button class="tpf-row"><span class="col"><span class="inp">Summarise the tickets that came in this morning</span><span class="lab">Summary</span></span><span class="go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></button><button class="tpf-row"><span class="col"><span class="inp">What are people complaining about most this week?</span><span class="lab">Analysis</span></span><span class="go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></button><button class="tpf-row"><span class="col"><span class="inp">Post today&rsquo;s ticket summary to #customer-support</span><span class="lab">Writes somewhere</span></span><span class="go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></button><button class="tpf-row"><span class="col"><span class="inp">Which tickets has nobody replied to yet?</span><span class="lab">Finds a gap</span></span><span class="go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></button><button class="tpf-row tpf-row--more"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="m10.25 2 .005.193A3.75 3.75 0 0 0 14 5.75h1.25v4.5H14A3.75 3.75 0 0 0 10.25 14v1.25h-4.5V14a3.75 3.75 0 0 0-3.557-3.745L2 10.25H.75v-4.5H2l.193-.005A3.75 3.75 0 0 0 5.75 2V.75h4.5zm-3.006.25A5.25 5.25 0 0 1 2.25 7.243v1.513a5.25 5.25 0 0 1 4.994 4.994h1.512a5.25 5.25 0 0 1 4.994-4.994V7.243A5.25 5.25 0 0 1 8.756 2.25z"/></svg><span class="col"><span class="inp">Write different scenarios</span></span></button></div></div></div><div class="tpf-foot"><div class="tpf-composer">Test Metrics Sync&hellip;</div></div></div></div></div>
+    <div class="tpf"><div class="tpf-stage"><div class="tpf-panel"><div class="tpf-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v7.5a2 2 0 0 1-.2.9L4.7 20.6a1 1 0 0 0 .9 1.4h12.8a1 1 0 0 0 .9-1.4l-5.1-10.2a2 2 0 0 1-.2-.9V2"/><path d="M8.5 2h7"/><path d="M7 16h10"/></svg><span class="t">Test agent</span><span style="flex:1"></span><button class="tpf-icon" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div><div class="tpf-body"><div class="tpf-msg"><div class="tpf-turn"><div class="tpf-say">Select a scenario to test the agent against, or write your own below.</div><div class="tpf-rows"><button class="tpf-row"><span class="col"><span class="inp">Summarise the tickets that came in this morning</span><span class="lab">Summary</span></span><span class="go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></button><button class="tpf-row"><span class="col"><span class="inp">What are people complaining about most this week?</span><span class="lab">Analysis</span></span><span class="go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></button><button class="tpf-row"><span class="col"><span class="inp">Post today&rsquo;s ticket summary to #customer-support</span><span class="lab">Writes somewhere</span></span><span class="go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></button><button class="tpf-row"><span class="col"><span class="inp">Which tickets has nobody replied to yet?</span><span class="lab">Finds a gap</span></span><span class="go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></button></div><button class="tpf-more-btn"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="m10.25 2 .005.193A3.75 3.75 0 0 0 14 5.75h1.25v4.5H14A3.75 3.75 0 0 0 10.25 14v1.25h-4.5V14a3.75 3.75 0 0 0-3.557-3.745L2 10.25H.75v-4.5H2l.193-.005A3.75 3.75 0 0 0 5.75 2V.75h4.5zm-3.006.25A5.25 5.25 0 0 1 2.25 7.243v1.513a5.25 5.25 0 0 1 4.994 4.994h1.512a5.25 5.25 0 0 1 4.994-4.994V7.243A5.25 5.25 0 0 1 8.756 2.25z"/></svg>Write different scenarios</button></div></div><div class="tpf-foot"><div class="tpf-composer">Test Metrics Sync&hellip;</div></div></div></div></div>
   </section>
 
 </div>
