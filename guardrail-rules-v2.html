@@ -327,15 +327,15 @@
 
     <div class="section-title">Open questions</div>
     <div class="gr-oq">
-      <h3>Still unanswered after the 22 Oct review</h3>
-      <p class="gr-oq-sub">The review settled most of the structure. These are what's left, and the first three block design rather than engineering.</p>
+      <h3>Still open</h3>
+      <p class="gr-oq-sub">What a build would hit first. The top two block design, not engineering.</p>
       <ol>
-        <li><b>Does the Skills pattern transfer wholesale?</b> Mostly answered rather than open: Skills already ships a reusable object at Settings &rarr; Context with a three-rung scope, a usage count, a read-only state and a deletion rule, and a guardrail wants all four. What needs deciding is whether guardrails share that page as a second tab or get their own, and whether a guardrail may be scoped <i>above</i> the person who has to live with it &mdash; a Global one set by an admin is, in effect, instance policy by another route.</li>
-        <li><b>Is the PII row in Advanced just a guardrail with a shortcut?</b> Both exist on the page and both have the same four hooks. Either the row creates a guardrail behind the scenes, or there are two doors to one room and they'll drift.</li>
-        <li><b>Who owns content policy &mdash; us or the instance?</b> If an admin sets it, this is read-only for the builder. But a single-user account has no admin, and nobody knows whether instance policies exist outside enterprise. Needs the conversation with Jan's team.</li>
-        <li><b>Is <i>never stop</i> really the default</b> when nobody answers an approval request? It contradicts the reasoning used to cap the wait options at a day.</li>
-        <li><b>Does &ldquo;no rule&rdquo; mean unfinished?</b> An agent with no content check may be perfectly fine. If the summary styles every gap as a warning, builders will either chase them all or stop reading it.</li>
-        <li><b>Where does the summary live between publishes?</b> It's shown at publish, but the question it answers comes back later.</li>
+        <li><b>The library is ahead of the modal.</b> The table below is drawn with the Skills scope ladder &mdash; Global, project, <i>{agent} only</i> &mdash; but <i>Where can this be used</i> came out of the create modal. Until it returns, a guardrail belongs to the agent you made it in and the reuse argument only holds within one agent. Either the field comes back or the table loses a column.</li>
+        <li><b>Is the PII row in Advanced just a guardrail with a shortcut?</b> Both exist on this page. Either the row quietly creates one, or there are two doors to one room and they'll drift.</li>
+        <li><b>Who owns content policy &mdash; us or the instance?</b> If an admin sets it, it's read-only for the builder. A single-user account has no admin, and nobody knows whether instance policies reach non-enterprise. Needs Jan's team.</li>
+        <li><b>Do guardrails share the Skills page or get their own?</b> Drawn as a second tab under Settings &rarr; Context.</li>
+        <li><b>Can a suggestion be dismissed?</b> The Build card suggests two; right now there's no way to say no, so they'd sit there forever.</li>
+        <li><b>What rule generates the suggestions?</b> &ldquo;Writes to Slack, so check what it sends&rdquo; reads well but engineering needs the tool&rarr;guardrail table behind it.</li>
       </ol>
     </div>
 
@@ -362,14 +362,14 @@
     </div>
 
     <div class="gr-oq" style="margin-bottom:26px;">
-      <h3>What the review changed</h3>
-      <p class="gr-oq-sub">The short version, so the sections below read in the right light.</p>
+      <h3>Where this has got to</h3>
+      <p class="gr-oq-sub">The shape after the 22 Oct review and the rounds since, so the sections below read in the right light.</p>
       <ol>
+        <li><b>A guardrail is its own object</b> &mdash; built once, attached to many tools. Its types aren't ours: the <i>Guardrails node</i> already ships them, and the modal reuses that list plus a workflow and the two limits.</li>
+        <li><b>It attaches per slot.</b> A tool has <i>Input</i> and <i>Output</i>, each holding any number of guardrails as tags, with one <i>Add guardrail</i> per slot.</li>
+        <li><b>Limits are guardrails too</b>, grouped apart because they aren't about content. They bring <i>When the limit is hit</i> with them, which is why the tool pane shows that row only when one is attached.</li>
         <li><b>Cut:</b> cost cap per operation, max runs per hour, per-tool spend, the content policy card, and the central &ldquo;who it can message&rdquo; panel.</li>
-        <li><b>New shape:</b> a guardrail is <b>its own reusable object</b> &mdash; built once, applied to many tools &mdash; not a form inside each tool.</li>
-        <li><b>Content checks need a model, not a list.</b> PII detection via a model trained for it; anything else is a workflow hook you write.</li>
-        <li><b>Reach is both:</b> identities go to the channel, and one Allow&nbsp;/&nbsp;Block row stays in Settings. A genuinely global rules engine is P1.</li>
-        <li><b>The summary view is P1</b> and moves to publish time.</li>
+        <li><b>Not ours:</b> access and approval routing are Michael's. The summary view moved to <a href="agent-summary.html#/agent-summary">Agent summary</a>.</li>
       </ol>
     </div>
 
@@ -938,7 +938,7 @@
 
           <div class="gr-tblwrap">
           <table class="gr-tbl">
-            <thead><tr><th>Guardrail</th><th>Scope</th><th>Agents</th><th>Created by</th><th>Last updated</th><th></th></tr></thead>
+            <thead><tr><th>Guardrail</th><th>Scope <span class="gr-tag is-new" style="margin-left:4px;">P1</span></th><th>Agents</th><th>Created by</th><th>Last updated</th><th></th></tr></thead>
             <tbody>
               <tr>
                 <td>Prompt injection check<div class="sub">Workflow &middot; output</div></td>
