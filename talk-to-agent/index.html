@@ -11,6 +11,27 @@
   * { box-sizing: border-box; }
   .n8n-button--primary { background: #1f1f1f; color: #fff; border-color: transparent; }
   .n8n-button--primary:hover { background: #3a3a3a; }
+  /* N8nCollapsiblePanel: bordered box, chevron rotated -90deg closed / 0deg open, title medium 12px */
+  .panel { border: 1px solid var(--color--neutral-200); border-radius: var(--radius--2xs); margin: 0 0 var(--spacing--sm); }
+  .panel-head { display: flex; align-items: center; gap: var(--spacing--4xs); padding: var(--spacing--4xs) var(--spacing--xs); min-height: 32px; cursor: pointer; user-select: none; }
+  .panel-head svg { flex: none; width: 14px; height: 14px; color: var(--text-color--subtler); transform: rotate(-90deg); transition: transform 120ms ease, color 120ms ease; }
+  .panel.is-open .panel-head svg { transform: rotate(0deg); }
+  .panel-title { font-size: var(--font-size--2xs); font-weight: var(--font-weight--medium); color: var(--text-color); line-height: 1; }
+  .panel-hint { font-size: var(--font-size--2xs); color: var(--text-color--subtler); line-height: 1; }
+  .panel.is-open .panel-hint { display: none; }
+  .panel-body { display: none; padding: var(--spacing--2xs) var(--spacing--xs) var(--spacing--xs); }
+  .panel.is-open .panel-body { display: block; }
+  .panel-head:hover svg { color: var(--text-color); }
+  .req { color: var(--color--danger, #e5484d); margin-left: 2px; }
+  .modal.wf { width: 500px; }
+  .modal.wf .stack { display: flex; flex-direction: column; gap: var(--spacing--lg); }
+  .modal.wf .stack .actions { margin-top: 0; justify-content: flex-end; gap: var(--spacing--xs); }
+  .modal.wf .count { margin: 4px 0 0; }
+  .modal.wf .modal-head { margin-bottom: var(--spacing--lg); }
+  .tabstrip { height: 36px; flex: none; display: flex; align-items: flex-end; gap: 4px; padding: 6px 10px 0; background: var(--color--neutral-200); }
+  .btab { height: 30px; display: flex; align-items: center; gap: 6px; padding: 0 12px; border-radius: 8px 8px 0 0; font-size: 12px; color: var(--text-color--subtle); cursor: pointer; max-width: 220px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .btab.is-active { background: var(--background--surface); color: var(--text-color); cursor: default; }
+  .btab:not(.is-active):hover { background: rgba(255,255,255,.5); }
   .page { max-width: 1120px; margin: 0 auto; padding: 32px 24px 80px; }
   .back { font-size: 13px; color: var(--text-color--subtle); text-decoration: none; }
   .back:hover { color: var(--text-color); }
@@ -25,6 +46,7 @@
   .stage { position: relative; width: 100%; max-width: 820px; height: 580px; border: 1px solid var(--border-color); border-radius: var(--radius--md); overflow: hidden; background: var(--color--neutral-100); }
   .view { position: absolute; inset: 0; display: none; }
   .view.is-on { display: block; }
+  .view.col.is-on { display: flex; flex-direction: column; }
   .backdrop { position: absolute; inset: 0; background: rgba(20,20,22,0.28); display: flex; align-items: center; justify-content: center; }
   .ghost-builder { position: absolute; inset: 0; background: var(--background--surface); }
   .ghost-builder .bar { height: 48px; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; padding: 0 20px; font-size: 13px; color: var(--text-color--subtler); }
@@ -88,7 +110,7 @@
 
   <!-- ============ 1. PUBLISH ============ -->
   <h2>1 &mdash; One publish modal</h2>
-  <p class="sub">See what publishing does and publish. Naming the version and describing changes sit behind Add versioning, so the common case stays short. Talk to agent is part of the same modal, so there is no second confirmation screen.</p>
+  <p class="sub">See what publishing does and publish. Naming the version and describing changes sit in a collapsed Versioning panel, so the common case stays short. Talk to agent is part of the same modal, so there is no second confirmation screen.</p>
 
   <div class="stage" id="stage1">
     <div class="view is-on" data-view="publish">
@@ -97,13 +119,15 @@
         <div class="modal">
           <div class="modal-head"><span class="modal-title">Publish agent</span><span class="modal-close" onclick="s1Close(false)">&times;</span></div>
           <p class="msg">Your agent will go live in n8n Chat &mdash; anyone in Personal will be able to talk to it.</p>
-          <button class="n8n-button n8n-button--tertiary n8n-button--size-small" id="s1Toggle" onclick="s1ToggleVersioning()" style="margin:0 0 var(--spacing--xs) calc(var(--spacing--xs) * -1);"><svg id="s1Chev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="transition:transform 120ms;"><path d="m9 6 6 6-6 6"/></svg><span id="s1ToggleLabel">Add versioning</span></button>
-          <div id="s1Versioning" style="display:none;">
-            <div class="field-label">Version name</div>
-            <input class="input" id="s1Version" value="Version 3" maxlength="128" oninput="s1Count()">
-            <div class="count" id="s1Counter">9/128</div>
-            <div class="field-label">Describe changes <span class="opt">(optional)</span></div>
-            <textarea class="textarea" placeholder="What changed in this version?" style="margin-bottom:var(--spacing--sm);"></textarea>
+          <div class="panel" id="s1Panel">
+            <div class="panel-head" onclick="s1ToggleVersioning()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg><span class="panel-title">Versioning</span><span class="panel-hint" id="s1Hint">&middot; Version 3</span></div>
+            <div class="panel-body">
+              <div class="field-label">Version name</div>
+              <input class="input" id="s1Version" value="Version 3" maxlength="128" oninput="s1Count()">
+              <div class="count" id="s1Counter">9/128</div>
+              <div class="field-label">Describe changes <span class="opt">(optional)</span></div>
+              <textarea class="textarea" placeholder="What changed in this version?"></textarea>
+            </div>
           </div>
           <div class="callout">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-color--subtler)" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 11h1v5h1"/></svg>
@@ -121,14 +145,57 @@
     <div class="view" data-view="home" id="home1"></div>
   </div>
   <ul class="notes">
-    <li>Versioning is collapsed by default. If it stays closed, the version is named automatically (Version 3), so nothing is required to publish.</li>
+    <li>Versioning is a collapsible panel, closed by default and following the design system&rsquo;s panel pattern. The closed panel shows the automatic name (Version 3), so people see what will be saved without opening it.</li>
     <li>The message moves to the future tense, because it now appears before publishing: it says what publishing will do instead of confirming it afterwards.</li>
     <li>Publish and talk to agent is the primary action, since talking to the agent is the next thing people want. Publish alone stays one click away and returns to the builder.</li>
   </ul>
 
+  <!-- ============ 1b. WORKFLOWS PATTERN ============ -->
+  <h2>1b &mdash; Same modal, following the Workflows pattern</h2>
+  <p class="sub">The same modal rebuilt on how Publish workflow works today (<code>WorkflowPublishModal.vue</code> and <code>WorkflowVersionForm.vue</code>): the version form is always open, with no collapsing.</p>
+
+  <div class="stage" id="stage1b" style="height:660px;">
+    <div class="view is-on" data-view="publish">
+      <div class="ghost-builder"><div class="bar">Personal / <b>Agents Funnel Metrics Sync</b><span class="spacer"></span><span id="s1bPill" style="display:none; align-items:center; gap:6px; color:var(--text-color--subtle);"><span class="dot"></span>Published</span></div><div class="body"><div class="line" style="width:40%"></div><div class="line" style="width:80%"></div><div class="line" style="width:70%"></div><div class="replay" id="s1bReplay" style="display:none;"><a onclick="s1bOpen()">Publish again</a></div></div></div>
+      <div class="backdrop" id="s1bBackdrop">
+        <div class="modal wf">
+          <div class="modal-head"><span class="modal-title" style="font-size:var(--font-size--xl, 20px);">Publish agent</span><span class="modal-close" onclick="s1bClose(false)">&times;</span></div>
+          <div class="stack">
+            <p class="msg" style="margin:0;">Your agent will go live in n8n Chat &mdash; anyone in Personal will be able to talk to it.</p>
+            <div class="callout" style="margin:0;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-color--subtler)" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 11h1v5h1"/></svg>
+              <span>Any changes you make to this agent will not be published until you publish it again.</span>
+            </div>
+            <div>
+              <div class="field-label">Version name<span class="req">*</span></div>
+              <input class="input" id="s1bVersion" value="Version 3" maxlength="128" oninput="s1bCount()" style="height:40px;">
+              <div class="count" id="s1bCounter">9/128</div>
+            </div>
+            <div>
+              <div class="field-label">Describe changes</div>
+              <textarea class="textarea" id="s1bDesc" rows="4" maxlength="2048" oninput="document.getElementById('s1bDescCount').textContent=this.value.length+'/2048'" style="min-height:96px;"></textarea>
+              <div class="count" id="s1bDescCount">0/2048</div>
+            </div>
+            <div class="actions">
+              <button class="n8n-button n8n-button--secondary n8n-button--size-medium" onclick="s1bClose(false)">Cancel</button>
+              <button class="n8n-button n8n-button--secondary n8n-button--size-medium" onclick="s1bClose(true)">Publish</button>
+              <button class="n8n-button n8n-button--primary n8n-button--size-medium" onclick="stageGo('stage1b','home')">Publish and talk to agent</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="view" data-view="home" id="home1b"></div>
+  </div>
+  <ul class="notes">
+    <li>Copied from the real modal: 500px wide, 24px between blocks, version name marked required and prefilled, description with a four-row field, character counters (128 and 2048), and Cancel and the publish buttons right-aligned with Cancel as an outline button.</li>
+    <li>Different from the real modal: the info message and callout above the form, and Publish and talk to agent as the primary button. In Workflows, Publish is the primary.</li>
+    <li>Trade-off against 1: this matches what people already know from Workflows, but the form takes most of the modal even when nobody wants to name a version.</li>
+  </ul>
+
   <!-- ============ 2. ENTRY POINT IN n8n CHAT MODAL ============ -->
   <h2>2 &mdash; Talk to agent from the n8n Chat settings</h2>
-  <p class="sub">The same button, in the footer of the modal that opens from the Channels row. It only shows when the agent is published, because that is the only time this modal opens in Edit mode.</p>
+  <p class="sub">The same button, in the footer of the modal that opens from the Channels row. It only shows when the agent is published, because that is the only time this modal opens in Edit mode. It opens the homepage in a new tab, so the trailing arrow marks it.</p>
 
   <div class="stage" id="stage2">
     <div class="view is-on" data-view="modal">
@@ -146,7 +213,7 @@
           <div class="actions">
             <button class="n8n-button n8n-button--tertiary n8n-button--size-medium">Make unavailable</button>
             <span class="spacer"></span>
-            <button class="n8n-button n8n-button--secondary n8n-button--size-medium" onclick="s2Talk()">Talk to agent</button>
+            <button class="n8n-button n8n-button--secondary n8n-button--size-medium" onclick="s2Talk()">Talk to agent<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 3h6v6M10 14 21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg></button>
             <button class="n8n-button n8n-button--primary n8n-button--size-medium">Save</button>
           </div>
         </div>
@@ -156,7 +223,7 @@
   </div>
   <ul class="notes">
     <li>Talk to agent is secondary and Save stays the one primary action, because leaving for the homepage is not what this modal is for.</li>
-    <li>Anything typed in Description is saved on the way out, so nothing is lost. The homepage confirms it with &ldquo;Description saved&rdquo;.</li>
+    <li>The trailing <code>external-link</code> icon is the design system&rsquo;s marker for something that opens in a new tab (<code>N8nExternalLink</code> and the sub-execution link both use it). The settings modal stays open behind, so unsaved edits to Description are not lost.</li>
   </ul>
 
   <h2>Where it lands</h2>
@@ -193,7 +260,7 @@
 
 <script>
   var tpl = document.getElementById("homeTpl");
-  ["home1","home2"].forEach(function (id) { document.getElementById(id).appendChild(tpl.content.cloneNode(true)); });
+  ["home1","home1b","home2"].forEach(function (id) { document.getElementById(id).appendChild(tpl.content.cloneNode(true)); });
 
   function stageGo(stageId, view) {
     var st = document.getElementById(stageId);
@@ -202,35 +269,48 @@
   document.querySelectorAll("[data-back]").forEach(function (b) {
     b.addEventListener("click", function () {
       var st = b.closest(".stage");
-      stageGo(st.id, st.id === "stage1" ? "publish" : "modal");
+      stageGo(st.id, st.id === "stage2" ? "modal" : "publish");
       if (st.id === "stage1") { s1Open(); document.getElementById("s1Pill").style.display = "inline-flex"; }
+      if (st.id === "stage1b") { s1bOpen(); document.getElementById("s1bPill").style.display = "inline-flex"; }
     });
   });
 
   /* stage 1 */
-  function s1Count() { document.getElementById("s1Counter").textContent = document.getElementById("s1Version").value.length + "/128"; }
+  function s1Count() {
+    var v = document.getElementById("s1Version").value;
+    document.getElementById("s1Counter").textContent = v.length + "/128";
+    document.getElementById("s1Hint").textContent = "\u00b7 " + (v.trim() || "Version 3");
+  }
   function s1Close(published) {
     document.getElementById("s1Backdrop").style.display = "none";
     document.getElementById("s1Pill").style.display = published ? "inline-flex" : "none";
     document.getElementById("s1Replay").style.display = "block";
   }
-  function s1ToggleVersioning() {
-    var box = document.getElementById("s1Versioning");
-    var open = box.style.display === "none";
-    box.style.display = open ? "block" : "none";
-    document.getElementById("s1Chev").style.transform = open ? "rotate(90deg)" : "none";
-    document.getElementById("s1ToggleLabel").textContent = open ? "Hide versioning" : "Add versioning";
-  }
+  function s1ToggleVersioning() { document.getElementById("s1Panel").classList.toggle("is-open"); }
   function s1Open() { document.getElementById("s1Backdrop").style.display = "flex"; }
 
-  /* stage 2 */
-  function s2Talk() {
-    var d = document.getElementById("s2Desc").value.trim();
-    var home = document.getElementById("home2");
-    home.querySelector("[data-saved]").style.display = d ? "inline-flex" : "none";
-    if (d) home.querySelector("[data-desc]").textContent = d;
-    stageGo("stage2", "home");
+  /* stage 1b */
+  function s1bCount() { document.getElementById("s1bCounter").textContent = document.getElementById("s1bVersion").value.length + "/128"; }
+  function s1bClose(published) {
+    document.getElementById("s1bBackdrop").style.display = "none";
+    document.getElementById("s1bPill").style.display = published ? "inline-flex" : "none";
+    document.getElementById("s1bReplay").style.display = "block";
   }
+  function s1bOpen() { document.getElementById("s1bBackdrop").style.display = "flex"; }
+
+  /* stage 2 */
+  (function () {
+    var home = document.getElementById("home2");
+    var inner = home.firstElementChild;           // the cloned .home
+    home.classList.add("col");
+    inner.style.flex = "1"; inner.style.minHeight = "0";
+    var strip = document.createElement("div");
+    strip.className = "tabstrip";
+    strip.innerHTML = '<span class="btab" onclick="stageGo(\'stage2\',\'modal\')">Personal / Agents Funnel Metrics Sync</span><span class="btab is-active">n8n</span>';
+    home.insertBefore(strip, inner);
+    home.querySelector("[data-back]").style.display = "none";
+  })();
+  function s2Talk() { stageGo("stage2", "home"); }
 </script>
 </body>
 </html>
