@@ -61,7 +61,7 @@
 
   .agent-head { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; }
   .glyph { color: var(--pink-ink); }
-  .agent-head .glyph svg { width: 26px; height: 26px; }
+  .agent-head #hav { display: flex; }
   .agent-head h1 { margin: 0; font-size: 18px; font-weight: 600; line-height: 1.2; }
   .agent-head p { margin: 2px 0 0; color: var(--ink-2); font-size: 13px; }
 
@@ -83,8 +83,7 @@
   .bubble .text { padding: 0 4px 2px; line-height: 1.5; }
 
   .agent { display: flex; gap: 12px; margin-bottom: 26px; }
-  .agent > .glyph { margin-top: 1px; }
-  .agent > .glyph svg { width: 20px; height: 20px; }
+  .agent > .av { width: 30px; height: 30px; margin-top: -4px; }
   .agent .body { flex: 1; min-width: 0; }
   .plain { color: var(--ink-2); line-height: 1.5; }
 
@@ -167,26 +166,84 @@
   .menu button:hover { background: #f1f1f1; }
   .menu svg { width: 16px; height: 16px; color: var(--ink-2); }
 
-  .listen { display: none; }
-  .composer.is-listening .idle { display: none; }
-  .composer.is-listening .listen { display: block; }
-  .l-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
-  .l-top .t { display: flex; align-items: center; gap: 10px; font-size: 15px; font-weight: 500; }
-  .l-top .t i { width: 9px; height: 9px; border-radius: 50%; background: var(--pink); animation: pulse 1.1s ease-in-out infinite; }
-  .l-top .time { color: var(--ink-3); font-variant-numeric: tabular-nums; }
-  .l-wave { display: flex; align-items: center; justify-content: center; gap: 4px; height: 64px; margin: 4px 0 10px; }
-  .l-wave i { width: 3px; height: 100%; border-radius: 2px; background: #3a3a3a; transform: scaleY(.15); animation: lv 1s ease-in-out infinite; }
-  .l-wave i.p { background: var(--pink); }
-  @keyframes lv { 0%,100% { transform: scaleY(.15); } 50% { transform: scaleY(1); } }
-  .l-text { min-height: 52px; font-size: 18px; line-height: 1.45; text-align: center; padding: 0 12px; }
-  .l-text .soft { color: var(--ink-3); }
-  .l-bot { display: flex; align-items: center; justify-content: space-between; margin-top: 8px; }
-  .l-bot .cancel { display: inline-flex; align-items: center; gap: 8px; height: 32px; padding: 0 8px; border-radius: 8px; font-size: 14px; }
-  .l-bot .cancel:hover { background: #f1f1f1; }
-  .l-bot .cancel svg { width: 14px; height: 14px; }
-  .l-bot .done { display: inline-flex; align-items: center; gap: 12px; font-size: 14px; font-weight: 500; }
-  .l-bot .stop { width: 38px; height: 38px; border-radius: 50%; background: var(--pink-soft); display: flex; align-items: center; justify-content: center; }
-  .l-bot .stop svg { width: 12px; height: 12px; }
+  /* listening: quiet. A blurred glow behind the composer, words land in the text box, small live controls */
+  .glow { position: absolute; left: -90px; right: -90px; top: -40px; bottom: -70px; z-index: -1; pointer-events: none; opacity: 0; transition: opacity .8s ease;
+    background:
+      radial-gradient(48% 90% at 18% 100%, rgba(255,145,172,.70), transparent 70%),
+      radial-gradient(44% 90% at 52% 108%, rgba(255,199,150,.60), transparent 70%),
+      radial-gradient(44% 90% at 86% 100%, rgba(186,170,255,.55), transparent 70%);
+    filter: blur(34px); }
+  .composer.is-listening .glow { opacity: 1; animation: drift 7s ease-in-out infinite alternate; }
+  @keyframes drift { from { transform: translateX(-26px) scaleX(1); } to { transform: translateX(26px) scaleX(1.06); } }
+  .live { display: none; align-items: center; gap: 6px; }
+  .composer.is-listening .live { display: flex; }
+  .composer.is-listening #mic, .composer.is-listening #send { display: none; }
+  .composer.is-listening .c-text { color: var(--ink); }
+  .mw { display: flex; align-items: center; gap: 2px; height: 18px; margin-right: 2px; }
+  .mw i { width: 2px; height: 100%; border-radius: 1px; background: var(--pink-ink); transform: scaleY(.25); animation: lv 1s ease-in-out infinite; }
+  @keyframes lv { 0%,100% { transform: scaleY(.25); } 50% { transform: scaleY(1); } }
+  .lt { font-size: 12px; color: var(--ink-3); font-variant-numeric: tabular-nums; margin-right: 4px; }
+  .stop { width: 34px; height: 34px; border-radius: 50%; background: var(--pink-soft); display: flex; align-items: center; justify-content: center; }
+  .stop i { width: 10px; height: 10px; border-radius: 2px; background: var(--ink); }
+
+  /* avatar */
+  .av { width: 46px; height: 46px; display: block; flex: none; }
+  .av .blob { fill: var(--pink); }
+  .av .eyes ellipse, .av .m-wait { fill: var(--ink); }
+  .av .eyes-h path, .av .m { fill: none; stroke: var(--ink); stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+  .av .eyes-h, .av .m-work, .av .m-wait, .av .m-happy { display: none; }
+  .av .eyes ellipse { transform-box: fill-box; transform-origin: center; animation: blink 5s infinite; }
+  @keyframes blink { 0%, 92%, 100% { transform: scaleY(1); } 95% { transform: scaleY(.1); } }
+  .av[data-s="working"] .m-idle { display: none; } .av[data-s="working"] .m-work { display: block; }
+  .av[data-s="working"] .eyes { animation: look 1.7s ease-in-out infinite; }
+  @keyframes look { 0%, 100% { transform: translateX(-2.2px); } 50% { transform: translateX(2.2px); } }
+  .av[data-s="awaiting"] .m-idle { display: none; } .av[data-s="awaiting"] .m-wait { display: block; }
+  .av[data-s="awaiting"] .eyes { transform: translateY(-2px); }
+  .av[data-s="happy"] .eyes, .av[data-s="happy"] .m-idle { display: none; }
+  .av[data-s="happy"] .eyes-h, .av[data-s="happy"] .m-happy { display: block; }
+  .av .eyes, .av { transition: transform .3s ease; }
+
+  /* status next to the agent's name */
+  .status { margin-left: auto; display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: var(--ink-2); }
+  .status .sd { width: 7px; height: 7px; border-radius: 50%; background: var(--line-2); }
+  .status.working .sd { background: var(--pink); animation: pulse 1.1s ease-in-out infinite; }
+  .status.awaiting .sd { background: #e0a030; }
+  .status.done .sd { background: var(--green); }
+  .trace.wait .head-dot { background: #e0a030; }
+
+  /* the agent asks, suggests, waits for approval, comes back */
+  .ask, .sugg { margin-top: 10px; max-width: 640px; }
+  .sugg { margin-top: 14px; }
+  .ask .q, .sugg .q { line-height: 1.5; margin-bottom: 8px; }
+  .sugg .q { color: var(--ink-2); }
+  .opts { display: flex; flex-wrap: wrap; gap: 8px; }
+  .opt { height: 34px; padding: 0 14px; border: 1px solid var(--line-2); border-radius: 999px; background: #fff; font-size: 13px; font-weight: 500; }
+  .opt:hover { background: #f4f4f4; }
+  .opt.sel { background: var(--pink-soft); border-color: var(--pink-soft); }
+  .opt.off { pointer-events: none; opacity: .5; }
+  .opt.off.sel { opacity: 1; }
+  .wfs { margin: 4px 0 2px; }
+  .wf { display: flex; gap: 12px; padding: 11px 0; border-top: 1px solid var(--line); align-items: flex-start; }
+  .wf:first-child { border-top: 0; }
+  .wf svg { width: 16px; height: 16px; color: var(--ink-2); margin-top: 2px; }
+  .wf .t { font-weight: 500; }
+  .wf .s { font-size: 12.5px; color: var(--ink-2); margin-top: 2px; }
+  .wf.done { align-items: center; gap: 10px; }
+  .wf.done .dot { background: var(--green); }
+  .decided { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: var(--ink-2); height: 34px; }
+  .stats { display: flex; gap: 32px; margin-top: 6px; }
+  .stats b { display: block; font-size: 24px; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .stats span { font-size: 12px; color: var(--ink-3); }
+  .divider { display: flex; align-items: center; gap: 12px; margin: 6px 0 26px; color: var(--ink-3); font-size: 12px; }
+  .divider::before, .divider::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+
+  /* stronger glow while listening */
+  .glow { top: -90px; bottom: -80px; left: -110px; right: -110px;
+    background:
+      radial-gradient(46% 80% at 16% 100%, rgba(255,120,160,.85), transparent 72%),
+      radial-gradient(42% 80% at 50% 108%, rgba(255,190,130,.75), transparent 72%),
+      radial-gradient(44% 80% at 86% 100%, rgba(170,150,255,.70), transparent 72%);
+    filter: blur(30px); }
 </style>
 </head>
 <body>
@@ -238,8 +295,9 @@
           <button class="ghost r" id="demo-btn">Play demo</button>
         </div>
         <header class="agent-head">
-          <span class="glyph"><svg class="ico" viewBox="0 0 24 24"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg></span>
+          <span id="hav"></span>
           <div><h1>Marketing agent</h1><p>Create campaign content from your ideas.</p></div>
+          <div class="status idle" id="status"><span class="sd"></span><span id="status-t">Ready</span></div>
         </header>
         <section id="thread"></section>
       </div>
@@ -247,27 +305,20 @@
 
     <div class="composer-wrap">
       <div class="composer" id="composer">
+        <div class="glow"></div>
         <div class="idle">
           <div class="c-attach" id="c-attach"></div>
           <textarea class="c-text" id="c-text" rows="1" placeholder="Message Marketing agent"></textarea>
           <div class="row">
             <button class="ib" id="plus" title="Add"><svg class="ico" viewBox="0 0 24 24"><path d="M5 12h14M12 5v14"/></svg></button>
             <span class="sp"></span>
+            <span class="live"><span class="mw" id="mw"></span><span class="lt" id="l-time">0:00</span><button class="ib" id="l-cancel" title="Cancel"><svg class="ico" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></button><button class="stop" id="l-done" title="Done"><i></i></button></span>
             <button class="ib" id="mic" title="Talk"><svg class="ico" viewBox="0 0 24 24"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v3"/></svg></button>
             <button class="send off" id="send" title="Send"><svg class="ico" viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
           </div>
           <div class="menu" id="menu">
             <button data-add="photo"><svg class="ico" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.1-3.1a2 2 0 0 0-2.8 0L6 21"/></svg>Photo</button>
             <button data-add="video"><svg class="ico" viewBox="0 0 24 24"><rect x="2" y="6" width="14" height="12" rx="2"/><path d="m22 8-6 4 6 4z"/></svg>Video</button>
-          </div>
-        </div>
-        <div class="listen">
-          <div class="l-top"><span class="t"><i></i>Listening…</span><span class="time" id="l-time">0:00</span></div>
-          <div class="l-wave" id="l-wave"></div>
-          <div class="l-text" id="l-text"></div>
-          <div class="l-bot">
-            <button class="cancel" id="l-cancel"><svg class="ico" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>Cancel</button>
-            <span class="done">Done<button class="stop" id="l-done" title="Stop"><svg class="fill" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/></svg></button></span>
           </div>
         </div>
       </div>
@@ -289,6 +340,17 @@
     glyph: '<svg class="ico" viewBox="0 0 24 24"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>'
   };
   var SCENE = '<svg class="scene" viewBox="0 0 640 360" preserveAspectRatio="xMidYMid slice"><use href="#bag-scene"/></svg>';
+
+
+  // the agent's avatar: a small pink blob with a face that follows what the agent is doing
+  function AV(state) {
+    return '<svg class="av" data-s="' + state + '" viewBox="0 0 64 64" aria-hidden="true">' +
+      '<path class="blob" d="M32 4c12 0 23 7 27 18 4 11 0 23-9 31-8 7-21 9-31 4C9 52 3 41 5 28 7 14 19 4 32 4z"/>' +
+      '<g class="eyes"><ellipse cx="23.5" cy="29" rx="3.4" ry="4.8"/><ellipse cx="40.5" cy="29" rx="3.4" ry="4.8"/></g>' +
+      '<g class="eyes-h"><path d="M19.5 31q4-6 8 0"/><path d="M36.5 31q4-6 8 0"/></g>' +
+      '<path class="m m-idle" d="M27 42q5 3.5 10 0"/><path class="m m-work" d="M29 43h6"/><ellipse class="m-wait" cx="32" cy="43" rx="2.2" ry="2.6"/><path class="m m-happy" d="M25 40q7 8 14 0"/>' +
+      '</svg>';
+  }
 
   function waveBars(n, pinkCount, seed) {
     var out = "", v = seed || 7;
@@ -373,21 +435,23 @@
     if (S.lastKind === "audio1") return { text: "A little slower, with a softer ending.", dur: 5 };
     return { text: "That works, thanks.", dur: 3 };
   }
-  var L = { words: [], n: 0, tick: null, p: null };
+  var L = { words: [], n: 0, tick: null, p: null, base: "" };
   function startListen() {
     if (S.listening || S.busy) return;
     S.listening = true; openMenu(false);
     L.p = phrase(); L.words = L.p.text.split(" "); L.n = 0;
-    var bars = "";
-    for (var i = 0; i < 40; i++) bars += '<i class="' + (i % 7 === 3 ? "p" : "") + '" style="animation-delay:' + ((i * 83) % 700) + 'ms;animation-duration:' + (700 + (i * 53) % 500) + 'ms"></i>';
-    $("l-wave").innerHTML = bars;
-    $("l-text").innerHTML = ""; $("l-time").textContent = "0:00";
+    // speaking replaces an untouched suggestion; otherwise it adds to what is already typed
+    L.base = (ta.value.trim() === S.suggested) ? "" : ta.value.trim();
+    if (!L.base) ta.value = "";
+    S.suggested = null; ta.readOnly = true;
+    var bars = ""; for (var i = 0; i < 5; i++) bars += '<i style="animation-delay:' + (i * 120) + 'ms;animation-duration:' + (780 + i * 90) + 'ms"></i>';
+    $("mw").innerHTML = bars; $("l-time").textContent = "0:00";
     $("composer").classList.add("is-listening");
     var total = L.words.length, ms = 3400 / total;
     L.tick = setInterval(function () {
       L.n++;
       var said = L.words.slice(0, L.n).join(" ");
-      $("l-text").innerHTML = said + (L.n < total ? ' <span class="soft">…</span>' : "");
+      ta.value = (L.base ? L.base + " " : "") + said; autosize(); updateSend();
       $("l-time").textContent = fmt(Math.round(L.p.dur * L.n / total));
       if (L.n >= total) clearInterval(L.tick);
     }, ms);
@@ -395,13 +459,16 @@
   function stopListen(keep) {
     if (!S.listening) return;
     clearInterval(L.tick);
-    S.listening = false;
+    S.listening = false; ta.readOnly = false;
     $("composer").classList.remove("is-listening");
     if (keep) {
+      // finish the sentence if stopped early, and keep the recording as a small chip
+      ta.value = (L.base ? L.base + " " : "") + L.p.text; autosize();
       S.att = S.att.filter(function (a) { return a.t !== "voice"; });
       S.att.push({ t: "voice", dur: L.p.dur });
-      if (!ta.value.trim()) { ta.value = L.p.text; autosize(); }
       renderAttach();
+    } else {
+      ta.value = L.base; autosize(); updateSend();
     }
   }
   $("mic").addEventListener("click", startListen);
@@ -410,6 +477,7 @@
 
   // ---------- thread
   var thread = $("thread");
+  $("hav").innerHTML = AV("idle");
   function scrollDown() { var s = $("scroll"); s.scrollTo({ top: s.scrollHeight, behavior: "smooth" }); }
   function el(html, cls) { var d = document.createElement("div"); d.className = cls; d.innerHTML = html; thread.appendChild(d); return d; }
 
@@ -426,30 +494,48 @@
     scrollDown();
   }
 
-  // ---------- agent turns (all scripted)
-  var TURNS = {
-    video1: { steps: ["Looking at your photo", "Reading your brand voice", "Drafting the script", "Rendering the video"], worked: "5 s · 4 steps",
-      card: { kind: "video", title: "Your launch video", dur: 18, head: "Meet your new morning ritual.", sub: "Smooth, balanced coffee for focused mornings." } },
-    video2: { steps: ["Reading your change", "Trimming the video", "Adjusting the music"], worked: "3 s · 3 steps",
-      card: { kind: "video", title: "Your launch video · Draft 2", note: "Shorter by 4 s · more upbeat music", dur: 14, head: "Meet your new morning ritual.", sub: "Smooth, balanced coffee for focused mornings." } },
-    audio1: { steps: ["Watching your video", "Pulling out the key lines", "Writing a 20-second script", "Recording the voiceover"], worked: "5 s · 4 steps",
-      card: { kind: "audio", title: "Your audio ad", note: "Adapted from Coffee_launch.mp4", dur: 20, script: "A fresh start, one cup at a time. Meet our smooth, balanced coffee, made for your morning ritual. Try it this week." } },
-    audio2: { steps: ["Reading your change", "Slowing the pace", "Softening the ending"], worked: "3 s · 3 steps",
-      card: { kind: "audio", title: "Your audio ad · Draft 2", note: "Slower pace · softer ending", dur: 22, script: "A fresh start, one cup at a time. Meet our smooth, balanced coffee, made for your morning ritual. Try it this week." } }
-  };
+  // quiet status next to the agent's name: what the agent is doing, or waiting for
+  function setStatus(kind, text) {
+    $("status").className = "status " + kind; $("status-t").textContent = text;
+    var map = { working: "working", awaiting: "awaiting", done: "happy", idle: "idle" }, h = $("hav").firstChild;
+    if (h) h.setAttribute("data-s", map[kind] || "idle");
+  }
+
+  function sleep(ms) { return new Promise(function (r) { later(r, ms); }); }
+  function until(fn) { return new Promise(function (r) { (function poll() { if (fn()) r(); else later(poll, 100); })(); }); }
+
+  // ---------- cards
+  var WF = '<svg class="ico" viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="2"/><path d="M7 11v4a2 2 0 0 0 2 2h4"/><rect x="13" y="13" width="8" height="8" rx="2"/></svg>';
+  var SCRIPT = "A fresh start, one cup at a time. Meet our smooth, balanced coffee, made for your morning ritual. Try it this week.";
 
   function cardHtml(c) {
     var note = c.note ? '<p class="note">' + c.note + "</p>" : "";
+    var head = '<div class="rhead"><h2>' + c.title + "</h2>" + note + "</div>";
     if (c.kind === "video") {
-      return '<div class="rhead"><h2>' + c.title + "</h2>" + note + "</div>" +
-        '<div class="rbody"><div class="video" data-total="' + c.dur + '">' + SCENE + '<span class="pbtn">' + I.play + '</span><span class="len">' + fmt(c.dur) + '</span><span class="vbar"><i></i></span></div>' +
+      return head + '<div class="rbody"><div class="video" data-total="' + c.dur + '">' + SCENE + '<span class="pbtn">' + I.play + '</span><span class="len">' + fmt(c.dur) + '</span><span class="vbar"><i></i></span></div>' +
         '<div class="rside"><div class="copy"><div class="label">SUGGESTED COPY</div><div class="head">' + c.head + '</div><div class="sub">' + c.sub + "</div></div>" +
-        '<div class="actions"><button class="b ghost2">' + I.pencil + 'Edit</button><button class="b primary">Use this version</button></div></div></div>';
+        '<div class="actions"><button class="b ghost2">' + I.pencil + 'Edit</button><button class="b primary" data-use="1">Use this version</button></div></div></div>';
     }
-    return '<div class="rhead"><h2>' + c.title + "</h2>" + note + "</div>" +
-      '<div class="audio" data-total="' + c.dur + '"><span class="play">' + I.play + '</span><span class="wave">' + waveBars(48, 0, 5) + '</span><span class="time">0:00 / ' + fmt(c.dur) + "</span></div>" +
-      '<div class="script"><div class="label">SCRIPT</div><div class="txt">' + c.script + "</div></div>" +
-      '<div class="actions"><button class="b ghost2">' + I.pencil + 'Edit script</button><button class="b primary">Use this version</button></div>';
+    if (c.kind === "audio") {
+      return head + '<div class="audio" data-total="' + c.dur + '"><span class="play">' + I.play + '</span><span class="wave">' + waveBars(48, 0, 5) + '</span><span class="time">0:00 / ' + fmt(c.dur) + "</span></div>" +
+        '<div class="script"><div class="label">SCRIPT</div><div class="txt">' + c.script + "</div></div>" +
+        '<div class="actions"><button class="b ghost2">' + I.pencil + 'Edit script</button><button class="b primary" data-use="1">Use this version</button></div>';
+    }
+    if (c.kind === "approve") {
+      return head + '<div class="wfs">' +
+        '<div class="wf">' + WF + '<div><div class="t">Schedule the video on LinkedIn</div><div class="s">Thursday, 9:00 · workflow: Post to LinkedIn</div></div></div>' +
+        '<div class="wf">' + WF + '<div><div class="t">Share it with the team in Slack</div><div class="s">#marketing · workflow: Notify team</div></div></div>' +
+        '<div class="wf">' + WF + '<div><div class="t">Log the campaign</div><div class="s">Campaign tracker · workflow: Log campaign</div></div></div></div>' +
+        '<div class="actions"><button class="b ghost2" data-act="change">Change</button><button class="b primary" data-act="go">Approve and run</button></div>';
+    }
+    if (c.kind === "done") {
+      return head + '<div class="wfs">' +
+        '<div class="wf done"><span class="dot"></span><div class="t">LinkedIn post scheduled for Thursday, 9:00</div></div>' +
+        '<div class="wf done"><span class="dot"></span><div class="t">Team notified in #marketing</div></div>' +
+        '<div class="wf done"><span class="dot"></span><div class="t">Campaign added to the tracker</div></div></div>';
+    }
+    // report
+    return head + '<div class="stats"><div><b>1,204</b><span>views</span></div><div><b>38</b><span>reactions</span></div><div><b>6</b><span>comments</span></div></div>';
   }
 
   // fake playback (progress only, no media)
@@ -472,34 +558,178 @@
     });
   }
 
-  function agentTurn(key, fast) {
-    var T = TURNS[key];
-    var d = el('<span class="glyph">' + I.glyph + '</span><div class="body"><div class="trace open run"><button class="trace-head">' + I.chev +
-      '<span class="head-dot"></span><span class="lbl">Working…</span></button><ul class="trace-list"></ul></div></div>', "agent enter");
-    var trace = d.querySelector(".trace"), list = d.querySelector(".trace-list"), body = d.querySelector(".body");
-    trace.querySelector(".trace-head").addEventListener("click", function () { trace.classList.toggle("open"); });
-
-    function finish() {
-      trace.classList.remove("run", "open");
-      trace.querySelector(".lbl").textContent = "Worked for " + T.worked;
-      var card = document.createElement("div"); card.className = "result enter"; card.innerHTML = cardHtml(T.card);
-      body.appendChild(card); wirePlayer(card);
-      S.lastKind = key; S.busy = false; scrollDown();
-    }
-    function addStep(txt, isDone) {
-      var li = document.createElement("li"); li.className = isDone ? "done" : "run";
-      li.innerHTML = '<span class="dot"></span><span>' + txt + "</span>"; list.appendChild(li);
-    }
-    S.busy = true;
-    if (fast) { T.steps.forEach(function (s) { addStep(s, true); }); finish(); return; }
-    var t = 500;
-    T.steps.forEach(function (s) {
-      later(function () { addStep(s, false); scrollDown(); }, t);
-      t += 1050;
-      later(function () { var li = list.children; for (var i = 0; i < li.length; i++) { li[i].classList.remove("run"); li[i].classList.add("done"); } }, t - 120);
+  // ---------- the agent as an actor: works, asks, suggests, waits for approval, comes back
+  function choices(body, q, opts, fast, cls, auto) {
+    var box = document.createElement("div"); box.className = cls + " enter";
+    box.innerHTML = '<div class="q">' + q + '</div><div class="opts">' + opts.map(function (o, i) { return '<button class="opt" data-i="' + i + '">' + o + "</button>"; }).join("") + "</div>";
+    body.appendChild(box); scrollDown();
+    return new Promise(function (res) {
+      function pick(i) { box.querySelectorAll(".opt").forEach(function (b, k) { b.classList.add("off"); if (k === i) b.classList.add("sel"); }); res(i); }
+      if (fast && auto) { pick(0); return; }
+      box.querySelector(".opts").addEventListener("click", function (e) {
+        var b = e.target.closest(".opt"); if (!b || b.classList.contains("off")) return;
+        pick(parseInt(b.getAttribute("data-i"), 10));
+      });
     });
-    later(finish, t + 250);
   }
+
+  function plainAgent(fast) {
+    var d = el(AV("idle") + '<div class="body"></div>', "agent enter");
+    var body = d.querySelector(".body");
+    return {
+      body: body,
+      say: function (text) { var p = document.createElement("div"); p.className = "plain"; p.textContent = text; body.appendChild(p); scrollDown(); },
+      suggest: function (q, opts, auto) { return choices(body, q, opts, fast, "sugg", auto !== false); }
+    };
+  }
+
+  function newAgent(fast) {
+    var d = el(AV("working") + '<div class="body"><div class="trace open run"><button class="trace-head">' + I.chev +
+      '<span class="head-dot"></span><span class="lbl">Working…</span></button><ul class="trace-list"></ul></div></div>', "agent enter");
+    var body = d.querySelector(".body"), trace = d.querySelector(".trace"), list = d.querySelector(".trace-list"), lbl = d.querySelector(".lbl"), av = d.querySelector(".av");
+    trace.querySelector(".trace-head").addEventListener("click", function () { trace.classList.toggle("open"); });
+    var A = { body: body };
+    A.step = function (txt) {
+      return new Promise(function (res) {
+        var li = document.createElement("li"); li.className = fast ? "done" : "run";
+        li.innerHTML = '<span class="dot"></span><span>' + txt + "</span>"; list.appendChild(li);
+        if (fast) { res(); return; }
+        scrollDown();
+        later(function () { li.classList.remove("run"); li.classList.add("done"); res(); }, 1000);
+      });
+    };
+    A.pause = function (label) { trace.classList.remove("run"); trace.classList.add("wait"); lbl.textContent = label; av.setAttribute("data-s", "awaiting"); };
+    A.resume = function () { trace.classList.remove("wait"); trace.classList.add("run"); lbl.textContent = "Working…"; av.setAttribute("data-s", "working"); };
+    A.finish = function (worked, c) {
+      trace.classList.remove("run", "wait", "open");
+      lbl.textContent = "Worked for " + worked;
+      av.setAttribute("data-s", "happy"); later(function () { av.setAttribute("data-s", "idle"); }, 1800);
+      var card = document.createElement("div"); card.className = "result enter"; card.innerHTML = cardHtml(c);
+      body.appendChild(card); wirePlayer(card); scrollDown();
+      return card;
+    };
+    A.ask = function (q, opts) { return choices(body, q, opts, fast, "ask", true); };
+    A.suggest = function (q, opts, auto) { return choices(body, q, opts, fast, "sugg", auto !== false); };
+    return A;
+  }
+
+  function chain(A, steps) { return steps.reduce(function (p, s) { return p.then(function () { return A.step(s); }); }, Promise.resolve()); }
+  function ready(text) { S.busy = false; setStatus("idle", text || "Your turn"); }
+  function working(text) { S.busy = true; setStatus("working", text || "Working"); }
+
+  // 1. photo + voice in. The agent asks where it will run, then makes the video
+  function storyVideo1(fast) {
+    working();
+    var A = newAgent(fast), CH = ["LinkedIn", "Instagram", "Both"];
+    return chain(A, ["Looking at your photo", "Reading your brand voice"]).then(function () {
+      A.pause("Waiting for your answer"); setStatus("awaiting", "Waiting for your answer");
+      return A.ask("Where will this run?", CH);
+    }).then(function (i) {
+      S.channel = CH[i]; A.resume(); working();
+      return chain(A, ["Drafting the script for " + (i === 2 ? "both channels" : CH[i]), "Rendering the video"]).then(function () {
+        A.finish("6 s · 4 steps", { kind: "video", title: "Your launch video", note: "Made for " + (i === 2 ? "LinkedIn and Instagram" : CH[i]), dur: 18, head: "Meet your new morning ritual.", sub: "Smooth, balanced coffee for focused mornings." });
+        S.lastKind = "video1"; ready();
+      });
+    });
+  }
+
+  // 2. voice revision, then the agent offers the audio version on its own
+  function storyVideo2(fast) {
+    working();
+    var A = newAgent(fast);
+    return chain(A, ["Reading your change", "Trimming the video", "Adjusting the music"]).then(function () {
+      A.finish("3 s · 3 steps", { kind: "video", title: "Your launch video · Draft 2", note: "Shorter by 4 s · more upbeat music", dur: 14, head: "Meet your new morning ritual.", sub: "Smooth, balanced coffee for focused mornings." });
+      S.lastKind = "video2"; ready();
+      return A.suggest("I can also turn this into a 20-second audio ad for radio and podcasts.", ["Make the audio ad", "Not now"]).then(function (i) {
+        if (i === 0) { userBubble([], "Make the audio ad"); return storyAudioFromDraft(fast); }
+      });
+    });
+  }
+
+  function storyAudioFromDraft(fast) {
+    working();
+    var A = newAgent(fast);
+    return chain(A, ["Taking the script from Draft 2", "Recording the voiceover", "Matching the 20-second length"]).then(function () {
+      A.finish("4 s · 3 steps", { kind: "audio", title: "Your audio ad", note: "Adapted from Draft 2", dur: 20, script: SCRIPT });
+      S.audioDone = true; ready();
+    });
+  }
+
+  // alternate path: a video comes in, an audio ad goes out
+  function storyAudio1(fast) {
+    working();
+    var A = newAgent(fast);
+    return chain(A, ["Watching your video", "Pulling out the key lines", "Writing a 20-second script", "Recording the voiceover"]).then(function () {
+      A.finish("5 s · 4 steps", { kind: "audio", title: "Your audio ad", note: "Adapted from Coffee_launch.mp4", dur: 20, script: SCRIPT });
+      S.lastKind = "audio1"; ready();
+    });
+  }
+  function storyAudio2(fast) {
+    working();
+    var A = newAgent(fast);
+    return chain(A, ["Reading your change", "Slowing the pace", "Softening the ending"]).then(function () {
+      A.finish("3 s · 3 steps", { kind: "audio", title: "Your audio ad · Draft 2", note: "Slower pace · softer ending", dur: 22, script: SCRIPT });
+      S.lastKind = "audio2"; ready();
+    });
+  }
+
+  // 3. approval: the agent says exactly what will run, and waits
+  function storyApproval(fast) {
+    working();
+    var A = newAgent(fast);
+    return A.step("Checking your connected tools").then(function () {
+      var card = A.finish("2 s · 1 step", { kind: "approve", title: "Ready to publish?", note: "Nothing runs until you approve." });
+      S.busy = false; setStatus("awaiting", "Waiting for your approval");
+      return new Promise(function (res) {
+        function decide(act) {
+          card.querySelector(".actions").innerHTML = act === "go"
+            ? '<span class="decided"><span class="dot" style="background:var(--green)"></span>Approved</span>'
+            : '<span class="decided"><span class="dot"></span>Not now</span>';
+          res(act);
+        }
+        if (fast) { decide("go"); return; }
+        card.addEventListener("click", function (e) {
+          var b = e.target.closest("[data-act]"); if (!b || !card.querySelector(".actions .b")) return;
+          decide(b.getAttribute("data-act"));
+        });
+      });
+    }).then(function (act) {
+      if (act !== "go") { var P = plainAgent(fast); P.say("Sure. Tell me what to change."); S.approving = false; ready(); return; }
+      return storyRun(fast);
+    });
+  }
+
+  // 4. it runs the workflows, then reports what happened
+  function storyRun(fast) {
+    working("Running your workflows");
+    var A = newAgent(fast);
+    return chain(A, ["Post to LinkedIn · scheduled for Thursday, 9:00", "Notify the team in Slack", "Log to the Campaign tracker"]).then(function () {
+      A.finish("4 s · 3 workflows", { kind: "done", title: "Scheduled", note: "I'll check how it performs and report back." });
+      S.approving = false; S.busy = false; setStatus("done", "Scheduled");
+      return fast ? null : sleep(2800);
+    }).then(function () { return storyReport(fast); });
+  }
+
+  // 5. later, the agent comes back on its own
+  function storyReport(fast) {
+    el('<div class="divider"><span>Thursday · 11:04</span></div>', "enter");
+    var P = plainAgent(fast);
+    var card = document.createElement("div"); card.className = "result enter";
+    card.innerHTML = cardHtml({ kind: "report", title: "Your launch video is live", note: "On LinkedIn · 2 hours in" });
+    P.body.appendChild(card);
+    S.reported = true; setStatus("idle", "Reported back"); scrollDown();
+    P.suggest("Want me to repeat it on Instagram?", ["Repeat on Instagram", "Not now"], false).then(function (i) {
+      if (i === 0) { userBubble([], "Repeat on Instagram"); plainAgent(false).say("That is as far as this demo goes for now."); }
+    });
+  }
+
+  function useVersion() {
+    if (S.busy || S.approving || S.listening) return;
+    S.approving = true;
+    userBubble([], "Use this version");
+    storyApproval(false);
+  }
+  thread.addEventListener("click", function (e) { if (e.target.closest("[data-use]")) useVersion(); });
 
   function replyFor() {
     if (S.lastKind === null) return hasMedia("video") ? "audio1" : "video1";
@@ -514,46 +744,61 @@
     if (!S.att.length && !text) return;
     var key = replyFor();
     userBubble(S.att.slice(), text);
-    S.att = []; ta.value = ""; autosize(); renderAttach();
-    if (key) agentTurn(key, false);
-    else {
-      el('<span class="glyph">' + I.glyph + '</span><div class="body plain">That is as far as this demo goes for now.</div>', "agent enter");
-      scrollDown();
-    }
+    S.att = []; S.suggested = null; ta.value = ""; autosize(); renderAttach();
+    if (key === "video1") storyVideo1(false);
+    else if (key === "video2") storyVideo2(false);
+    else if (key === "audio1") storyAudio1(false);
+    else if (key === "audio2") storyAudio2(false);
+    else { plainAgent(false).say("That is as far as this demo goes for now."); }
   }
   $("send").addEventListener("click", send);
 
-  // ---------- demo + reset
+  // ---------- reset, demo, finished state
   function resetAll() {
     timers.forEach(clearTimeout); timers = [];
-    clearInterval(L.tick); S = { att: [], lastKind: null, listening: false, busy: false, suggested: null };
-    $("composer").classList.remove("is-listening"); openMenu(false);
+    clearInterval(L.tick); S = { att: [], lastKind: null, listening: false, busy: false, suggested: null, approving: false };
+    $("composer").classList.remove("is-listening"); ta.readOnly = false; openMenu(false);
     thread.innerHTML = ""; ta.value = ""; autosize(); renderAttach();
+    setStatus("idle", "Ready");
   }
 
+  // plays the whole story: attach, speak, answer a question, revise, accept a suggestion, approve, come back
   function demo() {
     resetAll();
-    var t = 900;
-    later(function () { openMenu(true); }, t); t += 900;
-    later(function () { attach("photo"); }, t); t += 900;
-    later(startListen, t); t += 4400;
-    later(function () { stopListen(true); }, t); t += 1100;
-    later(send, t); t += 500 + 4 * 1050 + 250 + 1800;
-    later(startListen, t); t += 4000;
-    later(function () { stopListen(true); }, t); t += 1000;
-    later(send, t);
+    var pick = function (sel) { var b = document.querySelector(sel); if (b) b.click(); };
+    sleep(900).then(function () { openMenu(true); return sleep(900); })
+      .then(function () { attach("photo"); return sleep(1700); })
+      .then(function () { startListen(); return sleep(4300); })
+      .then(function () { stopListen(true); return sleep(1000); })
+      .then(function () { send(); return until(function () { return document.querySelector(".ask .opt:not(.off)"); }); })
+      .then(function () { return sleep(1500); })
+      .then(function () { pick(".ask .opt"); return until(function () { return S.lastKind === "video1" && !S.busy; }); })
+      .then(function () { return sleep(2200); })
+      .then(function () { startListen(); return sleep(3400); })
+      .then(function () { stopListen(true); return sleep(900); })
+      .then(function () { send(); return until(function () { return document.querySelector(".sugg .opt:not(.off)"); }); })
+      .then(function () { return sleep(2000); })
+      .then(function () { pick(".sugg .opt"); return until(function () { return S.audioDone; }); })
+      .then(function () { return sleep(2400); })
+      .then(function () { var all = document.querySelectorAll(".result .video ~ .rside [data-use], .result [data-use]"); var v = document.querySelectorAll(".result .rbody [data-use]"); (v[v.length - 1] || all[0]).click(); return until(function () { return document.querySelector("[data-act=go]"); }); })
+      .then(function () { return sleep(3000); })
+      .then(function () { pick("[data-act=go]"); });
   }
 
   function endState() {
     resetAll();
     userBubble([{ t: "photo" }, { t: "voice", dur: 12 }], "Create a short launch video for this coffee. Keep it warm and simple.");
-    agentTurn("video1", true);
-    userBubble([{ t: "voice", dur: 5 }], "Make it a bit shorter and more upbeat.");
-    agentTurn("video2", true);
-    $("scroll").scrollTop = $("scroll").scrollHeight;
+    storyVideo1(true).then(function () {
+      userBubble([{ t: "voice", dur: 5 }], "Make it a bit shorter and more upbeat.");
+      return storyVideo2(true);
+    }).then(function () {
+      userBubble([], "Use this version"); S.approving = true;
+      return storyApproval(true);
+    }).then(function () { $("scroll").scrollTop = $("scroll").scrollHeight; });
   }
 
   $("demo-btn").addEventListener("click", demo);
+  setStatus("idle", "Ready");
   var q = location.search;
   if (q.indexOf("end") > -1) endState(); else if (q.indexOf("demo") > -1) demo();
 </script>
