@@ -33,7 +33,7 @@
   .ghost-builder .line { height: 10px; border-radius: 5px; background: var(--color--neutral-100); margin-bottom: 12px; }
 
   .modal { width: 540px; background: var(--background--surface); border-radius: var(--radius--lg); box-shadow: 0 0 0 0.5px var(--border-color), 0 8px 8px rgba(0,0,0,0.04), 0 32px 32px rgba(0,0,0,0.04), 0 64px 64px rgba(0,0,0,0.06); padding: var(--spacing--xl); position: relative; }
-  .modal-head { display: flex; align-items: center; padding: 0 var(--spacing--xl) var(--spacing--md); margin: 0 calc(var(--spacing--xl) * -1) var(--spacing--md); border-bottom: 1px solid var(--border-color); }
+  .modal-head { display: flex; align-items: center; padding: 0; margin: 0 0 var(--spacing--md); }
   .modal-title { font-size: var(--font-size--lg); font-weight: var(--font-weight--medium); }
   .modal-close { cursor: pointer; color: var(--text-color--subtler); font-size: 18px; margin-left: auto; line-height: 1; }
   .field-label { font-size: var(--font-size--sm); font-weight: var(--font-weight--medium); margin-bottom: var(--spacing--3xs); }
@@ -44,7 +44,7 @@
   .textarea { min-height: 76px; resize: vertical; }
   .count { font-size: var(--font-size--3xs); color: var(--text-color--subtler); text-align: right; margin: 2px 0 var(--spacing--sm); }
   .msg { font-size: var(--font-size--sm); line-height: 1.55; color: var(--text-color); margin: 0 0 var(--spacing--sm); }
-  .actions { display: flex; align-items: center; gap: var(--spacing--3xs); padding-top: var(--spacing--sm); border-top: 1px solid var(--border-color); margin: var(--spacing--sm) calc(var(--spacing--xl) * -1) 0; padding-left: var(--spacing--xl); padding-right: var(--spacing--xl); }
+  .actions { display: flex; align-items: center; gap: var(--spacing--3xs); margin-top: var(--spacing--md); }
   .spacer { flex: 1; }
   .check { display: inline-flex; align-items: center; gap: 6px; font-size: var(--font-size--2xs); color: var(--text-color--subtle); cursor: pointer; user-select: none; }
   .check i { width: 14px; height: 14px; border: 1.5px solid var(--color--neutral-300, #c9c9c9); border-radius: 3px; display: inline-flex; align-items: center; justify-content: center; }
@@ -146,7 +146,6 @@
           <div class="actions">
             <button class="n8n-button n8n-button--tertiary n8n-button--size-medium">Make unavailable</button>
             <span class="spacer"></span>
-            <button class="n8n-button n8n-button--tertiary n8n-button--size-medium">Cancel</button>
             <button class="n8n-button n8n-button--secondary n8n-button--size-medium" onclick="s2Talk()">Talk to agent</button>
             <button class="n8n-button n8n-button--primary n8n-button--size-medium">Save</button>
           </div>
