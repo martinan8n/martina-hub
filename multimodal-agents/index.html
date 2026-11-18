@@ -514,7 +514,7 @@
     var bars = ""; for (var i = 0; i < 5; i++) bars += '<i style="animation-delay:' + (i * 120) + 'ms;animation-duration:' + (780 + i * 90) + 'ms"></i>';
     $("mw").innerHTML = bars; $("l-time").textContent = "0:00";
     $("composer").classList.add("is-listening");
-    var total = L.words.length, ms = 3400 / total;
+    var total = L.words.length, ms = (MM.dict || 3400) / total;
     L.tick = setInterval(function () {
       L.n++;
       var said = L.words.slice(0, L.n).join(" ");
@@ -544,6 +544,9 @@
 
   // ---------- thread
   var thread = $("thread");
+  // hooks for filming: build the story up to any point instantly, hold at a pending choice, slow everything down
+  var MM = window.mm = { instant: false, hold: false, slow: 1 };
+  (function () { var m = /slow=([\d.]+)/.exec(location.search); if (m) MM.slow = parseFloat(m[1]); })();
   $("hav").innerHTML = AV("idle");
   function scrollDown() { var s = $("scroll"); s.scrollTo({ top: s.scrollHeight, behavior: "smooth" }); }
   function el(html, cls) { var d = document.createElement("div"); d.className = cls; d.innerHTML = html; thread.appendChild(d); return d; }
@@ -573,7 +576,7 @@
     if (h) h.setAttribute("data-s", map[kind] || "idle");
   }
 
-  function sleep(ms) { return new Promise(function (r) { later(r, ms); }); }
+  function sleep(ms) { return new Promise(function (r) { later(r, ms * MM.slow); }); }
   function until(fn) { return new Promise(function (r) { (function poll() { if (fn()) r(); else later(poll, 100); })(); }); }
 
   // ---------- cards
@@ -645,7 +648,7 @@
         box.querySelector(".tag").classList.add("done"); box.querySelector(".tag span").textContent = "You chose";
         res(i);
       }
-      if (fast && auto) { pick(0); return; }
+      if ((fast || MM.instant) && auto && !MM.hold) { pick(0); return; }
       box.querySelector(".opts").addEventListener("click", function (e) {
         var b = e.target.closest(".opt"); if (!b || b.classList.contains("off")) return;
         pick(parseInt(b.getAttribute("data-i"), 10));
@@ -671,11 +674,11 @@
     var A = { body: body };
     A.step = function (txt) {
       return new Promise(function (res) {
-        var li = document.createElement("li"); li.className = fast ? "done" : "run";
+        var quick = fast || MM.instant; var li = document.createElement("li"); li.className = quick ? "done" : "run";
         li.innerHTML = '<span class="dot"></span><span>' + txt + "</span>"; list.appendChild(li);
-        if (fast) { res(); return; }
+        if (quick) { res(); return; }
         scrollDown();
-        later(function () { li.classList.remove("run"); li.classList.add("done"); res(); }, 1000);
+        later(function () { li.classList.remove("run"); li.classList.add("done"); res(); }, 1000 * MM.slow);
       });
     };
     A.pause = function (label) { trace.classList.remove("run"); trace.classList.add("wait"); lbl.textContent = label; av.setAttribute("data-s", "awaiting"); };
@@ -821,7 +824,7 @@
     return chain(A, ["Post to LinkedIn · scheduled for Thursday, 9:00", "Notify the team in Slack", "Log to the Campaign tracker"]).then(function () {
       A.finish("4 s · 3 workflows", { kind: "done", title: "Scheduled", note: "I'll check how it performs and report back." });
       S.approving = false; S.busy = false; setStatus("done", "Scheduled");
-      return fast ? null : sleep(2800);
+      return (fast || MM.instant) ? null : sleep(2800);
     }).then(function () { return storyReport(fast); });
   }
 
@@ -918,6 +921,29 @@
       return storyApproval(true);
     }).then(function () { $("scroll").scrollTop = $("scroll").scrollHeight; });
   }
+
+  // build the conversation instantly up to a named point (used when filming one scene at a time)
+  MM.build = function (name) {
+    resetAll(); MM.instant = true; MM.hold = false;
+    var REV = "Make it a bit shorter and more upbeat.";
+    function done() { MM.instant = false; MM.hold = false; var sc = $("scroll"); sc.scrollTop = sc.scrollHeight; }
+    function composed() { S.att = [{ t: "photo" }, { t: "video" }, { t: "voice", dur: 14, tr: P_BOTH }]; S.suggested = null; ta.value = P_BOTH; autosize(); renderAttach(); }
+    function revision() { S.att = [{ t: "voice", dur: 5, tr: REV }]; ta.value = REV; autosize(); renderAttach(); }
+    var p = Promise.resolve();
+    if (name === "empty") { done(); return p; }
+    composed();
+    if (name === "composed") { done(); return p; }
+    if (name === "asking") { MM.hold = true; send(); return until(function () { return document.querySelector(".ask .opt:not(.off)"); }).then(done); }
+    send();
+    p = until(function () { return S.lastKind === "video1" && !S.busy; });
+    if (name === "video1") return p.then(done);
+    p = p.then(revision);
+    if (name === "revision") return p.then(done);
+    if (name === "offer") return p.then(function () { MM.hold = true; send(); return until(function () { return document.querySelector(".sugg .opt:not(.off)"); }); }).then(done);
+    p = p.then(function () { send(); return until(function () { return S.audioDone; }); });
+    if (name === "audio") return p.then(done);
+    return p.then(function () { useVersion(); return until(function () { return document.querySelector("[data-act=go]"); }); }).then(done);   // "approving"
+  };
 
   $("demo-btn").addEventListener("click", demo);
   setStatus("idle", "Ready");
