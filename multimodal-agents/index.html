@@ -71,8 +71,8 @@
   .attach { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-bottom: 10px; }
   .thumb { position: relative; width: 84px; height: 64px; border-radius: 8px; overflow: hidden; flex: none; }
   .thumb svg.scene { width: 100%; height: 100%; }
-  .thumb .vtag { position: absolute; left: 4px; bottom: 4px; display: flex; align-items: center; gap: 4px; background: rgba(22,22,22,.78); color: #fff; font-size: 10px; font-weight: 500; padding: 2px 5px; border-radius: 4px; }
-  .thumb .vtag svg { width: 8px; height: 8px; }
+  .thumb .vtag, .th .vtag { position: absolute; left: 4px; bottom: 4px; display: flex; align-items: center; gap: 4px; background: rgba(22,22,22,.78); color: #fff; font-size: 10px; font-weight: 500; padding: 2px 5px; border-radius: 4px; }
+  .thumb .vtag svg, .th .vtag svg { width: 8px; height: 8px; margin: 0; }
   .voice { display: flex; align-items: center; gap: 10px; background: #fff; border-radius: 10px; height: 44px; padding: 0 12px 0 8px; }
   .voice .play { width: 28px; height: 28px; border-radius: 50%; background: var(--ink); color: #fff; display: flex; align-items: center; justify-content: center; }
   .voice .play svg { width: 11px; height: 11px; margin-left: 1px; }
@@ -265,6 +265,29 @@
   .chose .label { display: block; margin-bottom: 2px; }
   .why { margin: 12px 0 2px; font-size: 13px; color: var(--ink-2); line-height: 1.5; }
   .why .label { display: block; margin-bottom: 2px; }
+
+  /* labelled attachment previews */
+  .c-attach { align-items: flex-end; gap: 12px; margin-bottom: 12px; }
+  .mc { position: relative; width: 96px; animation: enter .3s ease both; }
+  .th { position: relative; width: 100%; height: 64px; border-radius: 8px; overflow: hidden; }
+  .th svg.scene { width: 100%; height: 100%; }
+  .mc .cap, .vc .cap { margin-top: 5px; font-size: 11.5px; color: var(--ink-3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .mc .x { position: absolute; top: 4px; right: 4px; width: 20px; height: 20px; border-radius: 50%; background: rgba(22,22,22,.72); color: #fff; display: flex; align-items: center; justify-content: center; }
+  .mc .x svg { width: 11px; height: 11px; }
+  .sepv { align-self: stretch; width: 1px; background: var(--line); margin: 0 2px 22px; }
+  .vc { animation: enter .3s ease both; }
+  .vc .pill { display: flex; align-items: center; gap: 10px; height: 64px; min-width: 220px; padding: 0 8px 0 10px; border: 1px solid var(--line); border-radius: 10px; background: #fafafa; }
+  .vc .play { width: 28px; height: 28px; border-radius: 50%; background: var(--ink); color: #fff; display: flex; align-items: center; justify-content: center; flex: none; }
+  .vc .play svg { width: 11px; height: 11px; margin-left: 1px; }
+  .vc .x2 { margin-left: auto; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--ink-3); }
+  .vc .x2:hover { background: #ececec; color: var(--ink); }
+  .vc .x2 svg { width: 12px; height: 12px; }
+  .bubble .attach { align-items: flex-start; gap: 12px; margin-bottom: 10px; }
+  .bubble .mc { width: 92px; }
+  .bubble .mc .th { height: 62px; }
+  .bubble .voice { margin-bottom: 0; }
+  .bubble .tr { padding: 8px 4px 2px; line-height: 1.5; color: var(--ink-2); }
+  .menu button.hot { background: #f1f1f1; }
 </style>
 </head>
 <body>
@@ -410,11 +433,15 @@
 
   function fmt(s) { return "0:" + (s < 10 ? "0" : "") + s; }
   function renderAttach() {
-    var h = "";
+    var h = "", sawMedia = false;
     S.att.forEach(function (a, i) {
-      if (a.t === "photo") h += '<div class="chip"><div class="thumb">' + SCENE + '</div>coffee-bag.jpg<button class="x" data-rm="' + i + '">' + I.x + '</button></div>';
-      if (a.t === "video") h += '<div class="chip"><div class="thumb">' + SCENE2 + '<span class="vtag">' + I.play + '0:30</span></div>Roastery_footage.mp4<button class="x" data-rm="' + i + '">' + I.x + '</button></div>';
-      if (a.t === "voice") h += '<div class="chip"><span class="vch"><span class="play">' + I.play + '</span><span class="wave">' + waveBars(14, 3, 11) + '</span>Voice brief · ' + fmt(a.dur) + '</span><button class="x" data-rm="' + i + '">' + I.x + '</button></div>';
+      var rm = '<button class="x" data-rm="' + i + '" title="Remove">' + I.x + "</button>";
+      if (a.t === "photo") { sawMedia = true; h += '<div class="mc"><div class="th">' + SCENE + rm + '</div><div class="cap">Photo</div></div>'; }
+      if (a.t === "video") { sawMedia = true; h += '<div class="mc"><div class="th">' + SCENE2 + '<span class="vtag">' + I.play + '0:30</span>' + rm + '</div><div class="cap">Footage</div></div>'; }
+      if (a.t === "voice") {
+        h += (sawMedia ? '<span class="sepv"></span>' : "") +
+          '<div class="vc"><div class="pill"><span class="play">' + I.play + '</span><span class="wave">' + waveBars(16, 3, 11) + '</span><button class="x2" data-rm="' + i + '" title="Remove">' + I.x + '</button></div><div class="cap">Voice note · ' + fmt(a.dur) + "</div></div>";
+      }
     });
     $("c-attach").innerHTML = h;
     updateSend();
@@ -505,7 +532,7 @@
       // finish the sentence if stopped early, and keep the recording as a small chip
       ta.value = (L.base ? L.base + " " : "") + L.p.text; autosize();
       S.att = S.att.filter(function (a) { return a.t !== "voice"; });
-      S.att.push({ t: "voice", dur: L.p.dur });
+      S.att.push({ t: "voice", dur: L.p.dur, tr: L.p.text });
       renderAttach();
     } else {
       ta.value = L.base; autosize(); updateSend();
@@ -522,15 +549,20 @@
   function el(html, cls) { var d = document.createElement("div"); d.className = cls; d.innerHTML = html; thread.appendChild(d); return d; }
 
   function userBubble(att, text) {
-    var a = "";
-    att.forEach(function (x) {
-      if (x.t === "photo") a += '<div class="thumb">' + SCENE + "</div>";
-      if (x.t === "video") a += '<div class="thumb">' + SCENE2 + '<span class="vtag">' + I.play + '0:30</span></div>';
-      if (x.t === "voice") a += '<div class="voice"><span class="play">' + I.play + '</span><span class="wave">' + waveBars(24, 5, 7) + '</span><span class="t">Voice brief · ' + fmt(x.dur) + "</span></div>";
-    });
-    var html = '<div class="bubble">' + (a ? '<div class="attach">' + a + "</div>" : "") + (text ? '<div class="text"></div>' : "") + "</div>";
+    var media = att.filter(function (x) { return x.t !== "voice"; }), voice = null;
+    att.forEach(function (x) { if (x.t === "voice") voice = x; });
+    var m = media.map(function (x) {
+      return x.t === "photo"
+        ? '<div class="mc"><div class="th">' + SCENE + '</div><div class="cap">Photo</div></div>'
+        : '<div class="mc"><div class="th">' + SCENE2 + '<span class="vtag">' + I.play + '0:30</span></div><div class="cap">Footage</div></div>';
+    }).join("");
+    var asTranscript = voice && voice.tr && text === voice.tr;
+    var v = voice ? '<div class="voice"><span class="play">' + I.play + '</span><span class="wave">' + waveBars(24, 5, 7) + '</span><span class="t">Voice note · ' + fmt(voice.dur) + "</span></div>" : "";
+    var html = '<div class="bubble">' + (m ? '<div class="attach">' + m + "</div>" : "") + v +
+      (asTranscript ? '<div class="tr"></div>' : (text ? '<div class="text"></div>' : "")) + "</div>";
     var d = el(html, "user enter");
-    if (text) d.querySelector(".text").textContent = text;
+    if (asTranscript) d.querySelector(".tr").textContent = "“" + text + "”";
+    else if (text) d.querySelector(".text").textContent = text;
     scrollDown();
   }
 
@@ -850,10 +882,13 @@
   function demo() {
     resetAll();
     var pick = function (sel) { var b = document.querySelector(sel); if (b) b.click(); };
-    sleep(900).then(function () { openMenu(true); return sleep(900); })
-      .then(function () { attach("photo"); return sleep(1300); })
-      .then(function () { openMenu(true); return sleep(800); })
-      .then(function () { attach("video"); return sleep(1700); })
+    var hot = function (k) { var b = document.querySelector('.menu [data-add="' + k + '"]'); if (b) { b.classList.add("hot"); setTimeout(function () { b.classList.remove("hot"); }, 500); } };
+    sleep(900).then(function () { openMenu(true); return sleep(800); })
+      .then(function () { hot("photo"); return sleep(550); })
+      .then(function () { attach("photo"); return sleep(1900); })
+      .then(function () { openMenu(true); return sleep(700); })
+      .then(function () { hot("video"); return sleep(550); })
+      .then(function () { attach("video"); return sleep(1900); })
       .then(function () { startListen(); return sleep(4300); })
       .then(function () { stopListen(true); return sleep(1000); })
       .then(function () { send(); return until(function () { return document.querySelector(".ask .opt:not(.off)"); }); })
@@ -874,9 +909,9 @@
   function endState() {
     resetAll();
     S.sent = { photo: true, video: true };
-    userBubble([{ t: "photo" }, { t: "video" }, { t: "voice", dur: 14 }], P_BOTH);
+    userBubble([{ t: "photo" }, { t: "video" }, { t: "voice", dur: 14, tr: P_BOTH }], P_BOTH);
     storyVideo1(true).then(function () {
-      userBubble([{ t: "voice", dur: 5 }], "Make it a bit shorter and more upbeat.");
+      userBubble([{ t: "voice", dur: 5, tr: "Make it a bit shorter and more upbeat." }], "Make it a bit shorter and more upbeat.");
       return storyVideo2(true);
     }).then(function () {
       userBubble([], "Use this version"); S.approving = true;
