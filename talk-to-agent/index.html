@@ -88,7 +88,7 @@
 
   <!-- ============ 1. PUBLISH ============ -->
   <h2>1 &mdash; One publish modal</h2>
-  <p class="sub">Name the version, see what publishing does, and publish. Talk to agent is part of the same modal, so there is no second confirmation screen.</p>
+  <p class="sub">See what publishing does and publish. Naming the version and describing changes sit behind Add versioning, so the common case stays short. Talk to agent is part of the same modal, so there is no second confirmation screen.</p>
 
   <div class="stage" id="stage1">
     <div class="view is-on" data-view="publish">
@@ -97,11 +97,14 @@
         <div class="modal">
           <div class="modal-head"><span class="modal-title">Publish agent</span><span class="modal-close" onclick="s1Close(false)">&times;</span></div>
           <p class="msg">Your agent will go live in n8n Chat &mdash; anyone in Personal will be able to talk to it.</p>
-          <div class="field-label">Version name</div>
-          <input class="input" id="s1Version" value="Version 3" maxlength="128" oninput="s1Count()">
-          <div class="count" id="s1Counter">9/128</div>
-          <div class="field-label">Describe changes <span class="opt">(optional)</span></div>
-          <textarea class="textarea" placeholder="What changed in this version?" style="margin-bottom:var(--spacing--sm);"></textarea>
+          <button class="n8n-button n8n-button--tertiary n8n-button--size-small" id="s1Toggle" onclick="s1ToggleVersioning()" style="margin:0 0 var(--spacing--xs) calc(var(--spacing--xs) * -1);"><svg id="s1Chev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="transition:transform 120ms;"><path d="m9 6 6 6-6 6"/></svg><span id="s1ToggleLabel">Add versioning</span></button>
+          <div id="s1Versioning" style="display:none;">
+            <div class="field-label">Version name</div>
+            <input class="input" id="s1Version" value="Version 3" maxlength="128" oninput="s1Count()">
+            <div class="count" id="s1Counter">9/128</div>
+            <div class="field-label">Describe changes <span class="opt">(optional)</span></div>
+            <textarea class="textarea" placeholder="What changed in this version?" style="margin-bottom:var(--spacing--sm);"></textarea>
+          </div>
           <div class="callout">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-color--subtler)" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 11h1v5h1"/></svg>
             <span>Any changes you make to this agent will not be published until you publish it again.</span>
@@ -118,6 +121,7 @@
     <div class="view" data-view="home" id="home1"></div>
   </div>
   <ul class="notes">
+    <li>Versioning is collapsed by default. If it stays closed, the version is named automatically (Version 3), so nothing is required to publish.</li>
     <li>The message moves to the future tense, because it now appears before publishing: it says what publishing will do instead of confirming it afterwards.</li>
     <li>Publish and talk to agent is the primary action, since talking to the agent is the next thing people want. Publish alone stays one click away and returns to the builder.</li>
   </ul>
@@ -210,6 +214,13 @@
     document.getElementById("s1Backdrop").style.display = "none";
     document.getElementById("s1Pill").style.display = published ? "inline-flex" : "none";
     document.getElementById("s1Replay").style.display = "block";
+  }
+  function s1ToggleVersioning() {
+    var box = document.getElementById("s1Versioning");
+    var open = box.style.display === "none";
+    box.style.display = open ? "block" : "none";
+    document.getElementById("s1Chev").style.transform = open ? "rotate(90deg)" : "none";
+    document.getElementById("s1ToggleLabel").textContent = open ? "Hide versioning" : "Add versioning";
   }
   function s1Open() { document.getElementById("s1Backdrop").style.display = "flex"; }
 
