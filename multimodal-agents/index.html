@@ -61,8 +61,9 @@
   .agent-head p { margin: 2px 0 0; color: var(--ink-2); font-size: 13px; }
 
   /* ---- messages ---- */
-  .msg { opacity: 0; transform: translateY(6px); transition: opacity .35s ease, transform .35s ease; }
-  .msg.in { opacity: 1; transform: none; }
+  .msg { transition: opacity .35s ease, transform .35s ease; }
+  .anim .msg { opacity: 0; transform: translateY(6px); }
+  .anim .msg.in { opacity: 1; transform: none; }
 
   .user { display: flex; justify-content: flex-end; margin-bottom: 26px; }
   .bubble { background: #f0f0f0; border-radius: 14px; padding: 10px; max-width: 560px; }
@@ -90,8 +91,9 @@
   .trace.open .chev { transform: rotate(90deg); }
   .trace-list { list-style: none; margin: 4px 0 0; padding: 0 0 0 4px; display: none; }
   .trace.open .trace-list { display: block; }
-  .trace-list li { display: flex; align-items: center; gap: 10px; height: 26px; color: var(--ink-2); font-size: 13px; opacity: 0; transform: translateY(4px); transition: opacity .3s ease, transform .3s ease; }
-  .trace-list li.in { opacity: 1; transform: none; }
+  .trace-list li { display: flex; align-items: center; gap: 10px; height: 26px; color: var(--ink-2); font-size: 13px; transition: opacity .3s ease, transform .3s ease; }
+  .anim .trace-list li { opacity: 0; transform: translateY(4px); }
+  .anim .trace-list li.in { opacity: 1; transform: none; }
   .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--line-2); flex: none; }
   li.run .dot, .trace.run .head-dot { background: var(--pink); animation: pulse 1.1s ease-in-out infinite; }
   li.done .dot { background: var(--green); }
@@ -287,8 +289,9 @@
   function later(fn, ms) { timers.push(setTimeout(fn, ms)); }
   function $(id) { return document.getElementById(id); }
 
-  function reset() {
+  function reset(animate) {
     timers.forEach(clearTimeout); timers = [];
+    document.documentElement.classList.toggle("anim", !!animate);
     ["m-user", "m-agent", "result"].forEach(function (id) { $(id).classList.remove("in"); });
     var tr = $("trace"); tr.classList.add("open", "run");
     $("trace-label").textContent = "Working…";
@@ -301,12 +304,12 @@
     li.className = "run";
     li.innerHTML = '<span class="dot"></span><span>' + text + "</span>";
     $("trace-list").appendChild(li);
-    requestAnimationFrame(function () { li.classList.add("in"); });
+    setTimeout(function () { li.classList.add("in"); }, 20);
     return li;
   }
 
   function run() {
-    reset();
+    reset(true);
     var t = 300;
     later(function () { $("m-user").classList.add("in"); }, t);
     t += 800;
