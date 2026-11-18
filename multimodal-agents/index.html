@@ -107,7 +107,7 @@
   .rhead { margin-bottom: 12px; }
   .rbody { display: grid; grid-template-columns: 290px 1fr; gap: 18px; align-items: stretch; }
   .rside { display: flex; flex-direction: column; justify-content: space-between; min-width: 0; }
-  .video { position: relative; border-radius: 8px; overflow: hidden; aspect-ratio: 16 / 9; background: #e7b3a6; cursor: pointer; }
+  .video { position: relative; align-self: start; width: 100%; border-radius: 8px; overflow: hidden; aspect-ratio: 16 / 9; background: #e7b3a6; cursor: pointer; }
   .video svg.scene { width: 100%; height: 100%; }
   .pbtn { position: absolute; left: 50%; top: 50%; width: 44px; height: 44px; margin: -22px 0 0 -22px; border-radius: 50%; background: rgba(22,22,22,.86); color: #fff; display: flex; align-items: center; justify-content: center; }
   .pbtn svg { width: 16px; height: 16px; }
@@ -244,6 +244,27 @@
       radial-gradient(42% 80% at 50% 108%, rgba(255,190,130,.75), transparent 72%),
       radial-gradient(44% 80% at 86% 100%, rgba(170,150,255,.70), transparent 72%);
     filter: blur(30px); }
+
+  .tag { display: flex; align-items: center; gap: 7px; font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 6px; }
+  .tag i { width: 6px; height: 6px; border-radius: 50%; background: #e0a030; }
+  .tag.done i { background: var(--green); }
+  .rhead .tag { margin-bottom: 8px; }
+  .trail { margin-top: 12px; font-size: 12.5px; color: var(--ink-2); }
+  .noticed { margin-top: 10px; max-width: 640px; }
+  .noticed .label { margin-bottom: 6px; }
+  .nrow { display: flex; align-items: center; gap: 10px; height: 28px; color: var(--ink-2); font-size: 13px; }
+  .nrow svg { width: 15px; height: 15px; color: var(--ink-3); }
+
+  .plan { margin-bottom: 8px; max-width: 640px; }
+  .plan .label { margin-bottom: 6px; }
+  .prow { display: flex; align-items: center; gap: 10px; height: 26px; color: var(--ink-2); font-size: 13px; }
+  .prow b { width: 18px; height: 18px; border-radius: 50%; background: #f0f0f0; color: var(--ink-2); font-size: 11px; font-weight: 600; display: flex; align-items: center; justify-content: center; flex: none; }
+  .nrow.k-flag { color: var(--ink); height: auto; padding: 4px 0; align-items: flex-start; line-height: 1.45; }
+  .nrow.k-flag svg { color: #d4891a; margin-top: 2px; }
+  .chose { margin-top: 10px; font-size: 12.5px; color: var(--ink-2); line-height: 1.5; }
+  .chose .label { display: block; margin-bottom: 2px; }
+  .why { margin: 12px 0 2px; font-size: 13px; color: var(--ink-2); line-height: 1.5; }
+  .why .label { display: block; margin-bottom: 2px; }
 </style>
 </head>
 <body>
@@ -267,6 +288,17 @@
       <path d="M416 190 Q404 168 420 150 Q434 132 424 112" fill="none" stroke="#fff" stroke-opacity=".7" stroke-width="5" stroke-linecap="round"/>
       <path d="M452 188 Q440 168 456 152 Q470 138 462 120" fill="none" stroke="#fff" stroke-opacity=".5" stroke-width="5" stroke-linecap="round"/>
       <g fill="#6b3f2e"><ellipse cx="330" cy="318" rx="9" ry="6" transform="rotate(-20 330 318)"/><ellipse cx="350" cy="326" rx="9" ry="6" transform="rotate(15 350 326)"/><ellipse cx="318" cy="334" rx="9" ry="6" transform="rotate(30 318 334)"/><ellipse cx="372" cy="318" rx="9" ry="6" transform="rotate(-5 372 318)"/><ellipse cx="560" cy="318" rx="9" ry="6" transform="rotate(25 560 318)"/><ellipse cx="540" cy="330" rx="9" ry="6" transform="rotate(-15 540 330)"/></g>
+    </symbol>
+    <symbol id="roast-scene" viewBox="0 0 640 360">
+      <rect width="640" height="360" fill="#d9b18b"/>
+      <rect y="274" width="640" height="86" fill="#b98963"/>
+      <circle cx="320" cy="146" r="94" fill="#7b4a34"/>
+      <circle cx="320" cy="146" r="72" fill="#8d5a41"/>
+      <circle cx="320" cy="146" r="14" fill="#5a3324"/>
+      <rect x="286" y="236" width="68" height="44" rx="3" fill="#6a4030"/>
+      <g fill="#5a3324"><ellipse cx="250" cy="312" rx="11" ry="7" transform="rotate(-18 250 312)"/><ellipse cx="276" cy="322" rx="11" ry="7" transform="rotate(12 276 322)"/><ellipse cx="306" cy="314" rx="11" ry="7" transform="rotate(-6 306 314)"/><ellipse cx="338" cy="324" rx="11" ry="7" transform="rotate(22 338 324)"/><ellipse cx="372" cy="314" rx="11" ry="7" transform="rotate(-14 372 314)"/><ellipse cx="404" cy="322" rx="11" ry="7" transform="rotate(8 404 322)"/></g>
+      <path d="M118 90 Q104 64 122 46 Q138 28 126 8" fill="none" stroke="#fff" stroke-opacity=".55" stroke-width="5" stroke-linecap="round"/>
+      <path d="M520 100 Q506 74 524 56 Q540 38 528 18" fill="none" stroke="#fff" stroke-opacity=".45" stroke-width="5" stroke-linecap="round"/>
     </symbol>
   </defs>
 </svg>
@@ -340,6 +372,7 @@
     glyph: '<svg class="ico" viewBox="0 0 24 24"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>'
   };
   var SCENE = '<svg class="scene" viewBox="0 0 640 360" preserveAspectRatio="xMidYMid slice"><use href="#bag-scene"/></svg>';
+  var SCENE2 = '<svg class="scene" viewBox="0 0 640 360" preserveAspectRatio="xMidYMid slice"><use href="#roast-scene"/></svg>';
 
 
   // the agent's avatar: a small pink blob with a face that follows what the agent is doing
@@ -380,7 +413,7 @@
     var h = "";
     S.att.forEach(function (a, i) {
       if (a.t === "photo") h += '<div class="chip"><div class="thumb">' + SCENE + '</div>coffee-bag.jpg<button class="x" data-rm="' + i + '">' + I.x + '</button></div>';
-      if (a.t === "video") h += '<div class="chip"><div class="thumb">' + SCENE + '<span class="vtag">' + I.play + '0:30</span></div>Coffee_launch.mp4<button class="x" data-rm="' + i + '">' + I.x + '</button></div>';
+      if (a.t === "video") h += '<div class="chip"><div class="thumb">' + SCENE2 + '<span class="vtag">' + I.play + '0:30</span></div>Roastery_footage.mp4<button class="x" data-rm="' + i + '">' + I.x + '</button></div>';
       if (a.t === "voice") h += '<div class="chip"><span class="vch"><span class="play">' + I.play + '</span><span class="wave">' + waveBars(14, 3, 11) + '</span>Voice brief · ' + fmt(a.dur) + '</span><button class="x" data-rm="' + i + '">' + I.x + '</button></div>';
     });
     $("c-attach").innerHTML = h;
@@ -390,7 +423,7 @@
     var b = e.target.closest("[data-rm]"); if (!b) return;
     var removed = S.att.splice(parseInt(b.getAttribute("data-rm"), 10), 1)[0];
     renderAttach();
-    if (removed && removed.t !== "voice" && ta.value.trim() === S.suggested) setSuggested(null);
+    if (removed && removed.t !== "voice") setSuggested();
   });
 
   // attach menu
@@ -401,35 +434,42 @@
     var b = e.target.closest("[data-add]"); if (!b) return;
     attach(b.getAttribute("data-add"));
   });
-  var SUGGEST = {
-    photo: "Create a short launch video for this coffee. Keep it warm and simple.",
-    video: "Turn this video into a 20-second audio ad."
-  };
-  function setSuggested(kind) {
+  var P_BOTH = "Create a short launch video from this photo and the roastery footage. Keep it warm and simple.";
+  var P_PHOTO = "Create a short launch video for this coffee. Keep it warm and simple.";
+  var P_VIDEO = "Turn this video into a 20-second audio ad.";
+  function suggestFor() {
+    var p = hasMedia("photo"), v = hasMedia("video");
+    return p && v ? P_BOTH : p ? P_PHOTO : v ? P_VIDEO : null;
+  }
+  function setSuggested() {
     // only replace the box if it is empty or still holds an earlier suggestion
     if (ta.value.trim() && ta.value.trim() !== S.suggested) return;
-    S.suggested = kind ? SUGGEST[kind] : null;
-    ta.value = kind ? SUGGEST[kind] : "";
+    var next = suggestFor();
+    S.suggested = next; ta.value = next || "";
     autosize(); updateSend();
-    if (kind) {
+    if (next) {
       ta.classList.add("flash");
       setTimeout(function () { ta.classList.remove("flash"); }, 1100);
       ta.focus();
     }
   }
+  var ORDER = { photo: 0, video: 1, voice: 2 };
   function attach(kind) {
-    S.att = S.att.filter(function (a) { return a.t === "voice"; });
-    S.att.unshift({ t: kind });
+    S.att = S.att.filter(function (a) { return a.t !== kind; });
+    S.att.push({ t: kind });
+    S.att.sort(function (x, y) { return ORDER[x.t] - ORDER[y.t]; });
     openMenu(false); renderAttach();
-    setSuggested(kind);
+    setSuggested();
   }
 
   // ---------- simulated voice
   function hasMedia(kind) { return S.att.some(function (a) { return a.t === kind; }); }
   function phrase() {
     if (S.lastKind === null) {
-      if (hasMedia("video")) return { text: "Turn this video into a 20-second audio ad.", dur: 6 };
-      return { text: "Create a short launch video for this coffee. Keep it warm and simple.", dur: 12 };
+      var p = hasMedia("photo"), v = hasMedia("video");
+      if (p && v) return { text: P_BOTH, dur: 14 };
+      if (v) return { text: P_VIDEO, dur: 6 };
+      return { text: P_PHOTO, dur: 12 };
     }
     if (S.lastKind === "video1") return { text: "Make it a bit shorter and more upbeat.", dur: 5 };
     if (S.lastKind === "audio1") return { text: "A little slower, with a softer ending.", dur: 5 };
@@ -485,7 +525,7 @@
     var a = "";
     att.forEach(function (x) {
       if (x.t === "photo") a += '<div class="thumb">' + SCENE + "</div>";
-      if (x.t === "video") a += '<div class="thumb">' + SCENE + '<span class="vtag">' + I.play + '0:30</span></div>';
+      if (x.t === "video") a += '<div class="thumb">' + SCENE2 + '<span class="vtag">' + I.play + '0:30</span></div>';
       if (x.t === "voice") a += '<div class="voice"><span class="play">' + I.play + '</span><span class="wave">' + waveBars(24, 5, 7) + '</span><span class="t">Voice brief · ' + fmt(x.dur) + "</span></div>";
     });
     var html = '<div class="bubble">' + (a ? '<div class="attach">' + a + "</div>" : "") + (text ? '<div class="text"></div>' : "") + "</div>";
@@ -514,6 +554,7 @@
     if (c.kind === "video") {
       return head + '<div class="rbody"><div class="video" data-total="' + c.dur + '">' + SCENE + '<span class="pbtn">' + I.play + '</span><span class="len">' + fmt(c.dur) + '</span><span class="vbar"><i></i></span></div>' +
         '<div class="rside"><div class="copy"><div class="label">SUGGESTED COPY</div><div class="head">' + c.head + '</div><div class="sub">' + c.sub + "</div></div>" +
+        (c.chose ? '<div class="chose"><span class="label">I CHOSE</span>' + c.chose + "</div>" : "") +
         '<div class="actions"><button class="b ghost2">' + I.pencil + 'Edit</button><button class="b primary" data-use="1">Use this version</button></div></div></div>';
     }
     if (c.kind === "audio") {
@@ -522,10 +563,12 @@
         '<div class="actions"><button class="b ghost2">' + I.pencil + 'Edit script</button><button class="b primary" data-use="1">Use this version</button></div>';
     }
     if (c.kind === "approve") {
+      head = '<div class="rhead"><div class="tag"><i></i><span>Your turn</span></div><h2>' + c.title + "</h2>" + note + "</div>";
       return head + '<div class="wfs">' +
         '<div class="wf">' + WF + '<div><div class="t">Schedule the video on LinkedIn</div><div class="s">Thursday, 9:00 · workflow: Post to LinkedIn</div></div></div>' +
         '<div class="wf">' + WF + '<div><div class="t">Share it with the team in Slack</div><div class="s">#marketing · workflow: Notify team</div></div></div>' +
         '<div class="wf">' + WF + '<div><div class="t">Log the campaign</div><div class="s">Campaign tracker · workflow: Log campaign</div></div></div></div>' +
+        '<div class="why"><span class="label">WHY THURSDAY, 9:00</span>Your last three launches got the most views then.</div>' +
         '<div class="actions"><button class="b ghost2" data-act="change">Change</button><button class="b primary" data-act="go">Approve and run</button></div>';
     }
     if (c.kind === "done") {
@@ -561,10 +604,15 @@
   // ---------- the agent as an actor: works, asks, suggests, waits for approval, comes back
   function choices(body, q, opts, fast, cls, auto) {
     var box = document.createElement("div"); box.className = cls + " enter";
-    box.innerHTML = '<div class="q">' + q + '</div><div class="opts">' + opts.map(function (o, i) { return '<button class="opt" data-i="' + i + '">' + o + "</button>"; }).join("") + "</div>";
+    box.innerHTML = '<div class="tag"><i></i><span>Your turn</span></div><div class="q">' + q + '</div><div class="opts">' +
+      opts.map(function (o, i) { return '<button class="opt" data-i="' + i + '">' + o + "</button>"; }).join("") + "</div>";
     body.appendChild(box); scrollDown();
     return new Promise(function (res) {
-      function pick(i) { box.querySelectorAll(".opt").forEach(function (b, k) { b.classList.add("off"); if (k === i) b.classList.add("sel"); }); res(i); }
+      function pick(i) {
+        box.querySelectorAll(".opt").forEach(function (b, k) { b.classList.add("off"); if (k === i) b.classList.add("sel"); });
+        box.querySelector(".tag").classList.add("done"); box.querySelector(".tag span").textContent = "You chose";
+        res(i);
+      }
       if (fast && auto) { pick(0); return; }
       box.querySelector(".opts").addEventListener("click", function (e) {
         var b = e.target.closest(".opt"); if (!b || b.classList.contains("off")) return;
@@ -608,6 +656,22 @@
       body.appendChild(card); wirePlayer(card); scrollDown();
       return card;
     };
+    A.plan = function (items) {
+      var p = document.createElement("div"); p.className = "plan enter";
+      p.innerHTML = '<div class="label">MY PLAN</div>' + items.map(function (t, i) { return '<div class="prow"><b>' + (i + 1) + "</b><span>" + t + "</span></div>"; }).join("");
+      body.insertBefore(p, trace); scrollDown();
+    };
+    A.noticed = function (items) {
+      var ic = {
+        photo: '<svg class="ico" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.1-3.1a2 2 0 0 0-2.8 0L6 21"/></svg>',
+        video: '<svg class="ico" viewBox="0 0 24 24"><rect x="2" y="6" width="14" height="12" rx="2"/><path d="m22 8-6 4 6 4z"/></svg>',
+        voice: '<svg class="ico" viewBox="0 0 24 24"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v3"/></svg>',
+        flag: '<svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg>'
+      };
+      var n = document.createElement("div"); n.className = "noticed enter";
+      n.innerHTML = '<div class="label">WHAT I NOTICED</div>' + items.map(function (x) { return '<div class="nrow k-' + x.k + '">' + ic[x.k] + "<span>" + x.t + "</span></div>"; }).join("");
+      body.appendChild(n); scrollDown();
+    };
     A.ask = function (q, opts) { return choices(body, q, opts, fast, "ask", true); };
     A.suggest = function (q, opts, auto) { return choices(body, q, opts, fast, "sugg", auto !== false); };
     return A;
@@ -617,17 +681,28 @@
   function ready(text) { S.busy = false; setStatus("idle", text || "Your turn"); }
   function working(text) { S.busy = true; setStatus("working", text || "Working"); }
 
-  // 1. photo + voice in. The agent asks where it will run, then makes the video
+  // 1. photo, footage and voice in. The agent shows what it took from each, asks where it will run, then makes the video
   function storyVideo1(fast) {
     working();
-    var A = newAgent(fast), CH = ["LinkedIn", "Instagram", "Both"];
-    return chain(A, ["Looking at your photo", "Reading your brand voice"]).then(function () {
+    var A = newAgent(fast), CH = ["LinkedIn", "Instagram", "Both"], P = S.sent || { photo: true, video: false };
+    var looks = [], seen = [];
+    A.plan(["Study what you gave me", "Check where it will run", "Make the video and the copy", "Offer an audio version", "Ask for your OK before anything is published"]);
+    if (P.photo) { looks.push("Looking at your photo"); seen.push({ k: "photo", t: "Pink coffee bag, warm peach tones" }); }
+    if (P.video) { looks.push("Watching your footage"); seen.push({ k: "video", t: "Three usable moments: pouring, steam, first sip" }); }
+    looks.push("Listening to your brief", "Reading your brand voice"); seen.push({ k: "voice", t: "Tone: warm and simple" });
+    if (P.photo && P.video) seen.push({ k: "flag", t: "Heads up: the footage has no logo, so I will bring in the bag from your photo" });
+    return chain(A, looks).then(function () {
+      A.noticed(seen);
       A.pause("Waiting for your answer"); setStatus("awaiting", "Waiting for your answer");
       return A.ask("Where will this run?", CH);
     }).then(function (i) {
       S.channel = CH[i]; A.resume(); working();
-      return chain(A, ["Drafting the script for " + (i === 2 ? "both channels" : CH[i]), "Rendering the video"]).then(function () {
-        A.finish("6 s · 4 steps", { kind: "video", title: "Your launch video", note: "Made for " + (i === 2 ? "LinkedIn and Instagram" : CH[i]), dur: 18, head: "Meet your new morning ritual.", sub: "Smooth, balanced coffee for focused mornings." });
+      var where = i === 2 ? "LinkedIn and Instagram" : CH[i];
+      var from = P.photo && P.video ? "your photo and three moments from your footage" : "your photo";
+      return chain(A, ["Drafting the script for " + (i === 2 ? "both channels" : CH[i]), "Cutting the video"]).then(function () {
+        var n = looks.length + 2;
+        var ratio = i === 0 ? "16:9" : i === 1 ? "9:16" : "16:9 and 9:16";
+        A.finish((n + 1) + " s · " + n + " steps", { kind: "video", title: "Your launch video", note: "Made for " + where + " · built from " + from, chose: ratio + " for " + where + " · 18 s · warm acoustic music · opens on the pour", dur: 18, head: "Meet your new morning ritual.", sub: "Smooth, balanced coffee for focused mornings." });
         S.lastKind = "video1"; ready();
       });
     });
@@ -638,7 +713,7 @@
     working();
     var A = newAgent(fast);
     return chain(A, ["Reading your change", "Trimming the video", "Adjusting the music"]).then(function () {
-      A.finish("3 s · 3 steps", { kind: "video", title: "Your launch video · Draft 2", note: "Shorter by 4 s · more upbeat music", dur: 14, head: "Meet your new morning ritual.", sub: "Smooth, balanced coffee for focused mornings." });
+      A.finish("3 s · 3 steps", { kind: "video", title: "Your launch video · Draft 2", note: "Shorter by 4 s · more upbeat music", chose: "Cut 4 s from the middle · music tempo up a little · kept the ending", dur: 14, head: "Meet your new morning ritual.", sub: "Smooth, balanced coffee for focused mornings." });
       S.lastKind = "video2"; ready();
       return A.suggest("I can also turn this into a 20-second audio ad for radio and podcasts.", ["Make the audio ad", "Not now"]).then(function (i) {
         if (i === 0) { userBubble([], "Make the audio ad"); return storyAudioFromDraft(fast); }
@@ -660,7 +735,7 @@
     working();
     var A = newAgent(fast);
     return chain(A, ["Watching your video", "Pulling out the key lines", "Writing a 20-second script", "Recording the voiceover"]).then(function () {
-      A.finish("5 s · 4 steps", { kind: "audio", title: "Your audio ad", note: "Adapted from Coffee_launch.mp4", dur: 20, script: SCRIPT });
+      A.finish("5 s · 4 steps", { kind: "audio", title: "Your audio ad", note: "Adapted from Roastery_footage.mp4", dur: 20, script: SCRIPT });
       S.lastKind = "audio1"; ready();
     });
   }
@@ -682,9 +757,17 @@
       S.busy = false; setStatus("awaiting", "Waiting for your approval");
       return new Promise(function (res) {
         function decide(act) {
-          card.querySelector(".actions").innerHTML = act === "go"
+          var go = act === "go", parts = [];
+          if (go) {
+            if (S.channel) parts.push(S.channel === "Both" ? "LinkedIn and Instagram" : S.channel);
+            parts.push(S.lastKind === "video2" ? "Draft 2" : "Draft 1");
+            if (S.audioDone) parts.push("audio ad included");
+          }
+          card.querySelector(".actions").innerHTML = go
             ? '<span class="decided"><span class="dot" style="background:var(--green)"></span>Approved</span>'
             : '<span class="decided"><span class="dot"></span>Not now</span>';
+          var tag = card.querySelector(".tag"); tag.classList.add("done"); tag.querySelector("span").textContent = go ? "You approved" : "You paused";
+          if (go) { var tr = document.createElement("div"); tr.className = "trail"; tr.textContent = "You decided · " + parts.join(" · "); card.appendChild(tr); }
           res(act);
         }
         if (fast) { decide("go"); return; }
@@ -732,7 +815,7 @@
   thread.addEventListener("click", function (e) { if (e.target.closest("[data-use]")) useVersion(); });
 
   function replyFor() {
-    if (S.lastKind === null) return hasMedia("video") ? "audio1" : "video1";
+    if (S.lastKind === null) return (hasMedia("video") && !hasMedia("photo")) ? "audio1" : "video1";
     if (S.lastKind === "video1") return "video2";
     if (S.lastKind === "audio1") return "audio2";
     return null;
@@ -743,6 +826,7 @@
     var text = ta.value.trim();
     if (!S.att.length && !text) return;
     var key = replyFor();
+    S.sent = { photo: hasMedia("photo"), video: hasMedia("video") };
     userBubble(S.att.slice(), text);
     S.att = []; S.suggested = null; ta.value = ""; autosize(); renderAttach();
     if (key === "video1") storyVideo1(false);
@@ -767,7 +851,9 @@
     resetAll();
     var pick = function (sel) { var b = document.querySelector(sel); if (b) b.click(); };
     sleep(900).then(function () { openMenu(true); return sleep(900); })
-      .then(function () { attach("photo"); return sleep(1700); })
+      .then(function () { attach("photo"); return sleep(1300); })
+      .then(function () { openMenu(true); return sleep(800); })
+      .then(function () { attach("video"); return sleep(1700); })
       .then(function () { startListen(); return sleep(4300); })
       .then(function () { stopListen(true); return sleep(1000); })
       .then(function () { send(); return until(function () { return document.querySelector(".ask .opt:not(.off)"); }); })
@@ -787,7 +873,8 @@
 
   function endState() {
     resetAll();
-    userBubble([{ t: "photo" }, { t: "voice", dur: 12 }], "Create a short launch video for this coffee. Keep it warm and simple.");
+    S.sent = { photo: true, video: true };
+    userBubble([{ t: "photo" }, { t: "video" }, { t: "voice", dur: 14 }], P_BOTH);
     storyVideo1(true).then(function () {
       userBubble([{ t: "voice", dur: 5 }], "Make it a bit shorter and more upbeat.");
       return storyVideo2(true);
