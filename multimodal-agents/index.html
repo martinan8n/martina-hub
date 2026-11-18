@@ -151,6 +151,8 @@
   .chip .x svg { width: 12px; height: 12px; }
   .c-text { display: block; width: 100%; border: 0; outline: 0; resize: none; background: transparent; font: inherit; font-size: 14px; color: var(--ink); min-height: 24px; max-height: 120px; padding: 0; margin-bottom: 14px; }
   .c-text::placeholder { color: var(--ink-3); }
+  .c-text.flash { background: var(--pink-soft); border-radius: 4px; box-shadow: 0 0 0 4px var(--pink-soft); transition: none; }
+  .c-text { transition: background-color .9s ease, box-shadow .9s ease; }
   .row { display: flex; align-items: center; gap: 4px; }
   .ib { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: var(--ink); }
   .ib:hover, .ib.on { background: #f1f1f1; }
@@ -299,7 +301,7 @@
   }
 
   // ---------- state
-  var S = { att: [], lastKind: null, listening: false, busy: false };
+  var S = { att: [], lastKind: null, listening: false, busy: false, suggested: null };
 
   // ---------- composer
   var ta = $("c-text");
@@ -324,7 +326,9 @@
   }
   $("c-attach").addEventListener("click", function (e) {
     var b = e.target.closest("[data-rm]"); if (!b) return;
-    S.att.splice(parseInt(b.getAttribute("data-rm"), 10), 1); renderAttach();
+    var removed = S.att.splice(parseInt(b.getAttribute("data-rm"), 10), 1)[0];
+    renderAttach();
+    if (removed && removed.t !== "voice" && ta.value.trim() === S.suggested) setSuggested(null);
   });
 
   // attach menu
@@ -335,10 +339,27 @@
     var b = e.target.closest("[data-add]"); if (!b) return;
     attach(b.getAttribute("data-add"));
   });
+  var SUGGEST = {
+    photo: "Create a short launch video for this coffee. Keep it warm and simple.",
+    video: "Turn this video into a 20-second audio ad."
+  };
+  function setSuggested(kind) {
+    // only replace the box if it is empty or still holds an earlier suggestion
+    if (ta.value.trim() && ta.value.trim() !== S.suggested) return;
+    S.suggested = kind ? SUGGEST[kind] : null;
+    ta.value = kind ? SUGGEST[kind] : "";
+    autosize(); updateSend();
+    if (kind) {
+      ta.classList.add("flash");
+      setTimeout(function () { ta.classList.remove("flash"); }, 1100);
+      ta.focus();
+    }
+  }
   function attach(kind) {
     S.att = S.att.filter(function (a) { return a.t === "voice"; });
     S.att.unshift({ t: kind });
     openMenu(false); renderAttach();
+    setSuggested(kind);
   }
 
   // ---------- simulated voice
@@ -379,7 +400,7 @@
     if (keep) {
       S.att = S.att.filter(function (a) { return a.t !== "voice"; });
       S.att.push({ t: "voice", dur: L.p.dur });
-      ta.value = L.p.text; autosize();
+      if (!ta.value.trim()) { ta.value = L.p.text; autosize(); }
       renderAttach();
     }
   }
@@ -505,7 +526,7 @@
   // ---------- demo + reset
   function resetAll() {
     timers.forEach(clearTimeout); timers = [];
-    clearInterval(L.tick); S = { att: [], lastKind: null, listening: false, busy: false };
+    clearInterval(L.tick); S = { att: [], lastKind: null, listening: false, busy: false, suggested: null };
     $("composer").classList.remove("is-listening"); openMenu(false);
     thread.innerHTML = ""; ta.value = ""; autosize(); renderAttach();
   }
