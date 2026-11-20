@@ -178,6 +178,7 @@
             </div>
             <div class="actions">
               <button class="n8n-button n8n-button--secondary n8n-button--size-medium" onclick="s1bClose(false)">Cancel</button>
+              <span class="spacer"></span>
               <button class="n8n-button n8n-button--secondary n8n-button--size-medium" onclick="s1bClose(true)">Publish</button>
               <button class="n8n-button n8n-button--primary n8n-button--size-medium" onclick="stageGo('stage1b','home')">Publish and talk to agent</button>
             </div>
@@ -188,8 +189,8 @@
     <div class="view" data-view="home" id="home1b"></div>
   </div>
   <ul class="notes">
-    <li>Copied from the real modal: 500px wide, 24px between blocks, version name marked required and prefilled, description with a four-row field, character counters (128 and 2048), and Cancel and the publish buttons right-aligned with Cancel as an outline button.</li>
-    <li>Different from the real modal: the info message and callout above the form, and Publish and talk to agent as the primary button. In Workflows, Publish is the primary.</li>
+    <li>Copied from the real modal: 500px wide, 24px between blocks, version name marked required and prefilled, description with a four-row field, character counters (128 and 2048), and the publish buttons right-aligned. Cancel is an outline button.</li>
+    <li>Different from the real modal: Cancel sits on the left, apart from the publish buttons; the info message and callout above the form, and Publish and talk to agent as the primary button. In Workflows, Publish is the primary.</li>
     <li>Trade-off against 1: this matches what people already know from Workflows, but the form takes most of the modal even when nobody wants to name a version.</li>
   </ul>
 

@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Human Review</title>
+<link rel="stylesheet" href="../styles/n8n-tokens.css?v=1">
+<style>
+  html, body { margin:0; }
+  * { box-sizing: border-box; }
+  body { font-family: var(--font-family, InterVariable, system-ui, sans-serif); background: var(--color--neutral-100); color: var(--text-color); }
+  .page { max-width: 1960px; margin: 0 auto; padding: 32px 32px 96px; }
+  .back { font-size: 13px; color: var(--text-color--subtle); text-decoration: none; }
+  .back:hover { color: var(--text-color); }
+  h1 { font-size: 22px; font-weight: 600; margin: 14px 0 6px; }
+  .lede { font-size: 14px; line-height: 1.6; color: var(--text-color--subtle); max-width: 720px; margin: 0 0 36px; }
+  .cols { display: flex; flex-wrap: wrap; gap: 64px; align-items: flex-start; }
+  .col { display: flex; flex-direction: column; gap: 32px; }
+  .col h2 { font-size: 20px; font-weight: 600; margin: 0 0 -8px; }
+  .col.hr { width: 850px; max-width: 100%; }
+  .col.gr { width: 920px; max-width: 100%; }
+  .gr-row { display: flex; gap: 32px; flex-wrap: wrap; align-items: flex-start; }
+
+  /* a shot = a surface dimmed behind a modal, like the board screenshots */
+  .shot { background: #9a9a9a; border-radius: 4px; padding: 28px 34px; display: flex; justify-content: center; }
+  .shot.bare { background: none; padding: 0; display: block; }
+
+  .card { background: var(--background--surface); border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; }
+  .card h3 { font-size: 13px; font-weight: 500; margin: 0 0 6px; }
+  .card .desc { font-size: 13px; color: var(--text-color--subtler); margin: 0 0 16px; }
+
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .chip { display: inline-flex; align-items: center; gap: 8px; height: 32px; padding: 0 14px; border: 1px solid var(--color--neutral-300); border-radius: 9999px; background: #fff; font-size: 13px; color: var(--text-color); white-space: nowrap; max-width: 270px; }
+  .chip .t { overflow: hidden; text-overflow: ellipsis; }
+  .chip .mut { color: var(--text-color--subtler); }
+  .chip .x { margin-left: 2px; color: var(--text-color--subtle); cursor: pointer; display: inline-flex; }
+  .chip.plain { padding: 0 12px; }
+  .chip svg { flex: none; }
+  .plus { display: inline-flex; width: 28px; height: 28px; align-items: center; justify-content: center; color: var(--text-color--subtle); cursor: pointer; }
+  .plus:hover { color: var(--text-color); }
+  .chips.off .chip, .chips.off .plus { color: var(--text-color--subtler); }
+  .chips.off .chip b { font-weight: 500; }
+
+  .modal { background: var(--background--surface); border-radius: 16px; box-shadow: 0 0 0 .5px var(--border-color), 0 8px 24px rgba(0,0,0,.08); position: relative; width: 100%; }
+  .mbody { padding: 24px 24px 20px; }
+  .mhead { display: flex; align-items: center; margin-bottom: 18px; }
+  .mtitle { font-size: 16px; font-weight: 500; display: flex; align-items: center; gap: 8px; }
+  .mclose { margin-left: auto; color: var(--text-color--subtle); cursor: pointer; display: inline-flex; }
+  .mfoot { border-top: 1px solid var(--border-color); padding: 16px 24px; display: flex; align-items: center; gap: 8px; }
+  .mfoot .sp { flex: 1; }
+  .pbtn { height: 32px; padding: 0 16px; border-radius: 9999px; font: inherit; font-size: 13px; font-weight: 500; cursor: pointer; border: 1px solid var(--color--neutral-300); background: #fff; color: var(--text-color); }
+  .pbtn.dark { background: #1f1f1f; border-color: #1f1f1f; color: #fff; }
+  .pbtn.dis { background: #8e8e8e; border-color: #8e8e8e; color: #fff; cursor: default; }
+  .pbtn.ghost { border: 0; background: none; padding: 0; display: inline-flex; align-items: center; gap: 6px; color: var(--text-color); }
+
+  .am { display: flex; align-items: center; margin-bottom: 14px; font-size: 13px; }
+  .seg { margin-left: auto; display: inline-flex; background: var(--color--neutral-100); border-radius: 8px; padding: 3px; }
+  .seg button { font: inherit; font-size: 12px; border: 0; background: none; padding: 6px 12px; border-radius: 6px; color: var(--text-color--subtle); cursor: pointer; }
+  .seg button.on { background: #fff; color: var(--text-color); box-shadow: 0 0 0 1px var(--border-color); }
+
+  .rows { border: 1px solid var(--border-color); border-radius: 12px; overflow: hidden; }
+  .row { display: flex; align-items: center; min-height: 66px; padding: 0 20px; font-size: 13px; border-top: 1px solid var(--border-color); }
+  .row:first-child { border-top: 0; }
+  .row .l { flex: 1; }
+  .row.adv { font-weight: 500; min-height: 50px; cursor: pointer; }
+  .row.adv.focus { outline: 2px solid var(--color--neutral-300); outline-offset: -2px; border-radius: 2px; }
+  .row .chev { color: var(--text-color--subtle); transition: transform .12s; }
+  .row.adv.open .chev { transform: rotate(180deg); }
+  .row.subrow { min-height: 56px; }
+  .sel { display: inline-flex; align-items: center; gap: 8px; width: 230px; height: 36px; padding: 0 10px; border: 1px solid var(--color--neutral-300); border-radius: 8px; font-size: 13px; background: #fff; }
+  .sel .t { flex: 1; }
+  .sel.ph .t { color: var(--text-color--subtler); }
+  .sel svg:last-child { color: var(--text-color--subtle); }
+  .advbody { display: none; }
+  .advbody.open { display: block; }
+  [data-mode="workflow"] .only-channel, [data-mode="channel"] .only-workflow { display: none; }
+
+  /* tool modal bits */
+  .sm { font-size: 11px; color: var(--text-color); }
+  .fld { margin-bottom: 12px; }
+  .fld .lab { font-size: 11px; margin-bottom: 4px; display: flex; align-items: center; gap: 4px; }
+  .ta { border: 1px solid var(--color--neutral-300); border-radius: 6px; padding: 8px 10px; font-size: 12px; min-height: 40px; background: #fff; }
+  .tgl { width: 34px; height: 20px; border-radius: 10px; background: #cfcfcf; position: relative; cursor: pointer; flex: none; transition: background .12s; }
+  .tgl::after { content:""; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%; background: #fff; transition: left .12s; }
+  .tgl.on { background: var(--color--pink-500); }
+  .tgl.on::after { left: 16px; }
+  .reqbox { border: 1px solid var(--border-color); border-radius: 12px; padding: 14px 16px; margin-top: 14px; }
+  .reqbox .top { display: flex; align-items: center; }
+  .reqbox .top b { flex: 1; font-size: 13px; font-weight: 500; }
+  .reqbox .hint { font-size: 11px; color: var(--text-color--subtler); margin: 2px 0 10px; }
+  .reqbox .hrow { display: flex; align-items: center; gap: 8px; font-size: 13px; }
+  .reqbox .hrow > b { flex: 1; font-weight: 400; }
+  .dim { opacity: .45; pointer-events: none; }
+  .perm { border: 1px solid var(--border-color); border-radius: 10px; padding: 10px 14px; margin-bottom: 8px; display: flex; align-items: center; font-size: 12px; }
+  .perm .l { flex: 1; } .perm small { display: block; color: var(--text-color--subtler); font-size: 11px; margin-top: 2px; }
+  .conn { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; border: 1px solid var(--color--neutral-300); border-radius: 6px; padding: 4px 8px; color: var(--text-color--subtle); }
+  .inp { border: 1px solid var(--color--neutral-300); border-radius: 8px; height: 36px; padding: 0 12px; font-size: 13px; background: #fff; display: flex; align-items: center; }
+  .inp .ph { color: var(--text-color--subtler); flex: 1; } .inp .unit { color: var(--text-color--subtler); font-size: 11px; }
+  .gbox { background: var(--color--neutral-100); border-radius: 10px; padding: 12px; margin: 14px 0; }
+  .gbox .hint { font-size: 11px; color: var(--text-color--subtler); margin-top: 8px; }
+  .radio { display: flex; align-items: center; gap: 8px; font-size: 13px; margin: 8px 0; }
+  .radio i { width: 14px; height: 14px; border-radius: 50%; border: 1px solid var(--color--neutral-400); display: inline-block; background: #fff; }
+  .radio.on i { border: 4px solid var(--color--pink-500); }
+  .lbl { font-size: 11px; margin: 14px 0 6px; }
+  .usage { border-top: 1px solid var(--border-color); margin-top: 16px; padding-top: 14px; }
+  .usage .u { display: flex; align-items: center; padding: 14px 0 0; }
+  .usage .u .l { flex: 1; font-size: 13px; }
+  .usage .u .l small { display: block; font-size: 12px; color: var(--text-color--subtler); margin-top: 6px; }
+  .usage .u .v { font-size: 12px; display: inline-flex; align-items: center; gap: 8px; }
+  .usage .head { display: flex; font-size: 13px; } .usage .head span:last-child { margin-left: auto; font-size: 12px; color: var(--text-color--subtler); }
+  .note { display: flex; align-items: center; gap: 10px; border: 1px solid var(--border-color); border-radius: 8px; padding: 10px 12px; font-size: 12px; color: var(--text-color--subtle); margin-top: 18px; }
+  .note .sp { flex: 1; }
+</style>
+</head>
+<body>
+<div class="page">
+  <a class="back" href="../index.html">&larr; Back to the hub</a>
+  <h1>Human Review</h1>
+  <p class="lede">Recreated from the Design prios board, section &ldquo;Guardrails vs Human Review&rdquo;. Human Review on the left, Guardrails on the right for comparison. This is the starting point before changes. The workflow and channel switch, the Advanced row and the toggles work.</p>
+
+  <div class="cols">
+
+    <!-- ================= HUMAN REVIEW ================= -->
+    <div class="col hr">
+      <h2>Human Review</h2>
+
+      <!-- 1. section on the agent -->
+      <div class="shot bare">
+        <div class="card">
+          <h3>Human review</h3>
+          <p class="desc">Ways this Agent can request human review</p>
+          <div class="chips">
+            <span class="chip"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/></svg><span class="t">Slack Assistant approval wor…</span></span>
+            <span class="chip"><svg width="16" height="16" viewBox="0 0 24 24"><rect x="3" y="10" width="7" height="3" rx="1.5" fill="#36c5f0"/><rect x="10" y="3" width="3" height="7" rx="1.5" fill="#2eb67d"/><rect x="14" y="10" width="7" height="3" rx="1.5" fill="#ecb22e"/><rect x="11" y="14" width="3" height="7" rx="1.5" fill="#e01e5a"/></svg><span class="t">Slack Michael Drury</span></span>
+            <span class="plus"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. new, workflow method. Toggle swaps to the channel method -->
+      <div class="shot" style="padding:28px 34px;">
+        <div class="modal" data-mode="workflow" id="mNew">
+          <div class="mbody">
+            <div class="mhead"><span class="mtitle">Human review 3</span><span class="mclose"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></span></div>
+            <div class="am">Approval method<div class="seg"><button class="on" data-m="workflow">Workflow</button><button data-m="channel">Channel</button></div></div>
+            <div class="rows">
+              <div class="row only-workflow"><span class="l">Which workflow is used to request review</span><span class="sel ph"><span class="t">Select workflow</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></div>
+              <div class="row only-channel"><span class="l">Which channel to use for review</span><span class="sel"><svg width="16" height="16" viewBox="0 0 24 24"><rect x="3" y="10" width="7" height="3" rx="1.5" fill="#36c5f0"/><rect x="10" y="3" width="3" height="7" rx="1.5" fill="#2eb67d"/><rect x="14" y="10" width="7" height="3" rx="1.5" fill="#ecb22e"/><rect x="11" y="14" width="3" height="7" rx="1.5" fill="#e01e5a"/></svg><span class="t">Slack</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></div>
+              <div class="row only-channel"><span class="l">Destination</span><span class="sel ph"><span class="t">Select destination</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></div>
+              <div class="row adv" data-adv><span class="l">Advanced</span><svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></div>
+              <div class="advbody">
+                <div class="row subrow"><span class="l">When the review expires</span><span class="sel"><span class="t">Never expires</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></div>
+                <div class="row subrow"><span class="l">Which tools require this review</span><span class="plus"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span></div>
+              </div>
+            </div>
+          </div>
+          <div class="mfoot"><span class="sp"></span><button class="pbtn">Cancel</button><button class="pbtn dis">Save</button></div>
+        </div>
+      </div>
+
+      <!-- 3. saved Slack, channel method -->
+      <div class="shot">
+        <div class="modal" data-mode="channel">
+          <div class="mbody">
+            <div class="mhead"><span class="mtitle">Slack Michael Drury</span><span class="mclose"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></span></div>
+            <div class="am">Approval method<div class="seg"><button data-m="workflow">Workflow</button><button class="on" data-m="channel">Channel</button></div></div>
+            <div class="rows">
+              <div class="row"><span class="l">Which channel to use for review</span><span class="sel"><svg width="16" height="16" viewBox="0 0 24 24"><rect x="3" y="10" width="7" height="3" rx="1.5" fill="#36c5f0"/><rect x="10" y="3" width="3" height="7" rx="1.5" fill="#2eb67d"/><rect x="14" y="10" width="7" height="3" rx="1.5" fill="#ecb22e"/><rect x="11" y="14" width="3" height="7" rx="1.5" fill="#e01e5a"/></svg><span class="t">Slack</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></div>
+              <div class="row"><span class="l">Destination</span><span class="sel"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M9 9h6v6"/></svg><span class="t">Michael Drury</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></div>
+              <div class="row adv" data-adv><span class="l">Advanced</span><svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></div>
+              <div class="advbody">
+                <div class="row subrow"><span class="l">When the review expires</span><span class="sel"><span class="t">Never expires</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></div>
+                <div class="row subrow"><span class="l">Which tools require this review</span><span class="plus"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span></div>
+              </div>
+            </div>
+          </div>
+          <div class="mfoot"><span class="sp"></span><button class="pbtn">Cancel</button><button class="pbtn dark">Save</button></div>
+        </div>
+      </div>
+
+      <!-- 4. same, Advanced open -->
+      <div class="shot" style="padding:12px 12px;">
+        <div class="modal" data-mode="channel">
+          <div class="mbody" style="padding:20px 20px 18px;">
+            <div class="mhead"><span class="mtitle">Slack Michael Drury</span><span class="mclose"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></span></div>
+            <div class="am">Approval method<div class="seg"><button data-m="workflow">Workflow</button><button class="on" data-m="channel">Channel</button></div></div>
+            <div class="rows">
+              <div class="row"><span class="l">Which channel to use for review</span><span class="sel"><svg width="16" height="16" viewBox="0 0 24 24"><rect x="3" y="10" width="7" height="3" rx="1.5" fill="#36c5f0"/><rect x="10" y="3" width="3" height="7" rx="1.5" fill="#2eb67d"/><rect x="14" y="10" width="7" height="3" rx="1.5" fill="#ecb22e"/><rect x="11" y="14" width="3" height="7" rx="1.5" fill="#e01e5a"/></svg><span class="t">Slack</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></div>
+              <div class="row"><span class="l">Destination</span><span class="sel"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M9 9h6v6"/></svg><span class="t">Michael Drury</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></div>
+              <div class="row adv open focus" data-adv><span class="l">Advanced</span><svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></div>
+              <div class="advbody open">
+                <div class="row subrow"><span class="l">When the review expires</span><span class="sel"><span class="t">Never expires</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></div>
+                <div class="row subrow"><span class="l">Which tools require this review</span><span class="plus"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span></div>
+              </div>
+            </div>
+          </div>
+          <div class="mfoot"><span class="sp"></span><button class="pbtn">Cancel</button><button class="pbtn dark">Save</button></div>
+        </div>
+      </div>
+
+      <!-- 5. tool modal with Require approval + Human reviews -->
+      <div class="shot" style="padding:12px 16px; max-width:560px;">
+        <div class="modal">
+          <div class="mbody" style="padding:16px 16px 14px;">
+            <div class="mhead" style="margin-bottom:8px;"><span class="mtitle" style="font-size:14px;"><svg width="22" height="22" viewBox="0 0 24 24"><rect width="24" height="24" rx="4" fill="#111"/><path d="M7 7l4 5-4 5M13 7l4 5-4 5" stroke="#fff" stroke-width="1.4" fill="none"/></svg>perplexity_search</span><span class="mclose"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></span></div>
+            <div class="fld"><div class="chip plain" style="height:22px;font-size:11px;"><span class="t">Defined by agent</span><span class="x">&times;</span></div></div>
+            <div class="fld"><div class="lab">Description</div><div class="ta">A focused, specific web search query</div></div>
+            <div class="fld"><div class="lab">Simplify Output</div><div style="display:flex;gap:10px;align-items:center;"><span class="tgl on"></span></div></div>
+            <div class="fld"><div class="lab" style="font-weight:500;">Options</div>
+              <div class="chip plain" style="height:24px;font-size:11px;margin:4px 0 8px;width:100%;max-width:none;border-radius:6px;"><span class="t">Max Results</span></div>
+              <div class="ta" style="min-height:52px;">Number of results to return, between 1 and 20. Use 5 unless more are needed.</div>
+              <div class="inp" style="height:30px;margin-top:10px;justify-content:center;font-size:11px;background:var(--color--neutral-100);">Add Option</div>
+            </div>
+            <div class="reqbox">
+              <div class="top"><b>Require approval</b><span class="tgl on" data-tgl></span></div>
+              <div class="hint">Pause before this tool runs until a human approves it.</div>
+              <div class="hrow"><b>Human reviews</b>
+                <span class="chip plain" style="height:28px;font-size:12px;">Ask user <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 11h1v5h1"/></svg></span>
+                <span class="chip plain" style="height:28px;font-size:12px;"><svg width="14" height="14" viewBox="0 0 24 24"><rect x="3" y="10" width="7" height="3" rx="1.5" fill="#36c5f0"/><rect x="10" y="3" width="3" height="7" rx="1.5" fill="#2eb67d"/><rect x="14" y="10" width="7" height="3" rx="1.5" fill="#ecb22e"/><rect x="11" y="14" width="3" height="7" rx="1.5" fill="#e01e5a"/></svg>Slack Michael Drury <span class="x">&times;</span></span>
+                <span class="plus"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span></div>
+            </div>
+          </div>
+          <div class="mfoot" style="padding:12px 16px;"><button class="pbtn ghost"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg>Remove</button><span class="sp"></span><button class="pbtn">Cancel</button><button class="pbtn dark">Save</button></div>
+        </div>
+      </div>
+
+      <!-- 6. MCP server modal with Human reviews -->
+      <div class="shot" style="padding:12px 16px; max-width:560px;">
+        <div class="modal">
+          <div class="mbody" style="padding:16px 16px 14px;">
+            <div class="mhead" style="margin-bottom:10px;"><span class="mtitle" style="font-size:14px;"><svg width="22" height="22" viewBox="0 0 24 24"><rect width="24" height="24" rx="4" fill="#111"/><text x="12" y="17" text-anchor="middle" font-size="14" font-weight="700" fill="#fff" font-family="serif">N</text></svg>Notion</span><span style="margin-left:auto;display:flex;gap:8px;align-items:center;"><span class="conn"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="4" width="16" height="16"/><path d="M4 10h16M4 15h16M10 4v16M15 4v16"/></svg>Connecting…</span><span class="mclose" style="margin-left:0;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="10"/><path d="M8 8l8 8M16 8l-8 8"/></svg></span></span></div>
+            <div style="font-size:13px;font-weight:500;">Official Notion MCP server</div>
+            <div style="font-size:11px;color:var(--text-color--subtler);margin:4px 0 8px;">Published by Notion · Version 1.2.0</div>
+            <div style="font-size:12px;line-height:1.5;color:var(--text-color--subtle);margin-bottom:14px;">Notion's official MCP server lets you use your Notion workspace as a system of record for knowledge work and software development. Search questions about the codebase and business, fetch links to pages such as tech specs and PRDs, and track tasks with your team.</div>
+            <div style="font-size:12px;margin-bottom:6px;">Tool permissions</div>
+            <div class="dim">
+              <div class="perm"><span class="l">Read-only tools<small>Can look things up</small></span><span style="font-size:11px;">Allow ⌄</span></div>
+              <div class="perm"><span class="l">Write and delete tools<small>Can change or delete things</small></span><span style="font-size:11px;">Ask first ⌄</span></div>
+            </div>
+            <div class="reqbox" style="margin-top:16px;"><div class="hrow"><b style="font-size:12px;">Human reviews</b>
+              <span class="chip plain" style="height:28px;font-size:12px;">Ask user <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 11h1v5h1"/></svg></span>
+              <span class="chip plain" style="height:28px;font-size:12px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/></svg>Slack Assistant approval workflow 1 <span class="x">&times;</span></span>
+              <span class="plus"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span></div></div>
+            <div class="dim" style="margin-top:14px;"><div style="font-size:12px;margin-bottom:6px;">Timeout</div><div class="inp"><span class="ph">60</span><span class="unit">seconds</span></div><div style="font-size:11px;color:var(--text-color--subtler);margin-top:6px;">How long a tool call may run before it fails</div></div>
+          </div>
+          <div class="mfoot" style="padding:12px 16px;"><button class="pbtn ghost"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg>Remove</button><span class="sp"></span><button class="pbtn">Cancel</button><button class="pbtn dis">Save</button></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= GUARDRAILS ================= -->
+    <div class="col gr">
+      <h2>Guardrails</h2>
+      <div class="gr-row">
+
+        <!-- Wikipedia tool modal -->
+        <div class="shot" style="padding:12px 16px; width:600px; max-width:100%;">
+          <div class="modal">
+            <div class="mbody" style="padding:16px 16px 0; min-height:360px;">
+              <div class="mhead" style="margin-bottom:14px;"><span class="mtitle" style="font-size:14px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/></svg>Wikipedia <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l4-1 11-11-3-3L5 16z"/></svg></span><span class="mclose"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></span></div>
+              <div style="font-size:12px;margin-bottom:16px;">This node does not have any parameters</div>
+              <div style="display:flex;align-items:center;"><div style="flex:1;"><div style="font-size:12px;font-weight:500;">Require approval</div><div style="font-size:11px;color:var(--text-color--subtler);margin-top:2px;">Pause before this tool runs until a human approves it.</div></div><span class="tgl" data-tgl></span></div>
+              <div style="font-size:12px;font-weight:500;margin:16px 0 2px;">Guardrails</div>
+              <div style="font-size:11px;color:var(--text-color--subtler);margin-bottom:8px;">Checks on what tools receive and return.</div>
+              <div class="chips off" style="border:1px solid var(--border-color);border-radius:10px;padding:8px;gap:6px;">
+                <span class="chip" style="height:26px;font-size:11px;"><b>Jailbreak prevention</b><span class="mut">· PII detection</span></span>
+                <span class="chip" style="height:26px;font-size:11px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M5 5l14 14"/></svg><b>K…</b><span class="mut">· Blocked keywords · All tools</span></span>
+                <span class="chip" style="height:26px;font-size:11px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M5 5l14 14"/></svg><b>Ant…</b><span class="mut">· NSFW detection · All tools</span></span>
+                <span class="plus"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+              </div>
+            </div>
+            <div class="mfoot" style="padding:12px 16px;"><button class="pbtn ghost"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg>Remove</button><span class="sp"></span><button class="pbtn">Cancel</button><button class="pbtn dark">Save</button></div>
+          </div>
+        </div>
+
+        <!-- create guardrail -->
+        <div class="shot" style="padding:12px 16px; width:440px; max-width:100%;">
+          <div class="modal">
+            <div class="mbody" style="padding:18px 18px 8px;">
+              <div class="mhead" style="margin-bottom:14px;"><span class="mtitle" style="font-size:14px;">Guardrail <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l4-1 11-11-3-3L5 16z"/></svg></span><span class="mclose"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></span></div>
+              <div style="font-size:11px;margin-bottom:6px;">Guardrail type</div>
+              <div class="sel" style="width:100%;"><span class="t">Blocked keywords</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></div>
+              <div class="gbox"><div style="font-size:11px;margin-bottom:6px;">Keywords <span style="color:var(--color--danger,#e5484d)">*</span></div><div class="inp"><span class="ph">Type a keyword and press Enter</span></div><div class="hint">Add at least one keyword.</div></div>
+              <div style="font-size:11px;margin-bottom:6px;">When it triggers <span style="color:var(--color--danger,#e5484d)">*</span></div>
+              <div class="sel" style="width:100%;"><span class="t">Block execution</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></div>
+              <div class="lbl">Which tools <span style="color:var(--color--danger,#e5484d)">*</span></div>
+              <div class="radio on"><i></i>All tools</div>
+              <div class="radio"><i></i>Select tools</div>
+            </div>
+            <div class="mfoot" style="padding:12px 18px;"><span class="sp"></span><button class="pbtn">Cancel</button><button class="pbtn dis">Create</button></div>
+          </div>
+        </div>
+
+        <!-- guardrails + usage section -->
+        <div class="shot bare" style="width:100%;">
+          <div class="card" style="padding:18px 18px 16px;">
+            <h3 style="font-size:14px;">Guardrails</h3>
+            <p class="desc" style="font-size:14px;margin-bottom:14px;">Checks on what tools receive and return.</p>
+            <div class="chips">
+              <span class="chip" style="font-size:14px;height:36px;"><b style="font-weight:500;">Jailbreak pre…</b><span class="mut">· PII detection · 1 tool</span></span>
+              <span class="chip" style="font-size:14px;height:36px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M5 5l14 14"/></svg><b style="font-weight:500;">K…</b><span class="mut">· Blocked keywords · All tools</span></span>
+              <span class="chip" style="font-size:14px;height:36px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M5 5l14 14"/></svg><b style="font-weight:500;">Ant…</b><span class="mut">· NSFW detection · All tools</span></span>
+              <span class="plus"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+            </div>
+            <div class="usage">
+              <div class="head"><span>Monthly usage</span><span>No monthly budget</span></div>
+              <div class="u"><div class="l">Monthly budget<small>Maximum this agent can spend across all sessions each month</small></div><span class="v">Not set <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></span></div>
+              <div class="u"><div class="l">Cost cap per session<small>Maximum a single session can spend</small></div><span class="v">Not set <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></span></div>
+              <div class="note"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 11h1v5h1"/></svg><span class="sp">Both limits cover estimated costs for this agent's AI model, including memory. n8n Assistant usage is not included.</span><span style="cursor:pointer;display:inline-flex;" data-dismiss><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+<script>
+  document.querySelectorAll('.modal').forEach(function (m) {
+    m.querySelectorAll('.seg button').forEach(function (b) {
+      b.addEventListener('click', function () {
+        m.querySelectorAll('.seg button').forEach(function (x) { x.classList.toggle('on', x === b); });
+        m.setAttribute('data-mode', b.getAttribute('data-m'));
+      });
+    });
+  });
+  document.querySelectorAll('[data-adv]').forEach(function (r) {
+    r.addEventListener('click', function () { r.classList.toggle('open'); r.nextElementSibling.classList.toggle('open'); });
+  });
+  document.querySelectorAll('[data-tgl]').forEach(function (t) {
+    t.addEventListener('click', function () { t.classList.toggle('on'); });
+  });
+  document.querySelectorAll('[data-dismiss]').forEach(function (d) {
+    d.addEventListener('click', function () { d.parentElement.style.display = 'none'; });
+  });
+</script>
+</body>
+</html>

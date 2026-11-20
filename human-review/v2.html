@@ -1,0 +1,483 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Human Approval, revised</title>
+<link rel="stylesheet" href="../styles/n8n-tokens.css?v=1">
+<style>
+  /* Built from the real design-system components (n8n-io/n8n, @n8n/design-system):
+     N8nSettingsSection / RowGroup / Row / EnableRow / RowConfigure, N8nDropdownMenu (+ sub menu),
+     N8nSwitch, N8nDialog, N8nButton, N8nTabs, N8nTag, N8nCallout. Values copied from their source. */
+  /* The current design system ships Geist (primitives: --font-family 'Geist'), Storybook renders it. The hub tokens file still has Inter, so Geist is scoped to this page only. */
+  @font-face { font-family: Geist; font-style: normal; font-weight: 100 900; font-display: swap; src: url('../styles/fonts/Geist-Variable.woff2') format('woff2'); }
+  :root { --font-family: Geist, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; --height--4xl: 4rem; --height--5xs: .5rem; --switch-bg: var(--color--neutral-400); }
+  html, body { margin: 0; }
+  * { box-sizing: border-box; }
+  body { font-family: var(--font-family); background: var(--color--neutral-100); color: var(--text-color); font-size: var(--font-size--sm); }
+  .page { max-width: 1960px; margin: 0 auto; padding: 32px 32px 96px; }
+  .back { font-size: var(--font-size--xs); color: var(--text-color--subtle); text-decoration: none; }
+  .back:hover { color: var(--text-color); }
+  h1 { font-size: var(--font-size--2xl); font-weight: var(--font-weight--medium); line-height: var(--line-height--sm); margin: 14px 0 6px; }
+  .lede { font-size: var(--font-size--sm); line-height: var(--line-height--xl); color: var(--text-color--subtle); max-width: 720px; margin: 0 0 36px; }
+  .cols { display: flex; flex-wrap: wrap; gap: 64px; align-items: flex-start; }
+  .col { display: flex; flex-direction: column; gap: 32px; }
+  .col.hr { width: 760px; max-width: 100%; }
+  .col.gr { width: 760px; max-width: 100%; }
+  .colhead { font-size: var(--font-size--xl); font-weight: var(--font-weight--medium); line-height: var(--line-height--sm); margin: 0 0 -12px; }
+  .frame-label { font-size: var(--font-size--2xs); color: var(--text-color--subtler); margin: 0 0 8px; }
+
+  /* ---------- N8nSettingsSection ---------- */
+  .s-section { display: flex; flex-direction: column; gap: var(--spacing--sm); width: 100%; }
+  .s-header { display: flex; flex-direction: column; gap: var(--spacing--4xs); }
+  .s-title { margin: 0; font-size: var(--font-size--md); line-height: var(--line-height--lg); font-weight: var(--font-weight--medium); color: var(--text-color); }   /* N8nHeading step md */
+  .s-desc { font-size: var(--font-size--2xs); line-height: var(--line-height--md); color: var(--text-color--subtle); }                                      /* N8nText small, text-base */
+  .s-groups { display: flex; flex-direction: column; gap: var(--spacing--xs); }
+  /* ---------- N8nSettingsRowGroup ---------- */
+  .s-group { display: flex; flex-direction: column; width: 100%; border: 1px solid var(--border-color--subtle); border-radius: var(--radius--xs); background: var(--background--surface); overflow: clip; }
+  .s-group > :last-child > .s-divider { display: none; }
+  /* ---------- N8nSettingsRow ---------- */
+  .s-row { position: relative; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; column-gap: var(--spacing--2xs); min-height: var(--height--4xl); padding-inline: var(--spacing--sm); width: 100%; }
+  .s-info { display: flex; align-items: center; gap: var(--spacing--2xs); flex: 1 0 0; min-width: 0; min-height: var(--height--4xl); }
+  .s-text { display: flex; flex-direction: column; gap: var(--spacing--5xs); padding-block: var(--spacing--xs); flex: 1 0 0; min-width: 0; }
+  .s-row-title { font-size: var(--font-size--sm); line-height: var(--line-height--md); font-weight: var(--font-weight--medium); color: var(--text-color); }   /* N8nText medium bold, text-dark */
+  .s-row-desc { font-size: var(--font-size--2xs); line-height: var(--line-height--xl); font-weight: var(--font-weight--regular); color: var(--text-color--subtler); }   /* N8nText small, text-light */
+  .s-action { flex: 0 0 auto; display: flex; align-items: center; justify-content: flex-end; min-width: 0; max-width: 50%; }
+  .s-divider { position: absolute; bottom: 0; left: var(--spacing--sm); right: var(--spacing--sm); height: 1px; background: var(--border-color--subtle); }
+  /* ---------- N8nSettingsRowConfigure ---------- */
+  .s-configure { display: inline-flex; align-items: center; gap: var(--spacing--3xs); font-size: var(--font-size--2xs); color: var(--text-color); }
+  .s-configure svg { color: var(--icon-color); }
+
+  /* ---------- N8nSwitch (small 32x16, thumb 12) ---------- */
+  .sw { position: relative; width: 32px; height: 16px; border-radius: 8px; background: var(--switch-bg); flex: none; cursor: pointer; transition: background-color .15s ease; border: 0; padding: 0; }
+  .sw::after { content: ""; position: absolute; top: 2px; left: 2px; width: 12px; height: 12px; border-radius: 6px; background: #fff; transition: left .15s ease; }
+  .sw.on { background: var(--background--brand); }
+  .sw.on::after { left: 18px; }
+
+  /* ---------- N8nTag / chips (md: 24px, 13px) used as the "added item" pill ---------- */
+  .chips { display: flex; flex-wrap: wrap; gap: var(--spacing--2xs); align-items: center; }
+  .chip { display: inline-flex; align-items: center; gap: var(--spacing--2xs); height: var(--height--md); padding: 0 var(--spacing--xs); border: 1px solid var(--border-color); border-radius: var(--radius--full); background: var(--background--surface); font-size: var(--font-size--xs); color: var(--text-color); white-space: nowrap; max-width: 280px; }
+  .chip .t { overflow: hidden; text-overflow: ellipsis; }
+  .chip .mut { color: var(--text-color--subtler); }
+  .chip .x { display: inline-flex; color: var(--icon-color); cursor: pointer; }
+  .chip svg { flex: none; }
+  .chip.sm { height: var(--height--sm); padding: 0 var(--spacing--2xs); font-size: var(--font-size--2xs); }
+  .chip .ind { display: inline-flex; color: var(--color--pink-600); }
+  /* ghost icon button: no resting outline, light fill on hover */
+  .gbtn { display: inline-flex; align-items: center; justify-content: center; width: var(--height--md); height: var(--height--md); border: 0; background: none; border-radius: var(--radius--xs); color: var(--text-color--subtle); cursor: pointer; padding: 0; }
+  .gbtn:hover { background: var(--background--hover); }
+
+  /* ---------- N8nSelect (medium: 32px, radius 8, 14px) ---------- */
+  .sel { position: relative; display: inline-flex; align-items: center; gap: var(--spacing--2xs); height: var(--height--md); min-width: 220px; padding: 0 var(--spacing--xs); border-radius: var(--radius--xs); background: var(--background--surface); box-shadow: 0 0 0 1px var(--border-color); font-size: var(--font-size--sm); color: var(--text-color); cursor: pointer; }
+  .sel:hover { box-shadow: 0 0 0 1px var(--border-color--strong); }
+  .sel .t { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .sel .t .mut, .sel.ph .t { color: var(--text-color--subtler); }
+  .sel > svg:last-child { color: var(--icon-color); flex: none; }
+  select.sel { appearance: none; -webkit-appearance: none; padding-right: 40px; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; font-family: inherit; }
+
+  /* ---------- N8nDropdownMenu + sub menu ---------- */
+  .dd { position: absolute; top: calc(100% + var(--spacing--5xs)); left: 0; z-index: 10; display: none; width: 100%; min-width: 220px; border-radius: var(--radius--xs); background: var(--background--surface); box-shadow: var(--shadow--md), var(--shadow--outline); }
+  .sel.open > .dd { display: block; }
+  .dd-items { display: flex; flex-direction: column; gap: var(--spacing--5xs); padding: var(--spacing--4xs); }
+  .dd-item { position: relative; display: flex; align-items: center; gap: var(--spacing--2xs); min-height: var(--spacing--xl); padding: var(--spacing--2xs); border-radius: var(--radius--2xs); font-size: var(--font-size--sm); line-height: var(--line-height--sm); color: var(--text-color); cursor: pointer; user-select: none; }
+  .dd-item:hover, .dd-item.open { background: var(--background--hover); }
+  .dd-item .lbl { flex-grow: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .dd-item .sub-ind { margin-left: auto; flex-shrink: 0; color: var(--icon-color); display: inline-flex; }
+  .dd-sub { display: none; position: absolute; top: calc(var(--spacing--4xs) * -1); left: calc(100% + var(--spacing--5xs)); min-width: 220px; border-radius: var(--radius--xs); background: var(--background--surface); box-shadow: var(--shadow--md), var(--shadow--outline); z-index: 11; }
+  .dd-item.open > .dd-sub { display: block; }
+  .dd-head { display: flex; align-items: center; padding: var(--spacing--2xs) var(--spacing--2xs) var(--spacing--3xs); font-size: var(--font-size--2xs); color: var(--text-color--subtler); user-select: none; }
+  .dd-sep { height: 1px; background: var(--border-color); margin: var(--spacing--5xs) calc(var(--spacing--4xs) * -1); }
+
+  /* ---------- N8nDialog (no header/footer dividers) ---------- */
+  .shot { background: #9a9a9a; border-radius: 4px; padding: 28px 34px; display: flex; justify-content: center; }
+  .dialog { position: relative; width: 100%; max-width: 560px; border-radius: var(--radius--lg); background: var(--background--surface); outline: 1px solid var(--border-color); box-shadow: 0 8px 8px rgba(0,0,0,.1), 0 32px 32px rgba(0,0,0,.1), 0 64px 64px rgba(0,0,0,.06); display: flex; flex-direction: column; }
+  .d-head { display: flex; align-items: flex-start; padding: calc(var(--spacing--md) + 2px); padding-bottom: var(--spacing--2xs); }
+  .d-title { margin: 0; display: flex; align-items: center; gap: var(--spacing--2xs); font-size: var(--font-size--lg); line-height: var(--line-height--xl); font-weight: var(--font-weight--medium); color: var(--color--neutral-900); }
+  .d-close { margin-left: auto; width: var(--spacing--lg); height: var(--spacing--lg); display: inline-flex; align-items: center; justify-content: center; border-radius: var(--radius--xs); color: var(--text-color--subtle); cursor: pointer; }
+  .d-close:hover { background: var(--background--hover); }
+  .d-body { padding: var(--spacing--2xs) calc(var(--spacing--md) + 2px) 2px; }
+  .d-foot { display: flex; align-items: center; justify-content: flex-end; gap: var(--spacing--2xs); padding: calc(var(--spacing--md) + 2px); margin-top: var(--spacing--md); }
+  .d-foot .sp { flex: 1; }
+  /* ---------- N8nButton (medium: 32px, 14px, pill) ---------- */
+  .btn { height: var(--height--md); padding: 0 var(--spacing--xs); border-radius: var(--radius--full); font: inherit; font-size: var(--font-size--sm); font-weight: var(--font-weight--medium); cursor: pointer; border: 1px solid var(--color--neutral-300); background: var(--background--surface); color: var(--text-color); display: inline-flex; align-items: center; gap: var(--spacing--3xs); }
+  .btn:hover { background: var(--background--hover); }
+  .btn.primary { background: #1f1f1f; border-color: #1f1f1f; color: #fff; }
+  .btn.primary:hover { background: #3a3a3a; }
+  .btn.dis { background: #8e8e8e; border-color: #8e8e8e; color: #fff; cursor: default; }
+  .btn.ghost { border-color: transparent; background: none; padding: 0 var(--spacing--2xs); }
+  .btn.ghost:hover { background: var(--background--hover); }
+
+  /* ---------- N8nTabs (default, as rendered in Storybook): 14px medium, 4px/16px padding, 2px primary underline on the active tab ---------- */
+  .tabs { display: flex; align-items: stretch; min-height: var(--height--xs); margin: 0 0 var(--spacing--sm); font-weight: var(--font-weight--medium); color: var(--text-color--subtle); }
+  .tabs button { --tab-border: 2px; font: inherit; line-height: 1; font-size: var(--font-size--sm); font-weight: var(--font-weight--medium); display: flex; align-items: center; gap: var(--spacing--4xs); background: none; border: 0; border-bottom: var(--tab-border) solid transparent; padding: 0 var(--spacing--sm); padding-bottom: calc(var(--spacing--2xs) + var(--tab-border)); color: var(--text-color--subtle); cursor: pointer; white-space: nowrap; }
+  .tabs button:hover { color: var(--color--primary); }
+  .tabs button.on { color: var(--color--primary); padding-bottom: var(--spacing--2xs); border-bottom-color: var(--color--primary); }
+  .tabpane { display: none; } .tabpane.on { display: block; }
+
+  /* tooltip, canvas, open questions */
+  .tipwrap { position: relative; display: inline-flex; }
+  .tip { display: none; position: absolute; top: calc(100% + 6px); left: 0; z-index: 12; width: 260px; background: #1f1f1f; color: #fff; border-radius: var(--radius--xs); padding: 10px 12px; font-size: var(--font-size--2xs); line-height: 1.5; }
+  .tip b { font-weight: 500; } .tip .mut { color: #b8b8b8; }
+  .tipwrap:hover .tip { display: block; }
+  .canvas { background: var(--background--subtle); border-radius: var(--radius--sm); height: 300px; position: relative; overflow: hidden; background-image: radial-gradient(#d4d4d4 1px, transparent 1px); background-size: 16px 16px; }
+  .nd { position: absolute; width: 150px; height: 56px; background: #fff; border-radius: 10px; box-shadow: 0 0 0 1px var(--color--neutral-300); display: flex; align-items: center; gap: 8px; padding: 0 12px; font-size: var(--font-size--2xs); font-weight: var(--font-weight--medium); }
+  .nd small { display: block; font-weight: var(--font-weight--regular); color: var(--text-color--subtler); font-size: var(--font-size--2xs); }
+  .grp { position: absolute; border: 1.5px dashed var(--color--pink-400); border-radius: 14px; background: rgba(255,145,172,.06); }
+  .grp .cap { position: absolute; top: -26px; left: 0; font-size: var(--font-size--2xs); font-weight: var(--font-weight--medium); color: var(--color--pink-600); }
+  .conn-l { position: absolute; height: 2px; background: #bdbdbd; }
+  .openq { border: 1px dashed var(--color--neutral-400); border-radius: 12px; padding: 18px 22px; background: #fff; }
+  .openq h3 { margin: 0 0 8px; font-size: var(--font-size--sm); font-weight: var(--font-weight--medium); }
+  .openq li { font-size: var(--font-size--sm); line-height: var(--line-height--xl); color: var(--text-color--subtle); margin-bottom: 4px; }
+  .fieldlabel { font-size: var(--font-size--sm); line-height: var(--line-height--md); font-weight: var(--font-weight--medium); color: var(--text-color); margin-bottom: var(--spacing--2xs); }
+  .ta { border-radius: var(--radius--xs); box-shadow: 0 0 0 1px var(--border-color); padding: var(--spacing--2xs) var(--spacing--xs); font-size: var(--font-size--sm); min-height: var(--height--md); background: var(--background--surface); }
+  .inp { border-radius: var(--radius--xs); box-shadow: 0 0 0 1px var(--border-color); height: var(--height--md); padding: 0 var(--spacing--xs); font-size: var(--font-size--sm); background: var(--background--surface); display: flex; align-items: center; }
+  .inp .ph { color: var(--text-color--subtler); flex: 1; } .inp .unit { color: var(--text-color--subtler); font-size: var(--font-size--2xs); }
+  .callout { display: flex; align-items: center; gap: var(--spacing--xs); border: 1px solid var(--color--neutral-200); border-radius: var(--radius--3xs); background: #fff; padding: var(--spacing--xs); font-size: var(--font-size--2xs); line-height: var(--line-height--xl); color: var(--color--neutral-700); }
+  .callout svg { color: var(--color--neutral-500); flex: none; }
+  .callout .sp { flex: 1; }
+  /* one card, sections split by dividers, every subsection title uses .s-title (16px / medium) */
+  .card { background: var(--background--surface); border: 1px solid var(--border-color--subtle); border-radius: var(--radius--xs); padding: 0 var(--spacing--sm); }
+  .card .csec { padding: var(--spacing--sm) 0; display: flex; flex-direction: column; gap: var(--spacing--4xs); }
+  .card .cdiv { height: 1px; background: var(--border-color--subtle); }
+  .card .crows { margin: var(--spacing--2xs) calc(var(--spacing--sm) * -1) 0; }
+  .card .crows .s-row { min-height: var(--height--3xl); }
+  .card .crows .s-info { min-height: 0; }
+  .card .crows .s-row:last-child .s-divider { display: none; }
+  .card .chips { margin-top: var(--spacing--sm); }
+  .rad { display: flex; align-items: center; gap: var(--spacing--2xs); font-size: var(--font-size--sm); margin-top: var(--spacing--2xs); color: var(--text-color); }
+  .rad i { width: 14px; height: 14px; border-radius: 50%; border: 1px solid var(--color--neutral-400); background: #fff; display: inline-block; }
+  .rad.on i { border: 4px solid var(--background--brand); }
+  .gname { font-weight: var(--font-weight--medium); color: var(--text-color); max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  /* "+" opens the same N8nDropdownMenu (with sub menus) as Send approval to, so a destination can be added in place */
+  .pop { position: fixed; z-index: 50; width: 240px; border-radius: var(--radius--xs); background: var(--background--surface); box-shadow: var(--shadow--md), var(--shadow--outline); }
+  .pop.flip .dd-sub { left: auto; right: calc(100% + var(--spacing--5xs)); }
+  .top-block { width: 760px; max-width: 100%; display: flex; flex-direction: column; gap: 32px; margin: 0 0 56px; }
+  /* collapsible cards: N8nSettingsRow "expandable" (disclosure chevron, 0fr to 1fr reveal), inside an N8nSettingsRowGroup card */
+  .acc-head { cursor: pointer; }
+  .acc-head:hover { background: var(--background--hover); }
+  .acc-head .s-divider { display: none; }
+  .sr-btn { display: flex; flex: 0 0 auto; align-items: center; justify-content: center; padding: var(--spacing--4xs) var(--spacing--2xs); border-radius: var(--radius); color: var(--text-color--subtle); }
+  .sr-chev { transition: transform .2s ease; }
+  .acc.open .sr-chev { transform: rotate(180deg); }
+  .acc-region { display: grid; grid-template-rows: 0fr; opacity: 0; transition: grid-template-rows .2s ease, opacity .2s ease; }
+  .acc.open .acc-region { grid-template-rows: 1fr; opacity: 1; }
+  .acc-inner { overflow: hidden; min-height: 0; }
+  .acc-pad { padding: 0 var(--spacing--sm) var(--spacing--sm); }
+  .acc .crows { margin: 0; }
+  /* one card, sections split by inset dividers (N8nSettingsRow divider: 1px, border-color--subtle, 16px inset) */
+  .acc { position: relative; }
+  .acc + .acc::before { content: ""; position: absolute; top: 0; left: var(--spacing--sm); right: var(--spacing--sm); height: 1px; background: var(--border-color--subtle); z-index: 1; }
+  /* empty state: N8nButton ghost, icon + label, like "Add skill" */
+  .add-ghost { display: inline-flex; align-items: center; gap: var(--spacing--2xs); height: var(--height--md); padding: 0 var(--spacing--2xs); margin-left: calc(var(--spacing--2xs) * -1); border: 0; border-radius: var(--radius--xs); background: none; font: inherit; font-size: var(--font-size--sm); font-weight: var(--font-weight--medium); color: var(--text-color--subtle); cursor: pointer; }
+  .add-ghost:hover { background: var(--background--hover); color: var(--text-color); }
+</style>
+</head>
+<body>
+<div class="page">
+  <a class="back" href="../index.html">&larr; Back to the hub</a> &nbsp;&middot;&nbsp; <a class="back" href="v3.html">Version 3, collapsible sections</a> &nbsp;&middot;&nbsp; <a class="back" href="index.html">Original recreation</a>
+  <h1>Human Approval, revised</h1>
+  <p class="lede">The Human Review page with the 18 November changes, rebuilt on the real design-system settings components so type sizes, spacing and rows match the product. At the top, Guardrails with Approval and Monthly usage as collapsible sections in one card, collapsed by default. The same block with every section open follows, then the dialogs.</p>
+
+  <div class="top-block"><h2 class="colhead">Guardrails</h2>
+      <div class="s-groups"><div class="s-group">
+        <div class="acc open" data-acc>
+          <div class="s-row acc-head" role="button" tabindex="0"><div class="s-info" style="min-height:var(--height--4xl);"><div class="s-text"><span class="s-row-title">Guardrails</span><span class="s-row-desc">Checks on what tools receive and return.</span></div></div><span class="sr-btn"><svg class="sr-chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></div>
+          <div class="acc-region"><div class="acc-inner"><div class="acc-pad"><div class="chips"><span class="chip"><b class="gname">Jailbreak prevention</b><span class="mut">·</span><span data-i="slack"></span></span><span class="chip"><b class="gname">Keyword filter</b><span class="mut">· All tools</span></span><span class="chip"><b class="gname">Anti-NSFW</b><span class="mut">· All tools</span></span><button class="gbtn" aria-label="Add"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button></div></div></div></div>
+        </div>
+        <div class="acc" data-acc>
+          <div class="s-row acc-head" role="button" tabindex="0"><div class="s-info" style="min-height:var(--height--4xl);"><div class="s-text"><span class="s-row-title">Approval</span><span class="s-row-desc">Where this agent sends approval requests</span></div></div><span class="sr-btn"><svg class="sr-chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></div>
+          <div class="acc-region"><div class="acc-inner"><div class="acc-pad"><div class="chips"><button class="add-ghost"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Add approval</button></div></div></div></div>
+        </div>
+        <div class="acc" data-acc>
+          <div class="s-row acc-head" role="button" tabindex="0"><div class="s-info" style="min-height:var(--height--4xl);"><div class="s-text"><span class="s-row-title">Monthly usage</span><span class="s-row-desc">No monthly budget</span></div></div><span class="sr-btn"><svg class="sr-chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></div>
+          <div class="acc-region"><div class="acc-inner"><div class="crows">
+            <div class="s-row"><div class="s-info" style="min-height:0;"><div class="s-text"><span class="s-row-title">Monthly budget</span><span class="s-row-desc">Maximum this agent can spend across all sessions each month</span></div></div><div class="s-action"><span class="s-configure">Not set<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></span></div><span class="s-divider"></span></div>
+            <div class="s-row"><div class="s-info" style="min-height:0;"><div class="s-text"><span class="s-row-title">Cost cap per session</span><span class="s-row-desc">Maximum a single session can spend</span></div></div><div class="s-action"><span class="s-configure">Not set<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></span></div><span class="s-divider"></span></div>
+          </div>
+          <div class="callout" style="margin:var(--spacing--xs) var(--spacing--sm) var(--spacing--sm);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 11h1v5h1"/></svg><span class="sp">Both limits cover estimated costs for this agent's AI model, including memory. n8n Assistant usage is not included.</span></div></div></div>
+        </div>
+      </div>
+      </div>
+  </div>
+
+  <div class="top-block"><h2 class="colhead">Guardrails, all sections open</h2>
+      <div class="s-groups"><div class="s-group">
+        <div class="acc open" data-acc>
+          <div class="s-row acc-head" role="button" tabindex="0"><div class="s-info" style="min-height:var(--height--4xl);"><div class="s-text"><span class="s-row-title">Guardrails</span><span class="s-row-desc">Checks on what tools receive and return.</span></div></div><span class="sr-btn"><svg class="sr-chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></div>
+          <div class="acc-region"><div class="acc-inner"><div class="acc-pad"><div class="chips"><span class="chip"><b class="gname">Jailbreak prevention</b><span class="mut">·</span><span data-i="slack"></span></span><span class="chip"><b class="gname">Keyword filter</b><span class="mut">· All tools</span></span><span class="chip"><b class="gname">Anti-NSFW</b><span class="mut">· All tools</span></span><button class="gbtn" aria-label="Add"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button></div></div></div></div>
+        </div>
+        <div class="acc open" data-acc>
+          <div class="s-row acc-head" role="button" tabindex="0"><div class="s-info" style="min-height:var(--height--4xl);"><div class="s-text"><span class="s-row-title">Approval</span><span class="s-row-desc">Where this agent sends approval requests</span></div></div><span class="sr-btn"><svg class="sr-chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></div>
+          <div class="acc-region"><div class="acc-inner"><div class="acc-pad"><div class="chips"><span class="chip"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/></svg><span class="t">Slack Assistant approval wor…</span></span><span class="chip"><span data-i="slack"></span><span class="t">Slack Michael Drury</span></span><button class="gbtn" aria-label="Add"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button></div></div></div></div>
+        </div>
+        <div class="acc open" data-acc>
+          <div class="s-row acc-head" role="button" tabindex="0"><div class="s-info" style="min-height:var(--height--4xl);"><div class="s-text"><span class="s-row-title">Monthly usage</span><span class="s-row-desc">No monthly budget</span></div></div><span class="sr-btn"><svg class="sr-chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></div>
+          <div class="acc-region"><div class="acc-inner"><div class="crows">
+            <div class="s-row"><div class="s-info" style="min-height:0;"><div class="s-text"><span class="s-row-title">Monthly budget</span><span class="s-row-desc">Maximum this agent can spend across all sessions each month</span></div></div><div class="s-action"><span class="s-configure">Not set<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></span></div><span class="s-divider"></span></div>
+            <div class="s-row"><div class="s-info" style="min-height:0;"><div class="s-text"><span class="s-row-title">Cost cap per session</span><span class="s-row-desc">Maximum a single session can spend</span></div></div><div class="s-action"><span class="s-configure">Not set<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></span></div><span class="s-divider"></span></div>
+          </div>
+          <div class="callout" style="margin:var(--spacing--xs) var(--spacing--sm) var(--spacing--sm);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 11h1v5h1"/></svg><span class="sp">Both limits cover estimated costs for this agent's AI model, including memory. n8n Assistant usage is not included.</span></div></div></div>
+        </div>
+      </div>
+      </div>
+  </div>
+
+  <div class="cols">
+    <!-- ================= HUMAN APPROVAL ================= -->
+    <div class="col hr">
+      <h2 class="colhead">Human approval</h2>
+
+      <!-- C. Send approval to -->
+      <div>
+        <div class="frame-label">Dialog</div>
+        <div class="shot">
+          <div class="dialog">
+            <div class="d-head"><h4 class="d-title">Human approval 3</h4><span class="d-close"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></span></div>
+            <div class="d-body">
+              <div class="s-text" style="padding-block:0;gap:var(--spacing--5xs);">
+                <span class="s-row-title">Send approval to</span>
+                <span class="s-row-desc">A workflow, or a person or channel in one of your channels.</span>
+              </div>
+              <div class="sel ph" id="cs" style="margin-top:var(--spacing--2xs);"><span class="t" id="csv">Select where to send</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+                <div class="dd" id="dd"><div class="dd-items" id="ddItems"></div></div></div>
+            </div>
+            <div class="d-foot"><button class="btn">Cancel</button><button class="btn dis" id="saveC">Save</button></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- D. workflow template -->
+      <section class="s-section">
+        <div class="s-header"><h3 class="s-title">New approval workflow, prefilled</h3><span class="s-desc">A skeleton with one simple example. Replace it with your own approval logic, or delete it.</span></div>
+        <div class="canvas">
+          <div class="nd" style="left:24px;top:122px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/></svg><span>Agent approval<small>Request from the agent</small></span></div>
+          <div class="conn-l" style="left:174px;top:150px;width:60px;"></div>
+          <div class="grp" style="left:234px;top:70px;width:230px;height:160px;"><span class="cap">Replace this with your approval logic</span></div>
+          <div class="nd" style="left:274px;top:84px;"><span data-i="slack"></span><span>Send message<small>Ask someone in Slack</small></span></div>
+          <div class="nd" style="left:274px;top:158px;"><span style="color:var(--color--pink-600)">&#9679;</span><span>Wait for approval<small>Continues once approved</small></span></div>
+          <div class="conn-l" style="left:464px;top:150px;width:60px;"></div>
+          <div class="nd" style="left:524px;top:122px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/></svg><span>Respond to agent approval<small>Approve or deny</small></span></div>
+        </div>
+      </section>
+
+      <!-- E. tool dialog with two tabs -->
+      <div>
+        <div class="frame-label">Dialog, tool</div>
+        <div class="shot">
+          <div class="dialog" id="toolModal">
+            <div class="d-head"><h4 class="d-title"><svg width="22" height="22" viewBox="0 0 24 24"><rect width="24" height="24" rx="4" fill="#111"/><path d="M7 7l4 5-4 5M13 7l4 5-4 5" stroke="#fff" stroke-width="1.4" fill="none"/></svg>perplexity_search</h4><span class="d-close"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></span></div>
+            <div class="d-body">
+              <div class="tabs"><button class="on" data-t="p">Parameters</button><button data-t="a">Approval</button></div>
+              <div class="tabpane on" data-p="p">
+                <div style="display:flex;flex-direction:column;gap:var(--spacing--xs);">
+                  <div><div class="fieldlabel">Description</div><div class="ta">A focused, specific web search query</div></div>
+                  <div class="s-group"><div class="s-row" style="min-height:var(--height--3xl);"><div class="s-info" style="min-height:0"><div class="s-text"><span class="s-row-title">Simplify output</span></div></div><div class="s-action"><span class="sw on" data-tgl></span></div></div></div>
+                  <div><div class="fieldlabel">Options</div><div class="ta" style="min-height:64px;">Number of results to return, between 1 and 20. Use 5 unless more are needed.</div></div>
+                </div>
+              </div>
+              <div class="tabpane" data-p="a">
+                <div class="fieldlabel">Send to</div>
+                <div class="chips"><span class="chip"><span data-i="slack"></span><span class="t">Slack Michael Drury</span><span class="x"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></span></span>
+                  <button class="gbtn" aria-label="Add"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button></div>
+              </div>
+            </div>
+            <div class="d-foot"><button class="btn ghost"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg>Remove</button><span class="sp"></span><button class="btn">Cancel</button><button class="btn primary">Save</button></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- F. MCP server, approval inside tool permissions -->
+      <div>
+        <div class="frame-label">Dialog, MCP server</div>
+        <div class="shot">
+          <div class="dialog">
+            <div class="d-head"><h4 class="d-title"><svg width="22" height="22" viewBox="0 0 24 24"><rect width="24" height="24" rx="4" fill="#111"/><text x="12" y="17" text-anchor="middle" font-size="14" font-weight="700" fill="#fff" font-family="serif">N</text></svg>Notion</h4><span class="d-close"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></span></div>
+            <div class="d-body">
+              <section class="s-section">
+                <div class="s-header"><h3 class="s-title">Tool permissions</h3><span class="s-desc">Choose what the agent can do without asking first.</span></div>
+                <div class="s-groups"><div class="s-group" id="perm">
+                  <div class="s-row"><div class="s-info"><div class="s-text"><span class="s-row-title">Read-only tools</span><span class="s-row-desc">Can look things up</span></div></div>
+                    <div class="s-action"><select class="sel" data-perm="r" style="min-width:140px;"><option>Allow</option><option>Ask first</option></select></div><span class="s-divider"></span></div>
+                  <div class="s-row" data-n="r" style="display:none;"><div class="s-info" style="min-height:var(--height--3xl);flex:0 0 96px;"><div class="s-text"><span class="s-row-title">Send to</span></div></div>
+                    <div class="s-action" style="flex:1;max-width:none;padding-block:var(--spacing--xs);"><div class="chips" style="justify-content:flex-end;"><span class="chip sm"><span data-i="slack" data-s="14"></span><span class="t">Slack Michael Drury</span></span><button class="gbtn" aria-label="Add" style="width:var(--height--sm);height:var(--height--sm);"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button></div></div><span class="s-divider"></span></div>
+                  <div class="s-row"><div class="s-info"><div class="s-text"><span class="s-row-title">Write and delete tools</span><span class="s-row-desc">Can change or delete things</span></div></div>
+                    <div class="s-action"><select class="sel" data-perm="w" style="min-width:140px;"><option>Allow</option><option selected>Ask first</option></select></div><span class="s-divider"></span></div>
+                  <div class="s-row" data-n="w"><div class="s-info" style="min-height:var(--height--3xl);flex:0 0 96px;"><div class="s-text"><span class="s-row-title">Send to</span></div></div>
+                    <div class="s-action" style="flex:1;max-width:none;padding-block:var(--spacing--xs);"><div class="chips" style="justify-content:flex-end;"><span class="chip sm"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/></svg><span class="t">Slack Assistant approval workflow 1</span></span><button class="gbtn" aria-label="Add" style="width:var(--height--sm);height:var(--height--sm);"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button></div></div><span class="s-divider"></span></div>
+                </div>
+                <div class="s-group"><div class="s-row"><div class="s-info"><div class="s-text"><span class="s-row-title">Timeout</span><span class="s-row-desc">How long a tool call may run before it fails</span></div></div><div class="s-action"><div class="inp" style="width:140px;"><span class="ph">60</span><span class="unit">seconds</span></div></div><span class="s-divider"></span></div></div>
+                </div>
+              </section>
+            </div>
+            <div class="d-foot"><button class="btn ghost"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg>Remove</button><span class="sp"></span><button class="btn">Cancel</button><button class="btn primary">Save</button></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="openq">
+        <h3>Open questions</h3>
+        <ul style="margin:0;padding-left:18px;">
+          <li>If both Read-only and Write and delete are set to Ask first, the person configures where to send twice (try it in the Notion dialog). Not solved yet.</li>
+          <li>Does sending to a Slack channel exist in the build, or only to a person? To confirm with the engineer.</li>
+          <li>The "Advanced" row (expiry, which tools) is left out until it is tested: it is confusing when you arrive from a tool.</li>
+          <li>The names of the Approval tab and of the Human approval section are working names.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ================= GUARDRAILS ================= -->
+    <div class="col gr">
+      <h2 class="colhead">Guardrails dialogs</h2>
+      <div>
+        <div class="frame-label">Dialog, tool</div>
+        <div class="shot"><div class="dialog">
+          <div class="d-head"><h4 class="d-title"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/></svg>Wikipedia</h4><span class="d-close"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></span></div>
+          <div class="d-body">
+            <div class="tabs"><button class="on" data-t="p">Parameters</button><button data-t="a">Approval</button></div>
+            <div class="tabpane on" data-p="p">
+              <div style="display:flex;flex-direction:column;gap:var(--spacing--xs);">
+                <div class="s-row-desc" style="font-size:var(--font-size--sm);color:var(--text-color);">This node does not have any parameters</div>
+                <div class="s-group"><div class="s-row" style="display:block;padding-block:var(--spacing--sm);"><div class="s-row-title">Guardrails</div><div class="s-row-desc" style="margin-bottom:var(--spacing--2xs);">Checks on what tools receive and return.</div><div class="chips">
+              <span class="chip sm"><b class="gname">Jailbreak prevention</b><span class="mut">·</span><span data-i="slack"></span></span>
+              <span class="chip sm"><b class="gname">Keyword filter</b><span class="mut">· All tools</span></span>
+              <span class="chip sm"><b class="gname">Anti-NSFW</b><span class="mut">· All tools</span></span></div></div></div>
+              </div>
+            </div>
+            <div class="tabpane" data-p="a">
+              <div class="fieldlabel">Send to</div>
+              <div class="chips"><span class="chip"><span data-i="slack"></span><span class="t">Slack Michael Drury</span><span class="x"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></span></span>
+                <button class="gbtn" aria-label="Add"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button></div>
+            </div>
+          </div>
+          <div class="d-foot"><button class="btn ghost"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg>Remove</button><span class="sp"></span><button class="btn">Cancel</button><button class="btn primary">Save</button></div>
+        </div></div>
+      </div>
+      <div>
+        <div class="frame-label">Dialog, create guardrail</div>
+        <div class="shot"><div class="dialog">
+          <div class="d-head"><h4 class="d-title">Guardrail</h4><span class="d-close"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></span></div>
+          <div class="d-body"><div style="display:flex;flex-direction:column;gap:var(--spacing--xs);"><div class="s-group" style="overflow:visible;">
+            <div class="s-row" style="display:block;padding-block:var(--spacing--sm);"><div class="s-row-title">Guardrail type</div>
+              <select class="sel" style="width:100%;margin-top:var(--spacing--2xs);"><option>Blocked keywords</option><option>PII detection</option><option>NSFW detection</option></select><span class="s-divider"></span></div>
+            <div class="s-row" style="display:block;padding-block:var(--spacing--sm);"><div class="s-row-title">Keywords <span style="color:var(--color--danger,#e5484d)">*</span></div>
+              <div class="inp" style="margin-top:var(--spacing--2xs);"><span class="ph">Type a keyword and press Enter</span></div>
+              <div class="s-row-desc" style="margin-top:var(--spacing--2xs);">Add at least one keyword.</div><span class="s-divider"></span></div>
+            </div>
+            <div class="s-group" style="overflow:visible;">
+            <div class="s-row" style="display:block;padding-block:var(--spacing--sm);"><div class="s-row-title">When it triggers <span style="color:var(--color--danger,#e5484d)">*</span></div>
+              <select class="sel" style="width:100%;margin-top:var(--spacing--2xs);"><option>Block execution</option><option>Flag only</option></select><span class="s-divider"></span></div>
+          </div></div></div>
+          <div class="d-foot"><span class="sp"></span><button class="btn">Cancel</button><button class="btn dis">Create</button></div>
+        </div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  var ICON = {
+    slack: '<svg width="16" height="16" viewBox="0 0 24 24"><rect x="3" y="10" width="7" height="3" rx="1.5" fill="#36c5f0"/><rect x="10" y="3" width="3" height="7" rx="1.5" fill="#2eb67d"/><rect x="14" y="10" width="7" height="3" rx="1.5" fill="#ecb22e"/><rect x="11" y="14" width="3" height="7" rx="1.5" fill="#e01e5a"/></svg>',
+    telegram: '<svg width="16" height="16" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#27a7e7"/><path d="M5.6 11.9l11.2-4.3c.5-.2 1 .1.8.9l-1.9 9c-.1.6-.5.8-1 .5l-2.9-2.1-1.4 1.4c-.2.2-.3.3-.6.3l.2-3 5.4-4.9c.2-.2 0-.3-.4-.1l-6.7 4.2-2.9-.9c-.6-.2-.6-.6.2-.9z" fill="#fff"/></svg>',
+    discord: '<svg width="16" height="16" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#5865f2"/><path d="M16.6 8.2a8.6 8.6 0 0 0-2.1-.7l-.3.6a8 8 0 0 0-2.4 0l-.3-.6c-.7.1-1.4.4-2.1.7-1.3 2-1.7 3.9-1.5 5.8.9.7 1.8 1.1 2.7 1.4l.6-1c-.3-.1-.6-.3-.9-.5l.2-.2a6 6 0 0 0 5.2 0l.2.2c-.3.2-.6.4-.9.5l.6 1c.9-.3 1.8-.7 2.7-1.4.3-2.200-.3-4.100-1.700-5.800zM10.200 13c-.5 0-.9-.5-.9-1s.4-1 .9-1 .9.5.9 1-.4 1-.9 1zm3.600 0c-.5 0-.9-.5-.9-1s.4-1 .9-1 .9.5.9 1-.4 1-.9 1z" fill="#fff"/></svg>',
+    workflow: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/></svg>'
+  };
+  var CHEVR = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>';
+  document.querySelectorAll("[data-i]").forEach(function (n) { n.outerHTML = ICON[n.getAttribute("data-i")]; });
+
+  /* Send approval to: one N8nDropdownMenu with sub menus. Workflow, then each channel with people and channels inside. */
+  var MENU = [
+    { key: "workflow", label: "Workflow", icon: ICON.workflow, sections: [{ head: "Workflows", items: ["Slack Assistant approval workflow 1", "Email approval workflow"] }], create: "Create new workflow" },
+    { key: "slack", label: "Slack", icon: ICON.slack, sections: [{ head: "People", items: ["Michael Drury", "Sindhuja Jeyabal"] }, { head: "Channels", items: ["#approvals", "#agents-team"] }] },
+    { key: "telegram", label: "Telegram", icon: ICON.telegram, sections: [{ head: "People", items: ["Michael Drury"] }, { head: "Groups", items: ["Agents group"] }] },
+    { key: "discord", label: "Discord", icon: ICON.discord, sections: [{ head: "People", items: ["Michael Drury"] }, { head: "Channels", items: ["#approvals"] }] }
+  ];
+  var dd = document.getElementById("ddItems"), cs = document.getElementById("cs"), csv = document.getElementById("csv");
+  dd.innerHTML = MENU.map(function (m) {
+    var sub = m.sections.map(function (s, i) {
+      return (i ? '<div class="dd-sep"></div>' : "") + '<div class="dd-head">' + s.head + "</div>" + s.items.map(function (it) { return '<div class="dd-item" data-pick="' + m.key + "|" + it + '"><span class="lbl">' + it + "</span></div>"; }).join("");
+    }).join("") + (m.create ? '<div class="dd-sep"></div><div class="dd-item" data-create><span class="lbl">+ ' + m.create + "</span></div>" : "");
+    return '<div class="dd-item" data-sub>' + m.icon + '<span class="lbl">' + m.label + '</span><span class="sub-ind">' + CHEVR + '</span><div class="dd-sub"><div class="dd-items">' + sub + "</div></div></div>";
+  }).join("");
+  cs.addEventListener("click", function (e) {
+    var p = e.target.closest("[data-pick]");
+    if (p) {
+      var v = p.getAttribute("data-pick").split("|"), m = MENU.filter(function (x) { return x.key === v[0]; })[0];
+      csv.innerHTML = '<span style="display:inline-flex;align-items:center;gap:8px;">' + m.icon + (v[0] === "workflow" ? v[1] : m.label + ' <span class="mut">&middot; ' + v[1] + "</span>") + "</span>";
+      cs.classList.remove("open", "ph"); document.getElementById("saveC").className = "btn primary"; e.stopPropagation(); return;
+    }
+    var s = e.target.closest("[data-sub]");
+    if (s) { dd.querySelectorAll("[data-sub]").forEach(function (x) { x.classList.toggle("open", x === s); }); e.stopPropagation(); return; }
+    cs.classList.toggle("open");
+  });
+  document.addEventListener("click", function (e) { if (!e.target.closest("#cs")) cs.classList.remove("open"); });
+
+  document.querySelectorAll(".tabs button").forEach(function (b) { b.addEventListener("click", function () {
+    var m = b.closest(".dialog"); m.querySelectorAll(".tabs button").forEach(function (x) { x.classList.toggle("on", x === b); });
+    m.querySelectorAll(".tabpane").forEach(function (p) { p.classList.toggle("on", p.getAttribute("data-p") === b.getAttribute("data-t")); }); }); });
+  document.querySelectorAll("[data-perm]").forEach(function (s) { s.addEventListener("change", function () {
+    document.querySelector('[data-n="' + s.getAttribute("data-perm") + '"]').style.display = s.value === "Ask first" ? "flex" : "none"; }); });
+  document.querySelectorAll("[data-acc]").forEach(function (g) {
+    var h = g.querySelector(".acc-head");
+    function t() { g.classList.toggle("open"); }
+    h.addEventListener("click", t);
+    h.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); t(); } });
+  });
+  document.querySelectorAll("[data-tgl]").forEach(function (t) { t.addEventListener("click", function () { t.classList.toggle("on"); }); });
+  document.querySelectorAll("[data-dismiss]").forEach(function (d) { d.addEventListener("click", function () { d.parentElement.style.display = "none"; }); });
+
+  /* ---- "+" next to approval destinations: open the menu in place and add a tag ---- */
+  (function () {
+    var pop = document.createElement("div"); pop.className = "pop"; pop.style.display = "none"; document.body.appendChild(pop);
+    var target = null;
+    function html() {
+      return '<div class="dd-items">' + MENU.map(function (m) {
+        var sub = m.sections.map(function (s, i) {
+          return (i ? '<div class="dd-sep"></div>' : "") + '<div class="dd-head">' + s.head + "</div>" + s.items.map(function (it) { return '<div class="dd-item" data-pick="' + m.key + "|" + it + '"><span class="lbl">' + it + "</span></div>"; }).join("");
+        }).join("") + (m.create ? '<div class="dd-sep"></div><div class="dd-item"><span class="lbl">+ ' + m.create + "</span></div>" : "");
+        return '<div class="dd-item" data-sub>' + m.icon + '<span class="lbl">' + m.label + '</span><span class="sub-ind">' + CHEVR + '</span><div class="dd-sub"><div class="dd-items">' + sub + "</div></div></div>";
+      }).join("") + "</div>";
+    }
+    pop.innerHTML = html();
+    function isApprovalPlus(b) {
+      if (b.closest('[data-p="a"]') || b.closest("[data-n]")) return true;
+      var sec = b.closest(".csec, .acc");
+      var t = sec && sec.querySelector(".s-title, .s-row-title");
+      return !!(t && t.textContent.trim() === "Approval");
+    }
+    function bind(b) {
+      b.addEventListener("click", function (e) {
+        e.stopPropagation();
+        if (pop.style.display === "block" && target === b) { pop.style.display = "none"; return; }
+        target = b; pop.querySelectorAll("[data-sub]").forEach(function (x) { x.classList.remove("open"); });
+        var r = b.getBoundingClientRect(), w = 240, left = r.left;
+        var flip = left + w + 260 > window.innerWidth;
+        if (left + w > window.innerWidth - 8) left = window.innerWidth - w - 8;
+        pop.classList.toggle("flip", flip);
+        pop.style.left = left + "px"; pop.style.top = (r.bottom + 4) + "px"; pop.style.display = "block";
+      });
+    }
+    document.querySelectorAll(".gbtn, .add-ghost").forEach(function (b) { if (isApprovalPlus(b)) bind(b); });
+    pop.addEventListener("click", function (e) {
+      e.stopPropagation();
+      var s = e.target.closest("[data-sub]"), p = e.target.closest("[data-pick]");
+      if (p) {
+        var v = p.getAttribute("data-pick").split("|"), m = MENU.filter(function (x) { return x.key === v[0]; })[0];
+        var chip = document.createElement("span"); chip.className = "chip";
+        chip.innerHTML = m.icon + '<span class="t">' + (v[0] === "workflow" ? v[1] : m.label + " " + v[1]) + '</span><span class="x"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></span>';
+        if (target.classList.contains("add-ghost")) {
+          var plus = document.createElement("button"); plus.className = "gbtn"; plus.setAttribute("aria-label", "Add");
+          plus.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>'; target.replaceWith(chip, plus); bind(plus);
+        } else { target.parentNode.insertBefore(chip, target); }
+        pop.style.display = "none"; return;
+      }
+      if (s) pop.querySelectorAll("[data-sub]").forEach(function (x) { x.classList.toggle("open", x === s); });
+    });
+    document.addEventListener("click", function (e) {
+      if (!e.target.closest(".pop")) pop.style.display = "none";
+      var x = e.target.closest(".chip .x"); if (x && x.closest(".chips")) x.closest(".chip").remove();
+    });
+  })();
+</script>
+</body>
+</html>
