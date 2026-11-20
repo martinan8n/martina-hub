@@ -170,6 +170,14 @@
   /* empty state: N8nButton ghost, icon + label, like "Add skill" */
   .add-ghost { display: inline-flex; align-items: center; gap: var(--spacing--2xs); height: var(--height--md); padding: 0 var(--spacing--2xs); margin-left: calc(var(--spacing--2xs) * -1); border: 0; border-radius: var(--radius--xs); background: none; font: inherit; font-size: var(--font-size--sm); font-weight: var(--font-weight--medium); color: var(--text-color--subtle); cursor: pointer; }
   .add-ghost:hover { background: var(--background--hover); color: var(--text-color); }
+  .srow { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--spacing--2xs); }
+  .top-divider { position: relative; }
+  .top-divider::before { content: ""; position: absolute; top: 0; left: var(--spacing--sm); right: var(--spacing--sm); height: 1px; background: var(--border-color--subtle); }
+  /* N8nDropdownMenu searchable content: search row above the items, divider below (DropdownMenuSearch.vue) */
+  .dd-search { display: flex; align-items: center; gap: var(--spacing--2xs); padding: var(--spacing--4xs) var(--spacing--2xs); border-bottom: 1px solid var(--border-color); }
+  .dd-search svg { flex: none; color: var(--icon-color); }
+  .dd-search input { flex: 1; min-width: 0; border: 0; background: transparent; outline: none; font: inherit; font-size: var(--font-size--sm); color: var(--text-color); height: var(--height--sm); padding: 0 var(--spacing--3xs); }
+  .dd-search input::placeholder { color: var(--color--neutral-600); }
 </style>
 </head>
 <body>
@@ -183,11 +191,11 @@
       <div class="s-groups"><div class="s-group">
         <div class="acc open" data-acc>
           <div class="s-row acc-head" role="button" tabindex="0"><div class="s-info" style="min-height:var(--height--4xl);"><div class="s-text"><span class="s-row-title">Guardrails</span><span class="s-row-desc">Checks on what tools receive and return.</span></div></div><span class="sr-btn"><svg class="sr-chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></div>
-          <div class="acc-region"><div class="acc-inner"><div class="acc-pad"><div class="chips"><span class="chip"><b class="gname">Jailbreak prevention</b><span class="mut">·</span><span data-i="slack"></span></span><span class="chip"><b class="gname">Keyword filter</b><span class="mut">· All tools</span></span><span class="chip"><b class="gname">Anti-NSFW</b><span class="mut">· All tools</span></span><button class="gbtn" aria-label="Add"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button></div></div></div></div>
+          <div class="acc-region"><div class="acc-inner"><div class="acc-pad"><div class="chips"><span class="chip"><span data-i="slack"></span><b class="gname">Jailbreak prevention</b></span><span class="chip"><b class="gname">Keyword filter</b><span class="mut">· All tools</span></span><span class="chip"><b class="gname">Anti-NSFW</b><span class="mut">· All tools</span></span><button class="gbtn" aria-label="Add"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button></div></div></div></div>
         </div>
         <div class="acc" data-acc>
           <div class="s-row acc-head" role="button" tabindex="0"><div class="s-info" style="min-height:var(--height--4xl);"><div class="s-text"><span class="s-row-title">Approval</span><span class="s-row-desc">Where this agent sends approval requests</span></div></div><span class="sr-btn"><svg class="sr-chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></div>
-          <div class="acc-region"><div class="acc-inner"><div class="acc-pad"><div class="chips"><span class="chip"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/></svg><span class="t">Slack Assistant approval wor…</span></span><span class="chip"><span data-i="slack"></span><span class="t">Slack Michael Drury</span></span><button class="gbtn" aria-label="Add"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button></div></div></div></div>
+          <div class="acc-region"><div class="acc-inner"><div class="acc-pad"><div class="chips"><span class="chip"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/></svg><span class="t">Slack Assistant approval wor…</span></span><span class="chip"><span data-i="slack"></span><span class="t">Michael Drury</span></span><button class="gbtn" aria-label="Add"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button></div></div></div></div>
         </div>
         <div class="acc" data-acc>
           <div class="s-row acc-head" role="button" tabindex="0"><div class="s-info" style="min-height:var(--height--4xl);"><div class="s-text"><span class="s-row-title">Monthly usage</span><span class="s-row-desc">No monthly budget</span></div></div><span class="sr-btn"><svg class="sr-chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></div>
@@ -213,13 +221,23 @@
           <div class="dialog">
             <div class="d-head"><h4 class="d-title">Human approval 3</h4><span class="d-close"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></span></div>
             <div class="d-body">
-              <div class="s-text" style="padding-block:0;gap:var(--spacing--5xs);">
+              <div class="s-group" style="overflow:visible;">
+                <div class="s-row" style="display:block;padding:var(--spacing--sm);">
+                <div class="s-text" style="padding-block:0;gap:var(--spacing--5xs);">
                 <span class="s-row-title">Send approval to</span>
-                <span class="s-row-desc">A workflow, or a person or channel in one of your channels.</span>
+                <span class="s-row-desc">A workflow, a person or a group in one of your channels</span>
               </div>
               <div class="sel ph" id="cs" style="margin-top:var(--spacing--2xs);"><span class="t" id="csv">Select where to send</span>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
                 <div class="dd" id="dd"><div class="dd-items" id="ddItems"></div></div></div>
+                </div>
+              </div>
+              <div class="s-group" style="margin-top:var(--spacing--xs);overflow:visible;">
+                <div class="s-row"><div class="s-info" style="min-height:var(--height--4xl);"><div class="s-text"><span class="s-row-title">Which tools require this</span></div></div>
+                  <div class="s-action" style="flex:1;max-width:none;justify-content:flex-end;"><div class="chips" style="justify-content:flex-end;"><button class="gbtn" id="toolsPlus" aria-label="Add tool"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button></div></div><span class="s-divider"></span></div>
+                <div class="s-row"><div class="s-info" style="min-height:var(--height--4xl);"><div class="s-text"><span class="s-row-title">When it expires</span></div></div>
+                  <div class="s-action"><select class="sel" style="min-width:160px;"><option>Never expires</option><option>After 1 hour</option><option>After 24 hours</option><option>After 7 days</option></select></div><span class="s-divider"></span></div>
+              </div>
             </div>
             <div class="d-foot"><button class="btn">Cancel</button><button class="btn dis" id="saveC">Save</button></div>
           </div>
@@ -230,13 +248,13 @@
       <section class="s-section">
         <div class="s-header"><h3 class="s-title">New approval workflow, prefilled</h3><span class="s-desc">A skeleton with one simple example. Replace it with your own approval logic, or delete it.</span></div>
         <div class="canvas">
-          <div class="nd" style="left:24px;top:122px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/></svg><span>Agent approval<small>Request from the agent</small></span></div>
+          <div class="nd" style="left:24px;top:122px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/></svg><span>Request from the agent</span></div>
           <div class="conn-l" style="left:174px;top:150px;width:60px;"></div>
           <div class="grp" style="left:234px;top:70px;width:230px;height:160px;"><span class="cap">Replace this with your approval logic</span></div>
           <div class="nd" style="left:274px;top:84px;"><span data-i="slack"></span><span>Send message<small>Ask someone in Slack</small></span></div>
           <div class="nd" style="left:274px;top:158px;"><span style="color:var(--color--pink-600)">&#9679;</span><span>Wait for approval<small>Continues once approved</small></span></div>
           <div class="conn-l" style="left:464px;top:150px;width:60px;"></div>
-          <div class="nd" style="left:524px;top:122px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/></svg><span>Respond to agent approval<small>Approve or deny</small></span></div>
+          <div class="nd" style="left:524px;top:122px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/></svg><span>Respond to agent</span></div>
         </div>
       </section>
 
@@ -247,7 +265,7 @@
           <div class="dialog" id="toolModal">
             <div class="d-head"><h4 class="d-title"><svg width="22" height="22" viewBox="0 0 24 24"><rect width="24" height="24" rx="4" fill="#111"/><path d="M7 7l4 5-4 5M13 7l4 5-4 5" stroke="#fff" stroke-width="1.4" fill="none"/></svg>perplexity_search</h4><span class="d-close"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></span></div>
             <div class="d-body">
-              <div class="tabs"><button class="on" data-t="p">Parameters</button><button data-t="a">Approval</button></div>
+              <div class="tabs"><button class="on" data-t="p">Parameters</button><button data-t="a">Guardrails</button></div>
               <div class="tabpane on" data-p="p">
                 <div style="display:flex;flex-direction:column;gap:var(--spacing--xs);">
                   <div><div class="fieldlabel">Description</div><div class="ta">A focused, specific web search query</div></div>
@@ -256,9 +274,17 @@
                 </div>
               </div>
               <div class="tabpane" data-p="a">
-                <div class="fieldlabel">Send to</div>
-                <div class="chips"><span class="chip"><span data-i="slack"></span><span class="t">Slack Michael Drury</span><span class="x"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></span></span>
-                  <button class="gbtn" aria-label="Add"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button></div>
+                <div class="s-group" style="margin-bottom:var(--spacing--xs);"><div class="s-row" style="display:block;padding-block:var(--spacing--sm);"><div class="s-row-title">Guardrails</div><div class="s-row-desc" style="margin-bottom:var(--spacing--2xs);">Checks on what tools receive and return.</div><div class="chips">
+              <span class="chip sm"><b class="gname">Jailbreak prevention</b></span>
+              <span class="chip sm"><b class="gname">Keyword filter</b></span>
+              <span class="chip sm"><b class="gname">Anti-NSFW</b></span><button class="gbtn" aria-label="Add guardrail"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button></div></div></div>
+                <div class="s-group" style="overflow:visible;">
+                  <div class="s-row"><div class="s-info" style="min-height:var(--height--4xl);"><div class="s-text"><span class="s-row-title">Require approval</span><span class="s-row-desc">The approval will be sent to the person talking to the agent</span></div></div><div class="s-action"><span class="sw" data-appsw role="switch" aria-label="Require approval"></span></div></div>
+                  <div class="top-divider acc" data-acc data-sendto style="display:none;">
+                    <div class="s-row acc-head" role="button" tabindex="0"><div class="s-info" style="min-height:var(--height--4xl);"><div class="s-text"><span class="s-row-title">Send to</span><span class="s-row-desc">A workflow, a person or a group in one of your channels</span></div></div><span class="sr-btn"><svg class="sr-chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></div>
+                    <div class="acc-region"><div class="acc-inner"><div class="acc-pad"><div class="chips" data-chips><button class="add-ghost"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Add approver</button></div></div></div></div>
+                  </div>
+                </div>
               </div>
             </div>
             <div class="d-foot"><button class="btn ghost"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg>Remove</button><span class="sp"></span><button class="btn">Cancel</button><button class="btn primary">Save</button></div>
@@ -278,12 +304,12 @@
                 <div class="s-groups"><div class="s-group" id="perm">
                   <div class="s-row"><div class="s-info"><div class="s-text"><span class="s-row-title">Read-only tools</span><span class="s-row-desc">Can look things up</span></div></div>
                     <div class="s-action"><select class="sel" data-perm="r" style="min-width:140px;"><option>Allow</option><option>Ask first</option></select></div><span class="s-divider"></span></div>
-                  <div class="s-row" data-n="r" style="display:none;"><div class="s-info" style="min-height:var(--height--3xl);flex:0 0 96px;"><div class="s-text"><span class="s-row-title">Send to</span></div></div>
-                    <div class="s-action" style="flex:1;max-width:none;padding-block:var(--spacing--xs);"><div class="chips" style="justify-content:flex-end;"><span class="chip sm"><span data-i="slack" data-s="14"></span><span class="t">Slack Michael Drury</span></span><button class="gbtn" aria-label="Add" style="width:var(--height--sm);height:var(--height--sm);"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button></div></div><span class="s-divider"></span></div>
                   <div class="s-row"><div class="s-info"><div class="s-text"><span class="s-row-title">Write and delete tools</span><span class="s-row-desc">Can change or delete things</span></div></div>
                     <div class="s-action"><select class="sel" data-perm="w" style="min-width:140px;"><option>Allow</option><option selected>Ask first</option></select></div><span class="s-divider"></span></div>
-                  <div class="s-row" data-n="w"><div class="s-info" style="min-height:var(--height--3xl);flex:0 0 96px;"><div class="s-text"><span class="s-row-title">Send to</span></div></div>
-                    <div class="s-action" style="flex:1;max-width:none;padding-block:var(--spacing--xs);"><div class="chips" style="justify-content:flex-end;"><span class="chip sm"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/></svg><span class="t">Slack Assistant approval workflow 1</span></span><button class="gbtn" aria-label="Add" style="width:var(--height--sm);height:var(--height--sm);"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button></div></div><span class="s-divider"></span></div>
+                  <div class="acc" data-acc data-sendto>
+                    <div class="s-row acc-head" role="button" tabindex="0"><div class="s-info" style="min-height:var(--height--4xl);"><div class="s-text"><span class="s-row-title">Send approval to</span><span class="s-row-desc">A workflow, a person or a group in one of your channels</span></div></div><span class="sr-btn"><svg class="sr-chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></div>
+                    <div class="acc-region"><div class="acc-inner"><div class="acc-pad"><div class="chips" data-chips><button class="add-ghost"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Add approver</button></div></div></div></div>
+                  </div>
                 </div>
                 <div class="s-group"><div class="s-row"><div class="s-info"><div class="s-text"><span class="s-row-title">Timeout</span><span class="s-row-desc">How long a tool call may run before it fails</span></div></div><div class="s-action"><div class="inp" style="width:140px;"><span class="ph">60</span><span class="unit">seconds</span></div></div><span class="s-divider"></span></div></div>
                 </div>
@@ -297,7 +323,7 @@
       <div class="openq">
         <h3>Open questions</h3>
         <ul style="margin:0;padding-left:18px;">
-          <li>If both Read-only and Write and delete are set to Ask first, the person configures where to send twice (try it in the Notion dialog). Not solved yet.</li>
+          <li>In the Notion dialog, approval is a single Send to row, collapsed by default, so nothing is configured twice. Still open: how it relates to the Allow / Ask first selects above it.</li>
           <li>Does sending to a Slack channel exist in the build, or only to a person? To confirm with the engineer.</li>
           <li>The "Advanced" row (expiry, which tools) is left out until it is tested: it is confusing when you arrive from a tool.</li>
           <li>The names of the Approval tab and of the Human approval section are working names.</li>
@@ -313,20 +339,24 @@
         <div class="shot"><div class="dialog">
           <div class="d-head"><h4 class="d-title"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/></svg>Wikipedia</h4><span class="d-close"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></span></div>
           <div class="d-body">
-            <div class="tabs"><button class="on" data-t="p">Parameters</button><button data-t="a">Approval</button></div>
+            <div class="tabs"><button class="on" data-t="p">Parameters</button><button data-t="a">Guardrails</button></div>
             <div class="tabpane on" data-p="p">
               <div style="display:flex;flex-direction:column;gap:var(--spacing--xs);">
                 <div class="s-row-desc" style="font-size:var(--font-size--sm);color:var(--text-color);">This node does not have any parameters</div>
-                <div class="s-group"><div class="s-row" style="display:block;padding-block:var(--spacing--sm);"><div class="s-row-title">Guardrails</div><div class="s-row-desc" style="margin-bottom:var(--spacing--2xs);">Checks on what tools receive and return.</div><div class="chips">
-              <span class="chip sm"><b class="gname">Jailbreak prevention</b><span class="mut">·</span><span data-i="slack"></span></span>
-              <span class="chip sm"><b class="gname">Keyword filter</b><span class="mut">· All tools</span></span>
-              <span class="chip sm"><b class="gname">Anti-NSFW</b><span class="mut">· All tools</span></span></div></div></div>
               </div>
             </div>
             <div class="tabpane" data-p="a">
-              <div class="fieldlabel">Send to</div>
-              <div class="chips"><span class="chip"><span data-i="slack"></span><span class="t">Slack Michael Drury</span><span class="x"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></span></span>
-                <button class="gbtn" aria-label="Add"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button></div>
+                <div class="s-group" style="margin-bottom:var(--spacing--xs);"><div class="s-row" style="display:block;padding-block:var(--spacing--sm);"><div class="s-row-title">Guardrails</div><div class="s-row-desc" style="margin-bottom:var(--spacing--2xs);">Checks on what tools receive and return.</div><div class="chips">
+              <span class="chip sm"><b class="gname">Jailbreak prevention</b></span>
+              <span class="chip sm"><b class="gname">Keyword filter</b></span>
+              <span class="chip sm"><b class="gname">Anti-NSFW</b></span><button class="gbtn" aria-label="Add guardrail"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button></div></div></div>
+              <div class="s-group" style="overflow:visible;">
+                  <div class="s-row"><div class="s-info" style="min-height:var(--height--4xl);"><div class="s-text"><span class="s-row-title">Require approval</span><span class="s-row-desc">The approval will be sent to the person talking to the agent</span></div></div><div class="s-action"><span class="sw" data-appsw role="switch" aria-label="Require approval"></span></div></div>
+                  <div class="top-divider acc" data-acc data-sendto style="display:none;">
+                    <div class="s-row acc-head" role="button" tabindex="0"><div class="s-info" style="min-height:var(--height--4xl);"><div class="s-text"><span class="s-row-title">Send to</span><span class="s-row-desc">A workflow, a person or a group in one of your channels</span></div></div><span class="sr-btn"><svg class="sr-chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></div>
+                    <div class="acc-region"><div class="acc-inner"><div class="acc-pad"><div class="chips" data-chips><button class="add-ghost"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Add approver</button></div></div></div></div>
+                  </div>
+                </div>
             </div>
           </div>
           <div class="d-foot"><button class="btn ghost"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg>Remove</button><span class="sp"></span><button class="btn">Cancel</button><button class="btn primary">Save</button></div>
@@ -367,16 +397,16 @@
   /* Send approval to: one N8nDropdownMenu with sub menus. Workflow, then each channel with people and channels inside. */
   var MENU = [
     { key: "workflow", label: "Workflow", icon: ICON.workflow, sections: [{ head: "Workflows", items: ["Slack Assistant approval workflow 1", "Email approval workflow"] }], create: "Create new workflow" },
-    { key: "slack", label: "Slack", icon: ICON.slack, sections: [{ head: "People", items: ["Michael Drury", "Sindhuja Jeyabal"] }, { head: "Channels", items: ["#approvals", "#agents-team"] }] },
-    { key: "telegram", label: "Telegram", icon: ICON.telegram, sections: [{ head: "People", items: ["Michael Drury"] }, { head: "Groups", items: ["Agents group"] }] },
-    { key: "discord", label: "Discord", icon: ICON.discord, sections: [{ head: "People", items: ["Michael Drury"] }, { head: "Channels", items: ["#approvals"] }] }
+    { key: "slack", label: "Slack", icon: ICON.slack, search: true, sections: [{ head: "People", items: ["Michael Drury", "Sindhuja Jeyabal"] }, { head: "Channels", items: ["#approvals", "#agents-team"] }] },
+    { key: "telegram", label: "Telegram", icon: ICON.telegram, search: true, sections: [{ head: "People", items: ["Michael Drury"] }, { head: "Groups", items: ["Agents group"] }] },
+    { key: "discord", label: "Discord", icon: ICON.discord, search: true, sections: [{ head: "People", items: ["Michael Drury"] }, { head: "Channels", items: ["#approvals"] }] }
   ];
   var dd = document.getElementById("ddItems"), cs = document.getElementById("cs"), csv = document.getElementById("csv");
   dd.innerHTML = MENU.map(function (m) {
     var sub = m.sections.map(function (s, i) {
       return (i ? '<div class="dd-sep"></div>' : "") + '<div class="dd-head">' + s.head + "</div>" + s.items.map(function (it) { return '<div class="dd-item" data-pick="' + m.key + "|" + it + '"><span class="lbl">' + it + "</span></div>"; }).join("");
     }).join("") + (m.create ? '<div class="dd-sep"></div><div class="dd-item" data-create><span class="lbl">+ ' + m.create + "</span></div>" : "");
-    return '<div class="dd-item" data-sub>' + m.icon + '<span class="lbl">' + m.label + '</span><span class="sub-ind">' + CHEVR + '</span><div class="dd-sub"><div class="dd-items">' + sub + "</div></div></div>";
+    return '<div class="dd-item" data-sub>' + m.icon + '<span class="lbl">' + m.label + '</span><span class="sub-ind">' + CHEVR + '</span><div class="dd-sub">' + (m.search ? '<div class="dd-search"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input type="text" placeholder="Search" aria-label="Search" /></div>' : "") + '<div class="dd-items">' + sub + "</div></div></div>";
   }).join("");
   cs.addEventListener("click", function (e) {
     var p = e.target.closest("[data-pick]");
@@ -394,8 +424,6 @@
   document.querySelectorAll(".tabs button").forEach(function (b) { b.addEventListener("click", function () {
     var m = b.closest(".dialog"); m.querySelectorAll(".tabs button").forEach(function (x) { x.classList.toggle("on", x === b); });
     m.querySelectorAll(".tabpane").forEach(function (p) { p.classList.toggle("on", p.getAttribute("data-p") === b.getAttribute("data-t")); }); }); });
-  document.querySelectorAll("[data-perm]").forEach(function (s) { s.addEventListener("change", function () {
-    document.querySelector('[data-n="' + s.getAttribute("data-perm") + '"]').style.display = s.value === "Ask first" ? "flex" : "none"; }); });
   document.querySelectorAll("[data-acc]").forEach(function (g) {
     var h = g.querySelector(".acc-head");
     function t() { g.classList.toggle("open"); }
@@ -414,12 +442,12 @@
         var sub = m.sections.map(function (s, i) {
           return (i ? '<div class="dd-sep"></div>' : "") + '<div class="dd-head">' + s.head + "</div>" + s.items.map(function (it) { return '<div class="dd-item" data-pick="' + m.key + "|" + it + '"><span class="lbl">' + it + "</span></div>"; }).join("");
         }).join("") + (m.create ? '<div class="dd-sep"></div><div class="dd-item"><span class="lbl">+ ' + m.create + "</span></div>" : "");
-        return '<div class="dd-item" data-sub>' + m.icon + '<span class="lbl">' + m.label + '</span><span class="sub-ind">' + CHEVR + '</span><div class="dd-sub"><div class="dd-items">' + sub + "</div></div></div>";
+        return '<div class="dd-item" data-sub>' + m.icon + '<span class="lbl">' + m.label + '</span><span class="sub-ind">' + CHEVR + '</span><div class="dd-sub">' + (m.search ? '<div class="dd-search"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input type="text" placeholder="Search" aria-label="Search" /></div>' : "") + '<div class="dd-items">' + sub + "</div></div></div>";
       }).join("") + "</div>";
     }
     pop.innerHTML = html();
     function isApprovalPlus(b) {
-      if (b.closest('[data-p="a"]') || b.closest("[data-n]")) return true;
+      if (b.closest('[data-p="a"]') || b.closest("[data-sendto]")) return true;
       var sec = b.closest(".csec, .acc");
       var t = sec && sec.querySelector(".s-title, .s-row-title");
       return !!(t && t.textContent.trim() === "Approval");
@@ -443,11 +471,12 @@
       if (p) {
         var v = p.getAttribute("data-pick").split("|"), m = MENU.filter(function (x) { return x.key === v[0]; })[0];
         var chip = document.createElement("span"); chip.className = "chip";
-        chip.innerHTML = m.icon + '<span class="t">' + (v[0] === "workflow" ? v[1] : m.label + " " + v[1]) + '</span><span class="x"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></span>';
+        chip.innerHTML = m.icon + '<span class="t">' + v[1] + '</span><span class="x"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></span>';
         if (target.classList.contains("add-ghost")) {
           var plus = document.createElement("button"); plus.className = "gbtn"; plus.setAttribute("aria-label", "Add");
           plus.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>'; target.replaceWith(chip, plus); bind(plus);
         } else { target.parentNode.insertBefore(chip, target); }
+        chip.dispatchEvent(new CustomEvent("approval-added", { bubbles: true }));
         pop.style.display = "none"; return;
       }
       if (s) pop.querySelectorAll("[data-sub]").forEach(function (x) { x.classList.toggle("open", x === s); });
@@ -457,6 +486,44 @@
       var x = e.target.closest(".chip .x"); if (x && x.closest(".chips")) x.closest(".chip").remove();
     });
   })();
+
+  /* "Which tools require this": the + opens a plain menu of tools and adds a tag */
+  (function () {
+    var btn = document.getElementById("toolsPlus"); if (!btn) return;
+    var tp = document.createElement("div"); tp.className = "pop"; tp.style.display = "none"; tp.style.width = "220px";
+    tp.innerHTML = '<div class="dd-items">' + ["perplexity_search", "Notion", "Wikipedia"].map(function (t) { return '<div class="dd-item" data-tool="' + t + '"><span class="lbl">' + t + "</span></div>"; }).join("") + "</div>";
+    document.body.appendChild(tp);
+    btn.addEventListener("click", function (e) {
+      e.stopPropagation();
+      var r = btn.getBoundingClientRect(), left = Math.min(r.left, window.innerWidth - 228);
+      tp.style.left = left + "px"; tp.style.top = (r.bottom + 4) + "px"; tp.style.display = tp.style.display === "block" ? "none" : "block";
+    });
+    tp.addEventListener("click", function (e) {
+      e.stopPropagation(); var i = e.target.closest("[data-tool]"); if (!i) return;
+      var chip = document.createElement("span"); chip.className = "chip";
+      chip.innerHTML = '<span class="t">' + i.getAttribute("data-tool") + '</span><span class="x"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></span>';
+      btn.parentNode.insertBefore(chip, btn); tp.style.display = "none";
+    });
+    document.addEventListener("click", function () { tp.style.display = "none"; });
+  })();
+
+  /* Require approval switch: "Send to" (with its add-approval empty state) shows only while it is on; destinations are kept when it is switched off */
+  function syncApproval(sw) { sw.closest(".s-group").querySelector("[data-sendto]").style.display = sw.classList.contains("on") ? "block" : "none"; }
+  document.querySelectorAll("[data-appsw]").forEach(function (sw) { sw.addEventListener("click", function () { sw.classList.toggle("on"); syncApproval(sw); }); });
+  document.addEventListener("approval-added", function (e) { var pane = e.target.closest ? e.target.closest('[data-p="a"]') : null; if (!pane) return; var sw = pane.querySelector("[data-appsw]"); if (sw) { sw.classList.add("on"); syncApproval(sw); } });
+
+  /* search inside a channel submenu: filters its people and channels as you type */
+  document.addEventListener("input", function (e) {
+    var inp = e.target.closest ? e.target.closest(".dd-search input") : null; if (!inp) return;
+    var q = inp.value.trim().toLowerCase(), sub = inp.closest(".dd-sub");
+    sub.querySelectorAll("[data-pick]").forEach(function (it) { it.style.display = it.textContent.toLowerCase().indexOf(q) > -1 ? "" : "none"; });
+    sub.querySelectorAll(".dd-head").forEach(function (h) {
+      var n = h.nextElementSibling, any = false;
+      while (n && !n.classList.contains("dd-head") && !n.classList.contains("dd-sep")) { if (n.style.display !== "none") any = true; n = n.nextElementSibling; }
+      h.style.display = any ? "" : "none";
+    });
+    sub.querySelectorAll(".dd-sep").forEach(function (sp) { sp.style.display = q ? "none" : ""; });
+  });
 </script>
 </body>
 </html>
