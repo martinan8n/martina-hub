@@ -178,6 +178,10 @@
   .dd-search svg { flex: none; color: var(--icon-color); }
   .dd-search input { flex: 1; min-width: 0; border: 0; background: transparent; outline: none; font: inherit; font-size: var(--font-size--sm); color: var(--text-color); height: var(--height--sm); padding: 0 var(--spacing--3xs); }
   .dd-search input::placeholder { color: var(--color--neutral-600); }
+  /* every tag / pill: one weight, the design system's regular (450), including the guardrail names that were medium */
+  .chip, .chip .t, .chip .gname, .chip .mut, .chip b { font-weight: 450; }
+  /* "+ Add ..." ghost buttons: normal weight (design system regular, 450) */
+  .add-ghost { font-weight: 450; }
 </style>
 </head>
 <body>
@@ -234,7 +238,7 @@
               </div>
               <div class="s-group" style="margin-top:var(--spacing--xs);overflow:visible;">
                 <div class="s-row"><div class="s-info" style="min-height:var(--height--4xl);"><div class="s-text"><span class="s-row-title">Which tools require this</span></div></div>
-                  <div class="s-action" style="flex:1;max-width:none;justify-content:flex-end;"><div class="chips" style="justify-content:flex-end;"><button class="gbtn" id="toolsPlus" aria-label="Add tool"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button></div></div><span class="s-divider"></span></div>
+                  <div class="s-action" style="flex:1;max-width:none;justify-content:flex-end;"><div class="chips" style="justify-content:flex-end;"><button class="add-ghost" id="toolsPlus" style="margin-left:0;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Add tool</button></div></div><span class="s-divider"></span></div>
                 <div class="s-row"><div class="s-info" style="min-height:var(--height--4xl);"><div class="s-text"><span class="s-row-title">When it expires</span></div></div>
                   <div class="s-action"><select class="sel" style="min-width:160px;"><option>Never expires</option><option>After 1 hour</option><option>After 24 hours</option><option>After 7 days</option></select></div><span class="s-divider"></span></div>
               </div>
@@ -248,13 +252,13 @@
       <section class="s-section">
         <div class="s-header"><h3 class="s-title">New approval workflow, prefilled</h3><span class="s-desc">A skeleton with one simple example. Replace it with your own approval logic, or delete it.</span></div>
         <div class="canvas">
-          <div class="nd" style="left:24px;top:122px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/></svg><span>Request from the agent</span></div>
+          <div class="nd" style="left:24px;top:122px;"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8.75 4.5H15V15h-1.5V6h-11v9H1V4.5h6.25V.25h1.5zm-1 6.25h-1.5v-3h1.5zm4 0h-1.5v-3h1.5z"/></svg><span>Request from the agent</span></div>
           <div class="conn-l" style="left:174px;top:150px;width:60px;"></div>
           <div class="grp" style="left:234px;top:70px;width:230px;height:160px;"><span class="cap">Replace this with your approval logic</span></div>
           <div class="nd" style="left:274px;top:84px;"><span data-i="slack"></span><span>Send message<small>Ask someone in Slack</small></span></div>
           <div class="nd" style="left:274px;top:158px;"><span style="color:var(--color--pink-600)">&#9679;</span><span>Wait for approval<small>Continues once approved</small></span></div>
           <div class="conn-l" style="left:464px;top:150px;width:60px;"></div>
-          <div class="nd" style="left:524px;top:122px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/></svg><span>Respond to agent</span></div>
+          <div class="nd" style="left:524px;top:122px;"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8.75 4.5H15V15h-1.5V6h-11v9H1V4.5h6.25V.25h1.5zm-1 6.25h-1.5v-3h1.5zm4 0h-1.5v-3h1.5z"/></svg><span>Respond to agent</span></div>
         </div>
       </section>
 
@@ -396,7 +400,7 @@
 
   /* Send approval to: one N8nDropdownMenu with sub menus. Workflow, then each channel with people and channels inside. */
   var MENU = [
-    { key: "workflow", label: "Workflow", icon: ICON.workflow, sections: [{ head: "Workflows", items: ["Slack Assistant approval workflow 1", "Email approval workflow"] }], create: "Create new workflow" },
+    { key: "workflow", label: "Workflow", icon: ICON.workflow, search: true, sections: [{ head: "Workflows", items: ["Slack Assistant approval workflow 1", "Email approval workflow"] }], create: "Create new workflow" },
     { key: "slack", label: "Slack", icon: ICON.slack, search: true, sections: [{ head: "People", items: ["Michael Drury", "Sindhuja Jeyabal"] }, { head: "Channels", items: ["#approvals", "#agents-team"] }] },
     { key: "telegram", label: "Telegram", icon: ICON.telegram, search: true, sections: [{ head: "People", items: ["Michael Drury"] }, { head: "Groups", items: ["Agents group"] }] },
     { key: "discord", label: "Discord", icon: ICON.discord, search: true, sections: [{ head: "People", items: ["Michael Drury"] }, { head: "Channels", items: ["#approvals"] }] }
@@ -487,22 +491,29 @@
     });
   })();
 
-  /* "Which tools require this": the + opens a plain menu of tools and adds a tag */
+  /* "Which tools require this": empty state is a ghost "+ Add tool"; the menu lists tools; after the first one the "+" icon takes over */
   (function () {
-    var btn = document.getElementById("toolsPlus"); if (!btn) return;
     var tp = document.createElement("div"); tp.className = "pop"; tp.style.display = "none"; tp.style.width = "220px";
     tp.innerHTML = '<div class="dd-items">' + ["perplexity_search", "Notion", "Wikipedia"].map(function (t) { return '<div class="dd-item" data-tool="' + t + '"><span class="lbl">' + t + "</span></div>"; }).join("") + "</div>";
     document.body.appendChild(tp);
-    btn.addEventListener("click", function (e) {
-      e.stopPropagation();
-      var r = btn.getBoundingClientRect(), left = Math.min(r.left, window.innerWidth - 228);
-      tp.style.left = left + "px"; tp.style.top = (r.bottom + 4) + "px"; tp.style.display = tp.style.display === "block" ? "none" : "block";
-    });
+    var target = null;
+    function bind(btn) {
+      btn.addEventListener("click", function (e) {
+        e.stopPropagation(); target = btn;
+        var r = btn.getBoundingClientRect(), left = Math.min(r.left, window.innerWidth - 228);
+        tp.style.left = left + "px"; tp.style.top = (r.bottom + 4) + "px"; tp.style.display = tp.style.display === "block" ? "none" : "block";
+      });
+    }
+    var first = document.getElementById("toolsPlus"); if (first) bind(first);
     tp.addEventListener("click", function (e) {
-      e.stopPropagation(); var i = e.target.closest("[data-tool]"); if (!i) return;
+      e.stopPropagation(); var i = e.target.closest("[data-tool]"); if (!i || !target) return;
       var chip = document.createElement("span"); chip.className = "chip";
       chip.innerHTML = '<span class="t">' + i.getAttribute("data-tool") + '</span><span class="x"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></span>';
-      btn.parentNode.insertBefore(chip, btn); tp.style.display = "none";
+      if (target.classList.contains("add-ghost")) {
+        var plus = document.createElement("button"); plus.className = "gbtn"; plus.setAttribute("aria-label", "Add tool"); plus.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>';
+        target.replaceWith(chip, plus); bind(plus); target = plus;
+      } else { target.parentNode.insertBefore(chip, target); }
+      tp.style.display = "none";
     });
     document.addEventListener("click", function () { tp.style.display = "none"; });
   })();
